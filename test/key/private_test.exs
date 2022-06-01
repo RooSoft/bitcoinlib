@@ -1,4 +1,4 @@
-defmodule Bitcoin.Key.PrivateTest do
+defmodule BitcoinLib.Key.PrivateTest do
   use ExUnit.Case
 
   alias BitcoinLib.Key.Private

@@ -1,4 +1,4 @@
-defmodule Bitcoin.CryptoTest do
+defmodule BitcoinLib.CryptoTest do
   use ExUnit.Case
 
   alias BitcoinLib.Crypto
