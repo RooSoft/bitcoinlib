@@ -9,12 +9,14 @@ defmodule BitcoinLib.Crypto do
     |> Base.decode16!()
     |> checksum_bitstring
     |> Base.encode16()
+    |> String.downcase()
   end
 
   def ripemd160(str) when is_binary(str) do
     str
     |> ripemd160_bitstring()
     |> Base.encode16()
+    |> String.downcase()
   end
 
   def sha1(str) when is_binary(str) do
@@ -27,6 +29,7 @@ defmodule BitcoinLib.Crypto do
     str
     |> sha256_bitstring()
     |> Base.encode16()
+    |> String.downcase()
   end
 
   def double_sha256(str) when is_binary(str) do

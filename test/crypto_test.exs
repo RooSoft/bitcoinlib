@@ -11,7 +11,7 @@ defmodule BitcoinLib.CryptoTest do
       value
       |> Crypto.sha256()
 
-    assert hash == "AB6A8F1D9E2B0333DFF8E370ED6FDFE20B2E8008E045EFB3FB3298C22F7569DA"
+    assert hash == "ab6a8f1d9e2b0333dff8e370ed6fdfe20b2e8008e045efb3fb3298c22f7569da"
   end
 
   test "creates a RIPEMD160 hash from a string" do
@@ -22,7 +22,7 @@ defmodule BitcoinLib.CryptoTest do
       value
       |> Crypto.ripemd160()
 
-    assert hash == "F23D97252131C60666708E4AE2C59FED1349F439"
+    assert hash == "f23d97252131c60666708e4ae2c59fed1349f439"
   end
 
   test "creates a checksum" do
@@ -32,6 +32,6 @@ defmodule BitcoinLib.CryptoTest do
       value
       |> Crypto.checksum()
 
-    assert checksum == "B56C36B1"
+    assert checksum == "b56c36b1"
   end
 end
