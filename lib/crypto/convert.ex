@@ -3,6 +3,5 @@ defmodule BitcoinLib.Crypto.Convert do
     value
     |> Binary.from_integer()
     |> Binary.pad_leading(bytes_length)
-    |> IO.inspect()
   end
 end
