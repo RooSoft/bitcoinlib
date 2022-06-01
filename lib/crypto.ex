@@ -7,8 +7,7 @@ defmodule BitcoinLib.Crypto do
     str
     |> String.upcase()
     |> Base.decode16!()
-    |> double_sha256_bitstring()
-    |> Binary.take(4)
+    |> checksum_bitstring
     |> Base.encode16()
   end
 
@@ -35,6 +34,12 @@ defmodule BitcoinLib.Crypto do
     |> Base.decode16!()
     |> double_sha256_bitstring()
     |> Base.encode16()
+  end
+
+  def checksum_bitstring(bin) when is_bitstring(bin) do
+    bin
+    |> double_sha256_bitstring()
+    |> Binary.take(4)
   end
 
   def ripemd160_bitstring(bin) when is_bitstring(bin), do: :crypto.hash(:ripemd160, bin)

@@ -1,82 +1,22 @@
 defmodule BitcoinLib.Key.Private do
-  alias BitcoinLib.Crypto
+  alias BitcoinLib.Crypto.{Wif}
+
+  @private_key_bits_length 256
+  @private_key_bytes_length div(@private_key_bits_length, 8)
+  @largest_key 0xFFFF_FFFF_FFFF_FFFF_FFFF_FFFF_FFFF_FFFE_BAAE_DCE6_AF48_A03B_BFD2_5E8C_D036_4140
 
   def generate do
-    private_key = :crypto.strong_rand_bytes(32)
+    raw = Enum.random(1..@largest_key)
 
-    case valid?(private_key) do
-      true -> private_key
-      false -> private_key
-    end
+    %{
+      raw: raw,
+      wif: raw |> Wif.from_integer(@private_key_bytes_length)
+    }
   end
 
   # Based on https://learnmeabitcoin.com/technical/wif
   def to_wif(private_key) do
     private_key
-    |> String.upcase()
-    |> add_prefix
-    |> add_compressed
-    |> add_checksum
-    |> Base.decode16!()
-    |> Base58.encode()
+    |> Wif.from_integer()
   end
-
-  defp add_prefix(key) do
-    "80#{key}"
-  end
-
-  defp add_compressed(key) do
-    "#{key}01"
-  end
-
-  defp add_checksum(key) do
-    checksum =
-      key
-      |> Crypto.checksum()
-
-    "#{key}#{checksum}"
-  end
-
-  defp valid?(key) when is_binary(key) do
-    key
-    |> :binary.decode_unsigned()
-    |> valid?
-  end
-
-  @n :binary.decode_unsigned(<<
-       0xFF,
-       0xFF,
-       0xFF,
-       0xFF,
-       0xFF,
-       0xFF,
-       0xFF,
-       0xFF,
-       0xFF,
-       0xFF,
-       0xFF,
-       0xFF,
-       0xFF,
-       0xFF,
-       0xFF,
-       0xFE,
-       0xBA,
-       0xAE,
-       0xDC,
-       0xE6,
-       0xAF,
-       0x48,
-       0xA0,
-       0x3B,
-       0xBF,
-       0xD2,
-       0x5E,
-       0x8C,
-       0xD0,
-       0x36,
-       0x41,
-       0x41
-     >>)
-  defp valid?(key) when key > 1 and key < @n, do: true
-  defp valid?(_), do: false
 end
