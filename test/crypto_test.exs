@@ -1,6 +1,8 @@
 defmodule BitcoinLib.CryptoTest do
   use ExUnit.Case
 
+  doctest BitcoinLib.Crypto
+
   alias BitcoinLib.Crypto
 
   test "creates a SHA256 hash from a string" do
