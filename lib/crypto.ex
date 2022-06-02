@@ -22,6 +22,15 @@ defmodule BitcoinLib.Crypto do
     |> String.downcase()
   end
 
+  @doc """
+  Computes [RIPEMD160](https://en.wikipedia.org/wiki/RIPEMD) on an arbitrary string
+
+  ## Examples
+
+    iex> "6c7ab2f961a1bc3f13cdc08dc41c3f439adebd549a8ef1c089e81a5907376107"
+    ...> |> BitcoinLib.Crypto.ripemd160()
+    "f23d97252131c60666708e4ae2c59fed1349f439"
+  """
   def ripemd160(str) when is_binary(str) do
     str
     |> ripemd160_bitstring()
@@ -65,6 +74,15 @@ defmodule BitcoinLib.Crypto do
     |> Binary.take(4)
   end
 
+  @doc """
+  Computes [RIPEMD160](https://en.wikipedia.org/wiki/RIPEMD) on a binary and returns it as a binary
+
+  ## Examples
+
+    iex> "6c7ab2f961a1bc3f13cdc08dc41c3f439adebd549a8ef1c089e81a5907376107"
+    ...> |> BitcoinLib.Crypto.ripemd160_bitstring()
+    <<242, 61, 151, 37, 33, 49, 198, 6, 102, 112, 142, 74, 226, 197, 159, 237, 19, 73, 244, 57>>
+  """
   def ripemd160_bitstring(bin) when is_bitstring(bin), do: :crypto.hash(:ripemd160, bin)
   def sha1_bitstring(bin) when is_bitstring(bin), do: :crypto.hash(:sha, bin)
 
