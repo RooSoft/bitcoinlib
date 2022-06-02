@@ -16,7 +16,7 @@ Bitcoin helpers such as:
 } = BitcoinLib.generate_private_key()
 ```
 
-## Public key generation
+## Public key derivation
 
 ```elixir
 private_key = "0a8d286b11b98f6cb2585b627ff44d12059560acd430dcfa1260ef2bd9569373"
