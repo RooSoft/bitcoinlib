@@ -1,21 +1,17 @@
-# Bitcoinlib
+# BitcoinLib
 
-**TODO: Add description**
+Bitcoin helpers such as:
 
-## Installation
+- Creation of
+  - Private Keys
+  - Public Keys
+  - P2PKH addresses
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `bitcoinlib` to your list of dependencies in `mix.exs`:
+## Private key generation
 
 ```elixir
-def deps do
-  [
-    {:bitcoinlib, "~> 0.1.0"}
-  ]
-end
+%{
+  raw: private_key, 
+  wif: wif_version
+} = BitcoinLib.generate_private_key()
 ```
-
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at <https://hexdocs.pm/bitcoinlib>.
-
