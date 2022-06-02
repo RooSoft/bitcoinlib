@@ -30,4 +30,14 @@ defmodule BitcoinLib.Test do
              "02" <>
                "0F69EF8F2FEB09B29393EEF514761F22636B90D8E4D3F2138B2373BD37523053"
   end
+
+  test "generate a P2PKH address from a public key" do
+    public_key = "020f69ef8f2feb09b29393eef514761f22636b90d8e4d3f2138b2373bd37523053"
+
+    address =
+      public_key
+      |> BitcoinLib.generate_p2pkh_address()
+
+    assert address == "1Ak9NVPmwCHEpsSWvM6cNRC7dsYniRmwMG"
+  end
 end
