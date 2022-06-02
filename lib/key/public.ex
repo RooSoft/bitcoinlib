@@ -17,8 +17,8 @@ defmodule BitcoinLib.Key.Public do
     compressed = get_compressed(public_uncompressed)
 
     {
-      Base.encode16(public_uncompressed),
-      Base.encode16(compressed)
+      Base.encode16(public_uncompressed, case: :lower),
+      Base.encode16(compressed, case: :lower)
     }
   end
 
