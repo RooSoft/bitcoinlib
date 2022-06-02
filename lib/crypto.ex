@@ -18,8 +18,7 @@ defmodule BitcoinLib.Crypto do
     |> String.upcase()
     |> Base.decode16!()
     |> checksum_bitstring
-    |> Base.encode16()
-    |> String.downcase()
+    |> Base.encode16(case: :lower)
   end
 
   @doc """
@@ -34,28 +33,35 @@ defmodule BitcoinLib.Crypto do
   def ripemd160(str) when is_binary(str) do
     str
     |> ripemd160_bitstring()
-    |> Base.encode16()
-    |> String.downcase()
+    |> Base.encode16(case: :lower)
   end
 
+  @doc """
+  Computes [SHA1](https://en.wikipedia.org/wiki/SHA-1) on an arbitrary string
+
+  ## Examples
+
+    iex> "806c7ab2f961a1bc3f13cdc08dc41c3f439adebd549a8ef1c089e81a590737610701"
+    ...> |> BitcoinLib.Crypto.sha1()
+    "1c90d51061e90f9483d89cb23525a5f1de323cd8"
+  """
   def sha1(str) when is_binary(str) do
     str
     |> sha1_bitstring()
-    |> Base.encode16()
+    |> Base.encode16(case: :lower)
   end
 
   def sha256(str) when is_binary(str) do
     str
     |> sha256_bitstring()
-    |> Base.encode16()
-    |> String.downcase()
+    |> Base.encode16(case: :lower)
   end
 
   def double_sha256(str) when is_binary(str) do
     str
     |> Base.decode16!()
     |> double_sha256_bitstring()
-    |> Base.encode16()
+    |> Base.encode16(case: :lower)
   end
 
   @doc """
@@ -84,6 +90,16 @@ defmodule BitcoinLib.Crypto do
     <<242, 61, 151, 37, 33, 49, 198, 6, 102, 112, 142, 74, 226, 197, 159, 237, 19, 73, 244, 57>>
   """
   def ripemd160_bitstring(bin) when is_bitstring(bin), do: :crypto.hash(:ripemd160, bin)
+
+  @doc """
+  Computes [SHA1](https://en.wikipedia.org/wiki/SHA-1) on a binary and returns it as a binary
+
+  ## Examples
+
+    iex> "806c7ab2f961a1bc3f13cdc08dc41c3f439adebd549a8ef1c089e81a590737610701"
+    ...> |> BitcoinLib.Crypto.sha1_bitstring()
+    <<28, 144, 213, 16, 97, 233, 15, 148, 131, 216, 156, 178, 53, 37, 165, 241, 222, 50, 60, 216>>
+  """
   def sha1_bitstring(bin) when is_bitstring(bin), do: :crypto.hash(:sha, bin)
 
   def sha256_bitstring(bin) when is_bitstring(bin) do
