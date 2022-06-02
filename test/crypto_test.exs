@@ -5,6 +5,17 @@ defmodule BitcoinLib.CryptoTest do
 
   alias BitcoinLib.Crypto
 
+  test "creates a SHA1 hash from a string" do
+    # based on https://md5calc.com/hash/sha256
+    value = "6c7ab2f961a1bc3f13cdc08dc41c3f439adebd549a8ef1c089e81a5907376107"
+
+    hash =
+      value
+      |> Crypto.sha1()
+
+    assert hash == "4b68598994268b2dcb9560b5571eb244c2396139"
+  end
+
   test "creates a SHA256 hash from a string" do
     # based on https://md5calc.com/hash/sha256
     value = "6c7ab2f961a1bc3f13cdc08dc41c3f439adebd549a8ef1c089e81a5907376107"
