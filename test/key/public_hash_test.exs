@@ -4,7 +4,7 @@ defmodule BitcoinLib.Key.PublicHashTest do
   alias BitcoinLib.Key.PublicHash
 
   test "creates a public key hash from a public key" do
-    public_key = "0250863ad64a87ae8a2fe83c1af1a8403cb53f53e486d8511dad8a04887e5b2352"
+    public_key = "02b4632d08485ff1df2db55b9dafd23347d1c47a457072a1e87be26896549a8737"
 
     hash =
       public_key
