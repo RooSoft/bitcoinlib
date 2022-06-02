@@ -51,6 +51,15 @@ defmodule BitcoinLib.Crypto do
     |> Base.encode16(case: :lower)
   end
 
+  @doc """
+  Computes [SHA256](https://en.wikipedia.org/wiki/SHA-2) on an arbitrary string
+
+  ## Examples
+
+    iex> "6c7ab2f961a1bc3f13cdc08dc41c3f439adebd549a8ef1c089e81a5907376107"
+    ...> |> BitcoinLib.Crypto.sha256()
+    "ab6a8f1d9e2b0333dff8e370ed6fdfe20b2e8008e045efb3fb3298c22f7569da"
+  """
   def sha256(str) when is_binary(str) do
     str
     |> sha256_bitstring()
@@ -102,6 +111,15 @@ defmodule BitcoinLib.Crypto do
   """
   def sha1_bitstring(bin) when is_bitstring(bin), do: :crypto.hash(:sha, bin)
 
+  @doc """
+  Computes [SHA256](https://en.wikipedia.org/wiki/SHA-2) on a binary and returns it as a binary
+
+  ## Examples
+
+    iex> "6c7ab2f961a1bc3f13cdc08dc41c3f439adebd549a8ef1c089e81a5907376107"
+    ...> |> BitcoinLib.Crypto.sha256_bitstring()
+    <<171, 106, 143, 29, 158, 43, 3, 51, 223, 248, 227, 112, 237, 111, 223, 226, 11, 46, 128, 8, 224, 69, 239, 179, 251, 50, 152, 194, 47, 117, 105, 218>>
+  """
   def sha256_bitstring(bin) when is_bitstring(bin) do
     :crypto.hash(:sha256, bin)
   end
