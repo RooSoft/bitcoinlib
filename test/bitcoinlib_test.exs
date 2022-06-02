@@ -1,6 +1,8 @@
 defmodule BitcoinLib.Test do
   use ExUnit.Case
 
+  doctest BitcoinLib
+
   test "generate a private key: raw version" do
     %{raw: private_key} = BitcoinLib.generate_private_key()
 

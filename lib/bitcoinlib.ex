@@ -1,6 +1,17 @@
 defmodule BitcoinLib do
+  @moduledoc """
+  High level bitcoin operations
+  """
+
   alias BitcoinLib.Key.{Private, Public, PublicHash, Address}
 
+  @doc """
+  Creates a bitcoin private key both in raw and WIF format
+
+  ## Examples
+
+    iex> %{raw: _, wif: _} = BitcoinLib.generate_private_key()
+  """
   def generate_private_key do
     Private.generate()
   end
