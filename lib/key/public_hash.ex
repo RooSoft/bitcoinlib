@@ -15,6 +15,7 @@ defmodule BitcoinLib.Key.PublicHash do
     ...> |> BitcoinLib.Key.PublicHash.from_public_key()
     "93ce48570b55c42c2af816aeaba06cfee1224fae"
   """
+  @spec from_public_key(String.t()) :: String.t()
   def from_public_key(public_key) do
     public_key
     |> Binary.from_hex()
