@@ -1,6 +1,8 @@
 defmodule BitcoinLib.Key.WifTest do
   use ExUnit.Case
 
+  doctest BitcoinLib.Crypto.Wif
+
   alias BitcoinLib.Crypto.Wif
 
   test "creates a wif from an integer" do
