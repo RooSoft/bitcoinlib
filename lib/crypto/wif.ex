@@ -16,6 +16,7 @@ defmodule BitcoinLib.Crypto.Wif do
     ...> |> BitcoinLib.Crypto.Wif.from_integer
     "KwaDo7PNi4XPMaABfSEo9rP6uviDUATAqvyjjWTcKp4fxdkVJWLe"
   """
+  @spec from_integer(Integer.t(), Integer.t()) :: String.t()
   def from_integer(value, bytes_length \\ 32) do
     value
     |> Convert.integer_to_binary(bytes_length)
