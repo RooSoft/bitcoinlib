@@ -1,6 +1,8 @@
 defmodule BitcoinLib.Crypto.ConvertTest do
   use ExUnit.Case
 
+  doctest BitcoinLib.Crypto.Convert
+
   alias BitcoinLib.Crypto.Convert
 
   test "converts an integer into a bitstring" do
