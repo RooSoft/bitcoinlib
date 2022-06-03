@@ -1,9 +1,7 @@
 defmodule BitcoinLib.Key.Public do
   @moduledoc """
-  Public key operations.
+  Bitcoin public key management module
   """
-
-  @type t :: binary
 
   def from_private_key(private_key) do
     bitstring_private_key =
