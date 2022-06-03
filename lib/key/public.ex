@@ -6,6 +6,8 @@ defmodule BitcoinLib.Key.Public do
   @doc """
   Derives a public key from a private key in both uncompressed and compressed format
 
+  Based on https://learnmeabitcoin.com/technical/public-key
+
   ## Examples
     iex> "0a8d286b11b98f6cb2585b627ff44d12059560acd430dcfa1260ef2bd9569373"
     ...> |> BitcoinLib.Key.Public.from_private_key
@@ -30,6 +32,7 @@ defmodule BitcoinLib.Key.Public do
       Base.encode16(compressed, case: :lower)
     }
   end
+
 
   defp get_compressed(public_uncompressed) do
     first_char =
