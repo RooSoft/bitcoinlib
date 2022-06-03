@@ -1,6 +1,8 @@
 defmodule BitcoinLib.Key.PublicTest do
   use ExUnit.Case
 
+  doctest BitcoinLib.Key.Public
+
   alias BitcoinLib.Key.Public
 
   test "creates a public key from a private key" do
