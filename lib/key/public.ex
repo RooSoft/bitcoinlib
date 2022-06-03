@@ -16,6 +16,7 @@ defmodule BitcoinLib.Key.Public do
       "020f69ef8f2feb09b29393eef514761f22636b90d8e4d3f2138b2373bd37523053"
     }
   """
+  @spec from_private_key(String.t()) :: {String.t(), String.t()}
   def from_private_key(private_key) do
     bitstring_private_key =
       private_key
@@ -32,7 +33,6 @@ defmodule BitcoinLib.Key.Public do
       Base.encode16(compressed, case: :lower)
     }
   end
-
 
   defp get_compressed(public_uncompressed) do
     first_char =
