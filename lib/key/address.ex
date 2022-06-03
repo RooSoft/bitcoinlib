@@ -17,6 +17,7 @@ defmodule BitcoinLib.Key.Address do
     ...> |> BitcoinLib.Key.Address.from_public_key_hash()
     "1Ak9NVPmwCHEpsSWvM6cNRC7dsYniRmwMG"
   """
+  @spec from_public_key_hash(String.t()) :: String.t()
   def from_public_key_hash(public_key_hash) do
     public_key_hash
     |> prepend_prefix
