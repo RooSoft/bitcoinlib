@@ -12,6 +12,8 @@ defmodule BitcoinLib.Key.Private do
   @doc """
   Creates a Bitcoin private key using efficient randomness
 
+  Inspired by https://learnmeabitcoin.com/technical/private-key
+
   ## Examples
 
     iex> %{raw: raw1} = BitcoinLib.Key.Private.generate
