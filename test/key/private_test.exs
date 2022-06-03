@@ -1,6 +1,8 @@
 defmodule BitcoinLib.Key.PrivateTest do
   use ExUnit.Case
 
+  doctest BitcoinLib.Key.Private
+
   alias BitcoinLib.Key.Private
 
   test "creates a WIF from a private key" do
