@@ -49,6 +49,20 @@ defmodule BitcoinLib.CryptoTest do
     assert hash == "f23d97252131c60666708e4ae2c59fed1349f439"
   end
 
+  test "creates a HMAC hash from a string" do
+    # based on https://beautifytools.com/hmac-generator.php
+    key = "Bitcoin seed"
+
+    value =
+      "b1680c7a6ea6ed5ac9bf3bc3b43869a4c77098e60195bae51a94159333820e125c3409b8c8d74b4489f28ce71b06799b1126c1d9620767c2dadf642cf787cf36"
+
+    hash = Crypto.hmac(key, value)
+
+    assert hash ==
+             "1f22e99440b621e47e74a779ce4063c497846ab118fa2531a49611d43dca5787" <>
+               "ea2d0fb95937144c4fe3730b6e656895d0e30defa312b164727ca4cdd3530b43"
+  end
+
   test "creates a checksum" do
     value = "806c7ab2f961a1bc3f13cdc08dc41c3f439adebd549a8ef1c089e81a590737610701"
 

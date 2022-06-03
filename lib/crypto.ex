@@ -87,6 +87,22 @@ defmodule BitcoinLib.Crypto do
   end
 
   @doc """
+  Computes [HMAC](https://en.wikipedia.org/wiki/HMAC) on an arbitrary string
+
+  ## Examples
+
+    iex> key = "Bitcoin seed"
+    ...> seed = "b1680c7a6ea6ed5ac9bf3bc3b43869a4c77098e60195bae51a94159333820e125c3409b8c8d74b4489f28ce71b06799b1126c1d9620767c2dadf642cf787cf36"
+    ...> BitcoinLib.Crypto.hmac(key, seed)
+    "1f22e99440b621e47e74a779ce4063c497846ab118fa2531a49611d43dca5787ea2d0fb95937144c4fe3730b6e656895d0e30defa312b164727ca4cdd3530b43"
+  """
+  @spec hmac(String.t(), String.t()) :: String.t()
+  def hmac(key, str) when is_binary(str) do
+    hmac_bitstring(key, str)
+    |> Base.encode16(case: :lower)
+  end
+
+  @doc """
   Takes any binary and creates a double-sha256, keeping only the first 4 bytes
 
   ## Examples
@@ -155,5 +171,23 @@ defmodule BitcoinLib.Crypto do
     bin
     |> sha256_bitstring
     |> sha256_bitstring
+  end
+
+  @doc """
+  Computes [HMAC](https://en.wikipedia.org/wiki/HMAC) on a binary and returns it as a binary
+
+  ## Examples
+
+    iex> key = "Bitcoin seed"
+    ...> seed = "b1680c7a6ea6ed5ac9bf3bc3b43869a4c77098e60195bae51a94159333820e125c3409b8c8d74b4489f28ce71b06799b1126c1d9620767c2dadf642cf787cf36"
+    ...> BitcoinLib.Crypto.hmac_bitstring(key, seed)
+    <<31, 34, 233, 148, 64, 182, 33, 228, 126, 116, 167, 121, 206, 64, 99, 196, 151,
+    132, 106, 177, 24, 250, 37, 49, 164, 150, 17, 212, 61, 202, 87, 135, 234, 45,
+    15, 185, 89, 55, 20, 76, 79, 227, 115, 11, 110, 101, 104, 149, 208, 227, 13,
+    239, 163, 18, 177, 100, 114, 124, 164, 205, 211, 83, 11, 67>>
+  """
+  @spec hmac_bitstring(String.t(), String.t()) :: bitstring()
+  def hmac_bitstring(key, bin) when is_bitstring(bin) do
+    :crypto.mac(:hmac, :sha512, key, bin)
   end
 end
