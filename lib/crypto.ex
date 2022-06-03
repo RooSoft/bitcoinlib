@@ -13,6 +13,7 @@ defmodule BitcoinLib.Crypto do
     ...> |> BitcoinLib.Crypto.checksum()
     "b56c36b1"
   """
+  @spec checksum(String.t()) :: String.t()
   def checksum(str) when is_binary(str) do
     str
     |> String.upcase()
@@ -30,6 +31,7 @@ defmodule BitcoinLib.Crypto do
     ...> |> BitcoinLib.Crypto.ripemd160()
     "f23d97252131c60666708e4ae2c59fed1349f439"
   """
+  @spec ripemd160(String.t()) :: String.t()
   def ripemd160(str) when is_binary(str) do
     str
     |> ripemd160_bitstring()
@@ -45,6 +47,7 @@ defmodule BitcoinLib.Crypto do
     ...> |> BitcoinLib.Crypto.sha1()
     "1c90d51061e90f9483d89cb23525a5f1de323cd8"
   """
+  @spec sha1(String.t()) :: String.t()
   def sha1(str) when is_binary(str) do
     str
     |> sha1_bitstring()
@@ -60,6 +63,7 @@ defmodule BitcoinLib.Crypto do
     ...> |> BitcoinLib.Crypto.sha256()
     "ab6a8f1d9e2b0333dff8e370ed6fdfe20b2e8008e045efb3fb3298c22f7569da"
   """
+  @spec sha256(String.t()) :: String.t()
   def sha256(str) when is_binary(str) do
     str
     |> sha256_bitstring()
@@ -75,6 +79,7 @@ defmodule BitcoinLib.Crypto do
     ...> |> BitcoinLib.Crypto.double_sha256()
     "de43342f6e8bcc34d95f36e4e1b8eab957a0ce2ff3b0e183142d91a871170f2b"
   """
+  @spec double_sha256(String.t()) :: String.t()
   def double_sha256(str) when is_binary(str) do
     str
     |> double_sha256_bitstring()
@@ -91,6 +96,7 @@ defmodule BitcoinLib.Crypto do
     ...> value |> BitcoinLib.Crypto.checksum_bitstring()
     <<181, 108, 54, 177>>
   """
+  @spec checksum_bitstring(bitstring()) :: bitstring()
   def checksum_bitstring(bin) when is_bitstring(bin) do
     bin
     |> double_sha256_bitstring()
@@ -106,6 +112,7 @@ defmodule BitcoinLib.Crypto do
     ...> |> BitcoinLib.Crypto.ripemd160_bitstring()
     <<242, 61, 151, 37, 33, 49, 198, 6, 102, 112, 142, 74, 226, 197, 159, 237, 19, 73, 244, 57>>
   """
+  @spec ripemd160_bitstring(String.t()) :: bitstring()
   def ripemd160_bitstring(bin) when is_bitstring(bin), do: :crypto.hash(:ripemd160, bin)
 
   @doc """
@@ -117,6 +124,7 @@ defmodule BitcoinLib.Crypto do
     ...> |> BitcoinLib.Crypto.sha1_bitstring()
     <<28, 144, 213, 16, 97, 233, 15, 148, 131, 216, 156, 178, 53, 37, 165, 241, 222, 50, 60, 216>>
   """
+  @spec sha1_bitstring(String.t()) :: bitstring()
   def sha1_bitstring(bin) when is_bitstring(bin), do: :crypto.hash(:sha, bin)
 
   @doc """
@@ -128,6 +136,7 @@ defmodule BitcoinLib.Crypto do
     ...> |> BitcoinLib.Crypto.sha256_bitstring()
     <<171, 106, 143, 29, 158, 43, 3, 51, 223, 248, 227, 112, 237, 111, 223, 226, 11, 46, 128, 8, 224, 69, 239, 179, 251, 50, 152, 194, 47, 117, 105, 218>>
   """
+  @spec sha256_bitstring(String.t()) :: bitstring()
   def sha256_bitstring(bin) when is_bitstring(bin) do
     :crypto.hash(:sha256, bin)
   end
@@ -141,6 +150,7 @@ defmodule BitcoinLib.Crypto do
     ...> |> BitcoinLib.Crypto.double_sha256_bitstring()
     <<222, 67, 52, 47, 110, 139, 204, 52, 217, 95, 54, 228, 225, 184, 234, 185, 87, 160, 206, 47, 243, 176, 225, 131, 20, 45, 145, 168, 113, 23, 15, 43>>
   """
+  @spec double_sha256_bitstring(String.t()) :: bitstring()
   def double_sha256_bitstring(bin) when is_bitstring(bin) do
     bin
     |> sha256_bitstring
