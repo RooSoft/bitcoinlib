@@ -1,6 +1,8 @@
 defmodule BitcoinLib.Key.AddressTest do
   use ExUnit.Case
 
+  doctest BitcoinLib.Key.Address
+
   alias BitcoinLib.Key.Address
 
   test "generate a P2PKH from a public key hash" do
