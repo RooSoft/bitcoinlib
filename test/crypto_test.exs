@@ -56,7 +56,9 @@ defmodule BitcoinLib.CryptoTest do
     value =
       "b1680c7a6ea6ed5ac9bf3bc3b43869a4c77098e60195bae51a94159333820e125c3409b8c8d74b4489f28ce71b06799b1126c1d9620767c2dadf642cf787cf36"
 
-    hash = Crypto.hmac(key, value)
+    hash =
+      value
+      |> Crypto.hmac(key)
 
     assert hash ==
              "1f22e99440b621e47e74a779ce4063c497846ab118fa2531a49611d43dca5787" <>
