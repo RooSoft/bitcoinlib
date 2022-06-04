@@ -24,3 +24,5 @@ bitcoinlib-*.tar
 
 # Temporary files, for example, from tests.
 /tmp/
+
+/priv/wordlists/wordlist.ex
