@@ -4,23 +4,23 @@ defmodule BitcoinLib.Key.MnemonicSeed.Wordlist do
 
   def convert_seed(seed) do
     binary_seed = Binary.from_integer(seed)
-    checksum = checksum(binary_seed)
 
-    <<binary_seed::binary, checksum::4>>
+    size_in_bytes = byte_size(binary_seed)
+    nb_checksum_bits = div(size_in_bytes, 4)
+    checksum = checksum(binary_seed, nb_checksum_bits)
+
+    <<binary_seed::binary, checksum::size(nb_checksum_bits)>>
     |> BitUtils.chunks(11)
     |> Enum.map(&(&1 |> pad_leading_zeros |> :binary.decode_unsigned()))
     |> Enum.map(&get_word(&1))
   end
 
-  def checksum(binary_seed) do
-    size_in_bytes = byte_size(binary_seed)
-    nb_checksum_bits = div(size_in_bytes, 4)
-
+  def checksum(binary_seed, nb_bits_to_keep) do
     full_checksum =
       binary_seed
       |> Crypto.sha256_bitstring()
 
-    <<chunk::size(nb_checksum_bits), _rest::bitstring>> = full_checksum
+    <<chunk::size(nb_bits_to_keep), _rest::bitstring>> = full_checksum
 
     chunk
   end
