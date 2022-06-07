@@ -1,4 +1,10 @@
 defmodule BitcoinLib.Key.MnemonicSeed.Wordlist do
+  @moduledoc """
+  A list of all the words that can be contained in a private key seed
+
+  Source: https://raw.githubusercontent.com/bitcoin/bips/master/bip-0039/english.txt
+  """
+
   @doc """
   Get a single word from the wordlist by index
 
