@@ -1,9 +1,24 @@
 defmodule BitcoinLib.Key.MnemonicSeed.Wordlist do
+  @doc """
+  Get a single word from the wordlist by index
+
+  ## Examples
+    iex> BitcoinLib.Key.MnemonicSeed.Wordlist.get(8)
+    "absurd"
+  """
   def get(index) when is_integer(index) do
     all()
     |> Enum.at(index)
   end
 
+  @doc """
+  Get a list of all words in the wordlist
+
+  ## Examples
+    iex> BitcoinLib.Key.MnemonicSeed.Wordlist.all
+    ...> |> Enum.count()
+    2048
+  """
   def all do
     [
       "abandon",
