@@ -8,6 +8,12 @@ defmodule BitcoinLib.Key.MnemonicSeed.WordlistTest do
   test "get allwords" do
     wordlist = Wordlist.all()
 
-    assert 2048 = Enum.count(wordlist)
+    assert 2048 == Enum.count(wordlist)
+  end
+
+  test "get word number 8" do
+    word = Wordlist.get(8)
+
+    assert "absurd" == word
   end
 end
