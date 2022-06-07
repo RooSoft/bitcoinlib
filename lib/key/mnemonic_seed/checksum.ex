@@ -16,6 +16,7 @@ defmodule BitcoinLib.Key.MnemonicSeed.Checksum do
     ...> |> BitcoinLib.Key.MnemonicSeed.Checksum.compute(4)
     2
   """
+  @spec compute(Integer.t(), Integer.t()) :: Integer.t()
   def compute(binary_seed, nb_bits_to_keep) do
     binary_seed
     |> compute_sha256()
