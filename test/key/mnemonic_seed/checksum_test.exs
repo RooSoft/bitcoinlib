@@ -12,7 +12,7 @@ defmodule BitcoinLib.Key.MnemonicSeed.ChecksumTest do
 
     checksum =
       binary
-      |> BitcoinLib.Key.MnemonicSeed.Checksum.compute(4)
+      |> Checksum.compute(4)
 
     assert 2 == checksum
   end
