@@ -12,6 +12,7 @@ defmodule BitcoinLib.Key.MnemonicSeed.Wordlist do
     iex> BitcoinLib.Key.MnemonicSeed.Wordlist.get(8)
     "absurd"
   """
+  @spec get(Integer.t()) :: String.t()
   def get(index) when is_integer(index) do
     all()
     |> Enum.at(index)
@@ -25,6 +26,7 @@ defmodule BitcoinLib.Key.MnemonicSeed.Wordlist do
     ...> |> Enum.count()
     2048
   """
+  @spec all() :: list(String.t())
   def all do
     [
       "abandon",
