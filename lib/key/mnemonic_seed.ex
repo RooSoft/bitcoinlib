@@ -16,6 +16,7 @@ defmodule BitcoinLib.Key.MnemonicSeed do
     ...> |> Enum.join(" ")
     "erode gloom apart system broom lemon dismiss post artist slot humor occur"
   """
+  @spec from_integer(Integer.t()) :: list(String.t())
   def from_integer(seed) do
     seed
     |> append_checksum
