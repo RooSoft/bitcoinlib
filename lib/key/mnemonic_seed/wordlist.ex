@@ -47,6 +47,24 @@ defmodule BitcoinLib.Key.MnemonicSeed.Wordlist do
   end
 
   @doc """
+  Convert a list of words into a list of indices from the wordlist
+
+  ## Examples
+    iex> ["absurd", "able", "absent"]
+    ...> |> BitcoinLib.Key.MnemonicSeed.Wordlist.get_indices()
+    [8, 2, 5]
+  """
+  @spec get_indices(list(String.t())) :: list(Integer.t())
+  def get_indices(words) do
+    words
+    |> Enum.map(fn word ->
+      {:found, indice, ^word} = get_indice(word)
+
+      indice
+    end)
+  end
+
+  @doc """
   Get a list of all words in the wordlist
 
   ## Examples
