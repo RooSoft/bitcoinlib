@@ -22,4 +22,10 @@ defmodule BitcoinLib.Key.MnemonicSeed.WordlistTest do
 
     assert ["absurd", "able", "absent"] == words
   end
+
+  test "get word indice" do
+    indice = Wordlist.get_indice("absurd")
+
+    assert {:found, 8, "absurd"} == indice
+  end
 end

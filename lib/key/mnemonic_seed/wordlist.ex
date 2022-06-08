@@ -32,6 +32,21 @@ defmodule BitcoinLib.Key.MnemonicSeed.Wordlist do
   end
 
   @doc """
+  Convert a word into an indice from the wordlist
+
+  ## Examples
+    iex> BitcoinLib.Key.MnemonicSeed.Wordlist.get_indice("absurd")
+    {:found, 8, "absurd"}
+  """
+  @spec get_indice(String.t()) :: Integer.t()
+  def get_indice(word) do
+    all()
+    |> Enum.reduce_while({:not_found, 0}, fn el, {:not_found, index} ->
+      if el == word, do: {:halt, {:found, index, el}}, else: {:cont, {:not_found, index + 1}}
+    end)
+  end
+
+  @doc """
   Get a list of all words in the wordlist
 
   ## Examples
