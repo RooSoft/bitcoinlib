@@ -10,14 +10,28 @@ defmodule BitcoinLib.Key.BitUtilsTest do
       0x6C7AB2F961A
       |> Binary.from_integer()
 
-    integers = BitUtils.split(value, 11)
+    tokens = BitUtils.split(value, 11)
 
-    assert integers == [
+    assert tokens == [
              <<6, 6::size(3)>>,
              <<61, 2::size(3)>>,
              <<203, 7::size(3)>>,
              <<44, 1::size(3)>>,
              <<10::size(4)>>
            ]
+  end
+
+  test "combine a binary list into a single one" do
+    tokens = [
+      <<6, 6::size(3)>>,
+      <<61, 2::size(3)>>,
+      <<203, 7::size(3)>>,
+      <<44, 1::size(3)>>,
+      <<10::size(4)>>
+    ]
+
+    combined = BitUtils.combine(tokens)
+
+    assert combined == <<6, 199, 171, 47, 150, 26>>
   end
 end

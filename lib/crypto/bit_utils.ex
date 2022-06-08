@@ -23,6 +23,13 @@ defmodule BitcoinLib.Crypto.BitUtils do
     split(binary, bit_size, [])
   end
 
+  def combine(binary_list) do
+    binary_list
+    |> Enum.reduce(<<>>, fn binary, acc ->
+      <<acc::bitstring, binary::bitstring>>
+    end)
+  end
+
   defp split(binary, bit_size, acc) when bit_size(binary) <= bit_size do
     Enum.reverse([binary | acc])
   end
