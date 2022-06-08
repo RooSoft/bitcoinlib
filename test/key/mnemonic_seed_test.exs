@@ -11,7 +11,7 @@ defmodule BitcoinLib.Key.MnemonicSeedTest do
 
     wordlist =
       seed
-      |> MnemonicSeed.from_integer()
+      |> MnemonicSeed.wordlist_from_integer()
 
     assert wordlist == [
              "erode",
@@ -34,7 +34,7 @@ defmodule BitcoinLib.Key.MnemonicSeedTest do
 
     wordlist =
       seed
-      |> MnemonicSeed.from_integer()
+      |> MnemonicSeed.wordlist_from_integer()
 
     assert wordlist ==
              String.split(
@@ -48,7 +48,7 @@ defmodule BitcoinLib.Key.MnemonicSeedTest do
 
     wordlist =
       seed
-      |> MnemonicSeed.from_integer()
+      |> MnemonicSeed.wordlist_from_integer()
 
     assert wordlist ==
              String.split(
