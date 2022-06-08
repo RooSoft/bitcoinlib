@@ -4,7 +4,7 @@ defmodule BitcoinLib.Crypto.BitUtils do
   """
 
   @doc """
-  Converts a binary into a list of integers with their bit sizes
+  Converts a binary into a list of smaller binaries according to the bit size specification
 
   ## Examples
     iex> 0x6C7AB2F961A
@@ -18,16 +18,17 @@ defmodule BitcoinLib.Crypto.BitUtils do
       <<10::size(4)>>
     ]
   """
-  def split(binary, n) do
-    split(binary, n, [])
+  @spec split(Binary.t(), Integer.t()) :: list(Binary.t())
+  def split(binary, bit_size) do
+    split(binary, bit_size, [])
   end
 
-  defp split(binary, n, acc) when bit_size(binary) <= n do
+  defp split(binary, bit_size, acc) when bit_size(binary) <= bit_size do
     Enum.reverse([binary | acc])
   end
 
-  defp split(binary, n, acc) do
-    <<chunk::size(n), rest::bitstring>> = binary
-    split(rest, n, [<<chunk::size(n)>> | acc])
+  defp split(binary, bit_size, acc) do
+    <<chunk::size(bit_size), rest::bitstring>> = binary
+    split(rest, bit_size, [<<chunk::size(bit_size)>> | acc])
   end
 end
