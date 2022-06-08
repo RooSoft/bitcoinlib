@@ -9,13 +9,26 @@ defmodule BitcoinLib.Key.MnemonicSeed.Wordlist do
   Get a single word from the wordlist by index
 
   ## Examples
-    iex> BitcoinLib.Key.MnemonicSeed.Wordlist.get(8)
+    iex> BitcoinLib.Key.MnemonicSeed.Wordlist.get_word(8)
     "absurd"
   """
-  @spec get(Integer.t()) :: String.t()
-  def get(index) when is_integer(index) do
+  @spec get_word(Integer.t()) :: String.t()
+  def get_word(index) when is_integer(index) do
     all()
     |> Enum.at(index)
+  end
+
+  @doc """
+  Convert a list of indices into words from the wordlist
+
+  ## Examples
+    iex> BitcoinLib.Key.MnemonicSeed.Wordlist.get_words([8, 2, 5])
+    ["absurd", "able", "absent"]
+  """
+  @spec get_words(list(Integer.t())) :: list(String.t())
+  def get_words(indices) do
+    indices
+    |> Enum.map(&get_word(&1))
   end
 
   @doc """
