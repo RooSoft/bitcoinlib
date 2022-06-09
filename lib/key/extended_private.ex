@@ -15,7 +15,8 @@ defmodule BitcoinLib.Key.ExtendedPrivate do
   end
 
   defp split(extended_private_key) do
-    <<private_key::binary-32, chain_code::binary-32>> = extended_private_key
+    <<private_key::binary-@private_key_length, chain_code::binary-@private_key_length>> =
+      extended_private_key
 
     %{
       private_key: private_key,
