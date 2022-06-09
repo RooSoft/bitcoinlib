@@ -3,6 +3,8 @@ defmodule BitcoinLib.Key.MnemonicSeed do
   Compute a mnemonic seed from a private key
   """
 
+  @pbkdf2_opts rounds: 2048, digest: :sha512, length: 64, format: :hex
+
   alias BitcoinLib.Crypto.BitUtils
 
   alias BitcoinLib.Key.MnemonicSeed.{Checksum, Wordlist}
@@ -24,6 +26,19 @@ defmodule BitcoinLib.Key.MnemonicSeed do
     |> split_indices
     |> get_word_indices
     |> Wordlist.get_words()
+  end
+
+  @doc """
+  Convert a mnemonic phrase into a seed, with a optional passphrase
+
+  ## Examples
+    iex> "brick giggle panic mammal document foam gym canvas wheel among room analyst"
+    ...> |> BitcoinLib.Key.MnemonicSeed.to_seed()
+    "7e4803bd0278e223532f5833d81605bedc5e16f39c49bdfff322ca83d444892ddb091969761ea406bee99d6ab613fad6a99a6d4beba66897b252f00c9dd7b364"
+  """
+  @spec to_seed(String.t(), String.t()) :: String.t()
+  def to_seed(mnemonic_phrase, passphrase \\ "") do
+    Pbkdf2.Base.hash_password(mnemonic_phrase, "mnemonic#{passphrase}", @pbkdf2_opts)
   end
 
   defp append_checksum(binary_seed) do

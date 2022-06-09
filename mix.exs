@@ -23,7 +23,8 @@ defmodule Bitcoinlib.MixProject do
   defp deps do
     [
       {:binary, "0.0.4"},
-      {:exbase58, "~> 1.0"}
+      {:exbase58, "~> 1.0"},
+      {:pbkdf2_elixir, "~> 2.0"}
     ]
   end
 end
