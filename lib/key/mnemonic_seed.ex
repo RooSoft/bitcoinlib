@@ -8,7 +8,7 @@ defmodule BitcoinLib.Key.MnemonicSeed do
   alias BitcoinLib.Key.MnemonicSeed.{Checksum, Wordlist}
 
   @doc """
-  Convert a random integer into a mnemonic seed
+  Convert a random entropy number into a mnemonic seed
 
   ## Examples
     iex> 101_750_443_022_601_924_635_824_320_539_097_414_732
