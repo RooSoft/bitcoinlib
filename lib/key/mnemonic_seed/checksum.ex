@@ -26,8 +26,7 @@ defmodule BitcoinLib.Key.MnemonicSeed.Checksum do
   Computes the checksum, which is the first few bits of a SHA256 hash
 
   ## Examples
-    iex> 36_783_498_498_455_780_461_879_399_537_283_362_692
-    ...> |> Binary.from_integer()
+    iex> <<27, 172, 62, 126, 195, 84, 6, 180, 26, 1, 13, 250, 0, 254, 239, 132>>
     ...> |> BitcoinLib.Key.MnemonicSeed.Checksum.compute(4)
     2
   """
@@ -42,13 +41,13 @@ defmodule BitcoinLib.Key.MnemonicSeed.Checksum do
   Computes the checksum, and verify that it matches to the one received
 
   ## Examples
-    iex> 2_014_322_176_579_569_124_086_586_186_155_219_417_123
-    ...> |> Binary.from_integer()
-    ...> |> BitcoinLib.Key.MnemonicSeed.Checksum.validate_seed(4)
+    iex> <<5, 235, 104, 86, 249, 249, 27, 246, 234, 99, 13, 18, 209, 116, 50, 248, 35>>
+    ...> |> BitcoinLib.Key.MnemonicSeed.Checksum.validate_seed()
     true
   """
-  @spec validate_seed(Binary.t(), Integer.t()) :: true | false
-  def validate_seed(binary_seed, nb_of_checksum_bits) do
+  @spec validate_seed(Binary.t()) :: true | false
+  def validate_seed(binary_seed) do
+    nb_of_checksum_bits = number_of_checksum_bits(binary_seed)
     {seed, checksum} = split(binary_seed, nb_of_checksum_bits)
 
     seed
@@ -79,5 +78,11 @@ defmodule BitcoinLib.Key.MnemonicSeed.Checksum do
 
   defp concatenate(binary_seed, checksum, nb_of_checksum_bits) do
     <<binary_seed::binary, checksum::size(nb_of_checksum_bits)>>
+  end
+
+  @spec number_of_checksum_bits(Binary.t()) :: Integer.t()
+  def number_of_checksum_bits(binary_seed) do
+    bit_size(binary_seed)
+    |> div(32)
   end
 end
