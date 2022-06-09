@@ -10,7 +10,7 @@ defmodule BitcoinLib.Key.AddressTest do
 
     address =
       public_key_hash
-      |> Address.from_public_key_hash()
+      |> Address.from_public_key_hash(:p2pkh)
 
     assert address == "1Ak9NVPmwCHEpsSWvM6cNRC7dsYniRmwMG"
   end

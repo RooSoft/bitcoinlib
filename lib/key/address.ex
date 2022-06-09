@@ -14,13 +14,13 @@ defmodule BitcoinLib.Key.Address do
 
   ## Examples
     iex> "6ae201797de3fa7d1d95510f50c1a9c50ce4cc36"
-    ...> |> BitcoinLib.Key.Address.from_public_key_hash()
+    ...> |> BitcoinLib.Key.Address.from_public_key_hash(:p2pkh)
     "1Ak9NVPmwCHEpsSWvM6cNRC7dsYniRmwMG"
   """
-  @spec from_public_key_hash(String.t()) :: String.t()
-  def from_public_key_hash(public_key_hash) do
+  @spec from_public_key_hash(String.t(), :p2pkh | :p2sh) :: String.t()
+  def from_public_key_hash(public_key_hash, address_type \\ :p2sh) do
     public_key_hash
-    |> prepend_prefix
+    |> prepend_prefix(address_type)
     |> append_checksum
     |> Binary.from_hex()
     |> Base58.encode()
@@ -34,7 +34,14 @@ defmodule BitcoinLib.Key.Address do
     public_key_hash <> checksum
   end
 
-  defp prepend_prefix(public_key_hash) do
-    "00" <> public_key_hash
+  defp prepend_prefix(public_key_hash, address_type) do
+    get_prefix(address_type) <> public_key_hash
+  end
+
+  defp get_prefix(address_type) do
+    case address_type do
+      :p2pkh -> "00"
+      :p2sh -> "05"
+    end
   end
 end
