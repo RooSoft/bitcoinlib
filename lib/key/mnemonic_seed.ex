@@ -8,16 +8,16 @@ defmodule BitcoinLib.Key.MnemonicSeed do
   alias BitcoinLib.Key.MnemonicSeed.{Checksum, Wordlist}
 
   @doc """
-  Convert an integer into a mnemonic seed
+  Convert a random integer into a mnemonic seed
 
   ## Examples
     iex> 101_750_443_022_601_924_635_824_320_539_097_414_732
-    ...> |> BitcoinLib.Key.MnemonicSeed.wordlist_from_integer()
+    ...> |> BitcoinLib.Key.MnemonicSeed.wordlist_from_entropy()
     ...> |> Enum.join(" ")
     "erode gloom apart system broom lemon dismiss post artist slot humor occur"
   """
-  @spec wordlist_from_integer(Integer.t()) :: list(String.t())
-  def wordlist_from_integer(seed) do
+  @spec wordlist_from_entropy(Integer.t()) :: list(String.t())
+  def wordlist_from_entropy(seed) do
     seed
     |> Binary.from_integer()
     |> append_checksum
