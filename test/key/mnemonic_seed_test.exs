@@ -4,7 +4,6 @@ defmodule BitcoinLib.Key.MnemonicSeedTest do
   doctest BitcoinLib.Key.MnemonicSeed
 
   alias BitcoinLib.Key.MnemonicSeed
-  alias BitcoinLib.Key.MnemonicSeed.Wordlist
 
   test "convert a 128 bit seed into a 12 words list" do
     seed = 101_750_443_022_601_924_635_824_320_539_097_414_732

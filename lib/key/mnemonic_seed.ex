@@ -19,31 +19,30 @@ defmodule BitcoinLib.Key.MnemonicSeed do
   @spec wordlist_from_integer(Integer.t()) :: list(String.t())
   def wordlist_from_integer(seed) do
     seed
+    |> Binary.from_integer()
     |> append_checksum
-    |> BitUtils.chunks(11)
-    |> Enum.map(&(&1 |> pad_leading_zeros |> :binary.decode_unsigned()))
-    |> Enum.map(&Wordlist.get(&1))
+    |> split_indices
+    |> get_word_indices
+    |> Wordlist.get_words()
   end
 
-  defp append_checksum(seed) do
-    binary_seed = Binary.from_integer(seed)
-
-    nb_checksum_bits =
-      binary_seed
-      |> byte_size()
-      |> div(4)
-
-    checksum = Checksum.compute(binary_seed, nb_checksum_bits)
-
-    concatenate(binary_seed, checksum, nb_checksum_bits)
-  end
-
-  defp concatenate(binary_seed, checksum, nb_of_checksum_bits) do
-    <<binary_seed::binary, checksum::size(nb_of_checksum_bits)>>
+  defp append_checksum(binary_seed) do
+    binary_seed
+    |> Checksum.compute_and_append_to_seed()
   end
 
   defp pad_leading_zeros(bs) when is_bitstring(bs) do
     pad_length = 8 - rem(bit_size(bs), 8)
     <<0::size(pad_length), bs::bitstring>>
+  end
+
+  defp split_indices(seed_with_checksum) do
+    seed_with_checksum
+    |> BitUtils.split(11)
+  end
+
+  defp get_word_indices(chunks) do
+    chunks
+    |> Enum.map(&(&1 |> pad_leading_zeros |> :binary.decode_unsigned()))
   end
 end
