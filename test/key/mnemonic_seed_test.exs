@@ -56,7 +56,7 @@ defmodule BitcoinLib.Key.MnemonicSeedTest do
              )
   end
 
-  test "convert a mnemonic_phrase into a seed" do
+  test "convert a 12 word mnemonic phrase into a seed" do
     mnemonic_phrase =
       "brick giggle panic mammal document foam gym canvas wheel among room analyst"
 
@@ -65,6 +65,21 @@ defmodule BitcoinLib.Key.MnemonicSeedTest do
       |> MnemonicSeed.to_seed()
 
     assert seed ==
-             "7e4803bd0278e223532f5833d81605bedc5e16f39c49bdfff322ca83d444892ddb091969761ea406bee99d6ab613fad6a99a6d4beba66897b252f00c9dd7b364"
+             "7e4803bd0278e223532f5833d81605bedc5e16f39c49bdfff322ca83d444" <>
+               "892ddb091969761ea406bee99d6ab613fad6a99a6d4beba66897b252f00c9dd7b364"
+  end
+
+  test "convert a 24 word mnemonic phrase into a seed" do
+    mnemonic_phrase =
+      "work tenant tourist globe spice cattle suggest fever begin boil undo slogan " <>
+        "concert mystery midnight affair frequent helmet federal token fit speak health vendor"
+
+    seed =
+      mnemonic_phrase
+      |> MnemonicSeed.to_seed()
+
+    assert seed ==
+             "d525a6edf12d3919d132788ae3ce0f597430f4c58c4ff6cbac99609121565d" <>
+               "e24fab6ba7fb247fa2ea3028f8fc80cde71e7155f6928480644db2027b8b9a3627"
   end
 end
