@@ -1,9 +1,9 @@
-defmodule BitcoinLib.Key.MnemonicSeed.ChecksumTest do
+defmodule BitcoinLib.Key.HD.MnemonicSeed.ChecksumTest do
   use ExUnit.Case
 
-  doctest BitcoinLib.Key.MnemonicSeed.Checksum
+  doctest BitcoinLib.Key.HD.MnemonicSeed.Checksum
 
-  alias BitcoinLib.Key.MnemonicSeed.Checksum
+  alias BitcoinLib.Key.HD.MnemonicSeed.Checksum
 
   test "compute a checksum" do
     checksum =
@@ -16,7 +16,7 @@ defmodule BitcoinLib.Key.MnemonicSeed.ChecksumTest do
   test "validates a seed's checksum" do
     is_valid? =
       <<5, 235, 104, 86, 249, 249, 27, 246, 234, 99, 13, 18, 209, 116, 50, 248, 35>>
-      |> BitcoinLib.Key.MnemonicSeed.Checksum.validate_seed()
+      |> Checksum.validate_seed()
 
     assert is_valid?
   end

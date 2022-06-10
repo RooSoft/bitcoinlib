@@ -1,9 +1,9 @@
-defmodule BitcoinLib.Key.MnemonicSeedTest do
+defmodule BitcoinLib.Key.HD.MnemonicSeedTest do
   use ExUnit.Case
 
-  doctest BitcoinLib.Key.MnemonicSeed
+  doctest BitcoinLib.Key.HD.MnemonicSeed
 
-  alias BitcoinLib.Key.MnemonicSeed
+  alias BitcoinLib.Key.HD.MnemonicSeed
 
   test "convert a 128 bit entropy number into a 12 words list" do
     entropy = 101_750_443_022_601_924_635_824_320_539_097_414_732

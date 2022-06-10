@@ -1,9 +1,9 @@
-defmodule BitcoinLib.Key.ExtendedPrivateTest do
+defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
   use ExUnit.Case
 
-  doctest BitcoinLib.Key.ExtendedPrivate
+  doctest BitcoinLib.Key.HD.ExtendedPrivate
 
-  alias BitcoinLib.Key.{ExtendedPrivate, MnemonicSeed}
+  alias BitcoinLib.Key.HD.{ExtendedPrivate, MnemonicSeed}
 
   test "creates a WIF from a private key" do
     seed =

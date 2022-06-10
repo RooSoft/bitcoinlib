@@ -1,4 +1,4 @@
-defmodule BitcoinLib.Key.ExtendedPrivate do
+defmodule BitcoinLib.Key.HD.ExtendedPrivate do
   @moduledoc """
   Bitcoin extended private key management module
   """

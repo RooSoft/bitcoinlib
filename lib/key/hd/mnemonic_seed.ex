@@ -1,4 +1,4 @@
-defmodule BitcoinLib.Key.MnemonicSeed do
+defmodule BitcoinLib.Key.HD.MnemonicSeed do
   @moduledoc """
   Compute a mnemonic seed from a private key
   """
@@ -7,14 +7,14 @@ defmodule BitcoinLib.Key.MnemonicSeed do
 
   alias BitcoinLib.Crypto.BitUtils
 
-  alias BitcoinLib.Key.MnemonicSeed.{Checksum, Wordlist}
+  alias BitcoinLib.Key.HD.MnemonicSeed.{Checksum, Wordlist}
 
   @doc """
   Convert a random entropy number into a mnemonic seed
 
   ## Examples
     iex> 101_750_443_022_601_924_635_824_320_539_097_414_732
-    ...> |> BitcoinLib.Key.MnemonicSeed.wordlist_from_entropy()
+    ...> |> BitcoinLib.Key.HD.MnemonicSeed.wordlist_from_entropy()
     ...> |> Enum.join(" ")
     "erode gloom apart system broom lemon dismiss post artist slot humor occur"
   """
@@ -33,7 +33,7 @@ defmodule BitcoinLib.Key.MnemonicSeed do
 
   ## Examples
     iex> "brick giggle panic mammal document foam gym canvas wheel among room analyst"
-    ...> |> BitcoinLib.Key.MnemonicSeed.to_seed()
+    ...> |> BitcoinLib.Key.HD.MnemonicSeed.to_seed()
     "7e4803bd0278e223532f5833d81605bedc5e16f39c49bdfff322ca83d444892ddb091969761ea406bee99d6ab613fad6a99a6d4beba66897b252f00c9dd7b364"
   """
   @spec to_seed(String.t(), String.t()) :: String.t()

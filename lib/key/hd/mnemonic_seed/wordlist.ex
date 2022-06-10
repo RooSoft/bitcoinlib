@@ -1,4 +1,4 @@
-defmodule BitcoinLib.Key.MnemonicSeed.Wordlist do
+defmodule BitcoinLib.Key.HD.MnemonicSeed.Wordlist do
   @moduledoc """
   A list of all the words that can be contained in a private key seed
 
@@ -9,7 +9,7 @@ defmodule BitcoinLib.Key.MnemonicSeed.Wordlist do
   Get a single word from the wordlist by index
 
   ## Examples
-    iex> BitcoinLib.Key.MnemonicSeed.Wordlist.get_word(8)
+    iex> BitcoinLib.Key.HD.MnemonicSeed.Wordlist.get_word(8)
     "absurd"
   """
   @spec get_word(Integer.t()) :: String.t()
@@ -22,7 +22,7 @@ defmodule BitcoinLib.Key.MnemonicSeed.Wordlist do
   Convert a list of indices into words from the wordlist
 
   ## Examples
-    iex> BitcoinLib.Key.MnemonicSeed.Wordlist.get_words([8, 2, 5])
+    iex> BitcoinLib.Key.HD.MnemonicSeed.Wordlist.get_words([8, 2, 5])
     ["absurd", "able", "absent"]
   """
   @spec get_words(list(Integer.t())) :: list(String.t())
@@ -35,7 +35,7 @@ defmodule BitcoinLib.Key.MnemonicSeed.Wordlist do
   Convert a word into an indice from the wordlist
 
   ## Examples
-    iex> BitcoinLib.Key.MnemonicSeed.Wordlist.get_indice("absurd")
+    iex> BitcoinLib.Key.HD.MnemonicSeed.Wordlist.get_indice("absurd")
     {:found, 8, "absurd"}
   """
   @spec get_indice(String.t()) :: Integer.t()
@@ -51,7 +51,7 @@ defmodule BitcoinLib.Key.MnemonicSeed.Wordlist do
 
   ## Examples
     iex> ["absurd", "able", "absent"]
-    ...> |> BitcoinLib.Key.MnemonicSeed.Wordlist.get_indices()
+    ...> |> BitcoinLib.Key.HD.MnemonicSeed.Wordlist.get_indices()
     [8, 2, 5]
   """
   @spec get_indices(list(String.t())) :: list(Integer.t())
@@ -68,7 +68,7 @@ defmodule BitcoinLib.Key.MnemonicSeed.Wordlist do
   Get a list of all words in the wordlist
 
   ## Examples
-    iex> BitcoinLib.Key.MnemonicSeed.Wordlist.all
+    iex> BitcoinLib.Key.HD.MnemonicSeed.Wordlist.all
     ...> |> Enum.count()
     2048
   """
