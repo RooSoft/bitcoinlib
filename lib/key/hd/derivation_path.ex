@@ -18,12 +18,14 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
   ## Examples
     iex> "m / 44' / 0' / 0' / 0 / 0"
     ...> |> BitcoinLib.Key.HD.DerivationPath.parse()
-    %{
-      purpose: %{hardened?: true, value: 44},
-      coin_type: %{hardened?: true, value: 0},
-      account: %{hardened?: true, value: 0},
-      change: %{hardened?: false, value: 0},
-      address_index: %{hardened?: false, value: 0}
+    { :ok,
+      %{
+        purpose: %{hardened?: true, value: 44},
+        coin_type: %{hardened?: true, value: 0},
+        account: %{hardened?: true, value: 0},
+        change: %{hardened?: false, value: 0},
+        address_index: %{hardened?: false, value: 0}
+      }
     }
   """
   def parse(derivation_path) do
@@ -33,6 +35,7 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
     |> parse_values
     |> assign_keys
     |> create_hash
+    |> add_status_code
   end
 
   defp split_path(derivation_path) do
@@ -72,5 +75,21 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
       acc
       |> Map.put(key, value)
     end)
+  end
+
+  defp add_status_code(
+         %{
+           purpose: %{hardened?: _, value: _},
+           coin_type: %{hardened?: _, value: _},
+           account: %{hardened?: _, value: _},
+           change: %{hardened?: _, value: _},
+           address_index: %{hardened?: _, value: _}
+         } = result
+       ) do
+    {:ok, result}
+  end
+
+  defp add_status_code(%{}) do
+    {:error, "Some parameters are missing"}
   end
 end
