@@ -14,7 +14,7 @@ defmodule BitcoinLib.Key.HD.DerivationPathTest do
 
     assert %{
              purpose: :bip44,
-             coin_type: %{hardened?: true, value: 0},
+             coin_type: :bitcoin,
              account: %{hardened?: true, value: 0},
              change: %{hardened?: false, value: 0},
              address_index: %{hardened?: false, value: 0}
@@ -30,7 +30,7 @@ defmodule BitcoinLib.Key.HD.DerivationPathTest do
 
     assert %{
              purpose: :bip44,
-             coin_type: %{hardened?: true, value: 0},
+             coin_type: :bitcoin,
              account: %{hardened?: true, value: 0},
              change: %{hardened?: false, value: 0},
              address_index: %{hardened?: false, value: 0}
@@ -80,7 +80,7 @@ defmodule BitcoinLib.Key.HD.DerivationPathTest do
 
     assert %{
              purpose: :bip44,
-             coin_type: %{hardened?: true, value: 0},
+             coin_type: :bitcoin,
              account: %{hardened?: true, value: 0},
              change: %{hardened?: false, value: 0},
              address_index: %{hardened?: false, value: 0}

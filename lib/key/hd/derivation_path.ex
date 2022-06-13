@@ -5,9 +5,6 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
   Inspired by https://learnmeabitcoin.com/technical/derivation-paths
   """
 
-  # @mainnet_coin_type 0x80000000
-  # @testnet_coin_type 0x80000001
-
   # @hardened_value 0x80000000
 
   @bip44_purpose 44
@@ -17,6 +14,12 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
   @bip44_atom :bip44
   @bip49_atom :bip49
   @bip84_atom :bip84
+
+  @bitcoin_coin_type_value 0
+  @bitcoin_testnet_coin_type_value 1
+
+  @bitcoin_atom :bitcoin
+  @bitcoin_testnet_atom :bitcoin_testnet
 
   @invalid_atom :invalid
 
@@ -31,7 +34,7 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
     { :ok,
       %{
         purpose: :bip44,
-        coin_type: %{hardened?: true, value: 1},
+        coin_type: :bitcoin_testnet,
         account: %{hardened?: true, value: 2},
         change: %{hardened?: false, value: 3},
         address_index: %{hardened?: false, value: 4}
@@ -68,6 +71,7 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
     |> assign_keys
     |> create_hash
     |> parse_purpose
+    |> parse_coin_type
     |> add_status_code
   end
 
@@ -123,18 +127,35 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
     )
   end
 
+  defp parse_coin_type(%{coin_type: %{hardened?: true, value: value}} = hash) do
+    hash
+    |> Map.put(
+      :coin_type,
+      case value do
+        @bitcoin_coin_type_value -> @bitcoin_atom
+        @bitcoin_testnet_coin_type_value -> @bitcoin_testnet_atom
+        _ -> @invalid_atom
+      end
+    )
+  end
+
   defp add_status_code(
          %{
            purpose: purpose,
-           coin_type: %{hardened?: _, value: _},
+           coin_type: coin_type,
            account: %{hardened?: _, value: _},
            change: %{hardened?: _, value: _},
            address_index: %{hardened?: _, value: _}
          } = result
        ) do
-    case purpose do
-      @invalid_atom  -> {:error, "Invalid purpose"}
-      _ -> {:ok, result}
+    if purpose == @invalid_atom do
+      {:error, "Invalid purpose"}
+    else
+      if(coin_type == @invalid_atom) do
+        {:error, "Invalid coin type"}
+      else
+        {:ok, result}
+      end
     end
   end
 
