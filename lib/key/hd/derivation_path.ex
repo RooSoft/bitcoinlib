@@ -23,6 +23,12 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
   @bitcoin_coin_type_value 0
   @bitcoin_testnet_coin_type_value 1
 
+  # https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki#change
+  @external_chain_value 0
+  @external_chain_atom :external_chain
+  @change_chain_value 1
+  @change_chain_atom :change_chain
+
   @bitcoin_atom :bitcoin
   @bitcoin_testnet_atom :bitcoin_testnet
 
@@ -34,14 +40,14 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
   Transforms a derivation path string into an elixir structure
 
   ## Examples
-    iex> "m / 44' / 1' / 2' / 3 / 4"
+    iex> "m / 44' / 1' / 2' / 1 / 4"
     ...> |> BitcoinLib.Key.HD.DerivationPath.parse()
     { :ok,
       %{
         purpose: :bip44,
         coin_type: :bitcoin_testnet,
         account: %{hardened?: true, value: 2},
-        change: %{hardened?: false, value: 3},
+        change: :change_chain,
         address_index: %{hardened?: false, value: 4}
       }
     }
@@ -77,6 +83,7 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
     |> create_hash
     |> parse_purpose
     |> parse_coin_type
+    |> parse_change
     |> add_status_code
   end
 
@@ -144,6 +151,18 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
     )
   end
 
+  defp parse_change(%{change: %{hardened?: false, value: value}} = hash) do
+    hash
+    |> Map.put(
+      :change,
+      case value do
+        @external_chain_value -> @external_chain_atom
+        @change_chain_value -> @change_chain_atom
+        _ -> @invalid_atom
+      end
+    )
+  end
+
   defp add_status_code(%{purpose: @invalid_atom}) do
     {:error, "Invalid purpose"}
   end
@@ -152,12 +171,16 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
     {:error, "Invalid coin type"}
   end
 
+  defp add_status_code(%{change: @invalid_atom}) do
+    {:error, "Invalid change chain"}
+  end
+
   defp add_status_code(
          %{
            purpose: _,
            coin_type: _,
            account: %{hardened?: _, value: _},
-           change: %{hardened?: _, value: _},
+           change: _,
            address_index: %{hardened?: _, value: _}
          } = result
        ) do
