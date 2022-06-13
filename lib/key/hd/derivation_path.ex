@@ -16,15 +16,15 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
   Transforms a derivation path string into an elixir structure
 
   ## Examples
-    iex> "m / 44' / 0' / 0' / 0 / 0"
+    iex> "m / 44' / 1' / 2' / 3 / 4"
     ...> |> BitcoinLib.Key.HD.DerivationPath.parse()
     { :ok,
       %{
         purpose: %{hardened?: true, value: 44},
-        coin_type: %{hardened?: true, value: 0},
-        account: %{hardened?: true, value: 0},
-        change: %{hardened?: false, value: 0},
-        address_index: %{hardened?: false, value: 0}
+        coin_type: %{hardened?: true, value: 1},
+        account: %{hardened?: true, value: 2},
+        change: %{hardened?: false, value: 3},
+        address_index: %{hardened?: false, value: 4}
       }
     }
   """
