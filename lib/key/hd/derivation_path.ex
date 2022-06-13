@@ -18,6 +18,8 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
   @bip49_atom :bip49
   @bip84_atom :bip84
 
+  @invalid_atom :invalid
+
   # @hardened_index_base 0x80000000
 
   @doc """
@@ -116,7 +118,7 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
         @bip44_purpose -> @bip44_atom
         @bip49_purpose -> @bip49_atom
         @bip84_purpose -> @bip84_atom
-        _ -> :invalid
+        _ -> @invalid_atom
       end
     )
   end
@@ -131,7 +133,7 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
          } = result
        ) do
     case purpose do
-      :invalid -> {:error, "Invalid purpose"}
+      @invalid_atom  -> {:error, "Invalid purpose"}
       _ -> {:ok, result}
     end
   end
