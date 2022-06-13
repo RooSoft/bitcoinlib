@@ -144,24 +144,24 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
     )
   end
 
+  defp add_status_code(%{purpose: @invalid_atom}) do
+    {:error, "Invalid purpose"}
+  end
+
+  defp add_status_code(%{coin_type: @invalid_atom}) do
+    {:error, "Invalid coin type"}
+  end
+
   defp add_status_code(
          %{
-           purpose: purpose,
-           coin_type: coin_type,
+           purpose: _,
+           coin_type: _,
            account: %{hardened?: _, value: _},
            change: %{hardened?: _, value: _},
            address_index: %{hardened?: _, value: _}
          } = result
        ) do
-    if purpose == @invalid_atom do
-      {:error, "Invalid purpose"}
-    else
-      if(coin_type == @invalid_atom) do
-        {:error, "Invalid coin type"}
-      else
-        {:ok, result}
-      end
-    end
+    {:ok, result}
   end
 
   defp add_status_code(_result) do
