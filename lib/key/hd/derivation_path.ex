@@ -8,7 +8,15 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
   # @mainnet_coin_type 0x80000000
   # @testnet_coin_type 0x80000001
 
-  # @bip44_purpose 0x8000002C
+  # @hardened_value 0x80000000
+
+  @bip44_purpose 44
+  @bip49_purpose 49
+  @bip84_purpose 84
+
+  @bip44_atom :bip44
+  @bip49_atom :bip49
+  @bip84_atom :bip84
 
   # @hardened_index_base 0x80000000
 
@@ -20,7 +28,7 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
     ...> |> BitcoinLib.Key.HD.DerivationPath.parse()
     { :ok,
       %{
-        purpose: %{hardened?: true, value: 44},
+        purpose: :bip44,
         coin_type: %{hardened?: true, value: 1},
         account: %{hardened?: true, value: 2},
         change: %{hardened?: false, value: 3},
@@ -57,6 +65,7 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
     |> parse_values
     |> assign_keys
     |> create_hash
+    |> parse_purpose
     |> add_status_code
   end
 
@@ -99,9 +108,21 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
     end)
   end
 
+  defp parse_purpose(%{purpose: %{hardened?: true, value: value}} = hash) do
+    hash
+    |> Map.put(
+      :purpose,
+      case value do
+        @bip44_purpose -> @bip44_atom
+        @bip49_purpose -> @bip49_atom
+        @bip84_purpose -> @bip84_atom
+      end
+    )
+  end
+
   defp add_status_code(
          %{
-           purpose: %{hardened?: _, value: _},
+           purpose: _,
            coin_type: %{hardened?: _, value: _},
            account: %{hardened?: _, value: _},
            change: %{hardened?: _, value: _},
