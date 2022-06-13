@@ -7,14 +7,19 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
 
   # @hardened_value 0x80000000
 
+  # https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki#purpose
   @bip44_purpose 44
-  @bip49_purpose 49
-  @bip84_purpose 84
-
   @bip44_atom :bip44
+
+  # https://github.com/bitcoin/bips/blob/master/bip-0049.mediawiki#public-key-derivation
+  @bip49_purpose 49
   @bip49_atom :bip49
+
+  # https://github.com/bitcoin/bips/blob/master/bip-0084.mediawiki#public-key-derivation
+  @bip84_purpose 84
   @bip84_atom :bip84
 
+  # https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki#registered-coin-types
   @bitcoin_coin_type_value 0
   @bitcoin_testnet_coin_type_value 1
 
