@@ -146,4 +146,14 @@ defmodule BitcoinLib.Key.HD.DerivationPathTest do
 
     assert %{coin_type: :bitcoin_testnet} = result
   end
+
+  test "derivation path with invalid coin type" do
+    path = "m/44'/2'/0'/0/0"
+
+    {:error, result} =
+      path
+      |> DerivationPath.parse()
+
+    assert "Invalid coin type" = result
+  end
 end
