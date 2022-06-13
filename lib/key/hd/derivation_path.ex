@@ -22,8 +22,8 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
   @bitcoin_testnet_coin_type_value 1
 
   # https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki#change
-  @external_chain_value 0
-  @external_chain_atom :external_chain
+  @receiving_chain_value 0
+  @receiving_chain_atom :receiving_chain
   @change_chain_value 1
   @change_chain_atom :change_chain
 
@@ -152,7 +152,7 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
     |> Map.put(
       :change,
       case value do
-        @external_chain_value -> @external_chain_atom
+        @receiving_chain_value -> @receiving_chain_atom
         @change_chain_value -> @change_chain_atom
         _ -> @invalid_atom
       end
