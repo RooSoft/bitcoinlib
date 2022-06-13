@@ -30,6 +30,28 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
   """
   def parse(derivation_path) do
     derivation_path
+    |> validate
+    |> maybe_parse_valid_derivation_path()
+  end
+
+  defp validate(derivation_path) do
+    trimmed_path =
+      derivation_path
+      |> String.replace(" ", "")
+      |> String.downcase()
+
+    case Regex.match?(~r/^m((\/(\d+\'?)*){5})$/, trimmed_path) do
+      true -> {:ok, derivation_path}
+      false -> {:error, "Invalid derivation path"}
+    end
+  end
+
+  defp maybe_parse_valid_derivation_path({:error, _}) do
+    {:error, "Invalid derivation path"}
+  end
+
+  defp maybe_parse_valid_derivation_path({:ok, derivation_path}) do
+    derivation_path
     |> split_path
     |> extract_string_values
     |> parse_values
@@ -89,7 +111,7 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
     {:ok, result}
   end
 
-  defp add_status_code(_) do
+  defp add_status_code(_result) do
     {:error, "Some parameters are missing"}
   end
 end
