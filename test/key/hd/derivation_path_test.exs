@@ -50,4 +50,20 @@ defmodule BitcoinLib.Key.HD.DerivationPathTest do
 
     assert "Some parameters are missing" = result
   end
+
+  test "derivation path with double quote" do
+    path = "m / 44'' / 0' / 0' / 0 / 0"
+
+    {:ok, result} =
+      path
+      |> DerivationPath.parse()
+
+    assert %{
+             purpose: %{hardened?: true, value: 44},
+             coin_type: %{hardened?: true, value: 0},
+             account: %{hardened?: true, value: 0},
+             change: %{hardened?: false, value: 0},
+             address_index: %{hardened?: false, value: 0}
+           } = result
+  end
 end
