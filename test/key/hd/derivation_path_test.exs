@@ -61,6 +61,16 @@ defmodule BitcoinLib.Key.HD.DerivationPathTest do
            } = result
   end
 
+  test "a derivation path with an invalid purpose" do
+    path = "m/88'/0'/0'/0/0"
+
+    {:error, result} =
+      path
+      |> DerivationPath.parse()
+
+    assert "Invalid purpose" = result
+  end
+
   test "valid derivation path with an uppper case M" do
     path = "M / 44' / 0' / 0' / 0 / 0"
 

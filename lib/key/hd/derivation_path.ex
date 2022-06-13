@@ -116,20 +116,24 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
         @bip44_purpose -> @bip44_atom
         @bip49_purpose -> @bip49_atom
         @bip84_purpose -> @bip84_atom
+        _ -> :invalid
       end
     )
   end
 
   defp add_status_code(
          %{
-           purpose: _,
+           purpose: purpose,
            coin_type: %{hardened?: _, value: _},
            account: %{hardened?: _, value: _},
            change: %{hardened?: _, value: _},
            address_index: %{hardened?: _, value: _}
          } = result
        ) do
-    {:ok, result}
+    case purpose do
+      :invalid -> {:error, "Invalid purpose"}
+      _ -> {:ok, result}
+    end
   end
 
   defp add_status_code(_result) do
