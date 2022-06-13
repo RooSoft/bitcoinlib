@@ -89,7 +89,7 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
     {:ok, result}
   end
 
-  defp add_status_code(%{}) do
+  defp add_status_code(_) do
     {:error, "Some parameters are missing"}
   end
 end

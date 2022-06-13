@@ -31,8 +31,18 @@ defmodule BitcoinLib.Key.HD.DerivationPathTest do
     assert "Some parameters are missing" = result
   end
 
-  test "derivation path with a missing value" do
+  test "derivation path with a missing slash and value" do
     path = "m / 44' / 0' / 0' / 0"
+
+    {:error, result} =
+      path
+      |> DerivationPath.parse()
+
+    assert "Some parameters are missing" = result
+  end
+
+  test "derivation path with missing values but all slashes present" do
+    path = "m / 44' / 0' / 0' ///"
 
     {:error, result} =
       path
