@@ -24,10 +24,20 @@ defmodule BitcoinLib.Key.HD.DerivationPathTest do
   test "cause an error with an empty derivation path" do
     path = ""
 
-    {:error, _} =
+    {:error, result} =
       path
       |> DerivationPath.parse()
 
-    assert true
+    assert "Some parameters are missing" = result
+  end
+
+  test "derivation path with a missing value" do
+    path = "m / 44' / 0' / 0' / 0"
+
+    {:error, result} =
+      path
+      |> DerivationPath.parse()
+
+    assert "Some parameters are missing" = result
   end
 end
