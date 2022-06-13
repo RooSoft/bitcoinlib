@@ -27,10 +27,27 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
     }
   """
   def parse(derivation_path) do
+    derivation_path
+    |> split_path
+    |> extract_string_values
+    |> parse_values
+    |> assign_keys
+    |> create_hash
+  end
+
+  defp split_path(derivation_path) do
     Regex.scan(~r/\/\s*(\d+\'?)/, derivation_path)
+  end
+
+  defp extract_string_values(split_path) do
+    split_path
     |> Enum.map(fn [_, value] ->
       Regex.named_captures(~r/(?<value_string>\d+)(?<has_quote>\'?)/, value)
     end)
+  end
+
+  defp parse_values(string_values) do
+    string_values
     |> Enum.map(fn %{"has_quote" => has_quote, "value_string" => value_string} ->
       {value, _} = Integer.parse(value_string)
 
@@ -39,10 +56,18 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
         hardened?: has_quote == "'"
       }
     end)
+  end
+
+  defp assign_keys(parsed_values) do
+    parsed_values
     |> Enum.zip_with(
       ["purpose", "coin_type", "account", "change", "address_index"],
       fn value, title -> {String.to_atom(title), value} end
     )
+  end
+
+  defp create_hash(keys_and_values) do
+    keys_and_values
     |> Enum.reduce(%{}, fn {key, value}, acc ->
       acc
       |> Map.put(key, value)
