@@ -5,8 +5,6 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
   Inspired by https://learnmeabitcoin.com/technical/derivation-paths
   """
 
-  # @hardened_value 0x80000000
-
   # https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki#purpose
   @bip44_purpose 44
   @bip44_atom :bip44
@@ -33,8 +31,6 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
   @bitcoin_testnet_atom :bitcoin_testnet
 
   @invalid_atom :invalid
-
-  # @hardened_index_base 0x80000000
 
   @doc """
   Transforms a derivation path string into an elixir structure
