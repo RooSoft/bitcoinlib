@@ -37,6 +37,18 @@ defmodule BitcoinLib.Key.HD.DerivationPathTest do
            } = result
   end
 
+  test "a bip49 derivation path" do
+    path = "m/49'/0'/0'/0/0"
+
+    {:ok, result} =
+      path
+      |> DerivationPath.parse()
+
+    assert %{
+             purpose: :bip49
+           } = result
+  end
+
   test "valid derivation path with an uppper case M" do
     path = "M / 44' / 0' / 0' / 0 / 0"
 
