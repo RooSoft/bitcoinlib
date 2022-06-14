@@ -6,15 +6,15 @@ defmodule BitcoinLib.Key.HD.ExtendedPublicTest do
   alias BitcoinLib.Key.HD.ExtendedPublic
 
   test "derives an extended public key from an extended private key" do
-    private_key = "081549973bafbba825b31bcc402a3c4ed8e3185c2f3a31c75e55f423e9629aa3"
+    private_key = 0x081549973BAFBBA825B31BCC402A3C4ED8E3185C2F3A31C75E55F423E9629AA3
 
     {uncompressed, compressed} =
       private_key
       |> ExtendedPublic.from_private_key()
 
-    assert "0343b337dec65a47b3362c9620a6e6ff39a1ddfa908abab1666c8a30a3f8a7cccc" == compressed
+    assert 0x0343B337DEC65A47B3362C9620A6E6FF39A1DDFA908ABAB1666C8A30A3F8A7CCCC == compressed
 
-    assert "0443b337dec65a47b3362c9620a6e6ff39a1ddfa908abab1666c8a30a3f8a7cccc" <>
-             "fc24a7914950b6405729a9313cec6ae5bb4a082f92d05ac49df4b6dd8387bfeb" == uncompressed
+    assert 0x0443B337DEC65A47B3362C9620A6E6FF39A1DDFA908ABAB1666C8A30A3F8A7CCCCFC24A7914950B6405729A9313CEC6AE5BB4A082F92D05AC49DF4B6DD8387BFEB ==
+             uncompressed
   end
 end

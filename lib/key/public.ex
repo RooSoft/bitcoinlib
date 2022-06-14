@@ -9,19 +9,18 @@ defmodule BitcoinLib.Key.Public do
   Based on https://learnmeabitcoin.com/technical/public-key
 
   ## Examples
-    iex> "0a8d286b11b98f6cb2585b627ff44d12059560acd430dcfa1260ef2bd9569373"
+    iex> 0x0a8d286b11b98f6cb2585b627ff44d12059560acd430dcfa1260ef2bd9569373
     ...> |> BitcoinLib.Key.Public.from_private_key
     {
-      "040f69ef8f2feb09b29393eef514761f22636b90d8e4d3f2138b2373bd37523053002119e16b613619691f760eadd486315fc9e36491c7adb76998d1b903b3dd12",
-      "020f69ef8f2feb09b29393eef514761f22636b90d8e4d3f2138b2373bd37523053"
+      0x040f69ef8f2feb09b29393eef514761f22636b90d8e4d3f2138b2373bd37523053002119e16b613619691f760eadd486315fc9e36491c7adb76998d1b903b3dd12,
+      0x020f69ef8f2feb09b29393eef514761f22636b90d8e4d3f2138b2373bd37523053
     }
   """
-  @spec from_private_key(String.t()) :: {String.t(), String.t()}
-  def from_private_key(private_key) when is_binary(private_key) do
+  @spec from_private_key(Integer.t()) :: {Integer.t(), Integer.t()}
+  def from_private_key(private_key) do
     bitstring_private_key =
       private_key
-      |> String.upcase()
-      |> Base.decode16!()
+      |> Binary.from_integer()
 
     {public_uncompressed, _private} =
       :crypto.generate_key(:ecdh, :secp256k1, bitstring_private_key)
@@ -29,15 +28,9 @@ defmodule BitcoinLib.Key.Public do
     compressed = get_compressed(public_uncompressed)
 
     {
-      Base.encode16(public_uncompressed, case: :lower),
-      Base.encode16(compressed, case: :lower)
+      public_uncompressed |> Binary.to_integer(),
+      compressed |> Binary.to_integer()
     }
-  end
-
-  def from_private_key(private_key) when is_integer(private_key) do
-    private_key
-    |> Integer.to_string(16)
-    |> from_private_key()
   end
 
   defp get_compressed(public_uncompressed) do

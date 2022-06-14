@@ -78,7 +78,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
   end
 
   defp compute_hmac_input(%{compressed_public_key: compressed_public_key, index: index} = hash) do
-    binary_public_key = Binary.from_hex(compressed_public_key)
+    binary_public_key = Binary.from_integer(compressed_public_key)
 
     hmac_input = <<binary_public_key::bitstring, index::size(32)>> |> Binary.to_integer()
 

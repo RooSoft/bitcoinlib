@@ -22,13 +22,14 @@ defmodule BitcoinLib do
 
   ## Examples
 
-    iex> "0a8d286b11b98f6cb2585b627ff44d12059560acd430dcfa1260ef2bd9569373" |> BitcoinLib.derive_public_key()
+    iex> 0x0a8d286b11b98f6cb2585b627ff44d12059560acd430dcfa1260ef2bd9569373
+    ...> |> BitcoinLib.derive_public_key()
     {
-      "040f69ef8f2feb09b29393eef514761f22636b90d8e4d3f2138b2373bd37523053002119e16b613619691f760eadd486315fc9e36491c7adb76998d1b903b3dd12",
-      "020f69ef8f2feb09b29393eef514761f22636b90d8e4d3f2138b2373bd37523053"
+      0x040f69ef8f2feb09b29393eef514761f22636b90d8e4d3f2138b2373bd37523053002119e16b613619691f760eadd486315fc9e36491c7adb76998d1b903b3dd12,
+      0x020f69ef8f2feb09b29393eef514761f22636b90d8e4d3f2138b2373bd37523053
     }
   """
-  @spec derive_public_key(String.t()) :: {String.t(), String.t()}
+  @spec derive_public_key(Integer.t()) :: {Integer.t(), Integer.t()}
   def derive_public_key(private_key) do
     Public.from_private_key(private_key)
   end
