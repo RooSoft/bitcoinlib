@@ -40,4 +40,16 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
              <<224, 143, 204, 84, 66, 158, 71, 172, 85, 254, 189, 77, 201, 237, 204, 200, 141, 41,
                46, 180, 10, 163, 118, 90, 243, 218, 113, 120, 161, 74, 161, 20>>
   end
+
+  test "derive the first child of a private key" do
+    private_key = 0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9
+    chain_code = 0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B
+    index = 0
+
+    {:ok, child_private_key, child_chain_code} =
+      BitcoinLib.Key.HD.ExtendedPrivate.derive_child(private_key, chain_code, index)
+
+    assert child_private_key == 0x39F329FEDBA2A68E2A804FCD9AEEA4104ACE9080212A52CE8B52C1FB89850C72
+    assert child_chain_code == 0x05AAE71D7C080474EFAAB01FA79E96F4C6CFE243237780B0DF4BC36106228E31
+  end
 end
