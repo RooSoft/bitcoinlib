@@ -1,5 +1,5 @@
 defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
 
   doctest BitcoinLib.Key.HD.ExtendedPrivate
 
@@ -15,7 +15,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
 
     assert %{
              chain_code: _,
-             private_key: _
+             key: _
            } = extended_private_key
   end
 
@@ -28,7 +28,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
 
     seed = MnemonicSeed.to_seed(mnemonic)
 
-    %{private_key: private_key, chain_code: chain_code} =
+    %{key: private_key, chain_code: chain_code} =
       seed
       |> ExtendedPrivate.from_seed()
 
