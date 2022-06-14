@@ -3,12 +3,14 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
   Bitcoin extended private key management module
   """
 
+  @max_index 2_147_483_647
+
   @bitcoin_seed_hmac_key "Bitcoin seed"
   @hexadecimal 16
   @private_key_length 32
   @private_key_length_string_format @private_key_length * 2
 
-  @max_index 2_147_483_647
+  # this is n, as found here https://en.bitcoin.it/wiki/Secp256k1
   @order_of_the_curve 0xFFFFFFFF_FFFFFFFF_FFFFFFFF_FFFFFFFE_BAAEDCE6_AF48A03B_BFD25E8C_D0364141
 
   alias BitcoinLib.Crypto
