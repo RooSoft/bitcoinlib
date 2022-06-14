@@ -48,6 +48,15 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
       }
     }
   """
+  @spec parse(String.t()) ::
+          {:ok,
+           %{
+             purpose: Atom.t(),
+             coin_type: Atom.t(),
+             account: %{hardened?: Boolean.t(), value: Integer.t()},
+             change: Atom.t(),
+             address_index: %{hardened?: Boolean.t(), value: Integer.t()}
+           }}
   def parse(derivation_path) do
     derivation_path
     |> validate
