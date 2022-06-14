@@ -17,7 +17,7 @@ defmodule BitcoinLib.Key.Public do
     }
   """
   @spec from_private_key(String.t()) :: {String.t(), String.t()}
-  def from_private_key(private_key) do
+  def from_private_key(private_key) when is_binary(private_key) do
     bitstring_private_key =
       private_key
       |> String.upcase()
@@ -32,6 +32,12 @@ defmodule BitcoinLib.Key.Public do
       Base.encode16(public_uncompressed, case: :lower),
       Base.encode16(compressed, case: :lower)
     }
+  end
+
+  def from_private_key(private_key) when is_integer(private_key) do
+    private_key
+    |> Integer.to_string(16)
+    |> from_private_key()
   end
 
   defp get_compressed(public_uncompressed) do
