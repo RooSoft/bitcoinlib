@@ -52,6 +52,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
       0x05aae71d7c080474efaab01fa79e96f4c6cfe243237780b0df4bc36106228e31
     }
   """
+  @spec derive_child(Integer.t(), Integer.t(), Integer.t()) :: {:ok, Integer.t(), Integer.t()}
   def derive_child(key, chain_code, index) when index < @max_index do
     %{child_private_key: child_private_key, child_chain_code: child_chain_code} =
       %{key: key, chain_code: chain_code, index: index}
@@ -64,6 +65,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
     {:ok, child_private_key, child_chain_code}
   end
 
+  @spec derive_child(Integer.t(), Integer.t(), Integer.t()) :: {:error, String.t()}
   def derive_child(_, _, index) do
     {:error, "#{index} is too large of an index"}
   end
