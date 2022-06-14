@@ -1,1 +1,4 @@
-seed = "b1680c7a6ea6ed5ac9bf3bc3b43869a4c77098e60195bae51a94159333820e125c3409b8c8d74b4489f28ce71b06799b1126c1d9620767c2dadf642cf787cf36"
+mnemonics = "brick giggle panic mammal document foam gym canvas wheel among room analyst"
+seed = BitcoinLib.Key.HD.MnemonicSeed.to_seed(mnemonics)
+private_key = BitcoinLib.Key.HD.ExtendedPrivate.from_seed(seed)
+public_key = BitcoinLib.Key.HD.ExtendedPublic.from_private_key(private_key.key |> Binary.to_hex)
