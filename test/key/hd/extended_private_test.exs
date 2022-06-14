@@ -32,13 +32,8 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
       seed
       |> ExtendedPrivate.from_seed()
 
-    assert private_key ==
-             <<48, 166, 181, 156, 204, 201, 36, 252, 159, 253, 74, 176, 140, 92, 1, 240, 214, 164,
-               4, 103, 151, 187, 37, 93, 137, 25, 235, 62, 149, 192, 136, 113>>
-
-    assert chain_code ==
-             <<224, 143, 204, 84, 66, 158, 71, 172, 85, 254, 189, 77, 201, 237, 204, 200, 141, 41,
-               46, 180, 10, 163, 118, 90, 243, 218, 113, 120, 161, 74, 161, 20>>
+    assert private_key == 0x30A6B59CCCC924FC9FFD4AB08C5C01F0D6A4046797BB255D8919EB3E95C08871
+    assert chain_code == 0xE08FCC54429E47AC55FEBD4DC9EDCCC88D292EB40AA3765AF3DA7178A14AA114
   end
 
   test "derive the first child of a private key" do

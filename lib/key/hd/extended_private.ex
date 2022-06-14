@@ -22,19 +22,17 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
     iex> "7e4803bd0278e223532f5833d81605bedc5e16f39c49bdfff322ca83d444892ddb091969761ea406bee99d6ab613fad6a99a6d4beba66897b252f00c9dd7b364"
     ...> |> BitcoinLib.Key.HD.ExtendedPrivate.from_seed()
     %{
-      chain_code: <<90, 122, 235, 176, 251, 227, 123, 184, 158, 105, 10, 110, 53,
-        15, 175, 237, 53, 59, 98, 71, 65, 38, 158, 113, 0, 30, 96, 135, 50, 253,
-        129, 37>>,
-      key: <<65, 223, 111, 167, 240, 20, 166, 15, 215, 158, 197, 11, 32, 31, 236,
-        249, 206, 221, 131, 40, 146, 29, 223, 103, 10, 207, 206, 242, 39, 36, 38,
-        136>>
+      chain_code: 0x5A7AEBB0FBE37BB89E690A6E350FAFED353B624741269E71001E608732FD8125,
+      key: 0x41DF6FA7F014A60FD79EC50B201FECF9CEDD8328921DDF670ACFCEF227242688
     }
   """
+  @spec from_seed(Integer.t()) :: %{chain_code: Integer.t(), key: Integer.t()}
   def from_seed(seed) do
     seed
     |> Base.decode16!(case: :lower)
     |> Crypto.hmac_bitstring(@bitcoin_seed_hmac_key)
     |> split
+    |> to_integers
   end
 
   @doc """
@@ -121,6 +119,13 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
     %{
       key: private_key,
       chain_code: chain_code
+    }
+  end
+
+  defp to_integers(%{key: private_key, chain_code: chain_code}) do
+    %{
+      key: Binary.to_integer(private_key),
+      chain_code: Binary.to_integer(chain_code)
     }
   end
 end
