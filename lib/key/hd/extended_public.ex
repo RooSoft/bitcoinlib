@@ -15,6 +15,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic do
       0x0343b337dec65a47b3362c9620a6e6ff39a1ddfa908abab1666c8a30a3f8a7cccc
     }
   """
+  @spec from_private_key(Integer.t()) :: {Integer.t(), Integer.t()}
   def from_private_key(private_key) do
     private_key
     |> BitcoinLib.Key.Public.from_private_key()
