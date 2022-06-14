@@ -15,8 +15,14 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic do
       "0343b337dec65a47b3362c9620a6e6ff39a1ddfa908abab1666c8a30a3f8a7cccc"
     }
   """
-  def from_private_key(private_key) do
+  def from_private_key(private_key) when is_binary(private_key) do
     private_key
     |> BitcoinLib.Key.Public.from_private_key()
+  end
+
+  def from_private_key(private_key) when is_integer(private_key) do
+    private_key
+    |> Integer.to_string(16)
+    |> from_private_key()
   end
 end
