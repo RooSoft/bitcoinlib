@@ -6,12 +6,12 @@ defmodule BitcoinLib.Key.PublicHashTest do
   alias BitcoinLib.Key.PublicHash
 
   test "creates a public key hash from a public key" do
-    public_key = "02b4632d08485ff1df2db55b9dafd23347d1c47a457072a1e87be26896549a8737"
+    public_key = 0x02B4632D08485FF1DF2DB55B9DAFD23347D1C47A457072A1E87BE26896549A8737
 
     hash =
       public_key
       |> PublicHash.from_public_key()
 
-    assert hash == "93ce48570b55c42c2af816aeaba06cfee1224fae"
+    assert hash == 0x93CE48570B55C42C2AF816AEABA06CFEE1224FAE
   end
 end

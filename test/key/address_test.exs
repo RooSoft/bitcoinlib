@@ -6,7 +6,7 @@ defmodule BitcoinLib.Key.AddressTest do
   alias BitcoinLib.Key.Address
 
   test "generate a P2PKH from a public key hash" do
-    public_key_hash = "6ae201797de3fa7d1d95510f50c1a9c50ce4cc36"
+    public_key_hash = 0x6AE201797DE3FA7D1D95510F50C1A9C50CE4CC36
 
     address =
       public_key_hash
@@ -16,7 +16,7 @@ defmodule BitcoinLib.Key.AddressTest do
   end
 
   test "generate a P2SH from a public key hash" do
-    public_key_hash = "6ae201797de3fa7d1d95510f50c1a9c50ce4cc36"
+    public_key_hash = 0x6AE201797DE3FA7D1D95510F50C1A9C50CE4CC36
 
     address =
       public_key_hash
@@ -26,7 +26,7 @@ defmodule BitcoinLib.Key.AddressTest do
   end
 
   test "make sure default addresses are P2SH" do
-    public_key_hash = "6ae201797de3fa7d1d95510f50c1a9c50ce4cc36"
+    public_key_hash = 0x6AE201797DE3FA7D1D95510F50C1A9C50CE4CC36
 
     address =
       public_key_hash
