@@ -1,5 +1,5 @@
 defmodule BitcoinLib.Key.AddressTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
 
   doctest BitcoinLib.Key.Address
 

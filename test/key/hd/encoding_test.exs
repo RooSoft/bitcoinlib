@@ -1,5 +1,5 @@
 defmodule BitcoinLib.Key.HD.EncodingTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
 
   doctest BitcoinLib.Key.HD.Encoding
 

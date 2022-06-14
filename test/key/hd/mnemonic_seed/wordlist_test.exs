@@ -1,5 +1,5 @@
 defmodule BitcoinLib.Key.HD.MnemonicSeed.WordlistTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
 
   doctest BitcoinLib.Key.HD.MnemonicSeed.Wordlist
 

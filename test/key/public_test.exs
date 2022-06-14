@@ -1,5 +1,5 @@
 defmodule BitcoinLib.Key.PublicTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
 
   doctest BitcoinLib.Key.Public
 
