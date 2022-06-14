@@ -7,7 +7,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
 
   test "creates a WIF from a private key" do
     seed =
-      "67f93560761e20617de26e0cb84f7234aaf373ed2e66295c3d7397e6d7ebe882ea396d5d293808b0defd7edd2babd4c091ad942e6a9351e6d075a29d4df872af"
+      0x67F93560761E20617DE26E0CB84F7234AAF373ED2E66295C3D7397E6D7EBE882EA396D5D293808B0DEFD7EDD2BABD4C091AD942E6A9351E6D075A29D4DF872AF
 
     extended_private_key =
       seed

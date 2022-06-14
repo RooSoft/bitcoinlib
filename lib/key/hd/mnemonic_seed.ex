@@ -34,11 +34,15 @@ defmodule BitcoinLib.Key.HD.MnemonicSeed do
   ## Examples
     iex> "brick giggle panic mammal document foam gym canvas wheel among room analyst"
     ...> |> BitcoinLib.Key.HD.MnemonicSeed.to_seed()
-    "7e4803bd0278e223532f5833d81605bedc5e16f39c49bdfff322ca83d444892ddb091969761ea406bee99d6ab613fad6a99a6d4beba66897b252f00c9dd7b364"
+    0x7e4803bd0278e223532f5833d81605bedc5e16f39c49bdfff322ca83d444892ddb091969761ea406bee99d6ab613fad6a99a6d4beba66897b252f00c9dd7b364
   """
-  @spec to_seed(String.t(), String.t()) :: String.t()
+  @spec to_seed(String.t(), String.t()) :: Integer.t()
   def to_seed(mnemonic_phrase, passphrase \\ "") do
-    Pbkdf2.Base.hash_password(mnemonic_phrase, "mnemonic#{passphrase}", @pbkdf2_opts)
+    {integer_seed, _} =
+      Pbkdf2.Base.hash_password(mnemonic_phrase, "mnemonic#{passphrase}", @pbkdf2_opts)
+      |> Integer.parse(16)
+
+    integer_seed
   end
 
   defp append_checksum(binary_seed) do

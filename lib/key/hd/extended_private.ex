@@ -19,7 +19,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
   Converts a seed into a master private key hash containing the key itself and the chain code
 
   ## Examples
-    iex> "7e4803bd0278e223532f5833d81605bedc5e16f39c49bdfff322ca83d444892ddb091969761ea406bee99d6ab613fad6a99a6d4beba66897b252f00c9dd7b364"
+    iex> 0x7e4803bd0278e223532f5833d81605bedc5e16f39c49bdfff322ca83d444892ddb091969761ea406bee99d6ab613fad6a99a6d4beba66897b252f00c9dd7b364
     ...> |> BitcoinLib.Key.HD.ExtendedPrivate.from_seed()
     %{
       chain_code: 0x5A7AEBB0FBE37BB89E690A6E350FAFED353B624741269E71001E608732FD8125,
@@ -29,7 +29,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
   @spec from_seed(Integer.t()) :: %{chain_code: Integer.t(), key: Integer.t()}
   def from_seed(seed) do
     seed
-    |> Base.decode16!(case: :lower)
+    |> Binary.from_integer()
     |> Crypto.hmac_bitstring(@bitcoin_seed_hmac_key)
     |> split
     |> to_integers
