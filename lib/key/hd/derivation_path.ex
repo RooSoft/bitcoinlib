@@ -2,7 +2,12 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
   @moduledoc """
   Can parse derivation paths string format into a native format
 
-  Inspired by https://learnmeabitcoin.com/technical/derivation-paths
+  m / purpose' / coin_type' / account' / change / address_index
+
+  Inspired by
+  
+    https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki
+    https://learnmeabitcoin.com/technical/derivation-paths
   """
 
   # https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki#purpose
