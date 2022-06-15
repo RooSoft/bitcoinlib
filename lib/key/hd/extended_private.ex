@@ -88,6 +88,8 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
     |> Map.put(:hmac_input, hmac_input)
   end
 
+  # hmac_left_part and hmac_right_part are Il and Ir in slip-0010 as found here
+  # https://github.com/satoshilabs/slips/blob/master/slip-0010.md#master-key-generation
   defp compute_hmac(%{hmac_input: hmac_input, chain_code: chain_code} = hash) do
     {hmac_left_part, hmac_right_part} =
       hmac_input
