@@ -19,8 +19,8 @@ defmodule BitcoinLib.Key.HD.MnemonicSeed do
     "erode gloom apart system broom lemon dismiss post artist slot humor occur"
   """
   @spec wordlist_from_entropy(Integer.t()) :: list(String.t())
-  def wordlist_from_entropy(seed) do
-    seed
+  def wordlist_from_entropy(entropy) do
+    entropy
     |> Binary.from_integer()
     |> append_checksum
     |> split_indices
