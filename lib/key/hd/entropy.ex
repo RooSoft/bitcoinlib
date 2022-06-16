@@ -9,10 +9,10 @@ defmodule BitcoinLib.Key.HD.Entropy do
   creation
 
   ## Examples
-    iex> "012345012345012345012345012345012345012345012345012"
+    iex> "01234501234501234501234501234501234501234501234501"
     ...> |> BitcoinLib.Key.HD.Entropy.from_dice_rolls()
     ...> |> elem(1)
-    193_862_769_152_946_304_546_066_490_817_889_639_328
+    32_310_461_525_491_050_757_677_748_469_648_273_221
   """
   @spec from_dice_rolls(String.t()) :: {:ok, Integer.t()} | {:error, String.t()}
   def from_dice_rolls(dice_rolls) do
