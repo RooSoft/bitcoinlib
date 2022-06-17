@@ -8,6 +8,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
   @bitcoin_seed_hmac_key "Bitcoin seed"
 
   @private_key_length 32
+  @version_bytes 0x0488ADE4
 
   # this is n, as found here https://en.bitcoin.it/wiki/Secp256k1
   @order_of_the_curve 0xFFFFFFFF_FFFFFFFF_FFFFFFFF_FFFFFFFE_BAAEDCE6_AF48A03B_BFD25E8C_D0364141
@@ -19,17 +20,17 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
   Converts a seed into a master private key hash containing the key itself and the chain code
 
   ## Examples
-    iex> 0x7e4803bd0278e223532f5833d81605bedc5e16f39c49bdfff322ca83d444892ddb091969761ea406bee99d6ab613fad6a99a6d4beba66897b252f00c9dd7b364
+    iex> "7e4803bd0278e223532f5833d81605bedc5e16f39c49bdfff322ca83d444892ddb091969761ea406bee99d6ab613fad6a99a6d4beba66897b252f00c9dd7b364"
     ...> |> BitcoinLib.Key.HD.ExtendedPrivate.from_seed()
     %{
       chain_code: 0x5A7AEBB0FBE37BB89E690A6E350FAFED353B624741269E71001E608732FD8125,
       key: 0x41DF6FA7F014A60FD79EC50B201FECF9CEDD8328921DDF670ACFCEF227242688
     }
   """
-  @spec from_seed(Integer.t()) :: %{chain_code: Integer.t(), key: Integer.t()}
+  @spec from_seed(String.t()) :: %{chain_code: Integer.t(), key: Integer.t()}
   def from_seed(seed) do
     seed
-    |> Binary.from_integer()
+    |> Base.decode16!(case: :lower)
     |> Crypto.hmac_bitstring(@bitcoin_seed_hmac_key)
     |> split
     |> to_integers
