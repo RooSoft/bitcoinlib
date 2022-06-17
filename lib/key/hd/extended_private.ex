@@ -38,6 +38,9 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
   @doc """
   Derives the nth child of a HD private key
 
+  Takes a private key, its chain code and the child's index
+  Returns the child's private key and it's associated chain code
+
   Inspired by https://learnmeabitcoin.com/technical/extended-keys#child-extended-key-derivation
 
   ## Examples
