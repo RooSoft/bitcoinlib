@@ -1,4 +1,4 @@
-defmodule Bitcoinlib.MixProject do
+defmodule BitcoinLib.MixProject do
   use Mix.Project
 
   def project do
