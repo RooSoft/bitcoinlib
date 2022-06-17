@@ -3,6 +3,10 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic do
   Bitcoin extended public key management module
   """
 
+  @version_bytes 0x0488B21E
+
+  alias BitcoinLib.Crypto
+
   @doc """
   Derives an extended public key from an extended private key. Happens to be the same process
   as for regular keys.
@@ -19,5 +23,22 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic do
   def from_private_key(private_key) do
     private_key
     |> BitcoinLib.Key.Public.from_private_key()
+  end
+
+  def serialize_master_public_key(key, chain_code) do
+    data = <<
+      @version_bytes::size(32),
+      0::size(8),
+      0::size(32),
+      0::size(32),
+      chain_code::size(256),
+      key::size(264)
+    >>
+
+    <<
+      data::bitstring,
+      Crypto.checksum_bitstring(data)::bitstring
+    >>
+    |> Base58.encode()
   end
 end
