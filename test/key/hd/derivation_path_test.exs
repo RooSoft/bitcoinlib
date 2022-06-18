@@ -157,4 +157,18 @@ defmodule BitcoinLib.Key.HD.DerivationPathTest do
 
     assert "Invalid coin type" = result
   end
+
+  test "minimal derivation path returning no level information" do
+    path = "m"
+
+    {:ok, result} =
+      path
+      |> DerivationPath.parse()
+
+      refute Map.has_key?(result, :purpose)
+      refute Map.has_key?(result, :coin_type)
+      refute Map.has_key?(result, :account)
+      refute Map.has_key?(result, :change)
+      refute Map.has_key?(result, :address_index)
+    end
 end
