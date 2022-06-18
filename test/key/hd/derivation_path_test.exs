@@ -4,6 +4,7 @@ defmodule BitcoinLib.Key.HD.DerivationPathTest do
   doctest BitcoinLib.Key.HD.DerivationPath
 
   alias BitcoinLib.Key.HD.DerivationPath
+  alias BitcoinLib.Key.HD.DerivationPath.{Level}
 
   test "can parse a basic derivation path with a lowercase m" do
     path = "m / 44' / 0' / 0' / 0 / 0"
@@ -15,9 +16,9 @@ defmodule BitcoinLib.Key.HD.DerivationPathTest do
     assert %{
              purpose: :bip44,
              coin_type: :bitcoin,
-             account: %{hardened?: true, value: 0},
+             account: %Level{hardened?: true, value: 0},
              change: :receiving_chain,
-             address_index: %{hardened?: false, value: 0}
+             address_index: %Level{hardened?: false, value: 0}
            } = result
   end
 
@@ -31,9 +32,9 @@ defmodule BitcoinLib.Key.HD.DerivationPathTest do
     assert %{
              purpose: :bip44,
              coin_type: :bitcoin,
-             account: %{hardened?: true, value: 0},
+             account: %Level{hardened?: true, value: 0},
              change: :receiving_chain,
-             address_index: %{hardened?: false, value: 0}
+             address_index: %Level{hardened?: false, value: 0}
            } = result
   end
 
@@ -81,9 +82,9 @@ defmodule BitcoinLib.Key.HD.DerivationPathTest do
     assert %{
              purpose: :bip44,
              coin_type: :bitcoin,
-             account: %{hardened?: true, value: 0},
+             account: %Level{hardened?: true, value: 0},
              change: :receiving_chain,
-             address_index: %{hardened?: false, value: 0}
+             address_index: %Level{hardened?: false, value: 0}
            } = result
   end
 

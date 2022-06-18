@@ -5,10 +5,14 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
   m / purpose' / coin_type' / account' / change / address_index
 
   Inspired by
-  
+
     https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki
     https://learnmeabitcoin.com/technical/derivation-paths
   """
+
+  defstruct [:purpose, :coin_type, :account, :change, :address_index]
+
+  alias BitcoinLib.Key.HD.DerivationPath.Level
 
   # https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki#purpose
   @bip44_purpose 44
@@ -47,20 +51,20 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
       %{
         purpose: :bip44,
         coin_type: :bitcoin_testnet,
-        account: %{hardened?: true, value: 2},
+        account: %BitcoinLib.Key.HD.DerivationPath.Level{hardened?: true, value: 2},
         change: :change_chain,
-        address_index: %{hardened?: false, value: 4}
+        address_index: %BitcoinLib.Key.HD.DerivationPath.Level{hardened?: false, value: 4}
       }
     }
   """
   @spec parse(String.t()) ::
           {:ok,
-           %{
+           %BitcoinLib.Key.HD.DerivationPath{
              purpose: Atom.t(),
              coin_type: Atom.t(),
-             account: %{hardened?: Boolean.t(), value: Integer.t()},
+             account: %Level{},
              change: Atom.t(),
-             address_index: %{hardened?: Boolean.t(), value: Integer.t()}
+             address_index: %Level{}
            }}
   def parse(derivation_path) do
     derivation_path
@@ -113,7 +117,7 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
     |> Enum.map(fn %{"has_quote" => has_quote, "value_string" => value_string} ->
       {value, _} = Integer.parse(value_string)
 
-      %{
+      %Level{
         value: value,
         hardened?: has_quote == "'"
       }
