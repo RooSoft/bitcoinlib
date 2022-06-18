@@ -3,7 +3,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
 
   doctest BitcoinLib.Key.HD.ExtendedPrivate
 
-  alias BitcoinLib.Key.HD.{ExtendedPrivate, MnemonicSeed}
+  alias BitcoinLib.Key.HD.{DerivationPath, ExtendedPrivate, MnemonicSeed}
 
   test "creates a WIF from a private key" do
     seed =
@@ -52,9 +52,21 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
     primary_key = 0xE8F32E723DECF4051AEFAC8E2C93C9C5B214313817CDB01A1494B917C8436B35
     chain_code = 0x873DFF81C02F525623FD1FE5167EAC3A55A049DE3D314BB42EE227FFED37D508
 
-    serialized = BitcoinLib.Key.HD.ExtendedPrivate.serialize_master_private_key(primary_key, chain_code)
+    serialized =
+      BitcoinLib.Key.HD.ExtendedPrivate.serialize_master_private_key(primary_key, chain_code)
 
     assert "xprv9s21ZrQH143K3QTDL4LXw2F7HEK3wJUD2nW2nRk4stbPy6cq3jPPqjiChkVvvNKmPGJxWUtg6LnF5kejMRNNU3TGtRBeJgk33yuGBxrMPHi" ==
              serialized
+  end
+
+  test "get private key according to the minimal derivation path" do
+    private_key = 0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9
+    chain_code = 0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B
+
+    {:ok, child_private_key, child_chain_code} =
+      BitcoinLib.Key.HD.ExtendedPrivate.derive_child(private_key, chain_code, %DerivationPath{})
+
+    assert child_private_key == 0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9
+    assert child_chain_code == 0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B
   end
 end

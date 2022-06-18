@@ -14,7 +14,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
   @order_of_the_curve 0xFFFFFFFF_FFFFFFFF_FFFFFFFF_FFFFFFFE_BAAEDCE6_AF48A03B_BFD25E8C_D0364141
 
   alias BitcoinLib.Crypto
-  alias BitcoinLib.Key.HD.{ExtendedPublic}
+  alias BitcoinLib.Key.HD.{DerivationPath, ExtendedPublic}
 
   @doc """
   Converts a seed into a master private key hash containing the key itself and the chain code
@@ -57,7 +57,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
     }
   """
   @spec derive_child(Integer.t(), Integer.t(), Integer.t()) :: {:ok, Integer.t(), Integer.t()}
-  def derive_child(key, chain_code, index) when index < @max_index do
+  def derive_child(key, chain_code, index) when is_integer(index) and index < @max_index do
     %{child_private_key: child_private_key, child_chain_code: child_chain_code} =
       %{key: key, chain_code: chain_code, index: index}
       |> add_compressed_public_key
@@ -70,8 +70,14 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
   end
 
   @spec derive_child(Integer.t(), Integer.t(), Integer.t()) :: {:error, String.t()}
-  def derive_child(_, _, index) do
+  def derive_child(_, _, index) when is_integer(index) do
     {:error, "#{index} is too large of an index"}
+  end
+
+  @spec derive_child(Integer.t(), Integer.t(), %DerivationPath{}) ::
+          {:ok, Integer.t(), Integer.t()}
+  def derive_child(key, chain_code, %DerivationPath{} = _derivation_path) do
+    {:ok, key, chain_code}
   end
 
   @doc """
