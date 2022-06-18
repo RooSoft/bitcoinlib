@@ -98,14 +98,14 @@ defmodule BitcoinLib.Key.HD.DerivationPathTest do
     assert "Invalid derivation path" = result
   end
 
-  test "derivation path with a missing slash and value" do
+  test "derivation path with a missing level" do
     path = "m / 44' / 0' / 0' / 0"
 
-    {:error, result} =
+    {:ok, result} =
       path
       |> DerivationPath.parse()
 
-    assert "Invalid derivation path" = result
+    refute Map.has_key?(result, :address_index)
   end
 
   test "derivation path with missing values but all slashes present" do

@@ -78,7 +78,7 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
       |> String.replace(" ", "")
       |> String.downcase()
 
-    case Regex.match?(~r/^m((\/(\d+\'?)*){5})$/, trimmed_path) do
+    case Regex.match?(~r/^m((\/(\d+\'?)*){0,5})$/, trimmed_path) do
       true -> {:ok, derivation_path}
       false -> {:error, "Invalid derivation path"}
     end
@@ -189,19 +189,7 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
     {:error, "Invalid change chain"}
   end
 
-  defp add_status_code(
-         %{
-           purpose: _,
-           coin_type: _,
-           account: %{hardened?: _, value: _},
-           change: _,
-           address_index: %{hardened?: _, value: _}
-         } = result
-       ) do
+  defp add_status_code(result) do
     {:ok, result}
-  end
-
-  defp add_status_code(_result) do
-    {:error, "Some parameters are missing"}
   end
 end
