@@ -12,6 +12,7 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
 
   defstruct [:purpose, :coin_type, :account, :change, :address_index]
 
+  alias BitcoinLib.Key.HD.DerivationPath
   alias BitcoinLib.Key.HD.DerivationPath.Level
 
   # https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki#purpose
@@ -48,7 +49,7 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
     iex> "m / 44' / 1' / 2' / 1 / 4"
     ...> |> BitcoinLib.Key.HD.DerivationPath.parse()
     { :ok,
-      %{
+      %BitcoinLib.Key.HD.DerivationPath{
         purpose: :bip44,
         coin_type: :bitcoin_testnet,
         account: %BitcoinLib.Key.HD.DerivationPath.Level{hardened?: true, value: 2},
@@ -134,7 +135,7 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
 
   defp create_hash(keys_and_values) do
     keys_and_values
-    |> Enum.reduce(%{}, fn {key, value}, acc ->
+    |> Enum.reduce(%DerivationPath{}, fn {key, value}, acc ->
       acc
       |> Map.put(key, value)
     end)

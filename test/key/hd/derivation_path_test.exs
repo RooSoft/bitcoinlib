@@ -13,7 +13,7 @@ defmodule BitcoinLib.Key.HD.DerivationPathTest do
       path
       |> DerivationPath.parse()
 
-    assert %{
+    assert %DerivationPath{
              purpose: :bip44,
              coin_type: :bitcoin,
              account: %Level{hardened?: true, value: 0},
@@ -29,7 +29,7 @@ defmodule BitcoinLib.Key.HD.DerivationPathTest do
       path
       |> DerivationPath.parse()
 
-    assert %{
+    assert %DerivationPath{
              purpose: :bip44,
              coin_type: :bitcoin,
              account: %Level{hardened?: true, value: 0},
@@ -45,7 +45,7 @@ defmodule BitcoinLib.Key.HD.DerivationPathTest do
       path
       |> DerivationPath.parse()
 
-    assert %{
+    assert %DerivationPath{
              purpose: :bip49
            } = result
   end
@@ -57,7 +57,7 @@ defmodule BitcoinLib.Key.HD.DerivationPathTest do
       path
       |> DerivationPath.parse()
 
-    assert %{
+    assert %DerivationPath{
              purpose: :bip84
            } = result
   end
@@ -79,7 +79,7 @@ defmodule BitcoinLib.Key.HD.DerivationPathTest do
       path
       |> DerivationPath.parse()
 
-    assert %{
+    assert %DerivationPath{
              purpose: :bip44,
              coin_type: :bitcoin,
              account: %Level{hardened?: true, value: 0},
@@ -105,7 +105,7 @@ defmodule BitcoinLib.Key.HD.DerivationPathTest do
       path
       |> DerivationPath.parse()
 
-    refute Map.has_key?(result, :address_index)
+    assert nil == result.address_index
   end
 
   test "derivation path with missing values but all slashes present" do
@@ -165,10 +165,10 @@ defmodule BitcoinLib.Key.HD.DerivationPathTest do
       path
       |> DerivationPath.parse()
 
-      refute Map.has_key?(result, :purpose)
-      refute Map.has_key?(result, :coin_type)
-      refute Map.has_key?(result, :account)
-      refute Map.has_key?(result, :change)
-      refute Map.has_key?(result, :address_index)
-    end
+    assert nil == result.purpose
+    assert nil == result.coin_type
+    assert nil == result.account
+    assert nil == result.change
+    assert nil == result.address_index
+  end
 end
