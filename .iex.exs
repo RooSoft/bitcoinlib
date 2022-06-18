@@ -18,4 +18,4 @@ identifier = child_pub_key
 |> BitcoinLib.Crypto.sha256()
 |> BitcoinLib.Crypto.ripemd160()
 
-xprv = BitcoinLib.Key.HD.ExtendedPrivate.serialize_master_key(ss_pk.key, ss_pk.chain_code)
+xprv = BitcoinLib.Key.HD.ExtendedPrivate.serialize_master_private_key(ss_pk.key, ss_pk.chain_code)
