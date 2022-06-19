@@ -99,6 +99,10 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
     {:ok, key, chain_code}
   end
 
+  defp maybe_derive_purpose({key, chain_code, %DerivationPath{purpose: nil} = derivation_path}) do
+    {key, chain_code, derivation_path}
+  end
+
   defp maybe_derive_purpose(
          {key, chain_code, %DerivationPath{purpose: purpose} = derivation_path}
        ) do
@@ -108,6 +112,12 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
         _ -> {:ok, key, chain_code}
       end
 
+    {key, chain_code, derivation_path}
+  end
+
+  defp maybe_derive_coin_type(
+         {key, chain_code, %DerivationPath{coin_type: nil} = derivation_path}
+       ) do
     {key, chain_code, derivation_path}
   end
 
