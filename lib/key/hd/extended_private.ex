@@ -16,6 +16,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
 
   alias BitcoinLib.Crypto
   alias BitcoinLib.Key.HD.{DerivationPath, ExtendedPublic}
+  alias BitcoinLib.Key.HD.DerivationPath.{Level}
 
   @doc """
   Converts a seed into a master private key hash containing the key itself and the chain code
@@ -123,10 +124,15 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
     {key, chain_code, derivation_path}
   end
 
+  defp maybe_derive_account({key, chain_code, %DerivationPath{account: nil} = derivation_path}) do
+    {key, chain_code, derivation_path}
+  end
+
   defp maybe_derive_account(
-         {key, chain_code, %DerivationPath{account: _account} = derivation_path}
+         {key, chain_code,
+          %DerivationPath{account: %Level{hardened?: true, value: account}} = derivation_path}
        ) do
-    # TODO: implement
+    {:ok, key, chain_code} = derive_child(key, chain_code, account, true)
 
     {key, chain_code, derivation_path}
   end
