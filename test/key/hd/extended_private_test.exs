@@ -64,9 +64,45 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
     chain_code = 0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B
 
     {:ok, child_private_key, child_chain_code} =
-      BitcoinLib.Key.HD.ExtendedPrivate.derive_child(private_key, chain_code, %DerivationPath{})
+      BitcoinLib.Key.HD.ExtendedPrivate.from_derivation_path(
+        private_key,
+        chain_code,
+        %DerivationPath{}
+      )
 
     assert child_private_key == 0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9
     assert child_chain_code == 0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B
+  end
+
+  test "get private master bip44 key" do
+    private_key = 0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9
+    chain_code = 0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B
+    {:ok, derivation_path} = BitcoinLib.Key.HD.DerivationPath.parse("m/44'")
+
+    {:ok, child_private_key, child_chain_code} =
+      BitcoinLib.Key.HD.ExtendedPrivate.from_derivation_path(
+        private_key,
+        chain_code,
+        derivation_path
+      )
+
+    assert child_private_key == 0xDBC0D83640688A51F40B0FB28AC87687B745E2E774AA3AD68F7F11894CC98DB1
+    assert child_chain_code == 0x7910F96A0809BD47AF3B86DB0933A3BD8E1433E807F37059FA7B93939C5EF2
+  end
+
+  test "get private master bip44 bitcoin mainnet key" do
+    private_key = 0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9
+    chain_code = 0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B
+    {:ok, derivation_path} = BitcoinLib.Key.HD.DerivationPath.parse("m/44'/0'")
+
+    {:ok, child_private_key, child_chain_code} =
+      BitcoinLib.Key.HD.ExtendedPrivate.from_derivation_path(
+        private_key,
+        chain_code,
+        derivation_path
+      )
+
+    assert child_private_key == 0xCBA660EBA950D36AE1BAE071DA2BA96C6573D7C15DAE2D36099F408211ED7D31
+    assert child_chain_code == 0x36E1EB21FC299D5CE2A4CF4468B743A17666CC4DC47207CF9C8EB4E1BD
   end
 end

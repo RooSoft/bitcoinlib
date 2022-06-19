@@ -3,7 +3,8 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
   Bitcoin extended private key management module
   """
 
-  @max_index 2_147_483_647
+  @max_index 0x7FFFFFFF
+  @hardened 0x80000000
 
   @bitcoin_seed_hmac_key "Bitcoin seed"
 
@@ -57,7 +58,16 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
     }
   """
   @spec derive_child(Integer.t(), Integer.t(), Integer.t()) :: {:ok, Integer.t(), Integer.t()}
-  def derive_child(key, chain_code, index) when is_integer(index) and index < @max_index do
+  def derive_child(key, chain_code, index, is_hardened \\ false)
+
+  def derive_child(key, chain_code, index, is_hardened)
+      when is_integer(index) and index < @max_index do
+    index =
+      case is_hardened do
+        true -> @hardened + index
+        false -> index
+      end
+
     %{child_private_key: child_private_key, child_chain_code: child_chain_code} =
       %{key: key, chain_code: chain_code, index: index}
       |> add_compressed_public_key
@@ -70,14 +80,69 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
   end
 
   @spec derive_child(Integer.t(), Integer.t(), Integer.t()) :: {:error, String.t()}
-  def derive_child(_, _, index) when is_integer(index) do
+  def derive_child(_, _, index, _) when is_integer(index) do
     {:error, "#{index} is too large of an index"}
   end
 
-  @spec derive_child(Integer.t(), Integer.t(), %DerivationPath{}) ::
+  @spec from_derivation_path(Integer.t(), Integer.t(), %DerivationPath{}) ::
           {:ok, Integer.t(), Integer.t()}
-  def derive_child(key, chain_code, %DerivationPath{} = _derivation_path) do
+  def from_derivation_path(key, chain_code, %DerivationPath{} = derivation_path) do
+    {key, chain_code, _} =
+      {key, chain_code, derivation_path}
+      |> maybe_derive_purpose
+      |> maybe_derive_coin_type
+      |> maybe_derive_account
+      |> maybe_derive_change
+      |> maybe_derive_address_index
+
     {:ok, key, chain_code}
+  end
+
+  defp maybe_derive_purpose(
+         {key, chain_code, %DerivationPath{purpose: purpose} = derivation_path}
+       ) do
+    {:ok, key, chain_code} =
+      case purpose do
+        :bip44 -> derive_child(key, chain_code, 44, true)
+        _ -> {:ok, key, chain_code}
+      end
+
+    {key, chain_code, derivation_path}
+  end
+
+  defp maybe_derive_coin_type(
+         {key, chain_code, %DerivationPath{coin_type: coin_type} = derivation_path}
+       ) do
+    {:ok, key, chain_code} =
+      case coin_type do
+        :bitcoin -> derive_child(key, chain_code, 0, true)
+        :bitcoin_testnet -> derive_child(key, chain_code, 1, true)
+        _ -> {:ok, key, chain_code}
+      end
+
+    {key, chain_code, derivation_path}
+  end
+
+  defp maybe_derive_account(
+         {key, chain_code, %DerivationPath{account: _account} = derivation_path}
+       ) do
+    # TODO: implement
+
+    {key, chain_code, derivation_path}
+  end
+
+  defp maybe_derive_change({key, chain_code, %DerivationPath{change: _change} = derivation_path}) do
+    # TODO: implement
+
+    {key, chain_code, derivation_path}
+  end
+
+  defp maybe_derive_address_index(
+         {key, chain_code, %DerivationPath{address_index: _address_index} = derivation_path}
+       ) do
+    # TODO: implement
+
+    {key, chain_code, derivation_path}
   end
 
   @doc """
