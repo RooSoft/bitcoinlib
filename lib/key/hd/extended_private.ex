@@ -163,9 +163,16 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
   end
 
   defp maybe_derive_address_index(
-         {key, chain_code, %DerivationPath{address_index: _address_index} = derivation_path}
+         {key, chain_code, %DerivationPath{address_index: nil} = derivation_path}
        ) do
-    # TODO: implement
+    {key, chain_code, derivation_path}
+  end
+
+  defp maybe_derive_address_index(
+         {key, chain_code,
+          %DerivationPath{address_index: %Level{hardened?: false, value: index}} = derivation_path}
+       ) do
+    {:ok, key, chain_code} = derive_child(key, chain_code, index, true)
 
     {key, chain_code, derivation_path}
   end
