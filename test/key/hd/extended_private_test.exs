@@ -121,4 +121,20 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
     assert child_private_key == 0x5BA6080E4016B8C557A1BDD0563427E785FC6AC325ED209EE1BD121827180C12
     assert child_chain_code == 0xAB49104797CBBDA6D4CA5A6F3EC701D2F1D09D776C7991AC79517E6CAEFB75
   end
+
+  test "get private master bip44 bitcoin mainnet account 0 change key" do
+    private_key = 0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9
+    chain_code = 0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B
+    {:ok, derivation_path} = BitcoinLib.Key.HD.DerivationPath.parse("m/44'/0'/0'/1")
+
+    {:ok, child_private_key, child_chain_code} =
+      BitcoinLib.Key.HD.ExtendedPrivate.from_derivation_path(
+        private_key,
+        chain_code,
+        derivation_path
+      )
+
+    assert child_private_key == 0x85BA547116863652CBB8D943D6AAEC156A7B6C6B156DF5793A4A7DAA3A0B90E9
+    assert child_chain_code == 0x24D97713BA47F418F17252FD145B6C276254228865149A6F45D7E5B62F4BA4AC
+  end
 end

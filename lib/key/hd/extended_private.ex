@@ -147,8 +147,17 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
     {key, chain_code, derivation_path}
   end
 
-  defp maybe_derive_change({key, chain_code, %DerivationPath{change: _change} = derivation_path}) do
-    # TODO: implement
+  defp maybe_derive_change({key, chain_code, %DerivationPath{change: nil} = derivation_path}) do
+    {key, chain_code, derivation_path}
+  end
+
+  defp maybe_derive_change({key, chain_code, %DerivationPath{change: change} = derivation_path}) do
+    {:ok, key, chain_code} =
+      case change do
+        :receiving_chain -> derive_child(key, chain_code, 0, false)
+        :change_chain -> derive_child(key, chain_code, 1, false)
+        _ -> {:ok, key, chain_code}
+      end
 
     {key, chain_code, derivation_path}
   end
