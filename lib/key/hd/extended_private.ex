@@ -39,6 +39,35 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
   end
 
   @doc """
+  Serialization of a master private key into its xpriv version
+
+  ## Examples
+    values from https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki#test-vector-1
+
+    iex> primary_key = 0xE8F32E723DECF4051AEFAC8E2C93C9C5B214313817CDB01A1494B917C8436B35
+    ...> chain_code = 0x873DFF81C02F525623FD1FE5167EAC3A55A049DE3D314BB42EE227FFED37D508
+    ...> BitcoinLib.Key.HD.ExtendedPrivate.serialize_master_private_key(primary_key, chain_code)
+    "xprv9s21ZrQH143K3QTDL4LXw2F7HEK3wJUD2nW2nRk4stbPy6cq3jPPqjiChkVvvNKmPGJxWUtg6LnF5kejMRNNU3TGtRBeJgk33yuGBxrMPHi"
+  """
+  def serialize_master_private_key(key, chain_code) do
+    data = <<
+      @version_bytes::size(32),
+      0::size(8),
+      0::size(32),
+      0::size(32),
+      chain_code::size(256),
+      0::size(8),
+      key::size(256)
+    >>
+
+    <<
+      data::bitstring,
+      Crypto.checksum_bitstring(data)::bitstring
+    >>
+    |> Base58.encode()
+  end
+
+  @doc """
   Derives the nth child of a HD private key
 
   Takes a private key, its chain code and the child's index
@@ -175,35 +204,6 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
     {:ok, key, chain_code} = derive_child(key, chain_code, index, true)
 
     {key, chain_code, derivation_path}
-  end
-
-  @doc """
-  Serialization of a master private key into its xpriv version
-
-  ## Examples
-    values from https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki#test-vector-1
-
-    iex> primary_key = 0xE8F32E723DECF4051AEFAC8E2C93C9C5B214313817CDB01A1494B917C8436B35
-    ...> chain_code = 0x873DFF81C02F525623FD1FE5167EAC3A55A049DE3D314BB42EE227FFED37D508
-    ...> BitcoinLib.Key.HD.ExtendedPrivate.serialize_master_private_key(primary_key, chain_code)
-    "xprv9s21ZrQH143K3QTDL4LXw2F7HEK3wJUD2nW2nRk4stbPy6cq3jPPqjiChkVvvNKmPGJxWUtg6LnF5kejMRNNU3TGtRBeJgk33yuGBxrMPHi"
-  """
-  def serialize_master_private_key(key, chain_code) do
-    data = <<
-      @version_bytes::size(32),
-      0::size(8),
-      0::size(32),
-      0::size(32),
-      chain_code::size(256),
-      0::size(8),
-      key::size(256)
-    >>
-
-    <<
-      data::bitstring,
-      Crypto.checksum_bitstring(data)::bitstring
-    >>
-    |> Base58.encode()
   end
 
   defp add_compressed_public_key(%{key: key} = hash) do
