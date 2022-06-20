@@ -28,18 +28,17 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
 
     seed = MnemonicSeed.to_seed(mnemonic)
 
-    %ExtendedPrivate{
-      key: private_key,
-      chain_code: chain_code,
-      depth: 0,
-      index: 0,
-      parent_fingerprint: ""
-    } =
+    private_key =
       seed
       |> ExtendedPrivate.from_seed()
 
-    assert private_key == 0x30A6B59CCCC924FC9FFD4AB08C5C01F0D6A4046797BB255D8919EB3E95C08871
-    assert chain_code == 0xE08FCC54429E47AC55FEBD4DC9EDCCC88D292EB40AA3765AF3DA7178A14AA114
+    %ExtendedPrivate{
+      key: 0x30A6B59CCCC924FC9FFD4AB08C5C01F0D6A4046797BB255D8919EB3E95C08871,
+      chain_code: 0xE08FCC54429E47AC55FEBD4DC9EDCCC88D292EB40AA3765AF3DA7178A14AA114,
+      depth: 0,
+      index: 0,
+      parent_fingerprint: ""
+    } = private_key
   end
 
   test "derive the first child of a private key" do
