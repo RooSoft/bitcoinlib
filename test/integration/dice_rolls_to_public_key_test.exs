@@ -15,7 +15,6 @@ defmodule BitcoinLib.Test.Integration.DiceRollsToPublicKeyTest do
     |> BitcoinLib.Key.HD.MnemonicSeed.wordlist_from_entropy()
     |> BitcoinLib.Key.HD.MnemonicSeed.to_seed()
     |> BitcoinLib.Key.HD.ExtendedPrivate.from_seed()
-    |> Map.get(:key)
     |> BitcoinLib.Key.HD.ExtendedPublic.from_private_key()
   end
 end

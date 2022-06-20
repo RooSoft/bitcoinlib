@@ -6,7 +6,10 @@ defmodule BitcoinLib.Key.HD.ExtendedPublicTest do
   alias BitcoinLib.Key.HD.ExtendedPublic
 
   test "derives an extended public key from an extended private key" do
-    private_key = 0x081549973BAFBBA825B31BCC402A3C4ED8E3185C2F3A31C75E55F423E9629AA3
+    private_key = %BitcoinLib.Key.HD.ExtendedPrivate{
+      key: 0x081549973BAFBBA825B31BCC402A3C4ED8E3185C2F3A31C75E55F423E9629AA3,
+      chain_code: 0
+    }
 
     {uncompressed, compressed} =
       private_key

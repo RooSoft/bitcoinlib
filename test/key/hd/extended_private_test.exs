@@ -43,15 +43,20 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
   end
 
   test "derive the first child of a private key" do
-    private_key = 0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9
-    chain_code = 0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B
+    private_key = %ExtendedPrivate{
+      key: 0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9,
+      chain_code: 0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B
+    }
+
     index = 0
 
-    {:ok, child_private_key, child_chain_code} =
-      BitcoinLib.Key.HD.ExtendedPrivate.derive_child(private_key, chain_code, index)
+    {:ok, child_private_key} = BitcoinLib.Key.HD.ExtendedPrivate.derive_child(private_key, index)
 
-    assert child_private_key == 0x39F329FEDBA2A68E2A804FCD9AEEA4104ACE9080212A52CE8B52C1FB89850C72
-    assert child_chain_code == 0x05AAE71D7C080474EFAAB01FA79E96F4C6CFE243237780B0DF4BC36106228E31
+    assert child_private_key.key ==
+             0x39F329FEDBA2A68E2A804FCD9AEEA4104ACE9080212A52CE8B52C1FB89850C72
+
+    assert child_private_key.chain_code ==
+             0x05AAE71D7C080474EFAAB01FA79E96F4C6CFE243237780B0DF4BC36106228E31
   end
 
   test "serialize a master private key" do
@@ -67,97 +72,126 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
   end
 
   test "get private key according to the minimal derivation path" do
-    private_key = 0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9
-    chain_code = 0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B
+    private_key = %ExtendedPrivate{
+      key: 0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9,
+      chain_code: 0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B
+    }
 
-    {:ok, child_private_key, child_chain_code} =
+    {:ok, child_private_key} =
       BitcoinLib.Key.HD.ExtendedPrivate.from_derivation_path(
         private_key,
-        chain_code,
         %DerivationPath{}
       )
 
-    assert child_private_key == 0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9
-    assert child_chain_code == 0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B
+    assert child_private_key.key ==
+             0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9
+
+    assert child_private_key.chain_code ==
+             0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B
   end
 
   test "get private master bip44 key" do
-    private_key = 0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9
-    chain_code = 0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B
+    private_key = %ExtendedPrivate{
+      key: 0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9,
+      chain_code: 0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B
+    }
+
     {:ok, derivation_path} = BitcoinLib.Key.HD.DerivationPath.parse("m/44'")
 
-    {:ok, child_private_key, child_chain_code} =
+    {:ok, child_private_key} =
       BitcoinLib.Key.HD.ExtendedPrivate.from_derivation_path(
         private_key,
-        chain_code,
         derivation_path
       )
 
-    assert child_private_key == 0xDBC0D83640688A51F40B0FB28AC87687B745E2E774AA3AD68F7F11894CC98DB1
-    assert child_chain_code == 0x7910F96A0809BD47AF3B86DB0933A3BD8E1433E807F37059FA7B93939C5EF2
+    assert child_private_key.key ==
+             0xDBC0D83640688A51F40B0FB28AC87687B745E2E774AA3AD68F7F11894CC98DB1
+
+    assert child_private_key.chain_code ==
+             0x7910F96A0809BD47AF3B86DB0933A3BD8E1433E807F37059FA7B93939C5EF2
   end
 
   test "get private master bip44, bitcoin mainnet key" do
-    private_key = 0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9
-    chain_code = 0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B
+    private_key = %ExtendedPrivate{
+      key: 0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9,
+      chain_code: 0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B
+    }
+
     {:ok, derivation_path} = BitcoinLib.Key.HD.DerivationPath.parse("m/44'/0'")
 
-    {:ok, child_private_key, child_chain_code} =
+    {:ok, child_private_key} =
       BitcoinLib.Key.HD.ExtendedPrivate.from_derivation_path(
         private_key,
-        chain_code,
         derivation_path
       )
 
-    assert child_private_key == 0xCBA660EBA950D36AE1BAE071DA2BA96C6573D7C15DAE2D36099F408211ED7D31
-    assert child_chain_code == 0x36E1EB21FC299D5CE2A4CF4468B743A17666CC4DC47207CF9C8EB4E1BD
+    assert child_private_key.key ==
+             0xCBA660EBA950D36AE1BAE071DA2BA96C6573D7C15DAE2D36099F408211ED7D31
+
+    assert child_private_key.chain_code ==
+             0x36E1EB21FC299D5CE2A4CF4468B743A17666CC4DC47207CF9C8EB4E1BD
   end
 
   test "get private master bip44, bitcoin mainnet, account 0 key" do
-    private_key = 0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9
-    chain_code = 0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B
+    private_key = %ExtendedPrivate{
+      key: 0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9,
+      chain_code: 0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B
+    }
+
     {:ok, derivation_path} = BitcoinLib.Key.HD.DerivationPath.parse("m/44'/0'/0'")
 
-    {:ok, child_private_key, child_chain_code} =
+    {:ok, child_private_key} =
       BitcoinLib.Key.HD.ExtendedPrivate.from_derivation_path(
         private_key,
-        chain_code,
         derivation_path
       )
 
-    assert child_private_key == 0x5BA6080E4016B8C557A1BDD0563427E785FC6AC325ED209EE1BD121827180C12
-    assert child_chain_code == 0xAB49104797CBBDA6D4CA5A6F3EC701D2F1D09D776C7991AC79517E6CAEFB75
+    assert child_private_key.key ==
+             0x5BA6080E4016B8C557A1BDD0563427E785FC6AC325ED209EE1BD121827180C12
+
+    assert child_private_key.chain_code ==
+             0xAB49104797CBBDA6D4CA5A6F3EC701D2F1D09D776C7991AC79517E6CAEFB75
   end
 
   test "get private master bip44, bitcoin mainnet, account 0, change key" do
-    private_key = 0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9
-    chain_code = 0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B
+    private_key = %ExtendedPrivate{
+      key: 0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9,
+      chain_code: 0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B
+    }
+
     {:ok, derivation_path} = BitcoinLib.Key.HD.DerivationPath.parse("m/44'/0'/0'/1")
 
-    {:ok, child_private_key, child_chain_code} =
+    {:ok, child_private_key} =
       BitcoinLib.Key.HD.ExtendedPrivate.from_derivation_path(
         private_key,
-        chain_code,
         derivation_path
       )
 
-    assert child_private_key == 0x85BA547116863652CBB8D943D6AAEC156A7B6C6B156DF5793A4A7DAA3A0B90E9
-    assert child_chain_code == 0x24D97713BA47F418F17252FD145B6C276254228865149A6F45D7E5B62F4BA4AC
+    assert child_private_key.key ==
+             0x85BA547116863652CBB8D943D6AAEC156A7B6C6B156DF5793A4A7DAA3A0B90E9
+
+    assert child_private_key.chain_code ==
+             0x24D97713BA47F418F17252FD145B6C276254228865149A6F45D7E5B62F4BA4AC
   end
 
   test "get private master bip44, bitcoin mainnet, account 0, change, index 0 key" do
-    private_key = 0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9
-    chain_code = 0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B
+    private_key = %ExtendedPrivate{
+      key: 0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9,
+      chain_code: 0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B
+    }
+
     {:ok, derivation_path} = BitcoinLib.Key.HD.DerivationPath.parse("m/44'/0'/0'/1/0")
 
-    {:ok, child_private_key, child_chain_code} =
+    {:ok, child_private_key} =
       BitcoinLib.Key.HD.ExtendedPrivate.from_derivation_path(
         private_key,
-        chain_code,
         derivation_path
       )
 
-    assert child_private_key == 0x2FD9D422D63D2D351DFA495AC42D481B278B7702500D37C2EEB2E5FA5A063B26
-    assert child_chain_code == 0xC6A61F89923A032098326DBBFE4036EA648C0D01FD595288D619C6822626941C
+    assert child_private_key.key ==
+             0x2FD9D422D63D2D351DFA495AC42D481B278B7702500D37C2EEB2E5FA5A063B26
+
+    assert child_private_key.chain_code ==
+             0xC6A61F89923A032098326DBBFE4036EA648C0D01FD595288D619C6822626941C
   end
 end

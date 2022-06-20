@@ -90,20 +90,24 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
 
   ## Examples
 
-    iex> private_key = 0xf79bb0d317b310b261a55a8ab393b4c8a1aba6fa4d08aef379caba502d5d67f9
-    ...> chain_code = 0x463223aac10fb13f291a1bc76bc26003d98da661cb76df61e750c139826dea8b
+    iex> private_key = %BitcoinLib.Key.HD.ExtendedPrivate{
+    ...>   key: 0xf79bb0d317b310b261a55a8ab393b4c8a1aba6fa4d08aef379caba502d5d67f9,
+    ...>   chain_code: 0x463223aac10fb13f291a1bc76bc26003d98da661cb76df61e750c139826dea8b
+    ...> }
     ...> index = 0
-    ...> BitcoinLib.Key.HD.ExtendedPrivate.derive_child(private_key, chain_code, index)
+    ...> BitcoinLib.Key.HD.ExtendedPrivate.derive_child(private_key, index)
     {
       :ok,
-      0x39f329fedba2a68e2a804fcd9aeea4104ace9080212a52ce8b52c1fb89850c72,
-      0x05aae71d7c080474efaab01fa79e96f4c6cfe243237780b0df4bc36106228e31
+      %BitcoinLib.Key.HD.ExtendedPrivate{
+        key: 0x39f329fedba2a68e2a804fcd9aeea4104ace9080212a52ce8b52c1fb89850c72,
+        chain_code: 0x05aae71d7c080474efaab01fa79e96f4c6cfe243237780b0df4bc36106228e31
+      }
     }
   """
-  @spec derive_child(Integer.t(), Integer.t(), Integer.t()) :: {:ok, Integer.t(), Integer.t()}
-  def derive_child(key, chain_code, index, is_hardened \\ false)
+  @spec derive_child(Integer.t(), Integer.t(), Integer.t()) :: {:ok, %ExtendedPrivate{}}
+  def derive_child(private_key, index, is_hardened \\ false)
 
-  def derive_child(key, chain_code, index, is_hardened)
+  def derive_child(%ExtendedPrivate{} = private_key, index, is_hardened)
       when is_integer(index) and index < @max_index do
     index =
       case is_hardened do
@@ -111,117 +115,119 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
         false -> index
       end
 
-    %{child_private_key: child_private_key, child_chain_code: child_chain_code} =
-      %{key: key, chain_code: chain_code, index: index}
+    %{child_private_key: child_private_key} =
+      %{parent_private_key: private_key, index: index}
       |> add_compressed_public_key
       |> compute_hmac_input
       |> compute_hmac
       |> compute_child_chain_code
       |> compute_child_private_key
 
-    {:ok, child_private_key, child_chain_code}
+    {:ok, child_private_key}
   end
 
   @spec derive_child(Integer.t(), Integer.t(), Integer.t()) :: {:error, String.t()}
-  def derive_child(_, _, index, _) when is_integer(index) do
+  def derive_child(_, index, _) when is_integer(index) do
     {:error, "#{index} is too large of an index"}
   end
 
-  @spec from_derivation_path(Integer.t(), Integer.t(), %DerivationPath{}) ::
-          {:ok, Integer.t(), Integer.t()}
-  def from_derivation_path(key, chain_code, %DerivationPath{} = derivation_path) do
-    {key, chain_code, _} =
-      {key, chain_code, derivation_path}
+  @spec from_derivation_path(%ExtendedPrivate{}, %DerivationPath{}) :: {:ok, %ExtendedPrivate{}}
+  def from_derivation_path(%ExtendedPrivate{} = private_key, %DerivationPath{} = derivation_path) do
+    {child_private_key, _} =
+      {private_key, derivation_path}
       |> maybe_derive_purpose
       |> maybe_derive_coin_type
       |> maybe_derive_account
       |> maybe_derive_change
       |> maybe_derive_address_index
 
-    {:ok, key, chain_code}
-  end
-
-  defp maybe_derive_purpose({key, chain_code, %DerivationPath{purpose: nil} = derivation_path}) do
-    {key, chain_code, derivation_path}
+    {:ok, child_private_key}
   end
 
   defp maybe_derive_purpose(
-         {key, chain_code, %DerivationPath{purpose: purpose} = derivation_path}
+         {%ExtendedPrivate{} = private_key, %DerivationPath{purpose: nil} = derivation_path}
        ) do
-    {:ok, key, chain_code} =
+    {private_key, derivation_path}
+  end
+
+  defp maybe_derive_purpose(
+         {%ExtendedPrivate{} = private_key, %DerivationPath{purpose: purpose} = derivation_path}
+       ) do
+    {:ok, child_private_key} =
       case purpose do
-        :bip44 -> derive_child(key, chain_code, 44, true)
-        _ -> {:ok, key, chain_code}
+        :bip44 -> derive_child(private_key, 44, true)
+        _ -> {:ok, private_key}
       end
 
-    {key, chain_code, derivation_path}
+    {child_private_key, derivation_path}
   end
 
   defp maybe_derive_coin_type(
-         {key, chain_code, %DerivationPath{coin_type: nil} = derivation_path}
+         {%ExtendedPrivate{} = private_key, %DerivationPath{coin_type: nil} = derivation_path}
        ) do
-    {key, chain_code, derivation_path}
+    {private_key, derivation_path}
   end
 
   defp maybe_derive_coin_type(
-         {key, chain_code, %DerivationPath{coin_type: coin_type} = derivation_path}
+         {%ExtendedPrivate{} = private_key,
+          %DerivationPath{coin_type: coin_type} = derivation_path}
        ) do
-    {:ok, key, chain_code} =
+    {:ok, child_private_key} =
       case coin_type do
-        :bitcoin -> derive_child(key, chain_code, 0, true)
-        :bitcoin_testnet -> derive_child(key, chain_code, 1, true)
-        _ -> {:ok, key, chain_code}
+        :bitcoin -> derive_child(private_key, 0, true)
+        :bitcoin_testnet -> derive_child(private_key, 1, true)
+        _ -> {:ok, private_key}
       end
 
-    {key, chain_code, derivation_path}
+    {child_private_key, derivation_path}
   end
 
-  defp maybe_derive_account({key, chain_code, %DerivationPath{account: nil} = derivation_path}) do
-    {key, chain_code, derivation_path}
+  defp maybe_derive_account({private_key, %DerivationPath{account: nil} = derivation_path}) do
+    {private_key, derivation_path}
   end
 
   defp maybe_derive_account(
-         {key, chain_code,
+         {private_key,
           %DerivationPath{account: %Level{hardened?: true, value: account}} = derivation_path}
        ) do
-    {:ok, key, chain_code} = derive_child(key, chain_code, account, true)
+    {:ok, child_private_key} = derive_child(private_key, account, true)
 
-    {key, chain_code, derivation_path}
+    {child_private_key, derivation_path}
   end
 
-  defp maybe_derive_change({key, chain_code, %DerivationPath{change: nil} = derivation_path}) do
-    {key, chain_code, derivation_path}
+  defp maybe_derive_change({private_key, %DerivationPath{change: nil} = derivation_path}) do
+    {private_key, derivation_path}
   end
 
-  defp maybe_derive_change({key, chain_code, %DerivationPath{change: change} = derivation_path}) do
-    {:ok, key, chain_code} =
+  defp maybe_derive_change({private_key, %DerivationPath{change: change} = derivation_path}) do
+    {:ok, child_private_key} =
       case change do
-        :receiving_chain -> derive_child(key, chain_code, 0, false)
-        :change_chain -> derive_child(key, chain_code, 1, false)
-        _ -> {:ok, key, chain_code}
+        :receiving_chain -> derive_child(private_key, 0, false)
+        :change_chain -> derive_child(private_key, 1, false)
+        _ -> {:ok, private_key}
       end
 
-    {key, chain_code, derivation_path}
+    {child_private_key, derivation_path}
   end
 
   defp maybe_derive_address_index(
-         {key, chain_code, %DerivationPath{address_index: nil} = derivation_path}
+         {private_key, %DerivationPath{address_index: nil} = derivation_path}
        ) do
-    {key, chain_code, derivation_path}
+    {private_key, derivation_path}
   end
 
   defp maybe_derive_address_index(
-         {key, chain_code,
+         {private_key,
           %DerivationPath{address_index: %Level{hardened?: false, value: index}} = derivation_path}
        ) do
-    {:ok, key, chain_code} = derive_child(key, chain_code, index, true)
+    {:ok, child_private_key} = derive_child(private_key, index, true)
 
-    {key, chain_code, derivation_path}
+    {child_private_key, derivation_path}
   end
 
-  defp add_compressed_public_key(%{key: key} = hash) do
+  defp add_compressed_public_key(%{parent_private_key: private_key} = hash) do
     {_uncompressed_public_key, compressed_public_key} =
-      key
+      private_key
       |> ExtendedPublic.from_private_key()
 
     hash
@@ -239,7 +245,10 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
 
   # hmac_left_part and hmac_right_part are Il and Ir in slip-0010 as found here
   # https://github.com/satoshilabs/slips/blob/master/slip-0010.md#master-key-generation
-  defp compute_hmac(%{hmac_input: hmac_input, chain_code: chain_code} = hash) do
+  defp compute_hmac(
+         %{hmac_input: hmac_input, parent_private_key: %ExtendedPrivate{chain_code: chain_code}} =
+           hash
+       ) do
     {hmac_left_part, hmac_right_part} =
       hmac_input
       |> Binary.from_integer()
@@ -256,13 +265,22 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
     |> Map.put(:child_chain_code, hmac_right_part |> Binary.to_integer())
   end
 
-  defp compute_child_private_key(%{key: key, hmac_left_part: hmac_left_part} = hash) do
+  defp compute_child_private_key(
+         %{
+           parent_private_key: %ExtendedPrivate{key: key},
+           hmac_left_part: hmac_left_part,
+           hmac_right_part: hmac_right_part
+         } = hash
+       ) do
     child_private_key =
       (Binary.to_integer(hmac_left_part) + key)
       |> rem(@order_of_the_curve)
 
     hash
-    |> Map.put(:child_private_key, child_private_key)
+    |> Map.put(:child_private_key, %ExtendedPrivate{
+      key: child_private_key,
+      chain_code: hmac_right_part |> Binary.to_integer()
+    })
   end
 
   defp split(extended_private_key) do
