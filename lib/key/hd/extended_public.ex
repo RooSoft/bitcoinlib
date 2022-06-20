@@ -17,13 +17,13 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic do
 
   ## Examples
     iex> %BitcoinLib.Key.HD.ExtendedPrivate{
-    ...>   key: 0x081549973bafbba825b31bcc402a3c4ed8e3185c2f3a31c75e55f423e9629aa3,
-    ...>   chain_code: 0
+    ...>   key: 0x081549973BAFBBA825B31BCC402A3C4ED8E3185C2F3A31C75E55F423E9629AA3,
+    ...>   chain_code: 0x1D7D2A4C940BE028B945302AD79DD2CE2AFE5ED55E1A2937A5AF57F8401E73DD
     ...> }
     ...> |> BitcoinLib.Key.HD.ExtendedPublic.from_private_key()
     %BitcoinLib.Key.HD.ExtendedPublic{
-      key: 0x0343b337dec65a47b3362c9620a6e6ff39a1ddfa908abab1666c8a30a3f8a7cccc,
-      chain_code: 0,
+      key: 0x0343B337DEC65A47B3362C9620A6E6FF39A1DDFA908ABAB1666C8A30A3F8A7CCCC,
+      chain_code: 0x1D7D2A4C940BE028B945302AD79DD2CE2AFE5ED55E1A2937A5AF57F8401E73DD,
       depth: 0,
       index: 0,
       parent_fingerprint: ""
