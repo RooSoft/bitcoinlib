@@ -1,4 +1,4 @@
-defmodule BitcoinLib.Key.HD.ExtendedPrivate.Derivation do
+defmodule BitcoinLib.Key.HD.ExtendedPrivate.ChildFromIndex do
   alias BitcoinLib.Key.HD.ExtendedPrivate
 
   @max_index 0x7FFFFFFF
@@ -10,15 +10,15 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate.Derivation do
   alias BitcoinLib.Crypto
   alias BitcoinLib.Key.HD.{ExtendedPrivate, ExtendedPublic}
 
-  @spec get_child(%ExtendedPrivate{}, Integer.t(), Integer.t()) ::
+  @spec get(%ExtendedPrivate{}, Integer.t(), Integer.t()) ::
           {:ok, %ExtendedPrivate{}} | {:error, String.t()}
-  def get_child(private_key, index, is_hardened \\ false)
+  def get(private_key, index, is_hardened \\ false)
 
-  def get_child(_, index, _) when is_integer(index) and index > @max_index do
+  def get(_, index, _) when is_integer(index) and index > @max_index do
     {:error, "#{index} is too large of an index"}
   end
 
-  def get_child(%ExtendedPrivate{} = private_key, index, is_hardened) when is_integer(index) do
+  def get(%ExtendedPrivate{} = private_key, index, is_hardened) when is_integer(index) do
     index =
       case is_hardened do
         true -> @hardened + index

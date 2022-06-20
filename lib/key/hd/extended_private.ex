@@ -14,7 +14,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
   alias BitcoinLib.Crypto
   alias BitcoinLib.Key.HD.{DerivationPath, ExtendedPrivate}
   alias BitcoinLib.Key.HD.DerivationPath.{Level}
-  alias BitcoinLib.Key.HD.ExtendedPrivate.Derivation
+  alias BitcoinLib.Key.HD.ExtendedPrivate.ChildFromIndex
 
   @doc """
   Converts a seed into a master private key hash containing the key itself and the chain code
@@ -101,7 +101,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
   """
   @spec derive_child(%ExtendedPrivate{}, Integer.t(), Integer.t()) :: {:ok, %ExtendedPrivate{}}
   def derive_child(private_key, index, is_hardened \\ false) do
-    Derivation.get_child(private_key, index, is_hardened)
+    ChildFromIndex.get(private_key, index, is_hardened)
   end
 
   @doc """
