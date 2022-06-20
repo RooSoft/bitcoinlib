@@ -5,7 +5,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
 
   alias BitcoinLib.Key.HD.{DerivationPath, ExtendedPrivate, MnemonicSeed}
 
-  test "creates a WIF from a private key" do
+  test "returns an extended private key from a seed" do
     seed =
       "67f93560761e20617de26e0cb84f7234aaf373ed2e66295c3d7397e6d7ebe882ea396d5d293808b0defd7edd2babd4c091ad942e6a9351e6d075a29d4df872af"
 
@@ -14,8 +14,8 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
       |> ExtendedPrivate.from_seed()
 
     assert %ExtendedPrivate{
-             chain_code: _,
-             key: _
+             key: 0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9,
+             chain_code: 0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B
            } = extended_private_key
   end
 
