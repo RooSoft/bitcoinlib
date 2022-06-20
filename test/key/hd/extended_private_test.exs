@@ -51,11 +51,13 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
 
     {:ok, child_private_key} = BitcoinLib.Key.HD.ExtendedPrivate.derive_child(private_key, index)
 
-    assert child_private_key.key ==
-             0x39F329FEDBA2A68E2A804FCD9AEEA4104ACE9080212A52CE8B52C1FB89850C72
-
-    assert child_private_key.chain_code ==
-             0x05AAE71D7C080474EFAAB01FA79E96F4C6CFE243237780B0DF4BC36106228E31
+    %ExtendedPrivate{
+      key: 0x39F329FEDBA2A68E2A804FCD9AEEA4104ACE9080212A52CE8B52C1FB89850C72,
+      chain_code: 0x05AAE71D7C080474EFAAB01FA79E96F4C6CFE243237780B0DF4BC36106228E31,
+      depth: 0,
+      index: 0,
+      parent_fingerprint: ""
+    } = child_private_key
   end
 
   test "serialize a master private key" do
