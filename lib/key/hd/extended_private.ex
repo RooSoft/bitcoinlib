@@ -104,6 +104,24 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
     Derivation.get_child(private_key, index, is_hardened)
   end
 
+  @doc """
+  Derives a child private key, following a derivation path
+
+  ## Examples
+    iex> private_key = %BitcoinLib.Key.HD.ExtendedPrivate{
+    ...>   key: 0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9,
+    ...>   chain_code: 0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B
+    ...> }
+    ...> {:ok, derivation_path} = BitcoinLib.Key.HD.DerivationPath.parse("m/44'")
+    ...> BitcoinLib.Key.HD.ExtendedPrivate.from_derivation_path(private_key, derivation_path)
+    {
+      :ok,
+      %BitcoinLib.Key.HD.ExtendedPrivate{
+        key: 0xDBC0D83640688A51F40B0FB28AC87687B745E2E774AA3AD68F7F11894CC98DB1,
+        chain_code: 0x7910F96A0809BD47AF3B86DB0933A3BD8E1433E807F37059FA7B93939C5EF2
+      }
+    }
+  """
   @spec from_derivation_path(%ExtendedPrivate{}, %DerivationPath{}) :: {:ok, %ExtendedPrivate{}}
   def from_derivation_path(%ExtendedPrivate{} = private_key, %DerivationPath{} = derivation_path) do
     {child_private_key, _} =
