@@ -13,8 +13,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
 
   alias BitcoinLib.Crypto
   alias BitcoinLib.Key.HD.{DerivationPath, ExtendedPrivate}
-  alias BitcoinLib.Key.HD.DerivationPath.{Level}
-  alias BitcoinLib.Key.HD.ExtendedPrivate.ChildFromIndex
+  alias BitcoinLib.Key.HD.ExtendedPrivate.{ChildFromIndex, ChildFromDerivationPath}
 
   @doc """
   Converts a seed into a master private key hash containing the key itself and the chain code
@@ -124,96 +123,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
   """
   @spec from_derivation_path(%ExtendedPrivate{}, %DerivationPath{}) :: {:ok, %ExtendedPrivate{}}
   def from_derivation_path(%ExtendedPrivate{} = private_key, %DerivationPath{} = derivation_path) do
-    {child_private_key, _} =
-      {private_key, derivation_path}
-      |> maybe_derive_purpose
-      |> maybe_derive_coin_type
-      |> maybe_derive_account
-      |> maybe_derive_change
-      |> maybe_derive_address_index
-
-    {:ok, child_private_key}
-  end
-
-  defp maybe_derive_purpose(
-         {%ExtendedPrivate{} = private_key, %DerivationPath{purpose: nil} = derivation_path}
-       ) do
-    {private_key, derivation_path}
-  end
-
-  defp maybe_derive_purpose(
-         {%ExtendedPrivate{} = private_key, %DerivationPath{purpose: purpose} = derivation_path}
-       ) do
-    {:ok, child_private_key} =
-      case purpose do
-        :bip44 -> derive_child(private_key, 44, true)
-        _ -> {:ok, private_key}
-      end
-
-    {child_private_key, derivation_path}
-  end
-
-  defp maybe_derive_coin_type(
-         {%ExtendedPrivate{} = private_key, %DerivationPath{coin_type: nil} = derivation_path}
-       ) do
-    {private_key, derivation_path}
-  end
-
-  defp maybe_derive_coin_type(
-         {%ExtendedPrivate{} = private_key,
-          %DerivationPath{coin_type: coin_type} = derivation_path}
-       ) do
-    {:ok, child_private_key} =
-      case coin_type do
-        :bitcoin -> derive_child(private_key, 0, true)
-        :bitcoin_testnet -> derive_child(private_key, 1, true)
-        _ -> {:ok, private_key}
-      end
-
-    {child_private_key, derivation_path}
-  end
-
-  defp maybe_derive_account({private_key, %DerivationPath{account: nil} = derivation_path}) do
-    {private_key, derivation_path}
-  end
-
-  defp maybe_derive_account(
-         {private_key,
-          %DerivationPath{account: %Level{hardened?: true, value: account}} = derivation_path}
-       ) do
-    {:ok, child_private_key} = derive_child(private_key, account, true)
-
-    {child_private_key, derivation_path}
-  end
-
-  defp maybe_derive_change({private_key, %DerivationPath{change: nil} = derivation_path}) do
-    {private_key, derivation_path}
-  end
-
-  defp maybe_derive_change({private_key, %DerivationPath{change: change} = derivation_path}) do
-    {:ok, child_private_key} =
-      case change do
-        :receiving_chain -> derive_child(private_key, 0, false)
-        :change_chain -> derive_child(private_key, 1, false)
-        _ -> {:ok, private_key}
-      end
-
-    {child_private_key, derivation_path}
-  end
-
-  defp maybe_derive_address_index(
-         {private_key, %DerivationPath{address_index: nil} = derivation_path}
-       ) do
-    {private_key, derivation_path}
-  end
-
-  defp maybe_derive_address_index(
-         {private_key,
-          %DerivationPath{address_index: %Level{hardened?: false, value: index}} = derivation_path}
-       ) do
-    {:ok, child_private_key} = derive_child(private_key, index, true)
-
-    {child_private_key, derivation_path}
+    ChildFromDerivationPath.get(private_key, derivation_path)
   end
 
   defp split(extended_private_key) do
