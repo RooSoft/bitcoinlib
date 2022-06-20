@@ -51,12 +51,19 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
   """
   def serialize_master_private_key(key, chain_code) do
     data = <<
+      # "xprv"
       @version_bytes::size(32),
+      # depth
       0::size(8),
+      # index
       0::size(32),
+      # parent's fingerprint
       0::size(32),
+      # chain_code
       chain_code::size(256),
+      # prepend of private key
       0::size(8),
+      # private key
       key::size(256)
     >>
 
