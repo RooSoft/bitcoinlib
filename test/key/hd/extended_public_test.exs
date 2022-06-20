@@ -8,14 +8,17 @@ defmodule BitcoinLib.Key.HD.ExtendedPublicTest do
   test "derives an extended public key from an extended private key" do
     private_key = %BitcoinLib.Key.HD.ExtendedPrivate{
       key: 0x081549973BAFBBA825B31BCC402A3C4ED8E3185C2F3A31C75E55F423E9629AA3,
-      chain_code: 0
+      chain_code: 0x1D7D2A4C940BE028B945302AD79DD2CE2AFE5ED55E1A2937A5AF57F8401E73DD
     }
 
     public_key =
       private_key
       |> ExtendedPublic.from_private_key()
 
-    assert 0x0343B337DEC65A47B3362C9620A6E6FF39A1DDFA908ABAB1666C8A30A3F8A7CCCC == public_key.key
+    assert %ExtendedPublic{
+             key: 0x0343B337DEC65A47B3362C9620A6E6FF39A1DDFA908ABAB1666C8A30A3F8A7CCCC,
+             chain_code: 0x1D7D2A4C940BE028B945302AD79DD2CE2AFE5ED55E1A2937A5AF57F8401E73DD
+           } = public_key
   end
 
   test "serialize a master public key" do
