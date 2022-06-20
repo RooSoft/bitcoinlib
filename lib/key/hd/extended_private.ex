@@ -117,7 +117,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
 
     %{child_private_key: child_private_key} =
       %{parent_private_key: private_key, index: index}
-      |> add_compressed_public_key
+      |> add_public_key
       |> compute_hmac_input
       |> compute_hmac
       |> compute_child_chain_code
@@ -225,17 +225,17 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
     {child_private_key, derivation_path}
   end
 
-  defp add_compressed_public_key(%{parent_private_key: private_key} = hash) do
-    {_uncompressed_public_key, compressed_public_key} =
+  defp add_public_key(%{parent_private_key: private_key} = hash) do
+    public_key =
       private_key
       |> ExtendedPublic.from_private_key()
 
     hash
-    |> Map.put(:compressed_public_key, compressed_public_key)
+    |> Map.put(:public_key, public_key)
   end
 
-  defp compute_hmac_input(%{compressed_public_key: compressed_public_key, index: index} = hash) do
-    binary_public_key = Binary.from_integer(compressed_public_key)
+  defp compute_hmac_input(%{public_key: public_key, index: index} = hash) do
+    binary_public_key = Binary.from_integer(public_key.key)
 
     hmac_input = <<binary_public_key::bitstring, index::size(32)>> |> Binary.to_integer()
 

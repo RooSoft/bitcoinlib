@@ -4,9 +4,9 @@ defmodule BitcoinLib.Test.Integration.DiceRollsToPublicKeyTest do
   test "create a public key out of dice rolls" do
     dice_rolls = "01234501234501234501234501234501234501234501234501"
 
-    {_, public_key} = create_public_key(dice_rolls)
+    public_key = create_public_key(dice_rolls)
 
-    assert 0x263D3E2C03BE20C3F282EE7AF4D3174E171E5537815FEB551B4B033502251CBE4 == public_key
+    assert 0x263D3E2C03BE20C3F282EE7AF4D3174E171E5537815FEB551B4B033502251CBE4 == public_key.key
   end
 
   defp create_public_key(dice_rolls) do
