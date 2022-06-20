@@ -3,6 +3,9 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
   Bitcoin extended private key management module
   """
 
+  @enforce_keys [:key, :chain_code]
+  defstruct [:key, :chain_code, depth: 0, index: 0, parent_fingerprint: ""]
+
   @max_index 0x7FFFFFFF
   @hardened 0x80000000
 
@@ -15,7 +18,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
   @order_of_the_curve 0xFFFFFFFF_FFFFFFFF_FFFFFFFF_FFFFFFFE_BAAEDCE6_AF48A03B_BFD25E8C_D0364141
 
   alias BitcoinLib.Crypto
-  alias BitcoinLib.Key.HD.{DerivationPath, ExtendedPublic}
+  alias BitcoinLib.Key.HD.{DerivationPath, ExtendedPrivate, ExtendedPublic}
   alias BitcoinLib.Key.HD.DerivationPath.{Level}
 
   @doc """
@@ -24,18 +27,18 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
   ## Examples
     iex> "7e4803bd0278e223532f5833d81605bedc5e16f39c49bdfff322ca83d444892ddb091969761ea406bee99d6ab613fad6a99a6d4beba66897b252f00c9dd7b364"
     ...> |> BitcoinLib.Key.HD.ExtendedPrivate.from_seed()
-    %{
+    %BitcoinLib.Key.HD.ExtendedPrivate{
       chain_code: 0x5A7AEBB0FBE37BB89E690A6E350FAFED353B624741269E71001E608732FD8125,
       key: 0x41DF6FA7F014A60FD79EC50B201FECF9CEDD8328921DDF670ACFCEF227242688
     }
   """
-  @spec from_seed(String.t()) :: %{chain_code: Integer.t(), key: Integer.t()}
+  @spec from_seed(String.t()) :: %ExtendedPrivate{}
   def from_seed(seed) do
     seed
     |> Base.decode16!(case: :lower)
     |> Crypto.hmac_bitstring(@bitcoin_seed_hmac_key)
     |> split
-    |> to_integers
+    |> to_struct
   end
 
   @doc """
@@ -269,8 +272,8 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
     }
   end
 
-  defp to_integers(%{key: private_key, chain_code: chain_code}) do
-    %{
+  defp to_struct(%{key: private_key, chain_code: chain_code}) do
+    %ExtendedPrivate{
       key: Binary.to_integer(private_key),
       chain_code: Binary.to_integer(chain_code)
     }

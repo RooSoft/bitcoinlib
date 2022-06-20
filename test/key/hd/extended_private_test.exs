@@ -13,7 +13,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
       seed
       |> ExtendedPrivate.from_seed()
 
-    assert %{
+    assert %ExtendedPrivate{
              chain_code: _,
              key: _
            } = extended_private_key
@@ -28,7 +28,13 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
 
     seed = MnemonicSeed.to_seed(mnemonic)
 
-    %{key: private_key, chain_code: chain_code} =
+    %ExtendedPrivate{
+      key: private_key,
+      chain_code: chain_code,
+      depth: 0,
+      index: 0,
+      parent_fingerprint: ""
+    } =
       seed
       |> ExtendedPrivate.from_seed()
 
