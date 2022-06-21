@@ -4,11 +4,13 @@ defmodule BitcoinLib.Console do
   def write(%ExtendedPrivate{} = private_key) do
     tabulation = 12
     serialized = private_key |> ExtendedPrivate.serialize()
+    base58_key = Base58.encode(private_key.key)
 
     print_header("PRIVATE_KEY", tabulation)
 
     print_with_title("serialized", tabulation, serialized)
     print_with_title("key", tabulation, private_key.key, 64)
+    print_with_title("base58 key", tabulation, base58_key)
     print_with_title("chain_code", tabulation, private_key.chain_code, 64)
     print_with_title("depth", tabulation, private_key.depth)
     print_with_title("index", tabulation, private_key.index)
@@ -18,12 +20,14 @@ defmodule BitcoinLib.Console do
   def write(%ExtendedPublic{} = public_key) do
     tabulation = 12
     serialized = public_key |> ExtendedPublic.serialize()
+    base58_key = Base58.encode(public_key.key)
 
     IO.puts("PUBLIC KEY")
     IO.puts("----------")
 
     print_with_title("serialized", tabulation, serialized)
     print_with_title("key", tabulation, public_key.key, 66)
+    print_with_title("base58 key", tabulation, base58_key)
     print_with_title("chain_code", tabulation, public_key.chain_code, 64)
     print_with_title("depth", tabulation, public_key.depth)
     print_with_title("index", tabulation, public_key.index)
