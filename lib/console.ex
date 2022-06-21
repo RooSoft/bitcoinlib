@@ -3,7 +3,7 @@ defmodule BitcoinLib.Console do
 
   def write(%ExtendedPrivate{} = private_key) do
     tabulation = 12
-    serialized = private_key |> ExtendedPrivate.serialize_private_key()
+    serialized = private_key |> ExtendedPrivate.serialize()
 
     print_header("PRIVATE_KEY", tabulation)
 

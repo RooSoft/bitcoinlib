@@ -27,7 +27,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPublicTest do
       chain_code: 0x873DFF81C02F525623FD1FE5167EAC3A55A049DE3D314BB42EE227FFED37D508
     }
 
-    serialized = BitcoinLib.Key.HD.ExtendedPublic.serialize_master_public_key(public_key)
+    serialized = BitcoinLib.Key.HD.ExtendedPublic.serialize(public_key)
 
     assert "xpub661MyMwAqRbcFtXgS5sYJABqqG9YLmC4Q1Rdap9gSE8NqtwybGhePY2gZ29ESFjqJoCu1Rupje8YtGqsefD265TMg7usUDFdp6W1EGMcet8" ==
              serialized
