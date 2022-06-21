@@ -48,7 +48,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
     ...>   chain_code: 0x873DFF81C02F525623FD1FE5167EAC3A55A049DE3D314BB42EE227FFED37D508
     ...> }
     ...> |> BitcoinLib.Key.HD.ExtendedPrivate.serialize()
-    "xprv9s21ZrQL98ze8qqkA6Qkzq2RrHjyUCo1pSNfZDPPAUzbCPc4xehTisZZcrkePLAY8T5AA1xUcm94GFWBVxsphPyrqSvZCbnLZ5d6G8LDgdD"
+    "xprv9s21ZrQH143K3QTDL4LXw2F7HEK3wJUD2nW2nRk4stbPy6cq3jPPqjiChkVvvNKmPGJxWUtg6LnF5kejMRNNU3TGtRBeJgk33yuGBxrMPHi"
   """
   @spec serialize(%ExtendedPrivate{}) :: String.t()
   def serialize(%ExtendedPrivate{
@@ -58,11 +58,17 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
         parent_fingerprint: parent_fingerprint,
         chain_code: chain_code
       }) do
+    {fingerprint_integer, ""} =
+      parent_fingerprint
+      # prevent trying to parse an empty string
+      |> String.pad_leading(1, "0")
+      |> Integer.parse(16)
+
     data = <<
       @version_bytes::size(32),
       depth::size(8),
       index::size(32),
-      String.pad_leading(parent_fingerprint, 4, "0")::binary,
+      fingerprint_integer::size(32),
       chain_code::size(256),
       # prepend of private key
       0::size(8),
@@ -74,6 +80,33 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
       Crypto.checksum_bitstring(data)::bitstring
     >>
     |> Base58.encode()
+  end
+
+  def deserialize(serialized_private_key) do
+    <<
+      @version_bytes::size(32),
+      depth::size(8),
+      index::size(32),
+      parent_fingerprint::size(32),
+      chain_code::size(256),
+      # prepend of private key
+      0::size(8),
+      key::size(256),
+      _checksum::size(32)
+    >> =
+      serialized_private_key
+      |> Base58.decode()
+
+    %ExtendedPrivate{
+      key: key,
+      chain_code: chain_code,
+      depth: depth,
+      index: index,
+      parent_fingerprint:
+        parent_fingerprint
+        |> Binary.from_integer()
+        |> String.downcase()
+    }
   end
 
   @doc """

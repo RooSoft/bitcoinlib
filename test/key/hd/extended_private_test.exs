@@ -64,12 +64,32 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
     serialized =
       %ExtendedPrivate{
         key: 0xE8F32E723DECF4051AEFAC8E2C93C9C5B214313817CDB01A1494B917C8436B35,
-        chain_code: 0x873DFF81C02F525623FD1FE5167EAC3A55A049DE3D314BB42EE227FFED37D508
+        chain_code: 0x873DFF81C02F525623FD1FE5167EAC3A55A049DE3D314BB42EE227FFED37D508,
+        depth: 0,
+        index: 0,
+        parent_fingerprint: "0000"
       }
       |> BitcoinLib.Key.HD.ExtendedPrivate.serialize()
 
-    assert "xprv9s21ZrQL98ze8qqkA6Qkzq2RrHjyUCo1pSNfZDPPAUzbCPc4xehTisZZcrkePLAY8T5AA1xUcm94GFWBVxsphPyrqSvZCbnLZ5d6G8LDgdD" ==
+    assert "xprv9s21ZrQH143K3QTDL4LXw2F7HEK3wJUD2nW2nRk4stbPy6cq3jPPqjiChkVvvNKmPGJxWUtg6LnF5kejMRNNU3TGtRBeJgk33yuGBxrMPHi" ==
              serialized
+  end
+
+  test "deserialize a master private key" do
+    serialized =
+      "xprv9s21ZrQL98ze8qqkA6Qkzq2RrHjyUCo1pSNfZDPPAUzbCPc4xehTisZZcrkePLAY8T5AA1xUcm94GFWBVxsphPyrqSvZCbnLZ5d6G8LDgdD"
+
+    private_key =
+      serialized
+      |> BitcoinLib.Key.HD.ExtendedPrivate.deserialize()
+
+    assert %ExtendedPrivate{
+             key: 0xE8F32E723DECF4051AEFAC8E2C93C9C5B214313817CDB01A1494B917C8436B35,
+             chain_code: 0x873DFF81C02F525623FD1FE5167EAC3A55A049DE3D314BB42EE227FFED37D508,
+             depth: 0,
+             index: 0,
+             parent_fingerprint: "0000"
+           } == private_key
   end
 
   test "get private key according to the minimal derivation path" do

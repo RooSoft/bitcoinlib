@@ -12,7 +12,7 @@ defmodule BitcoinLib.Test.Integration.Bip32.SeedToSerializedKeysTest do
 
     serialized = create_serialized_master_private_key(seed)
 
-    assert "xprv9s21ZrQL98ze8qqkA6Qkzq2RrHjyUCo1pSNfZDPPAUzbCPc4xehTisZZcrkePLAY8T5AA1xUcm94GFWBVxsphPyrqSvZCbnLZ5d6G8LDgdD" ==
+    assert "xprv9s21ZrQH143K3QTDL4LXw2F7HEK3wJUD2nW2nRk4stbPy6cq3jPPqjiChkVvvNKmPGJxWUtg6LnF5kejMRNNU3TGtRBeJgk33yuGBxrMPHi" ==
              serialized
   end
 
