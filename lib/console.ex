@@ -13,7 +13,7 @@ defmodule BitcoinLib.Console do
     print_with_title("base58 key", tabulation, base58_key)
     print_with_title("chain_code", tabulation, private_key.chain_code, 64)
     print_with_title("depth", tabulation, private_key.depth)
-    print_with_title("index", tabulation, private_key.index)
+    print_with_title("index", tabulation, private_key.index |> Integer.to_string(16))
 
     print_with_title(
       "fingerprint",
@@ -35,7 +35,7 @@ defmodule BitcoinLib.Console do
     print_with_title("base58 key", tabulation, base58_key)
     print_with_title("chain_code", tabulation, public_key.chain_code, 64)
     print_with_title("depth", tabulation, public_key.depth)
-    print_with_title("index", tabulation, public_key.index)
+    print_with_title("index", tabulation, public_key.index |> Integer.to_string(16))
 
     print_with_title(
       "fingerprint",
