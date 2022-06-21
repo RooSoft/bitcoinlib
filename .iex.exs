@@ -1,3 +1,4 @@
+alias BitcoinLib.Console
 alias BitcoinLib.Key.HD.{Entropy, ExtendedPublic, ExtendedPrivate, MnemonicSeed}
 
 dice_rolls = "01234501234501234501234501234501234501234501234501"

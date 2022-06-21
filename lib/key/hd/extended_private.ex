@@ -14,7 +14,6 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
   require Logger
 
   alias BitcoinLib.Crypto
-  alias BitcoinLib.Helpers
   alias BitcoinLib.Key.HD.{DerivationPath, ExtendedPrivate}
   alias BitcoinLib.Key.HD.ExtendedPrivate.{ChildFromIndex, ChildFromDerivationPath}
 
@@ -139,16 +138,6 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
       key: private_key,
       chain_code: chain_code
     }
-  end
-
-  def to_string(%ExtendedPrivate{} = private_key) do
-    tabulation = 12
-
-    Helpers.print_with_title("key", tabulation, private_key.key, 64)
-    Helpers.print_with_title("chain_code", tabulation, private_key.chain_code, 64)
-    Helpers.print_with_title("depth", tabulation, private_key.depth)
-    Helpers.print_with_title("index", tabulation, private_key.index)
-    Helpers.print_with_title("fingerprint", tabulation, private_key.parent_fingerprint)
   end
 
   defp to_struct(%{key: private_key, chain_code: chain_code}) do
