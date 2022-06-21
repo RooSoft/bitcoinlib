@@ -46,10 +46,10 @@ defmodule BitcoinLib.Key.HD.MnemonicSeed do
     |> Checksum.compute_and_append_to_seed()
   end
 
-  defp pad_leading_zeros(bs) when is_bitstring(bs) do
-    pad_length = 8 - rem(bit_size(bs), 8)
-    <<0::size(pad_length), bs::bitstring>>
-  end
+      defp pad_leading_zeros(bs) when is_bitstring(bs) do
+        pad_length = 8 - rem(bit_size(bs), 8)
+        <<0::size(pad_length), bs::bitstring>>
+      end
 
   defp split_indices(seed_with_checksum) do
     seed_with_checksum
