@@ -142,9 +142,13 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
   end
 
   def to_string(%ExtendedPrivate{} = private_key) do
-    Helpers.print_with_title("key", 15, private_key.key, 64)
-    Helpers.print_with_title("chain_code", 15, private_key.chain_code, 64)
-    Helpers.print_with_title("fingerprint", 15, private_key.parent_fingerprint)
+    tabulation = 12
+
+    Helpers.print_with_title("key", tabulation, private_key.key, 64)
+    Helpers.print_with_title("chain_code", tabulation, private_key.chain_code, 64)
+    Helpers.print_with_title("depth", tabulation, private_key.depth)
+    Helpers.print_with_title("index", tabulation, private_key.index)
+    Helpers.print_with_title("fingerprint", tabulation, private_key.parent_fingerprint)
   end
 
   defp to_struct(%{key: private_key, chain_code: chain_code}) do
