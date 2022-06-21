@@ -14,7 +14,12 @@ defmodule BitcoinLib.Console do
     print_with_title("chain_code", tabulation, private_key.chain_code, 64)
     print_with_title("depth", tabulation, private_key.depth)
     print_with_title("index", tabulation, private_key.index)
-    print_with_title("fingerprint", tabulation, private_key.parent_fingerprint)
+
+    print_with_title(
+      "fingerprint",
+      tabulation,
+      private_key.parent_fingerprint |> Integer.to_string(16)
+    )
   end
 
   def write(%ExtendedPublic{} = public_key) do
@@ -31,7 +36,12 @@ defmodule BitcoinLib.Console do
     print_with_title("chain_code", tabulation, public_key.chain_code, 64)
     print_with_title("depth", tabulation, public_key.depth)
     print_with_title("index", tabulation, public_key.index)
-    print_with_title("fingerprint", tabulation, public_key.parent_fingerprint)
+
+    print_with_title(
+      "fingerprint",
+      tabulation,
+      public_key.parent_fingerprint |> Integer.to_string(16)
+    )
   end
 
   defp to_fixed_hex_string(value, length) when is_integer(value) do

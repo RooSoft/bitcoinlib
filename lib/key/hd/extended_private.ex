@@ -61,8 +61,8 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
     data = <<
       @version_bytes::size(32),
       depth::size(8),
-      index::size(32),
       parent_fingerprint::size(32),
+      index::size(32),
       chain_code::size(256),
       # prepend of private key
       0::size(8),
@@ -98,8 +98,8 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
     <<
       @version_bytes::size(32),
       depth::size(8),
-      index::size(32),
       parent_fingerprint::size(32),
+      index::size(32),
       chain_code::size(256),
       # prepend of private key
       0::size(8),

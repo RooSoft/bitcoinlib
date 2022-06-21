@@ -77,18 +77,18 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
 
   test "deserialize a master private key" do
     serialized =
-      "xprv9s21ZrQL98ze8qqkA6Qkzq2RrHjyUCo1pSNfZDPPAUzbCPc4xehTisZZcrkePLAY8T5AA1xUcm94GFWBVxsphPyrqSvZCbnLZ5d6G8LDgdD"
+      "xprv9s21ZrQH143K2MPKHPWh91wRxLKehoCNsRrwizj2xNaj9zD5SHMNiHJesDEYgJAavgNE1fDWLgYNneHeSA8oVeVXVYomhP1wxdzZtKsLJbc"
 
     private_key =
       serialized
       |> BitcoinLib.Key.HD.ExtendedPrivate.deserialize()
 
     assert %ExtendedPrivate{
-             key: 0xE8F32E723DECF4051AEFAC8E2C93C9C5B214313817CDB01A1494B917C8436B35,
-             chain_code: 0x873DFF81C02F525623FD1FE5167EAC3A55A049DE3D314BB42EE227FFED37D508,
+             key: 0x81549973BAFBBA825B31BCC402A3C4ED8E3185C2F3A31C75E55F423E9629AA3,
+             chain_code: 0x1D7D2A4C940BE028B945302AD79DD2CE2AFE5ED55E1A2937A5AF57F8401E73DD,
              depth: 0,
              index: 0,
-             parent_fingerprint: 808464432
+             parent_fingerprint: 0
            } == private_key
   end
 
@@ -130,7 +130,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
     assert %ExtendedPrivate{
              key: 0xDBC0D83640688A51F40B0FB28AC87687B745E2E774AA3AD68F7F11894CC98DB1,
              chain_code: 0x7910F96A0809BD47AF3B86DB0933A3BD8E1433E807F37059FA7B93939C5EF2,
-             parent_fingerprint: 0x18c1
+             parent_fingerprint: 0x18C1
            } = child_private_key
   end
 
@@ -151,7 +151,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
              chain_code: 0x7910F96A0809BD47AF3B86DB0933A3BD8E1433E807F37059FA7B93939C5EF2,
              depth: 1,
              index: 0x8000002C,
-             parent_fingerprint: 0x18c1
+             parent_fingerprint: 0x18C1
            } = child_private_key
   end
 
@@ -172,7 +172,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
     assert %ExtendedPrivate{
              key: 0xCBA660EBA950D36AE1BAE071DA2BA96C6573D7C15DAE2D36099F408211ED7D31,
              chain_code: 0x36E1EB21FC299D5CE2A4CF4468B743A17666CC4DC47207CF9C8EB4E1BD,
-             parent_fingerprint: 0x5d3e
+             parent_fingerprint: 0x5D3E
            } = child_private_key
   end
 

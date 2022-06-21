@@ -73,8 +73,8 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic do
     data = <<
       @version_bytes::size(32),
       depth::size(8),
-      index::size(32),
       parent_fingerprint::size(32),
+      index::size(32),
       chain_code::size(256),
       key::size(264)
     >>
@@ -106,8 +106,8 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic do
     <<
       @version_bytes::size(32),
       depth::size(8),
-      index::size(32),
       parent_fingerprint::size(32),
+      index::size(32),
       chain_code::size(256),
       key::size(264),
       _checksum::size(32)
