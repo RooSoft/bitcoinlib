@@ -3,9 +3,11 @@ defmodule BitcoinLib.Console do
 
   def write(%ExtendedPrivate{} = private_key) do
     tabulation = 12
+    serialized = private_key |> ExtendedPrivate.serialize_master_private_key()
 
     print_header("PRIVATE_KEY", tabulation)
 
+    print_with_title("serialized", tabulation, serialized)
     print_with_title("key", tabulation, private_key.key, 64)
     print_with_title("chain_code", tabulation, private_key.chain_code, 64)
     print_with_title("depth", tabulation, private_key.depth)
@@ -15,10 +17,12 @@ defmodule BitcoinLib.Console do
 
   def write(%ExtendedPublic{} = public_key) do
     tabulation = 12
+    serialized = public_key |> ExtendedPublic.serialize_master_public_key()
 
     IO.puts("PUBLIC KEY")
     IO.puts("----------")
 
+    print_with_title("serialized", tabulation, serialized)
     print_with_title("key", tabulation, public_key.key, 66)
     print_with_title("chain_code", tabulation, public_key.chain_code, 64)
     print_with_title("depth", tabulation, public_key.depth)
@@ -48,7 +52,7 @@ defmodule BitcoinLib.Console do
   end
 
   defp print_with_title(title, title_length, value) when is_binary(value) do
-    IO.puts("#{blue(title |> String.pad_leading(title_length, " "))}: #{yellow value}")
+    IO.puts("#{blue(title |> String.pad_leading(title_length, " "))}: #{yellow(value)}")
   end
 
   defp print_header(header, tabulation) do
