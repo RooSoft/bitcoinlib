@@ -17,7 +17,7 @@ defmodule BitcoinLib.Console do
 
   def write(%ExtendedPublic{} = public_key) do
     tabulation = 12
-    serialized = public_key |> ExtendedPublic.serialize_master_public_key()
+    serialized = public_key |> ExtendedPublic.serialize()
 
     IO.puts("PUBLIC KEY")
     IO.puts("----------")
