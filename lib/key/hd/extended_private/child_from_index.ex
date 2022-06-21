@@ -80,7 +80,8 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate.ChildFromIndex do
       |> ExtendedPublic.get_hash()
       |> Integer.to_string(16)
       |> String.slice(0, 4)
-      |> String.downcase()
+      |> Integer.parse(16)
+      |> elem(0)
 
     hash
     |> Map.put(:parent_fingerprint, parent_fingerprint)

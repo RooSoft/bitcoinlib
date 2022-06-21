@@ -56,7 +56,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
       chain_code: 0x05AAE71D7C080474EFAAB01FA79E96F4C6CFE243237780B0DF4BC36106228E31,
       depth: 1,
       index: 0,
-      parent_fingerprint: "18c1"
+      parent_fingerprint: 0x18C1
     } = child_private_key
   end
 
@@ -130,7 +130,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
     assert %ExtendedPrivate{
              key: 0xDBC0D83640688A51F40B0FB28AC87687B745E2E774AA3AD68F7F11894CC98DB1,
              chain_code: 0x7910F96A0809BD47AF3B86DB0933A3BD8E1433E807F37059FA7B93939C5EF2,
-             parent_fingerprint: "18c1"
+             parent_fingerprint: 0x18c1
            } = child_private_key
   end
 
@@ -151,7 +151,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
              chain_code: 0x7910F96A0809BD47AF3B86DB0933A3BD8E1433E807F37059FA7B93939C5EF2,
              depth: 1,
              index: 0x8000002C,
-             parent_fingerprint: "18c1"
+             parent_fingerprint: 0x18c1
            } = child_private_key
   end
 
@@ -172,7 +172,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
     assert %ExtendedPrivate{
              key: 0xCBA660EBA950D36AE1BAE071DA2BA96C6573D7C15DAE2D36099F408211ED7D31,
              chain_code: 0x36E1EB21FC299D5CE2A4CF4468B743A17666CC4DC47207CF9C8EB4E1BD,
-             parent_fingerprint: "5d3e"
+             parent_fingerprint: 0x5d3e
            } = child_private_key
   end
 
