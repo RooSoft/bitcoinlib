@@ -4,7 +4,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
   """
 
   @enforce_keys [:key, :chain_code]
-  defstruct [:key, :chain_code, depth: 0, index: 0, parent_fingerprint: ""]
+  defstruct [:key, :chain_code, depth: 0, index: 0, parent_fingerprint: 0]
 
   @bitcoin_seed_hmac_key "Bitcoin seed"
 
@@ -58,17 +58,11 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
         parent_fingerprint: parent_fingerprint,
         chain_code: chain_code
       }) do
-    {fingerprint_integer, ""} =
-      parent_fingerprint
-      # prevent trying to parse an empty string
-      |> String.pad_leading(1, "0")
-      |> Integer.parse(16)
-
     data = <<
       @version_bytes::size(32),
       depth::size(8),
       index::size(32),
-      fingerprint_integer::size(32),
+      parent_fingerprint::size(32),
       chain_code::size(256),
       # prepend of private key
       0::size(8),
@@ -83,7 +77,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
   end
 
   @doc """
-  Deserialization of a master private key from its xpriv version
+  Deserialization of a private key from its xpriv version
 
   ## Examples
     values from https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki#test-vector-1
@@ -96,7 +90,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
       chain_code: 0x873DFF81C02F525623FD1FE5167EAC3A55A049DE3D314BB42EE227FFED37D508,
       depth: 0,
       index: 0,
-      parent_fingerprint: "0000"
+      parent_fingerprint: 0
     }
   """
   @spec deserialize(String.t()) :: %ExtendedPrivate{}
@@ -120,10 +114,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
       chain_code: chain_code,
       depth: depth,
       index: index,
-      parent_fingerprint:
-        parent_fingerprint
-        |> Binary.from_integer()
-        |> String.downcase()
+      parent_fingerprint: parent_fingerprint
     }
   end
 
@@ -206,7 +197,10 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
   defp to_struct(%{key: private_key, chain_code: chain_code}) do
     %ExtendedPrivate{
       key: Binary.to_integer(private_key),
-      chain_code: Binary.to_integer(chain_code)
+      chain_code: Binary.to_integer(chain_code),
+      depth: 0,
+      index: 0,
+      parent_fingerprint: 0
     }
   end
 end

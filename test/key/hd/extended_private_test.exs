@@ -37,7 +37,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
       chain_code: 0xE08FCC54429E47AC55FEBD4DC9EDCCC88D292EB40AA3765AF3DA7178A14AA114,
       depth: 0,
       index: 0,
-      parent_fingerprint: ""
+      parent_fingerprint: 0
     } = private_key
   end
 
@@ -67,7 +67,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
         chain_code: 0x873DFF81C02F525623FD1FE5167EAC3A55A049DE3D314BB42EE227FFED37D508,
         depth: 0,
         index: 0,
-        parent_fingerprint: "0000"
+        parent_fingerprint: 0
       }
       |> BitcoinLib.Key.HD.ExtendedPrivate.serialize()
 
@@ -88,7 +88,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
              chain_code: 0x873DFF81C02F525623FD1FE5167EAC3A55A049DE3D314BB42EE227FFED37D508,
              depth: 0,
              index: 0,
-             parent_fingerprint: "0000"
+             parent_fingerprint: 808464432
            } == private_key
   end
 
@@ -109,7 +109,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
              chain_code: 0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B,
              depth: 0,
              index: 0,
-             parent_fingerprint: ""
+             parent_fingerprint: 0
            } = child_private_key
   end
 

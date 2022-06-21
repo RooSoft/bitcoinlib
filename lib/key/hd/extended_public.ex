@@ -4,7 +4,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic do
   """
 
   @enforce_keys [:key, :chain_code]
-  defstruct [:key, :chain_code, depth: 0, index: 0, parent_fingerprint: ""]
+  defstruct [:key, :chain_code, depth: 0, index: 0, parent_fingerprint: 0]
 
   @version_bytes 0x0488B21E
 
@@ -28,7 +28,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic do
       chain_code: 0x1D7D2A4C940BE028B945302AD79DD2CE2AFE5ED55E1A2937A5AF57F8401E73DD,
       depth: 0,
       index: 0,
-      parent_fingerprint: ""
+      parent_fingerprint: 0
     }
   """
   @spec from_private_key(%ExtendedPrivate{}) :: {Integer.t(), Integer.t()}
@@ -54,20 +54,29 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic do
 
     iex> %BitcoinLib.Key.HD.ExtendedPublic{
     ...>   key: 0x339A36013301597DAEF41FBE593A02CC513D0B55527EC2DF1050E2E8FF49C85C2,
-    ...>   chain_code: 0x873DFF81C02F525623FD1FE5167EAC3A55A049DE3D314BB42EE227FFED37D508
+    ...>   chain_code: 0x873DFF81C02F525623FD1FE5167EAC3A55A049DE3D314BB42EE227FFED37D508,
+    ...>   depth: 0,
+    ...>   index: 0,
+    ...>   parent_fingerprint: 0
     ...> }
     ...> |> BitcoinLib.Key.HD.ExtendedPublic.serialize()
     "xpub661MyMwAqRbcFtXgS5sYJABqqG9YLmC4Q1Rdap9gSE8NqtwybGhePY2gZ29ESFjqJoCu1Rupje8YtGqsefD265TMg7usUDFdp6W1EGMcet8"
   """
   @spec serialize(%ExtendedPublic{}) :: String.t()
-  def serialize(public_key) do
+  def serialize(%ExtendedPublic{
+        key: key,
+        depth: depth,
+        index: index,
+        parent_fingerprint: parent_fingerprint,
+        chain_code: chain_code
+      }) do
     data = <<
       @version_bytes::size(32),
-      0::size(8),
-      0::size(32),
-      0::size(32),
-      public_key.chain_code::size(256),
-      public_key.key::size(264)
+      depth::size(8),
+      index::size(32),
+      parent_fingerprint::size(32),
+      chain_code::size(256),
+      key::size(264)
     >>
 
     <<
@@ -75,6 +84,44 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic do
       Crypto.checksum_bitstring(data)::bitstring
     >>
     |> Base58.encode()
+  end
+
+  @doc """
+  Deserialization of a public key from its xpub version
+
+  ## Examples
+    values from https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki#test-vector-1
+
+    iex> "xpub661MyMwAqRbcFtXgS5sYJABqqG9YLmC4Q1Rdap9gSE8NqtwybGhePY2gZ29ESFjqJoCu1Rupje8YtGqsefD265TMg7usUDFdp6W1EGMcet8"
+    ...> |> BitcoinLib.Key.HD.ExtendedPublic.deserialize()
+    %BitcoinLib.Key.HD.ExtendedPublic{
+      key: 0x339A36013301597DAEF41FBE593A02CC513D0B55527EC2DF1050E2E8FF49C85C2,
+      chain_code: 0x873DFF81C02F525623FD1FE5167EAC3A55A049DE3D314BB42EE227FFED37D508,
+      depth: 0,
+      index: 0,
+      parent_fingerprint: 0
+    }
+  """
+  def deserialize(serialized_public_key) do
+    <<
+      @version_bytes::size(32),
+      depth::size(8),
+      index::size(32),
+      parent_fingerprint::size(32),
+      chain_code::size(256),
+      key::size(264),
+      _checksum::size(32)
+    >> =
+      serialized_public_key
+      |> Base58.decode()
+
+    %ExtendedPublic{
+      key: key,
+      chain_code: chain_code,
+      depth: depth,
+      index: index,
+      parent_fingerprint: parent_fingerprint
+    }
   end
 
   def get_hash(%ExtendedPublic{} = public_key) do
