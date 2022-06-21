@@ -74,6 +74,18 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate.ChildFromIndex do
     |> Map.put(:hmac_right_part, hmac_right_part)
   end
 
+  defp compute_parent_fingerprint(hash, %ExtendedPublic{} = public_key) do
+    parent_fingerprint =
+      public_key
+      |> ExtendedPublic.get_hash()
+      |> Integer.to_string(16)
+      |> String.slice(0, 4)
+      |> String.downcase()
+
+    hash
+    |> Map.put(:parent_fingerprint, parent_fingerprint)
+  end
+
   defp compute_child_chain_code(%{hmac_right_part: hmac_right_part} = hash) do
     hash
     |> Map.put(:child_chain_code, hmac_right_part |> Binary.to_integer())
@@ -83,7 +95,8 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate.ChildFromIndex do
          %{
            parent_private_key: %ExtendedPrivate{key: key},
            hmac_left_part: hmac_left_part,
-           hmac_right_part: hmac_right_part
+           hmac_right_part: hmac_right_part,
+           parent_fingerprint: parent_fingerprint
          } = hash
        ) do
     child_private_key =
@@ -93,18 +106,8 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate.ChildFromIndex do
     hash
     |> Map.put(:child_private_key, %ExtendedPrivate{
       key: child_private_key,
-      chain_code: hmac_right_part |> Binary.to_integer()
+      chain_code: hmac_right_part |> Binary.to_integer(),
+      parent_fingerprint: parent_fingerprint
     })
-  end
-
-  defp compute_parent_fingerprint(hash, %ExtendedPublic{} = public_key) do
-    parent_fingerprint =
-      public_key
-      |> ExtendedPublic.get_hash()
-      |> Integer.to_string(16)
-      |> String.slice(0, 4)
-
-    hash
-    |> Map.put(:parent_fingerprint, parent_fingerprint)
   end
 end

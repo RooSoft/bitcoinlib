@@ -56,7 +56,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
       chain_code: 0x05AAE71D7C080474EFAAB01FA79E96F4C6CFE243237780B0DF4BC36106228E31,
       depth: 0,
       index: 0,
-      parent_fingerprint: ""
+      parent_fingerprint: "18c1"
     } = child_private_key
   end
 
@@ -107,11 +107,11 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
         derivation_path
       )
 
-    assert child_private_key.key ==
-             0xDBC0D83640688A51F40B0FB28AC87687B745E2E774AA3AD68F7F11894CC98DB1
-
-    assert child_private_key.chain_code ==
-             0x7910F96A0809BD47AF3B86DB0933A3BD8E1433E807F37059FA7B93939C5EF2
+    assert %ExtendedPrivate{
+             key: 0xDBC0D83640688A51F40B0FB28AC87687B745E2E774AA3AD68F7F11894CC98DB1,
+             chain_code: 0x7910F96A0809BD47AF3B86DB0933A3BD8E1433E807F37059FA7B93939C5EF2,
+             parent_fingerprint: "18c1"
+           } = child_private_key
   end
 
   test "get private master bip44, bitcoin mainnet key" do

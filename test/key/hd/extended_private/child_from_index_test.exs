@@ -21,7 +21,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate.ChildFromIndexTest do
       chain_code: 0x05AAE71D7C080474EFAAB01FA79E96F4C6CFE243237780B0DF4BC36106228E31,
       depth: 0,
       index: 0,
-      parent_fingerprint: ""
+      parent_fingerprint: "18c1"
     } = child_private_key
   end
 end

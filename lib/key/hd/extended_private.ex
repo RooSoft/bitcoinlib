@@ -94,7 +94,8 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
       :ok,
       %BitcoinLib.Key.HD.ExtendedPrivate{
         key: 0x39f329fedba2a68e2a804fcd9aeea4104ace9080212a52ce8b52c1fb89850c72,
-        chain_code: 0x05aae71d7c080474efaab01fa79e96f4c6cfe243237780b0df4bc36106228e31
+        chain_code: 0x05aae71d7c080474efaab01fa79e96f4c6cfe243237780b0df4bc36106228e31,
+        parent_fingerprint: "18c1"
       }
     }
   """
@@ -117,7 +118,8 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
       :ok,
       %BitcoinLib.Key.HD.ExtendedPrivate{
         key: 0xDBC0D83640688A51F40B0FB28AC87687B745E2E774AA3AD68F7F11894CC98DB1,
-        chain_code: 0x7910F96A0809BD47AF3B86DB0933A3BD8E1433E807F37059FA7B93939C5EF2
+        chain_code: 0x7910F96A0809BD47AF3B86DB0933A3BD8E1433E807F37059FA7B93939C5EF2,
+        parent_fingerprint: "18c1"
       }
     }
   """
