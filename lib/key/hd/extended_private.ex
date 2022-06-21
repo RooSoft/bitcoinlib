@@ -82,6 +82,24 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
     |> Base58.encode()
   end
 
+  @doc """
+  Deserialization of a master private key from its xpriv version
+
+  ## Examples
+    values from https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki#test-vector-1
+
+    iex> "xprv9s21ZrQH143K3QTDL4LXw2F7HEK3wJUD2nW2nRk4stbPy6cq3jPPqjiChkVvvNKmPGJxWUtg6LnF5kejMRNNU3TGtRBeJgk33yuGBxrMPHi"
+    ...> |> BitcoinLib.Key.HD.ExtendedPrivate.deserialize()
+
+    %BitcoinLib.Key.HD.ExtendedPrivate {
+      key: 0xE8F32E723DECF4051AEFAC8E2C93C9C5B214313817CDB01A1494B917C8436B35,
+      chain_code: 0x873DFF81C02F525623FD1FE5167EAC3A55A049DE3D314BB42EE227FFED37D508,
+      depth: 0,
+      index: 0,
+      parent_fingerprint: "0000"
+    }
+  """
+  @spec deserialize(String.t()) :: %ExtendedPrivate{}
   def deserialize(serialized_private_key) do
     <<
       @version_bytes::size(32),
