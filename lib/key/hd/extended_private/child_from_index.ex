@@ -25,11 +25,14 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate.ChildFromIndex do
         false -> index
       end
 
+    public_key = ExtendedPublic.from_private_key(private_key)
+
     %{child_private_key: child_private_key} =
       %{parent_private_key: private_key, index: index}
       |> add_public_key
       |> compute_hmac_input
       |> compute_hmac
+      |> compute_parent_fingerprint(public_key)
       |> compute_child_chain_code
       |> compute_child_private_key
 
@@ -92,5 +95,16 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate.ChildFromIndex do
       key: child_private_key,
       chain_code: hmac_right_part |> Binary.to_integer()
     })
+  end
+
+  defp compute_parent_fingerprint(hash, %ExtendedPublic{} = public_key) do
+    parent_fingerprint =
+      public_key
+      |> ExtendedPublic.get_hash()
+      |> Integer.to_string(16)
+      |> String.slice(0, 4)
+
+    hash
+    |> Map.put(:parent_fingerprint, parent_fingerprint)
   end
 end

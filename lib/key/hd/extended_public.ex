@@ -76,4 +76,8 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic do
     >>
     |> Base58.encode()
   end
+
+  def get_hash(%ExtendedPublic{} = public_key) do
+    BitcoinLib.Key.PublicHash.from_public_key(public_key.key)
+  end
 end
