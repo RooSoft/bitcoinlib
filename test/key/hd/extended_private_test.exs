@@ -114,6 +114,25 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
            } = child_private_key
   end
 
+  test "derive child without using the %DerivationPath struct" do
+    private_key = %ExtendedPrivate{
+      key: 0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9,
+      chain_code: 0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B
+    }
+
+    {:ok, child_private_key} =
+      ExtendedPrivate.from_derivation_path(
+        private_key,
+        "m/44'"
+      )
+
+    assert %ExtendedPrivate{
+             key: 0xDBC0D83640688A51F40B0FB28AC87687B745E2E774AA3AD68F7F11894CC98DB1,
+             chain_code: 0x7910F96A0809BD47AF3B86DB0933A3BD8E1433E807F37059FA7B93939C5EF2,
+             parent_fingerprint: "18c1"
+           } = child_private_key
+  end
+
   test "get private master bip44, bitcoin mainnet key" do
     private_key = %ExtendedPrivate{
       key: 0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9,

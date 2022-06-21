@@ -130,6 +130,14 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
     ChildFromDerivationPath.get(private_key, derivation_path)
   end
 
+  @spec from_derivation_path(%ExtendedPrivate{}, String.t()) :: {:ok, %ExtendedPrivate{}}
+  def from_derivation_path(%ExtendedPrivate{} = private_key, derivation_path_string)
+      when is_binary(derivation_path_string) do
+    {:ok, derivation_path} = DerivationPath.parse(derivation_path_string)
+
+    from_derivation_path(private_key, derivation_path)
+  end
+
   defp split(extended_private_key) do
     <<private_key::binary-@private_key_length, chain_code::binary-@private_key_length>> =
       extended_private_key
