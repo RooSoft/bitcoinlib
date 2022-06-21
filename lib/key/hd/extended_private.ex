@@ -47,11 +47,11 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
     ...>   key: 0xE8F32E723DECF4051AEFAC8E2C93C9C5B214313817CDB01A1494B917C8436B35,
     ...>   chain_code: 0x873DFF81C02F525623FD1FE5167EAC3A55A049DE3D314BB42EE227FFED37D508
     ...> }
-    ...> |> BitcoinLib.Key.HD.ExtendedPrivate.serialize_private_key()
+    ...> |> BitcoinLib.Key.HD.ExtendedPrivate.serialize()
     "xprv9s21ZrQL98ze8qqkA6Qkzq2RrHjyUCo1pSNfZDPPAUzbCPc4xehTisZZcrkePLAY8T5AA1xUcm94GFWBVxsphPyrqSvZCbnLZ5d6G8LDgdD"
   """
-  @spec serialize_private_key(%ExtendedPrivate{}) :: String.t()
-  def serialize_private_key(%ExtendedPrivate{
+  @spec serialize(%ExtendedPrivate{}) :: String.t()
+  def serialize(%ExtendedPrivate{
         key: key,
         depth: depth,
         index: index,

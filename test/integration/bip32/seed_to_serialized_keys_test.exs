@@ -28,7 +28,7 @@ defmodule BitcoinLib.Test.Integration.Bip32.SeedToSerializedKeysTest do
   defp create_serialized_master_private_key(seed) do
     seed
     |> ExtendedPrivate.from_seed()
-    |> ExtendedPrivate.serialize_private_key()
+    |> ExtendedPrivate.serialize()
   end
 
   defp create_serialized_master_public_key(seed) do
