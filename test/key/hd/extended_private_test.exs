@@ -54,7 +54,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
     %ExtendedPrivate{
       key: 0x39F329FEDBA2A68E2A804FCD9AEEA4104ACE9080212A52CE8B52C1FB89850C72,
       chain_code: 0x05AAE71D7C080474EFAAB01FA79E96F4C6CFE243237780B0DF4BC36106228E31,
-      depth: 0,
+      depth: 1,
       index: 0,
       parent_fingerprint: "18c1"
     } = child_private_key
@@ -66,9 +66,9 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
         key: 0xE8F32E723DECF4051AEFAC8E2C93C9C5B214313817CDB01A1494B917C8436B35,
         chain_code: 0x873DFF81C02F525623FD1FE5167EAC3A55A049DE3D314BB42EE227FFED37D508
       }
-      |> BitcoinLib.Key.HD.ExtendedPrivate.serialize_master_private_key()
+      |> BitcoinLib.Key.HD.ExtendedPrivate.serialize_private_key()
 
-    assert "xprv9s21ZrQH143K3QTDL4LXw2F7HEK3wJUD2nW2nRk4stbPy6cq3jPPqjiChkVvvNKmPGJxWUtg6LnF5kejMRNNU3TGtRBeJgk33yuGBxrMPHi" ==
+    assert "xprv9s21ZrQL98ze8qqkA6Qkzq2RrHjyUCo1pSNfZDPPAUzbCPc4xehTisZZcrkePLAY8T5AA1xUcm94GFWBVxsphPyrqSvZCbnLZ5d6G8LDgdD" ==
              serialized
   end
 
@@ -81,7 +81,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
     {:ok, child_private_key} =
       ExtendedPrivate.from_derivation_path(
         private_key,
-        %DerivationPath{}
+        "m"
       )
 
     assert %ExtendedPrivate{
@@ -129,6 +129,8 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
     assert %ExtendedPrivate{
              key: 0xDBC0D83640688A51F40B0FB28AC87687B745E2E774AA3AD68F7F11894CC98DB1,
              chain_code: 0x7910F96A0809BD47AF3B86DB0933A3BD8E1433E807F37059FA7B93939C5EF2,
+             depth: 1,
+             index: 0x8000002C,
              parent_fingerprint: "18c1"
            } = child_private_key
   end

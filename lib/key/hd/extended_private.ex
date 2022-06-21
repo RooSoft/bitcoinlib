@@ -47,25 +47,25 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
     ...>   key: 0xE8F32E723DECF4051AEFAC8E2C93C9C5B214313817CDB01A1494B917C8436B35,
     ...>   chain_code: 0x873DFF81C02F525623FD1FE5167EAC3A55A049DE3D314BB42EE227FFED37D508
     ...> }
-    ...> |> BitcoinLib.Key.HD.ExtendedPrivate.serialize_master_private_key()
-    "xprv9s21ZrQH143K3QTDL4LXw2F7HEK3wJUD2nW2nRk4stbPy6cq3jPPqjiChkVvvNKmPGJxWUtg6LnF5kejMRNNU3TGtRBeJgk33yuGBxrMPHi"
+    ...> |> BitcoinLib.Key.HD.ExtendedPrivate.serialize_private_key()
+    "xprv9s21ZrQL98ze8qqkA6Qkzq2RrHjyUCo1pSNfZDPPAUzbCPc4xehTisZZcrkePLAY8T5AA1xUcm94GFWBVxsphPyrqSvZCbnLZ5d6G8LDgdD"
   """
-  @spec serialize_master_private_key(%ExtendedPrivate{}) :: String.t()
-  def serialize_master_private_key(%ExtendedPrivate{key: key, chain_code: chain_code}) do
+  @spec serialize_private_key(%ExtendedPrivate{}) :: String.t()
+  def serialize_private_key(%ExtendedPrivate{
+        key: key,
+        depth: depth,
+        index: index,
+        parent_fingerprint: parent_fingerprint,
+        chain_code: chain_code
+      }) do
     data = <<
-      # "xprv"
       @version_bytes::size(32),
-      # depth
-      0::size(8),
-      # index
-      0::size(32),
-      # parent's fingerprint
-      0::size(32),
-      # chain_code
+      depth::size(8),
+      index::size(32),
+      String.pad_leading(parent_fingerprint, 4, "0")::binary,
       chain_code::size(256),
       # prepend of private key
       0::size(8),
-      # private key
       key::size(256)
     >>
 
@@ -97,6 +97,8 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
       %BitcoinLib.Key.HD.ExtendedPrivate{
         key: 0x39f329fedba2a68e2a804fcd9aeea4104ace9080212a52ce8b52c1fb89850c72,
         chain_code: 0x05aae71d7c080474efaab01fa79e96f4c6cfe243237780b0df4bc36106228e31,
+        depth: 1,
+        index: 0,
         parent_fingerprint: "18c1"
       }
     }
@@ -121,6 +123,8 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
       %BitcoinLib.Key.HD.ExtendedPrivate{
         key: 0xDBC0D83640688A51F40B0FB28AC87687B745E2E774AA3AD68F7F11894CC98DB1,
         chain_code: 0x7910F96A0809BD47AF3B86DB0933A3BD8E1433E807F37059FA7B93939C5EF2,
+        depth: 1,
+        index: 0x8000002C,
         parent_fingerprint: "18c1"
       }
     }

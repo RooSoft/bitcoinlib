@@ -93,20 +93,23 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate.ChildFromIndex do
 
   defp compute_child_private_key(
          %{
-           parent_private_key: %ExtendedPrivate{key: key},
+           parent_private_key: parent_private_key,
+           index: index,
            hmac_left_part: hmac_left_part,
            hmac_right_part: hmac_right_part,
            parent_fingerprint: parent_fingerprint
          } = hash
        ) do
     child_private_key =
-      (Binary.to_integer(hmac_left_part) + key)
+      (Binary.to_integer(hmac_left_part) + parent_private_key.key)
       |> rem(@order_of_the_curve)
 
     hash
     |> Map.put(:child_private_key, %ExtendedPrivate{
       key: child_private_key,
       chain_code: hmac_right_part |> Binary.to_integer(),
+      depth: parent_private_key.depth + 1,
+      index: index,
       parent_fingerprint: parent_fingerprint
     })
   end
