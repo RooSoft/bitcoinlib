@@ -25,6 +25,8 @@ defmodule BitcoinLib.Console do
       tabulation,
       private_key.parent_fingerprint |> Integer.to_string(16) |> String.downcase()
     )
+
+    private_key
   end
 
   def write(%ExtendedPublic{} = public_key) do
@@ -52,6 +54,8 @@ defmodule BitcoinLib.Console do
       tabulation,
       public_key.parent_fingerprint |> Integer.to_string(16) |> String.downcase()
     )
+    
+    public_key
   end
 
   defp to_fixed_hex_string(value, length) when is_integer(value) do
