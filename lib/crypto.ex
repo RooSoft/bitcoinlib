@@ -190,4 +190,10 @@ defmodule BitcoinLib.Crypto do
   def hmac_bitstring(bin, key) when is_bitstring(bin) do
     :crypto.mac(:hmac, :sha512, key, bin)
   end
+
+  def hash160_bitstring(data) do
+    data
+    |> sha256_bitstring()
+    |> ripemd160_bitstring()
+  end
 end
