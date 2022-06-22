@@ -191,6 +191,14 @@ defmodule BitcoinLib.Crypto do
     :crypto.mac(:hmac, :sha512, key, bin)
   end
 
+  @doc """
+  Computes a hash160 of a bitstring, which is the ripemd160 of a sha256
+
+  ## Examples
+    iex> <<128, 0, 0, 44>>
+    ...> |> BitcoinLib.Crypto.hash160_bitstring()
+    <<251, 126, 153, 20, 166, 224, 56, 154, 55, 180, 46, 3, 58, 245, 19, 162, 196, 12, 64, 2>>
+  """
   def hash160_bitstring(data) do
     data
     |> sha256_bitstring()
