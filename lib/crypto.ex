@@ -199,6 +199,7 @@ defmodule BitcoinLib.Crypto do
     ...> |> BitcoinLib.Crypto.hash160_bitstring()
     <<251, 126, 153, 20, 166, 224, 56, 154, 55, 180, 46, 3, 58, 245, 19, 162, 196, 12, 64, 2>>
   """
+  @spec hash160_bitstring(bitstring()) :: bitstring()
   def hash160_bitstring(data) do
     data
     |> sha256_bitstring()
