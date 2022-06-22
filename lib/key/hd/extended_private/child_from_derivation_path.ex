@@ -90,9 +90,10 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate.ChildFromDerivationPath do
 
   defp maybe_derive_address_index(
          {private_key,
-          %DerivationPath{address_index: %Level{hardened?: false, value: index}} = derivation_path}
+          %DerivationPath{address_index: %Level{hardened?: hardened?, value: index}} =
+            derivation_path}
        ) do
-    {:ok, child_private_key} = ChildFromIndex.get(private_key, index, true)
+    {:ok, child_private_key} = ChildFromIndex.get(private_key, index, hardened?)
 
     {child_private_key, derivation_path}
   end

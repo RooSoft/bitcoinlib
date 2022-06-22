@@ -28,7 +28,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate.ChildFromIndex do
     public_key = ExtendedPublic.from_private_key(private_key)
 
     %{child_private_key: child_private_key} =
-      %{parent_private_key: private_key, index: index}
+      %{parent_private_key: private_key, index: index, is_hardened: is_hardened}
       |> add_public_key
       |> compute_hmac_input
       |> compute_hmac
@@ -48,10 +48,21 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate.ChildFromIndex do
     |> Map.put(:public_key, public_key)
   end
 
-  defp compute_hmac_input(%{public_key: public_key, index: index} = hash) do
+  defp compute_hmac_input(%{public_key: public_key, index: index, is_hardened: false} = hash) do
     binary_public_key = Binary.from_integer(public_key.key)
 
-    hmac_input = <<binary_public_key::bitstring, index::size(32)>> |> Binary.to_integer()
+    hmac_input = <<binary_public_key::bitstring, index::size(32)>>
+
+    hash
+    |> Map.put(:hmac_input, hmac_input)
+  end
+
+  defp compute_hmac_input(
+         %{parent_private_key: private_key, index: index, is_hardened: true} = hash
+       ) do
+    binary_private_key = Binary.from_integer(private_key.key)
+
+    hmac_input = <<(<<0>>), binary_private_key::bitstring, index::size(32)>>
 
     hash
     |> Map.put(:hmac_input, hmac_input)
@@ -63,15 +74,13 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate.ChildFromIndex do
          %{hmac_input: hmac_input, parent_private_key: %ExtendedPrivate{chain_code: chain_code}} =
            hash
        ) do
-    {hmac_left_part, hmac_right_part} =
+    <<derived_key::256, child_chain::binary>> =
       hmac_input
-      |> Binary.from_integer()
       |> Crypto.hmac_bitstring(chain_code |> Binary.from_integer())
-      |> String.split_at(32)
 
     hash
-    |> Map.put(:hmac_left_part, hmac_left_part)
-    |> Map.put(:hmac_right_part, hmac_right_part)
+    |> Map.put(:hmac_left_part, derived_key)
+    |> Map.put(:hmac_right_part, child_chain)
   end
 
   defp compute_parent_fingerprint(hash, %ExtendedPublic{} = public_key) do
@@ -102,7 +111,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate.ChildFromIndex do
          } = hash
        ) do
     child_private_key =
-      (Binary.to_integer(hmac_left_part) + parent_private_key.key)
+      (hmac_left_part + parent_private_key.key)
       |> rem(@order_of_the_curve)
 
     hash
