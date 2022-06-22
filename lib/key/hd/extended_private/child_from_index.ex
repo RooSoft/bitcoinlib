@@ -84,13 +84,14 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate.ChildFromIndex do
   end
 
   defp compute_parent_fingerprint(hash, %ExtendedPublic{} = public_key) do
+    <<raw_fingerprint::binary-4, _rest::binary>> =
+      public_key.key
+      |> Binary.from_integer()
+      |> Crypto.hash160_bitstring()
+
     parent_fingerprint =
-      public_key
-      |> ExtendedPublic.get_hash()
-      |> Integer.to_string(16)
-      |> String.slice(0, 8)
-      |> Integer.parse(16)
-      |> elem(0)
+      raw_fingerprint
+      |> Binary.to_integer()
 
     hash
     |> Map.put(:parent_fingerprint, parent_fingerprint)

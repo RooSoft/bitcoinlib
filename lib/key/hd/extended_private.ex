@@ -141,7 +141,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
         chain_code: 0x05aae71d7c080474efaab01fa79e96f4c6cfe243237780b0df4bc36106228e31,
         depth: 1,
         index: 0,
-        parent_fingerprint: 0x18C12595
+        parent_fingerprint: 0x18C1259
       }
     }
   """
@@ -167,7 +167,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
         chain_code: 0xF42DE823EE78F6227822D79BC6F6101D084D7F0F876B7828BF027D681294E538,
         depth: 1,
         index: 0x8000002C,
-        parent_fingerprint: 0x18C12595
+        parent_fingerprint: 0x18C1259
       }
     }
   """
