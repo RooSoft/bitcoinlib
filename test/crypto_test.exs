@@ -74,4 +74,16 @@ defmodule BitcoinLib.CryptoTest do
 
     assert checksum == "b56c36b1"
   end
+
+  test "makes a hash160 of a bitstring" do
+    value = <<128, 0, 0, 44>>
+
+    hash =
+      value
+      |> Crypto.hash160_bitstring()
+
+    assert <<251, 126, 153, 20, 166, 224, 56, 154, 55, 180, 46, 3, 58, 245, 19, 162, 196, 12, 64,
+             2>> ==
+             hash
+  end
 end
