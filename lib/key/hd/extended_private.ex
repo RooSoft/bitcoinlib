@@ -169,6 +169,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
       parent_fingerprint: 0x18C1259
     }
   """
+  @spec derive_child!(%ExtendedPrivate{}, Integer.t(), Integer.t()) :: %ExtendedPrivate{}
   def derive_child!(private_key, index, is_hardened \\ false) do
     derive_child(private_key, index, is_hardened)
     |> elem(1)
