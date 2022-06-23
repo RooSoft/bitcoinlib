@@ -11,4 +11,6 @@ public_key = ExtendedPublic.from_private_key(private_key)
 ss_mnemonics = "rally celery split order almost twenty ignore record legend learn chaos decade"
 ss_seed = MnemonicSeed.to_seed(mnemonics)
 ss_pk = ExtendedPrivate.from_seed(ss_seed)
-ss_xprv = ExtendedPrivate.serialize(ss_pk)
+# this child is: bip 44 bitcoin mainnet account 0 receiving index 0
+{:ok, ss_child} = ss_pk |> ExtendedPrivate.from_derivation_path("m/44'/0'/0'/0/0")
+ss_child_xprv = ExtendedPrivate.serialize(ss_child)
