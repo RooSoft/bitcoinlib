@@ -9,10 +9,10 @@ defmodule BitcoinLib.Test.Integration.Bip32.ChildVsDerivationPathTest do
       |> MnemonicSeed.to_seed()
       |> ExtendedPrivate.from_seed()
 
-    manually_derived_child_private_key = derive_manually(private_key)
-    from_derivation_path_private_key = from_derivation_path(private_key, "m/44'/0'/0'/1/0")
+    manual_xprv = derive_manually(private_key)
+    derivation_path_xprv = from_derivation_path(private_key, "m/44'/0'/0'/1/0")
 
-    assert manually_derived_child_private_key == from_derivation_path_private_key
+    assert manual_xprv == derivation_path_xprv
   end
 
   defp derive_manually(private_key) do
