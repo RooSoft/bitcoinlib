@@ -150,6 +150,11 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
     ChildFromIndex.get(private_key, index, is_hardened)
   end
 
+  def derive_child!(private_key, index, is_hardened \\ false) do
+    derive_child(private_key, index, is_hardened)
+    |> elem(1)
+  end
+
   @doc """
   Derives a child private key, following a derivation path
 
@@ -182,6 +187,16 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
     {:ok, derivation_path} = DerivationPath.parse(derivation_path_string)
 
     from_derivation_path(private_key, derivation_path)
+  end
+
+  @doc """
+  Simply calls from_derivation_path and directly returns the private key whatever the outcome.any()
+  Will crash if used with an invalid derivation path
+  """
+  @spec from_derivation_path!(%ExtendedPrivate{}, any()) :: %ExtendedPrivate{}
+  def from_derivation_path!(%ExtendedPrivate{} = private_key, derivation_path) do
+    from_derivation_path(private_key, derivation_path)
+    |> elem(1)
   end
 
   defp split(extended_private_key) do

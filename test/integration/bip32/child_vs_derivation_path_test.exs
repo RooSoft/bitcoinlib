@@ -17,23 +17,17 @@ defmodule BitcoinLib.Test.Integration.Bip32.ChildVsDerivationPathTest do
 
   defp derive_manually(private_key) do
     private_key
-    |> ExtendedPrivate.derive_child(44, true)
-    |> elem(1)
-    |> ExtendedPrivate.derive_child(0, true)
-    |> elem(1)
-    |> ExtendedPrivate.derive_child(0, true)
-    |> elem(1)
-    |> ExtendedPrivate.derive_child(1, false)
-    |> elem(1)
-    |> ExtendedPrivate.derive_child(0, false)
-    |> elem(1)
+    |> ExtendedPrivate.derive_child!(44, true)
+    |> ExtendedPrivate.derive_child!(0, true)
+    |> ExtendedPrivate.derive_child!(0, true)
+    |> ExtendedPrivate.derive_child!(1, false)
+    |> ExtendedPrivate.derive_child!(0, false)
     |> ExtendedPrivate.serialize()
   end
 
   defp from_derivation_path(private_key, derivation_path) do
     private_key
-    |> ExtendedPrivate.from_derivation_path(derivation_path)
-    |> elem(1)
+    |> ExtendedPrivate.from_derivation_path!(derivation_path)
     |> ExtendedPrivate.serialize()
   end
 end
