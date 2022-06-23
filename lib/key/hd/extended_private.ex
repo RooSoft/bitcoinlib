@@ -192,6 +192,21 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
   @doc """
   Simply calls from_derivation_path and directly returns the private key whatever the outcome.any()
   Will crash if used with an invalid derivation path
+
+  ## Examples
+    iex> private_key = %BitcoinLib.Key.HD.ExtendedPrivate{
+    ...>   key: 0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9,
+    ...>   chain_code: 0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B
+    ...> }
+    ...> {:ok, derivation_path} = BitcoinLib.Key.HD.DerivationPath.parse("m/44'")
+    ...> BitcoinLib.Key.HD.ExtendedPrivate.from_derivation_path!(private_key, derivation_path)
+    %BitcoinLib.Key.HD.ExtendedPrivate{
+      key: 0x4E59086C1DEC6D081986CB079F536E38B3D2B6DA7A8EDCFFB1942AE8B9FDF156,
+      chain_code: 0xF42DE823EE78F6227822D79BC6F6101D084D7F0F876B7828BF027D681294E538,
+      depth: 1,
+      index: 0x8000002C,
+      parent_fingerprint: 0x18C1259
+    }
   """
   @spec from_derivation_path!(%ExtendedPrivate{}, any()) :: %ExtendedPrivate{}
   def from_derivation_path!(%ExtendedPrivate{} = private_key, derivation_path) do
