@@ -21,6 +21,22 @@ defmodule BitcoinLib.Key.HD.Entropy do
     |> maybe_parse_rolls
   end
 
+  @doc """
+  Takes a list of dice rolls as a string argument, having values ranging from 0 to 5,
+  transforming them into a single integer that could serve as entropy for mnemonic seed
+  creation
+
+  ## Examples
+    iex> "01234501234501234501234501234501234501234501234501"
+    ...> |> BitcoinLib.Key.HD.Entropy.from_dice_rolls!()
+    32_310_461_525_491_050_757_677_748_469_648_273_221
+  """
+  @spec from_dice_rolls!(String.t()) :: Integer.t()
+  def from_dice_rolls!(dice_rolls) do
+    from_dice_rolls(dice_rolls)
+    |> elem(1)
+  end
+
   defp validate_rolls(dice_rolls) do
     {
       Regex.match?(~r/^[0-5]+$/, dice_rolls),
