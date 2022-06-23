@@ -150,6 +150,25 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
     ChildFromIndex.get(private_key, index, is_hardened)
   end
 
+  @doc """
+  Simply calls from_derivation_path and directly returns the private key whatever the outcome.any()
+  Will crash if the index is negative or greater than 0x7FFFFFFF
+
+  ## Examples
+    iex> private_key = %BitcoinLib.Key.HD.ExtendedPrivate{
+    ...>   key: 0xf79bb0d317b310b261a55a8ab393b4c8a1aba6fa4d08aef379caba502d5d67f9,
+    ...>   chain_code: 0x463223aac10fb13f291a1bc76bc26003d98da661cb76df61e750c139826dea8b
+    ...> }
+    ...> index = 0
+    ...> BitcoinLib.Key.HD.ExtendedPrivate.derive_child!(private_key, index)
+    %BitcoinLib.Key.HD.ExtendedPrivate{
+      key: 0x39f329fedba2a68e2a804fcd9aeea4104ace9080212a52ce8b52c1fb89850c72,
+      chain_code: 0x05aae71d7c080474efaab01fa79e96f4c6cfe243237780b0df4bc36106228e31,
+      depth: 1,
+      index: 0,
+      parent_fingerprint: 0x18C1259
+    }
+  """
   def derive_child!(private_key, index, is_hardened \\ false) do
     derive_child(private_key, index, is_hardened)
     |> elem(1)
