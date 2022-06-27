@@ -17,15 +17,15 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate.ChildFromIndex do
     {:error, "#{index} is too large of an index"}
   end
 
-  def get(%ExtendedPrivate{} = private_key, index, is_hardened) when is_integer(index) do
+  def get(%ExtendedPrivate{} = private_key, index, hardened?) when is_integer(index) do
     index =
-      case is_hardened do
+      case hardened? do
         true -> @hardened + index
         false -> index
       end
 
     %{child_private_key: child_private_key} =
-      %{parent_private_key: private_key, index: index, is_hardened: is_hardened}
+      %{parent_private_key: private_key, index: index, hardened?: hardened?}
       |> add_public_key
       |> compute_hmac_input
       |> compute_hmac
@@ -45,13 +45,13 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate.ChildFromIndex do
     |> Map.put(:public_key, public_key)
   end
 
-  defp compute_hmac_input(%{public_key: public_key, index: index, is_hardened: false} = hash) do
+  defp compute_hmac_input(%{public_key: public_key, index: index, hardened?: false} = hash) do
     hash
     |> Map.put(:hmac_input, Hmac.get_input(public_key, index, false))
   end
 
   defp compute_hmac_input(
-         %{parent_private_key: private_key, index: index, is_hardened: true} = hash
+         %{parent_private_key: private_key, index: index, hardened?: true} = hash
        ) do
     hash
     |> Map.put(:hmac_input, Hmac.get_input(private_key, index, true))
