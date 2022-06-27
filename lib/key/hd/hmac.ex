@@ -2,6 +2,8 @@ defmodule BitcoinLib.Key.HD.Hmac do
   alias BitcoinLib.Crypto
   alias BitcoinLib.Key.HD.{ExtendedPublic, ExtendedPrivate}
 
+  def compute(private_key, index, hardened? \\ false)
+
   def compute(%ExtendedPrivate{} = private_key, index, hardened? = false) do
     private_key
     |> ExtendedPublic.from_private_key()
@@ -33,7 +35,7 @@ defmodule BitcoinLib.Key.HD.Hmac do
   end
 
   defp execute(hmac_input, chain_code) do
-    <<derived_key::256, child_chain::binary>> =
+    <<derived_key::256, child_chain::256>> =
       hmac_input
       |> Crypto.hmac_bitstring(chain_code |> Binary.from_integer())
 
