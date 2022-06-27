@@ -9,6 +9,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic do
   @version_bytes 0x0488B21E
 
   alias BitcoinLib.Crypto
+  alias BitcoinLib.Key.HD.ExtendedPublic.ChildFromIndex
   alias BitcoinLib.Key.HD.{ExtendedPrivate, ExtendedPublic}
 
   @doc """
@@ -122,6 +123,63 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic do
       index: index,
       parent_fingerprint: parent_fingerprint
     }
+  end
+
+  @doc """
+  Derives the nth child of a HD public key
+
+  Takes a public key, its chain code and the child's index
+  Returns the child's public key and it's associated chain code
+
+  Inspired by https://learnmeabitcoin.com/technical/extended-keys#child-extended-key-derivation
+
+  ## Examples
+
+    iex> public_key = %BitcoinLib.Key.HD.ExtendedPublic{
+    ...>  key: 0x252C616D91A2488C1FD1F0F172E98F7D1F6E51F8F389B2F8D632A8B490D5F6DA9,
+    ...>  chain_code: 0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B
+    ...> }
+    ...> index = 0
+    ...> BitcoinLib.Key.HD.ExtendedPublic.derive_child(public_key, index)
+    {
+      :ok,
+      %BitcoinLib.Key.HD.ExtendedPublic{
+        key: 0x951D9004DE141E9DC5FA045A15F3E71AE5592C2E5D74332CB4E034679950D0E1,
+        chain_code: 0x05AAE71D7C080474EFAAB01FA79E96F4C6CFE243237780B0DF4BC36106228E31,
+        depth: 1,
+        index: 0,
+        parent_fingerprint: 0x18C1259
+      }
+    }
+  """
+  @spec derive_child(%ExtendedPublic{}, Integer.t()) :: {:ok, %ExtendedPublic{}}
+  def derive_child(public_key, index) do
+    ChildFromIndex.get(public_key, index)
+  end
+
+  @doc """
+  Simply calls from_derivation_path and directly returns the public key whatever the outcome.any()
+  Will crash if the index is negative or greater than 0x7FFFFFFF
+
+  ## Examples
+    iex> public_key = %BitcoinLib.Key.HD.ExtendedPublic{
+    ...>  key: 0x252C616D91A2488C1FD1F0F172E98F7D1F6E51F8F389B2F8D632A8B490D5F6DA9,
+    ...>  chain_code: 0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B
+    ...> }
+    ...> index = 0
+    ...> BitcoinLib.Key.HD.ExtendedPublic.derive_child!(public_key, index)
+    %BitcoinLib.Key.HD.ExtendedPublic{
+      key: 0x951D9004DE141E9DC5FA045A15F3E71AE5592C2E5D74332CB4E034679950D0E1,
+      chain_code: 0x05AAE71D7C080474EFAAB01FA79E96F4C6CFE243237780B0DF4BC36106228E31,
+      depth: 1,
+      index: 0,
+      parent_fingerprint: 0x18C1259
+    }
+  """
+  @spec derive_child!(%ExtendedPublic{}, Integer.t()) :: %ExtendedPublic{}
+  def derive_child!(public_key, index) do
+    derive_child(public_key, index)
+    |> elem(1)
   end
 
   def get_hash(%ExtendedPublic{} = public_key) do
