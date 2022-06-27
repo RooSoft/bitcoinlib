@@ -8,7 +8,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate.ChildFromIndex do
   @order_of_the_curve 0xFFFFFFFF_FFFFFFFF_FFFFFFFF_FFFFFFFE_BAAEDCE6_AF48A03B_BFD25E8C_D0364141
 
   alias BitcoinLib.Crypto
-  alias BitcoinLib.Key.HD.{ExtendedPrivate, ExtendedPublic}
+  alias BitcoinLib.Key.HD.{Hmac, ExtendedPrivate, ExtendedPublic}
 
   @spec get(%ExtendedPrivate{}, Integer.t(), Integer.t()) ::
           {:ok, %ExtendedPrivate{}} | {:error, String.t()}
@@ -49,23 +49,15 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate.ChildFromIndex do
   end
 
   defp compute_hmac_input(%{public_key: public_key, index: index, is_hardened: false} = hash) do
-    binary_public_key = Binary.from_integer(public_key.key)
-
-    hmac_input = <<binary_public_key::bitstring, index::size(32)>>
-
     hash
-    |> Map.put(:hmac_input, hmac_input)
+    |> Map.put(:hmac_input, Hmac.get_input(public_key, index, false))
   end
 
   defp compute_hmac_input(
          %{parent_private_key: private_key, index: index, is_hardened: true} = hash
        ) do
-    binary_private_key = Binary.from_integer(private_key.key)
-
-    hmac_input = <<(<<0>>), binary_private_key::bitstring, index::size(32)>>
-
     hash
-    |> Map.put(:hmac_input, hmac_input)
+    |> Map.put(:hmac_input, Hmac.get_input(private_key, index, true))
   end
 
   # hmac_left_part and hmac_right_part are Il and Ir in slip-0010 as found here
@@ -74,9 +66,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate.ChildFromIndex do
          %{hmac_input: hmac_input, parent_private_key: %ExtendedPrivate{chain_code: chain_code}} =
            hash
        ) do
-    <<derived_key::256, child_chain::binary>> =
-      hmac_input
-      |> Crypto.hmac_bitstring(chain_code |> Binary.from_integer())
+    {derived_key, child_chain} = Hmac.compute(hmac_input, chain_code)
 
     hash
     |> Map.put(:hmac_left_part, derived_key)
