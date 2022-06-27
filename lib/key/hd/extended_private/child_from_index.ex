@@ -66,7 +66,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate.ChildFromIndex do
     hash
     |> Map.put(:child_private_key, %ExtendedPrivate{
       key: child_private_key,
-      chain_code: child_chain_code |> Binary.to_integer(),
+      chain_code: child_chain_code,
       depth: parent_private_key.depth + 1,
       index: index,
       parent_fingerprint: parent_fingerprint
