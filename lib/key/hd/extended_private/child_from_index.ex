@@ -7,8 +7,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate.ChildFromIndex do
   # this is n, as found here https://en.bitcoin.it/wiki/Secp256k1
   @order_of_the_curve 0xFFFFFFFF_FFFFFFFF_FFFFFFFF_FFFFFFFE_BAAEDCE6_AF48A03B_BFD25E8C_D0364141
 
-  alias BitcoinLib.Crypto
-  alias BitcoinLib.Key.HD.{Hmac, ExtendedPrivate, ExtendedPublic}
+  alias BitcoinLib.Key.HD.{Fingerprint, Hmac, ExtendedPrivate, ExtendedPublic}
 
   @spec get(%ExtendedPrivate{}, Integer.t(), Integer.t()) ::
           {:ok, %ExtendedPrivate{}} | {:error, String.t()}
@@ -25,14 +24,12 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate.ChildFromIndex do
         false -> index
       end
 
-    public_key = ExtendedPublic.from_private_key(private_key)
-
     %{child_private_key: child_private_key} =
       %{parent_private_key: private_key, index: index, is_hardened: is_hardened}
       |> add_public_key
       |> compute_hmac_input
       |> compute_hmac
-      |> compute_parent_fingerprint(public_key)
+      |> compute_parent_fingerprint
       |> compute_child_chain_code
       |> compute_child_private_key
 
@@ -73,18 +70,9 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate.ChildFromIndex do
     |> Map.put(:hmac_right_part, child_chain)
   end
 
-  defp compute_parent_fingerprint(hash, %ExtendedPublic{} = public_key) do
-    <<raw_fingerprint::binary-4, _rest::binary>> =
-      public_key.key
-      |> Binary.from_integer()
-      |> Crypto.hash160_bitstring()
-
-    parent_fingerprint =
-      raw_fingerprint
-      |> Binary.to_integer()
-
+  defp compute_parent_fingerprint(%{parent_private_key: private_key} = hash) do
     hash
-    |> Map.put(:parent_fingerprint, parent_fingerprint)
+    |> Map.put(:parent_fingerprint, Fingerprint.compute(private_key))
   end
 
   defp compute_child_chain_code(%{hmac_right_part: hmac_right_part} = hash) do
