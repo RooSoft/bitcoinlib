@@ -7,7 +7,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate.ChildFromIndex do
   # this is n, as found here https://en.bitcoin.it/wiki/Secp256k1
   @order_of_the_curve 0xFFFFFFFF_FFFFFFFF_FFFFFFFF_FFFFFFFE_BAAEDCE6_AF48A03B_BFD25E8C_D0364141
 
-  alias BitcoinLib.Key.HD.{Fingerprint, Hmac, ExtendedPrivate, ExtendedPublic}
+  alias BitcoinLib.Key.HD.{Fingerprint, Hmac, ExtendedPrivate}
 
   @spec get(%ExtendedPrivate{}, Integer.t(), Integer.t()) ::
           {:ok, %ExtendedPrivate{}} | {:error, String.t()}
@@ -26,21 +26,11 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate.ChildFromIndex do
 
     %{child_private_key: child_private_key} =
       %{parent_private_key: private_key, index: index, hardened?: hardened?}
-      |> add_public_key
       |> compute_hmac
       |> compute_parent_fingerprint
       |> compute_child_private_key
 
     {:ok, child_private_key}
-  end
-
-  defp add_public_key(%{parent_private_key: private_key} = hash) do
-    public_key =
-      private_key
-      |> ExtendedPublic.from_private_key()
-
-    hash
-    |> Map.put(:public_key, public_key)
   end
 
   # hmac_left_part and hmac_right_part are Il and Ir in slip-0010 as found here
