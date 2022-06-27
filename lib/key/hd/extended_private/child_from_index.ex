@@ -9,7 +9,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate.ChildFromIndex do
 
   alias BitcoinLib.Key.HD.{Fingerprint, Hmac, ExtendedPrivate}
 
-  @spec get(%ExtendedPrivate{}, Integer.t(), Integer.t()) ::
+  @spec get(%ExtendedPrivate{}, Integer.t(), Boolean.t()) ::
           {:ok, %ExtendedPrivate{}} | {:error, String.t()}
   def get(private_key, index, hardened? \\ false)
 
