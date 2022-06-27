@@ -41,7 +41,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate.ChildFromIndex do
     {derived_key, child_chain} = Hmac.compute(parent_private_key, index, hardened?)
 
     hash
-    |> Map.put(:derived_key, derived_key)
+    |> Map.put(:hmac_derived_key, derived_key)
     |> Map.put(:child_chain_code, child_chain)
   end
 
@@ -54,13 +54,13 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate.ChildFromIndex do
          %{
            parent_private_key: parent_private_key,
            index: index,
-           derived_key: derived_key,
+           hmac_derived_key: hmac_derived_key,
            child_chain_code: child_chain_code,
            parent_fingerprint: parent_fingerprint
          } = hash
        ) do
     child_private_key =
-      (derived_key + parent_private_key.key)
+      (hmac_derived_key + parent_private_key.key)
       |> rem(@order_of_the_curve)
 
     hash
