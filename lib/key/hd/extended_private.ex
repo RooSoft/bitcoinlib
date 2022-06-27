@@ -145,9 +145,9 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
       }
     }
   """
-  @spec derive_child(%ExtendedPrivate{}, Integer.t(), Integer.t()) :: {:ok, %ExtendedPrivate{}}
-  def derive_child(private_key, index, is_hardened \\ false) do
-    ChildFromIndex.get(private_key, index, is_hardened)
+  @spec derive_child(%ExtendedPrivate{}, Integer.t(), Boolean.t()) :: {:ok, %ExtendedPrivate{}}
+  def derive_child(private_key, index, hardened? \\ false) do
+    ChildFromIndex.get(private_key, index, hardened?)
   end
 
   @doc """
@@ -169,9 +169,9 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
       parent_fingerprint: 0x18C1259
     }
   """
-  @spec derive_child!(%ExtendedPrivate{}, Integer.t(), Integer.t()) :: %ExtendedPrivate{}
-  def derive_child!(private_key, index, is_hardened \\ false) do
-    derive_child(private_key, index, is_hardened)
+  @spec derive_child!(%ExtendedPrivate{}, Integer.t(), Boolean.t()) :: %ExtendedPrivate{}
+  def derive_child!(private_key, index, hardened? \\ false) do
+    derive_child(private_key, index, hardened?)
     |> elem(1)
   end
 
