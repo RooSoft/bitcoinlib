@@ -11,7 +11,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate.ChildFromIndex do
 
   @spec get(%ExtendedPrivate{}, Integer.t(), Integer.t()) ::
           {:ok, %ExtendedPrivate{}} | {:error, String.t()}
-  def get(private_key, index, is_hardened \\ false)
+  def get(private_key, index, hardened? \\ false)
 
   def get(_, index, _) when is_integer(index) and index > @max_index do
     {:error, "#{index} is too large of an index"}
@@ -27,7 +27,6 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate.ChildFromIndex do
     %{child_private_key: child_private_key} =
       %{parent_private_key: private_key, index: index, hardened?: hardened?}
       |> add_public_key
-      |> compute_hmac_input
       |> compute_hmac
       |> compute_parent_fingerprint
       |> compute_child_chain_code
@@ -45,25 +44,12 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate.ChildFromIndex do
     |> Map.put(:public_key, public_key)
   end
 
-  defp compute_hmac_input(%{public_key: public_key, index: index, hardened?: false} = hash) do
-    hash
-    |> Map.put(:hmac_input, Hmac.get_input(public_key, index, false))
-  end
-
-  defp compute_hmac_input(
-         %{parent_private_key: private_key, index: index, hardened?: true} = hash
-       ) do
-    hash
-    |> Map.put(:hmac_input, Hmac.get_input(private_key, index, true))
-  end
-
   # hmac_left_part and hmac_right_part are Il and Ir in slip-0010 as found here
   # https://github.com/satoshilabs/slips/blob/master/slip-0010.md#master-key-generation
   defp compute_hmac(
-         %{hmac_input: hmac_input, parent_private_key: %ExtendedPrivate{chain_code: chain_code}} =
-           hash
+         %{index: index, parent_private_key: parent_private_key, hardened?: hardened?} = hash
        ) do
-    {derived_key, child_chain} = Hmac.compute(hmac_input, chain_code)
+    {derived_key, child_chain} = Hmac.compute(parent_private_key, index, hardened?)
 
     hash
     |> Map.put(:hmac_left_part, derived_key)
