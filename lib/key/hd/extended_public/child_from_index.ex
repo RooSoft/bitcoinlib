@@ -4,6 +4,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic.ChildFromIndex do
   @max_index 0x7FFFFFFF
 
   alias BitcoinLib.Key.HD.{Fingerprint, Hmac, ExtendedPublic}
+  alias BitcoinLib.Crypto.Secp256k1
 
   @spec get(%ExtendedPublic{}, Integer.t()) ::
           {:ok, %ExtendedPublic{}} | {:error, String.t()}
@@ -50,9 +51,13 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic.ChildFromIndex do
            parent_fingerprint: parent_fingerprint
          } = hash
        ) do
+    {_, key} =
+      hmac_derived_key
+      |> BitcoinLib.Key.Public.from_private_key()
+
     hash
     |> Map.put(:child_public_key, %ExtendedPublic{
-      key: hmac_derived_key + parent_public_key.key,
+      key: Secp256k1.add_keys(key, parent_public_key.key),
       chain_code: child_chain_code,
       depth: parent_public_key.depth + 1,
       index: index,
