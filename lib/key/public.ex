@@ -3,6 +3,8 @@ defmodule BitcoinLib.Key.Public do
   Bitcoin public key management module
   """
 
+  alias BitcoinLib.Crypto
+
   @doc """
   Derives a public key from a private key in both uncompressed and compressed format
 
@@ -22,8 +24,7 @@ defmodule BitcoinLib.Key.Public do
       private_key
       |> Binary.from_integer()
 
-    {public_uncompressed, _private} =
-      :crypto.generate_key(:ecdh, :secp256k1, bitstring_private_key)
+    public_uncompressed = Crypto.secp256k1_bitstring(bitstring_private_key)
 
     compressed = get_compressed(public_uncompressed)
 
