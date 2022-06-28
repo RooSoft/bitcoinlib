@@ -1,6 +1,11 @@
 alias BitcoinLib.Console
 alias BitcoinLib.Key.HD.{Entropy, ExtendedPublic, ExtendedPrivate, MnemonicSeed}
 
+# options here https://hexdocs.pm/elixir/1.12/Inspect.Opts.html
+IEx.configure(
+  inspect: [base: :hex]
+)
+
 public_key =
   "01234501234501234501234501234501234501234501234501"
   |> Entropy.from_dice_rolls!()
