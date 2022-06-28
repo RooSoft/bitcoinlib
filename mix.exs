@@ -24,7 +24,8 @@ defmodule BitcoinLib.MixProject do
     [
       {:binary, "0.0.4"},
       {:exbase58, "~> 1.0"},
-      {:pbkdf2_elixir, "~> 2.0"}
+      {:pbkdf2_elixir, "~> 2.0"},
+      {:curvy, "~> 0.3.0"}
     ]
   end
 end
