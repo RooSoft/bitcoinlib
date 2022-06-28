@@ -43,7 +43,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPublicTest do
 
     result = BitcoinLib.Key.HD.ExtendedPublic.derive_child(public_key, index)
 
-    {
+    assert {
       :ok,
       %BitcoinLib.Key.HD.ExtendedPublic{
         key: 0x30204D3503024160E8303C0042930EA92A9D671DE9AA139C1867353F6B6664E59,
