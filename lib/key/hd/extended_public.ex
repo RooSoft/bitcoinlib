@@ -181,6 +181,17 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic do
     |> elem(1)
   end
 
+  @doc """
+  Computes a public key hash out of a public key
+
+  ## Examples
+    iex> %BitcoinLib.Key.HD.ExtendedPublic{
+    ...>   key: 0x0343B337DEC65A47B3362C9620A6E6FF39A1DDFA908ABAB1666C8A30A3F8A7CCCC,
+    ...>   chain_code: 0x1D7D2A4C940BE028B945302AD79DD2CE2AFE5ED55E1A2937A5AF57F8401E73DD
+    ...> }
+    ...> |> BitcoinLib.Key.HD.ExtendedPublic.get_hash()
+    0xED104CB8EF3ADABEC5D2BE8178C99847F9694269
+  """
   def get_hash(%ExtendedPublic{} = public_key) do
     BitcoinLib.Key.PublicHash.from_public_key(public_key.key)
   end
