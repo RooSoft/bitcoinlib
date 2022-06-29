@@ -14,7 +14,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
   require Logger
 
   alias BitcoinLib.Crypto
-  alias BitcoinLib.Key.HD.{DerivationPath, ExtendedPrivate, Fingerprint}
+  alias BitcoinLib.Key.HD.{DerivationPath, ExtendedPrivate, Fingerprint, MnemonicSeed}
   alias BitcoinLib.Key.HD.ExtendedPrivate.{ChildFromIndex, ChildFromDerivationPath}
 
   @doc """
@@ -36,6 +36,27 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
     |> Crypto.hmac_bitstring(@bitcoin_seed_hmac_key)
     |> split
     |> to_struct
+  end
+
+  @doc """
+  Converts a mnemonic phrase into an extended private key
+
+  ## Examples
+    iex> "rally celery split order almost twenty ignore record legend learn chaos decade"
+    ...> |> BitcoinLib.Key.HD.ExtendedPrivate.from_mnemonic_phrase()
+    %BitcoinLib.Key.HD.ExtendedPrivate{
+      fingerprint: 0x2E92A74C,
+      key: 0xD6EAD233E06C068585976B5C8373861D77E7F030EC452E65EE81C85FA6906970,
+      chain_code: 0xA17100DD000D9D4A37034F7CEE0D46F5AE97B570BE065E57A00546FAE014A8A2,
+      depth: 0x0,
+      index: 0x0
+    }
+  """
+  @spec from_mnemonic_phrase(String.t()) :: %ExtendedPrivate{}
+  def from_mnemonic_phrase(mnemonic_phrase, passphrase \\ "") do
+    mnemonic_phrase
+    |> MnemonicSeed.to_seed(passphrase)
+    |> from_seed
   end
 
   @doc """

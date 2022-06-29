@@ -26,11 +26,9 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
       "safe result wire cattle sauce luggage couple legend pause rather employ pear " <>
         "trigger live daring unlock music lyrics smoke mistake endorse kite obey siren"
 
-    seed = MnemonicSeed.to_seed(mnemonic)
-
     private_key =
-      seed
-      |> ExtendedPrivate.from_seed()
+      mnemonic
+      |> ExtendedPrivate.from_mnemonic_phrase()
 
     %ExtendedPrivate{
       key: 0x30A6B59CCCC924FC9FFD4AB08C5C01F0D6A4046797BB255D8919EB3E95C08871,
