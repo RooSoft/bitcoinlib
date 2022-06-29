@@ -36,12 +36,18 @@ defmodule BitcoinLib.Console do
   end
 
   def write(%ExtendedPublic{} = public_key) do
-    tabulation = 12
+    tabulation = 19
     serialized = public_key |> ExtendedPublic.serialize()
     base58_key = Base58.encode(public_key.key)
 
     IO.puts("PUBLIC KEY")
     IO.puts("----------")
+
+    print_with_title(
+      "fingerprint",
+      tabulation,
+      public_key.fingerprint |> Integer.to_string(16) |> String.downcase()
+    )
 
     print_with_title("serialized", tabulation, serialized)
     print_with_title("key", tabulation, public_key.key, 66)
