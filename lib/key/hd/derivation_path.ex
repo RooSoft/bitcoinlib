@@ -10,7 +10,7 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
     https://learnmeabitcoin.com/technical/derivation-paths
   """
 
-  defstruct [:purpose, :coin_type, :account, :change, :address_index]
+  defstruct [:type, :purpose, :coin_type, :account, :change, :address_index]
 
   alias BitcoinLib.Key.HD.DerivationPath
   alias BitcoinLib.Key.HD.DerivationPath.Level
@@ -50,6 +50,7 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
     ...> |> BitcoinLib.Key.HD.DerivationPath.parse()
     { :ok,
       %BitcoinLib.Key.HD.DerivationPath{
+        type: :private,
         purpose: :bip44,
         coin_type: :bitcoin_testnet,
         account: %BitcoinLib.Key.HD.DerivationPath.Level{hardened?: true, value: 2},
@@ -77,10 +78,9 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
     trimmed_path =
       derivation_path
       |> String.replace(" ", "")
-      |> String.downcase()
 
-    case Regex.match?(~r/^m((\/(\d+\'?)*){0,5})$/, trimmed_path) do
-      true -> {:ok, derivation_path}
+    case Regex.match?(~r/^(m|M)((\/(\d+\'?)*){0,5})$/, trimmed_path) do
+      true -> {:ok, trimmed_path}
       false -> {:error, "Invalid derivation path"}
     end
   end
@@ -99,7 +99,18 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
     |> parse_purpose
     |> parse_coin_type
     |> parse_change
+    |> extract_type(derivation_path)
     |> add_status_code
+  end
+
+  defp extract_type(hash, "m" <> _rest) do
+    hash
+    |> Map.put(:type, :private)
+  end
+
+  defp extract_type(hash, "M" <> _rest) do
+    hash
+    |> Map.put(:type, :public)
   end
 
   defp split_path(derivation_path) do

@@ -14,6 +14,7 @@ defmodule BitcoinLib.Key.HD.DerivationPathTest do
       |> DerivationPath.parse()
 
     assert %DerivationPath{
+             type: :private,
              purpose: :bip44,
              coin_type: :bitcoin,
              account: %Level{hardened?: true, value: 0},
@@ -30,6 +31,7 @@ defmodule BitcoinLib.Key.HD.DerivationPathTest do
       |> DerivationPath.parse()
 
     assert %DerivationPath{
+             type: :private,
              purpose: :bip44,
              coin_type: :bitcoin,
              account: %Level{hardened?: true, value: 0},
@@ -80,6 +82,7 @@ defmodule BitcoinLib.Key.HD.DerivationPathTest do
       |> DerivationPath.parse()
 
     assert %DerivationPath{
+             type: :public,
              purpose: :bip44,
              coin_type: :bitcoin,
              account: %Level{hardened?: true, value: 0},
@@ -165,6 +168,7 @@ defmodule BitcoinLib.Key.HD.DerivationPathTest do
       path
       |> DerivationPath.parse()
 
+    assert :private == result.type
     assert nil == result.purpose
     assert nil == result.coin_type
     assert nil == result.account

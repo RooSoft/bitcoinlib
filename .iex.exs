@@ -1,5 +1,5 @@
 alias BitcoinLib.Console
-alias BitcoinLib.Key.HD.{Entropy, ExtendedPublic, ExtendedPrivate, MnemonicSeed}
+alias BitcoinLib.Key.HD.{DerivationPath, Entropy, ExtendedPublic, ExtendedPrivate, MnemonicSeed}
 
 # options here https://hexdocs.pm/elixir/1.12/Inspect.Opts.html
 IEx.configure(
