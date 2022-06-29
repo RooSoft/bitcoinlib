@@ -15,6 +15,13 @@ defmodule BitcoinLib.Key.HD.Fingerprint do
     ...> }
     ...> |> BitcoinLib.Key.HD.Fingerprint.compute()
     0x3442193E
+
+    iex> %BitcoinLib.Key.HD.ExtendedPublic{
+    ...>   key: 0x252C616D91A2488C1FD1F0F172E98F7D1F6E51F8F389B2F8D632A8B490D5F6DA9,
+    ...>   chain_code: 0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B
+    ...> }
+    ...> |> BitcoinLib.Key.HD.Fingerprint.compute()
+    0x18C1259
   """
   def compute(%ExtendedPrivate{} = private_key) do
     private_key
