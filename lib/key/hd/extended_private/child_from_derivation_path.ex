@@ -88,8 +88,8 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate.ChildFromDerivationPath do
     {child_private_key, derivation_path}
   end
 
-  defp maybe_derive_change({private_key, %DerivationPath{change: nil} = derivation_path}) do
-    {private_key, derivation_path}
+  defp maybe_derive_change({%ExtendedPrivate{}, %DerivationPath{change: nil}} = hash) do
+    hash
   end
 
   defp maybe_derive_change({private_key, %DerivationPath{change: change} = derivation_path}) do
