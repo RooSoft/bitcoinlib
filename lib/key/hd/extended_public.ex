@@ -4,13 +4,13 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic do
   """
 
   @enforce_keys [:key, :chain_code]
-  defstruct [:key, :chain_code, depth: 0, index: 0, parent_fingerprint: 0]
+  defstruct [:key, :chain_code, depth: 0, index: 0, parent_fingerprint: 0, fingerprint: 0]
 
   @version_bytes 0x0488B21E
 
   alias BitcoinLib.Crypto
   alias BitcoinLib.Key.HD.ExtendedPublic.ChildFromIndex
-  alias BitcoinLib.Key.HD.{ExtendedPrivate, ExtendedPublic}
+  alias BitcoinLib.Key.HD.{ExtendedPrivate, ExtendedPublic, Fingerprint}
 
   @doc """
   Derives an extended public key from an extended private key. Happens to be the same process
@@ -25,6 +25,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic do
     ...> }
     ...> |> BitcoinLib.Key.HD.ExtendedPublic.from_private_key()
     %BitcoinLib.Key.HD.ExtendedPublic{
+      fingerprint: 0xED104CB8,
       key: 0x0343B337DEC65A47B3362C9620A6E6FF39A1DDFA908ABAB1666C8A30A3F8A7CCCC,
       chain_code: 0x1D7D2A4C940BE028B945302AD79DD2CE2AFE5ED55E1A2937A5AF57F8401E73DD,
       depth: 0,
@@ -45,6 +46,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic do
       index: private_key.index,
       parent_fingerprint: private_key.parent_fingerprint
     }
+    |> add_fingerprint()
   end
 
   @doc """
@@ -194,5 +196,10 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic do
   """
   def get_hash(%ExtendedPublic{} = public_key) do
     BitcoinLib.Key.PublicHash.from_public_key(public_key.key)
+  end
+
+  defp add_fingerprint(%ExtendedPublic{} = public_key) do
+    public_key
+    |> Map.put(:fingerprint, Fingerprint.compute(public_key))
   end
 end
