@@ -104,9 +104,9 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate.ChildFromDerivationPath do
   end
 
   defp maybe_derive_address_index(
-         {private_key, %DerivationPath{address_index: nil} = derivation_path}
+         {%ExtendedPrivate{}, %DerivationPath{address_index: nil}} = hash
        ) do
-    {private_key, derivation_path}
+    hash
   end
 
   defp maybe_derive_address_index(
