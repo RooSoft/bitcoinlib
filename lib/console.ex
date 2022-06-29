@@ -2,11 +2,17 @@ defmodule BitcoinLib.Console do
   alias BitcoinLib.Key.HD.{ExtendedPrivate, ExtendedPublic}
 
   def write(%ExtendedPrivate{} = private_key) do
-    tabulation = 12
+    tabulation = 19
     serialized = private_key |> ExtendedPrivate.serialize()
     base58_key = Base58.encode(private_key.key)
 
     print_header("PRIVATE_KEY", tabulation)
+
+    print_with_title(
+      "fingerprint",
+      tabulation,
+      private_key.fingerprint |> Integer.to_string(16) |> String.downcase()
+    )
 
     print_with_title("serialized", tabulation, serialized)
     print_with_title("key", tabulation, private_key.key, 64)
@@ -21,7 +27,7 @@ defmodule BitcoinLib.Console do
     )
 
     print_with_title(
-      "fingerprint",
+      "parent fingerprint",
       tabulation,
       private_key.parent_fingerprint |> Integer.to_string(16) |> String.downcase()
     )
@@ -50,11 +56,11 @@ defmodule BitcoinLib.Console do
     )
 
     print_with_title(
-      "fingerprint",
+      "parent fingerprint",
       tabulation,
       public_key.parent_fingerprint |> Integer.to_string(16) |> String.downcase()
     )
-    
+
     public_key
   end
 

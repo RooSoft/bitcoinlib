@@ -4,7 +4,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
   """
 
   @enforce_keys [:key, :chain_code]
-  defstruct [:key, :chain_code, depth: 0, index: 0, parent_fingerprint: 0]
+  defstruct [:key, :chain_code, depth: 0, index: 0, parent_fingerprint: 0, fingerprint: 0]
 
   @bitcoin_seed_hmac_key "Bitcoin seed"
 
@@ -14,7 +14,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
   require Logger
 
   alias BitcoinLib.Crypto
-  alias BitcoinLib.Key.HD.{DerivationPath, ExtendedPrivate}
+  alias BitcoinLib.Key.HD.{DerivationPath, ExtendedPrivate, Fingerprint}
   alias BitcoinLib.Key.HD.ExtendedPrivate.{ChildFromIndex, ChildFromDerivationPath}
 
   @doc """
@@ -25,7 +25,8 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
     ...> |> BitcoinLib.Key.HD.ExtendedPrivate.from_seed()
     %BitcoinLib.Key.HD.ExtendedPrivate{
       chain_code: 0x5A7AEBB0FBE37BB89E690A6E350FAFED353B624741269E71001E608732FD8125,
-      key: 0x41DF6FA7F014A60FD79EC50B201FECF9CEDD8328921DDF670ACFCEF227242688
+      key: 0x41DF6FA7F014A60FD79EC50B201FECF9CEDD8328921DDF670ACFCEF227242688,
+      fingerprint: 0xB317B417
     }
   """
   @spec from_seed(String.t()) :: %ExtendedPrivate{}
@@ -244,13 +245,21 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
     }
   end
 
-  defp to_struct(%{key: private_key, chain_code: chain_code}) do
+  defp to_struct(%{key: binary_private_key, chain_code: chain_code}) do
+    private_key = Binary.to_integer(binary_private_key)
+
     %ExtendedPrivate{
-      key: Binary.to_integer(private_key),
+      key: private_key,
       chain_code: Binary.to_integer(chain_code),
       depth: 0,
       index: 0,
       parent_fingerprint: 0
     }
+    |> add_fingerprint()
+  end
+
+  defp add_fingerprint(%ExtendedPrivate{} = private_key) do
+    private_key
+    |> Map.put(:fingerprint, Fingerprint.compute(private_key))
   end
 end
