@@ -41,10 +41,8 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate.ChildFromDerivationPath do
     {:ok, child_private_key}
   end
 
-  defp maybe_derive_purpose(
-         {%ExtendedPrivate{} = private_key, %DerivationPath{purpose: nil} = derivation_path}
-       ) do
-    {private_key, derivation_path}
+  defp maybe_derive_purpose({%ExtendedPrivate{}, %DerivationPath{purpose: nil}} = hash) do
+    hash
   end
 
   defp maybe_derive_purpose(
