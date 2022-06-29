@@ -15,7 +15,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate.ChildFromDerivationPathTest do
     {:ok, child_private_key} =
       ChildFromDerivationPath.get(
         private_key,
-        %DerivationPath{}
+        %DerivationPath{type: :private}
       )
 
     assert %ExtendedPrivate{

@@ -30,6 +30,13 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate.ChildFromDerivationPath do
   """
   @spec get(%ExtendedPrivate{}, %DerivationPath{}) :: {:ok, %ExtendedPrivate{}}
   def get(%ExtendedPrivate{} = private_key, %DerivationPath{} = derivation_path) do
+    case derivation_path.type == :private do
+      true -> derive(private_key, derivation_path)
+      false -> {:error, "wrong derivation path type"}
+    end
+  end
+
+  defp derive(%ExtendedPrivate{} = private_key, %DerivationPath{} = derivation_path) do
     {child_private_key, _} =
       {private_key, derivation_path}
       |> maybe_derive_purpose
