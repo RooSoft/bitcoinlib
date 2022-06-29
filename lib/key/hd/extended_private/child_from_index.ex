@@ -14,7 +14,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate.ChildFromIndex do
   alias BitcoinLib.Key.HD.{Fingerprint, Hmac, ExtendedPrivate}
 
   @doc """
-  Calculates direct childs from a private key based on a given index, and maybe a hardened flag
+  Calculates a direct child from a private key based on a given index, and maybe a hardened flag
 
   ## Examples
     iex> %BitcoinLib.Key.HD.ExtendedPrivate{
