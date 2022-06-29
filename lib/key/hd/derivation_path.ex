@@ -152,9 +152,7 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
     )
   end
 
-  defp parse_purpose(hash) do
-    hash
-  end
+  defp parse_purpose(hash), do: hash
 
   defp parse_coin_type(%{coin_type: %{hardened?: true, value: value}} = hash) do
     hash
@@ -168,9 +166,7 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
     )
   end
 
-  defp parse_coin_type(hash) do
-    hash
-  end
+  defp parse_coin_type(hash), do: hash
 
   defp parse_change(%{change: %{hardened?: false, value: value}} = hash) do
     hash
