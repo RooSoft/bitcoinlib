@@ -10,6 +10,7 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
     https://learnmeabitcoin.com/technical/derivation-paths
   """
 
+  @enforce_keys [:type]
   defstruct [:type, :purpose, :coin_type, :account, :change, :address_index]
 
   alias BitcoinLib.Key.HD.DerivationPath
@@ -87,23 +88,15 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
     |> extract_string_values
     |> parse_values
     |> assign_keys
-    |> create_hash
+    |> create_hash(derivation_path)
     |> parse_purpose
     |> parse_coin_type
     |> parse_change
-    |> extract_type(derivation_path)
     |> add_status_code
   end
 
-  defp extract_type(hash, "m" <> _rest) do
-    hash
-    |> Map.put(:type, :private)
-  end
-
-  defp extract_type(hash, "M" <> _rest) do
-    hash
-    |> Map.put(:type, :public)
-  end
+  defp extract_type("m" <> _rest), do: :private
+  defp extract_type("M" <> _rest), do: :public
 
   defp split_path(derivation_path) do
     Regex.scan(~r/\/\s*(\d+\'?)/, derivation_path)
@@ -136,9 +129,11 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
     )
   end
 
-  defp create_hash(keys_and_values) do
+  defp create_hash(keys_and_values, derivation_path) do
+    type = extract_type(derivation_path)
+
     keys_and_values
-    |> Enum.reduce(%DerivationPath{}, fn {key, value}, acc ->
+    |> Enum.reduce(%DerivationPath{type: type}, fn {key, value}, acc ->
       acc
       |> Map.put(key, value)
     end)

@@ -15,7 +15,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic.ChildFromDerivationPathTest do
     {:ok, child_public_key} =
       ChildFromDerivationPath.get(
         public_key,
-        %DerivationPath{}
+        %DerivationPath{type: :public}
       )
 
     assert %ExtendedPublic{

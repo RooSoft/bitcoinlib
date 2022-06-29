@@ -30,6 +30,13 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic.ChildFromDerivationPath do
   """
   @spec get(%ExtendedPublic{}, %DerivationPath{}) :: {:ok, %ExtendedPublic{}}
   def get(%ExtendedPublic{} = public_key, %DerivationPath{} = derivation_path) do
+    case derivation_path.type == :public do
+      true -> derive(public_key, derivation_path)
+      false -> {:error, "wrong derivation path type"}
+    end
+  end
+
+  defp derive(%ExtendedPublic{} = public_key, %DerivationPath{} = derivation_path) do
     {child_public_key, _} =
       {public_key, derivation_path}
       |> maybe_derive_purpose
