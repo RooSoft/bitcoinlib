@@ -1,4 +1,9 @@
 defmodule BitcoinLib.Key.HD.ExtendedPublic.Serialization do
+  @moduledoc """
+  Extended public key serialization module
+
+  To test the results, use https://www.npmjs.com/package/@swan-bitcoin/xpub-cli
+  """
   @bip32_mainnet_version_bytes 0x0488B21E
   @bip49_mainnet_version_bytes 0x049D7CB2
 
