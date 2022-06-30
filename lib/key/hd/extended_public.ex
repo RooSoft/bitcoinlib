@@ -6,7 +6,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic do
   @enforce_keys [:key, :chain_code]
   defstruct [:key, :chain_code, depth: 0, index: 0, parent_fingerprint: 0, fingerprint: 0]
 
-  @version_bytes 0x0488B21E
+  @bip32_version_bytes 0x0488B21E
 
   alias BitcoinLib.Crypto
   alias BitcoinLib.Key.HD.ExtendedPublic.ChildFromIndex
@@ -94,7 +94,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic do
         chain_code: chain_code
       }) do
     data = <<
-      @version_bytes::size(32),
+      @bip32_version_bytes::size(32),
       depth::size(8),
       parent_fingerprint::size(32),
       index::size(32),
@@ -127,7 +127,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic do
   """
   def deserialize(serialized_public_key) do
     <<
-      @version_bytes::size(32),
+      @bip32_version_bytes::size(32),
       depth::size(8),
       parent_fingerprint::size(32),
       index::size(32),
