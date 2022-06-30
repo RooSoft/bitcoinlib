@@ -33,9 +33,9 @@ blue_wallet_pub_key =
   |> ExtendedPrivate.from_derivation_path!("m/49'/0'/0'")
   |> ExtendedPublic.from_private_key()
 
-blue_wallet_xpub =
+blue_wallet_ypub =
   blue_wallet_pub_key
-  |> ExtendedPublic.serialize()
+  |> ExtendedPublic.serialize(:ypub)
 
 blue_wallet_address_0_pub_key =
   blue_wallet_pub_key
@@ -44,4 +44,4 @@ blue_wallet_address_0_pub_key =
 
 blue_wallet_address_0 =
   blue_wallet_address_0_pub_key
-  |> ExtendedPublic.to_address(:p2pkh)
+  |> ExtendedPublic.to_address(:p2sh)
