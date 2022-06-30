@@ -15,6 +15,7 @@ Bitcoin helpers such as:
 
 ### in progress
 - [BIP49](https://github.com/bitcoin/bips/blob/master/bip-0049.mediawiki) - Derivation scheme for P2WPKH-nested-in-P2SH based accounts
+- [BIP141](https://github.com/bitcoin/bips/blob/master/bip-0141.mediawiki) - Segregated Witness (Consensus layer)
 
 ## Private key generation
 
