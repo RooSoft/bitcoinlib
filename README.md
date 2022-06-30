@@ -67,3 +67,4 @@ address =
 ## Useful links
 
 - [BIP32 Deterministic Key Generator](http://bip32.org)
+- [Registered HD version bytes](https://github.com/satoshilabs/slips/blob/master/slip-0132.md#registered-hd-version-bytes)
