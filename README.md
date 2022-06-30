@@ -63,3 +63,7 @@ address =
 ```elixir
 1Ak9NVPmwCHEpsSWvM6cNRC7dsYniRmwMG
 ```
+
+## Useful links
+
+- [BIP32 Deterministic Key Generator](http://bip32.org)
