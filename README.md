@@ -10,12 +10,11 @@ Bitcoin helpers such as:
 ## BIP
 
 ### implemented
-
-BIP32 - Hierarchical Deterministic Wallets
-BIP44 - Multi-Account Hierarchy for Deterministic Wallets
+- BIP32 - Hierarchical Deterministic Wallets
+- BIP44 - Multi-Account Hierarchy for Deterministic Wallets
 
 ### in progress
-BIP49 - Derivation scheme for P2WPKH-nested-in-P2SH based accounts
+- BIP49 - Derivation scheme for P2WPKH-nested-in-P2SH based accounts
 
 ## Private key generation
 
