@@ -9,7 +9,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic.ChildFromIndexTest do
   test "Get a private key child from a derivation path" do
     public_key =
       "xpub661MyMwAqRbcG9f9XvWiQv4QoTjumJK1MYjvzg9ryCfaGkPymrT9cmxeD6cJeR1rMVbDNopS6MfmawkHGVojnQa3zuRT2uwGJLT1STLLUXs"
-      |> ExtendedPublic.deserialize()
+      |> ExtendedPublic.deserialize!()
 
     index = 0
 
