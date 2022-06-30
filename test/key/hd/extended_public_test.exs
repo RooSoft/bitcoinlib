@@ -73,4 +73,27 @@ defmodule BitcoinLib.Key.HD.ExtendedPublicTest do
              parent_fingerprint: 0x18C1259
            } == child
   end
+
+  test "derive a public key from a derivation path" do
+    public_key = %BitcoinLib.Key.HD.ExtendedPublic{
+      key: 0x252C616D91A2488C1FD1F0F172E98F7D1F6E51F8F389B2F8D632A8B490D5F6DA9,
+      chain_code: 0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B
+    }
+
+    {:ok, derivation_path} = BitcoinLib.Key.HD.DerivationPath.parse("M/44'/0'/0'/0/0")
+
+    derived_key =
+      BitcoinLib.Key.HD.ExtendedPublic.from_derivation_path(public_key, derivation_path)
+
+    assert {
+             :ok,
+             %BitcoinLib.Key.HD.ExtendedPublic{
+               key: 0x29DCAFD0D7D67B13657CC9EE7C8976E141F20F0684BF3FC83CAF068E74186BCDC,
+               chain_code: 0x162EEE68F7C3823CAF8BD2615A4A33633673CAAB66FF6F338FB0653FC59D462D,
+               depth: 5,
+               index: 0,
+               parent_fingerprint: 0xCA2A5281
+             }
+           } = derived_key
+  end
 end
