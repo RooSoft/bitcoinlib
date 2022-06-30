@@ -13,15 +13,9 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic.ChildFromIndexTest do
 
     index = 0
 
-    child_pub_key = ChildFromIndex.get(public_key, index)
+    {:ok, child_pub_key} = ChildFromIndex.get(public_key, index)
 
-    assert child_pub_key |> to_xpub ==
+    assert child_pub_key |> ExtendedPublic.serialize!() ==
              "xpub68EMPgybEdJKPbMeHddaRysY164ydrajq2u2BxkrdQxtkufYN3vjT7JcEtLmstG8tviUfqGNCh9G7K2Q9CTJZZR8F4YMrWff5zjHqZXH5JL"
-  end
-
-  defp to_xpub(public_key) do
-    public_key
-    |> elem(1)
-    |> ExtendedPublic.serialize()
   end
 end

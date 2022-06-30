@@ -27,7 +27,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPublicTest do
       chain_code: 0x873DFF81C02F525623FD1FE5167EAC3A55A049DE3D314BB42EE227FFED37D508
     }
 
-    serialized = BitcoinLib.Key.HD.ExtendedPublic.serialize(public_key)
+    {:ok, serialized} = BitcoinLib.Key.HD.ExtendedPublic.serialize(public_key)
 
     assert "xpub661MyMwAqRbcFtXgS5sYJABqqG9YLmC4Q1Rdap9gSE8NqtwybGhePY2gZ29ESFjqJoCu1Rupje8YtGqsefD265TMg7usUDFdp6W1EGMcet8" ==
              serialized
@@ -44,15 +44,15 @@ defmodule BitcoinLib.Key.HD.ExtendedPublicTest do
     result = BitcoinLib.Key.HD.ExtendedPublic.derive_child(public_key, index)
 
     assert {
-      :ok,
-      %BitcoinLib.Key.HD.ExtendedPublic{
-        key: 0x30204D3503024160E8303C0042930EA92A9D671DE9AA139C1867353F6B6664E59,
-        chain_code: 0x05AAE71D7C080474EFAAB01FA79E96F4C6CFE243237780B0DF4BC36106228E31,
-        depth: 1,
-        index: 0,
-        parent_fingerprint: 0x18C1259
-      }
-    } == result
+             :ok,
+             %BitcoinLib.Key.HD.ExtendedPublic{
+               key: 0x30204D3503024160E8303C0042930EA92A9D671DE9AA139C1867353F6B6664E59,
+               chain_code: 0x05AAE71D7C080474EFAAB01FA79E96F4C6CFE243237780B0DF4BC36106228E31,
+               depth: 1,
+               index: 0,
+               parent_fingerprint: 0x18C1259
+             }
+           } == result
   end
 
   test "derive the first child, without error checking" do
@@ -66,11 +66,11 @@ defmodule BitcoinLib.Key.HD.ExtendedPublicTest do
     child = BitcoinLib.Key.HD.ExtendedPublic.derive_child!(public_key, index)
 
     assert %BitcoinLib.Key.HD.ExtendedPublic{
-      key: 0x30204D3503024160E8303C0042930EA92A9D671DE9AA139C1867353F6B6664E59,
-      chain_code: 0x05AAE71D7C080474EFAAB01FA79E96F4C6CFE243237780B0DF4BC36106228E31,
-      depth: 1,
-      index: 0,
-      parent_fingerprint: 0x18C1259
-    } == child
+             key: 0x30204D3503024160E8303C0042930EA92A9D671DE9AA139C1867353F6B6664E59,
+             chain_code: 0x05AAE71D7C080474EFAAB01FA79E96F4C6CFE243237780B0DF4BC36106228E31,
+             depth: 1,
+             index: 0,
+             parent_fingerprint: 0x18C1259
+           } == child
   end
 end

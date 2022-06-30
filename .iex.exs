@@ -24,13 +24,13 @@ ss_private_key =
 ss_xpriv =
   ss_private_key
   # this child is: bip 44 bitcoin mainnet account 0 receiving index 0
-  |> ExtendedPrivate.from_derivation_path!("m/44'/0'/0'/0/0")
+  |> ExtendedPrivate.from_derivation_path!("m/49'/0'/0'/0/0")
   |> ExtendedPrivate.serialize()
 
 
 blue_wallet_pub_key =
   ss_private_key
-  |> ExtendedPrivate.from_derivation_path!("m/44'/0'/0'")
+  |> ExtendedPrivate.from_derivation_path!("m/49'/0'/0'")
   |> ExtendedPublic.from_private_key()
 
 blue_wallet_xpub =
