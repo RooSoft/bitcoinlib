@@ -19,8 +19,7 @@ defmodule BitcoinLib.Key.PublicHash do
   def from_public_key(public_key) do
     public_key
     |> Binary.from_integer()
-    |> Crypto.sha256_bitstring()
-    |> Crypto.ripemd160_bitstring()
+    |> Crypto.hash160_bitstring()
     |> Binary.to_integer()
   end
 end
