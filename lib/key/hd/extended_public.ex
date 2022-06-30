@@ -50,6 +50,26 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic do
   end
 
   @doc """
+  Converts the public key to an address of the type specified as the second parameter
+
+  ## Examples
+    iex> %BitcoinLib.Key.HD.ExtendedPublic{
+    ...>   key: 0x3EB181FB7B5CF63D82307188B20828B83008F2D2511E5C6EDCBE171C63DD2CBC1,
+    ...>   chain_code: 0x581F15490635CF8CD0AEEF556562F52C60179E0E87E0EA92977E364D949DC2E4,
+    ...>   depth: 0x5,
+    ...>   index: 0x0
+    ...> }
+    ...> |> BitcoinLib.Key.HD.ExtendedPublic.to_address(:p2pkh)
+    "1BRjWnoAVg3EASJHex5YeyDWC1zZ4CA5vc"
+  """
+  @spec to_address(%ExtendedPublic{}, :p2pkh | :p2sh) :: String.t()
+  def to_address(%ExtendedPublic{key: key}, type) do
+    key
+    |> BitcoinLib.Key.PublicHash.from_public_key()
+    |> BitcoinLib.Key.Address.from_public_key_hash(type)
+  end
+
+  @doc """
   Serialization of a master public key into its xpub version
 
   ## Examples

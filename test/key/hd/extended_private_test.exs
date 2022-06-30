@@ -3,7 +3,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
 
   doctest BitcoinLib.Key.HD.ExtendedPrivate
 
-  alias BitcoinLib.Key.HD.{DerivationPath, ExtendedPrivate, MnemonicSeed}
+  alias BitcoinLib.Key.HD.{DerivationPath, ExtendedPrivate}
 
   test "returns an extended private key from a seed" do
     seed =
