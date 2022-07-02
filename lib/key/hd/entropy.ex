@@ -38,10 +38,13 @@ defmodule BitcoinLib.Key.HD.Entropy do
   end
 
   defp validate_rolls(dice_rolls) do
-    {
-      Regex.match?(~r/^[0-5]+$/, dice_rolls),
-      dice_rolls
-    }
+    if (String.length(dice_rolls)) == 99 do
+      {
+        Regex.match?(~r/^[0-5]+$/, dice_rolls),
+        dice_rolls
+      }
+    else {:error, dice_rolls}
+    end
   end
 
   defp maybe_parse_rolls({true, dice_rolls}) do
@@ -55,5 +58,9 @@ defmodule BitcoinLib.Key.HD.Entropy do
 
   defp maybe_parse_rolls({false, _}) do
     {:error, "dice_rolls contains invalid characters outside of this range [0,5]"}
+  end
+
+  defp maybe_parse_rolls({:error, dice_rolls}) do
+    {:error, "You provided #{String.length(dice_rolls)} dice rolls. Please provide 99 dice rolls."}
   end
 end
