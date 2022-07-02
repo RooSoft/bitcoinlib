@@ -39,7 +39,7 @@ defmodule BitcoinLib.Key.HD.Entropy do
 
   defp validate_rolls(dice_rolls) do
     rolls = String.length(dice_rolls)
-    if rolls == 99 do
+    if rolls == 99 or rolls == 50 do
       {
         Regex.match?(~r/^[0-5]+$/, dice_rolls),
         dice_rolls
@@ -62,6 +62,6 @@ defmodule BitcoinLib.Key.HD.Entropy do
   end
 
   defp maybe_parse_rolls({:error, rolls}) do
-    {:error, "You provided #{rolls} dice rolls. Please provide 99 dice rolls."}
+    {:error, "You provided #{rolls} dice rolls. Please provide 50 Dice rolls for 12 words or 99 dice rolls for 24 words."}
   end
 end
