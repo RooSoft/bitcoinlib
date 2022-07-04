@@ -10,7 +10,16 @@ defmodule BitcoinLib.Key.HD.EntropyTest do
 
     {:ok, entropy} = Entropy.from_dice_rolls(dice_rolls)
 
-    assert entropy == 32_310_461_525_491_050_757_677_748_469_648_273_221
+    assert entropy == 0x184EC4BED56EB86AACAAA224B5672F45
+  end
+
+  test "create an entropy value out of 99 dice rolls" do
+    dice_rolls =
+      "012345012345012345012345012345012345012345012345012345012345012345012345012345012345012345012345012"
+
+    {:ok, entropy} = Entropy.from_dice_rolls(dice_rolls)
+
+    assert entropy == 0x99F8437B4996F903267CE4A8C0F47ADD78DFE53887DC3965197CCDC406B1BA0
   end
 
   test "try to extract entropy out of an invalid dice roll string" do
