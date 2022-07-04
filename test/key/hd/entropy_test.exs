@@ -22,6 +22,15 @@ defmodule BitcoinLib.Key.HD.EntropyTest do
     assert entropy == 0x99F8437B4996F903267CE4A8C0F47ADD78DFE53887DC3965197CCDC406B1BA0
   end
 
+  test "create an entropy with a wrong number of rolls" do
+    dice_rolls =
+      "01234501234501234501234501234501234501234501234501234501234501234501234501234012345012345012345012"
+
+    {:error, message} = Entropy.from_dice_rolls(dice_rolls)
+
+    assert message =~ "You provided 98 dice rolls"
+  end
+
   test "try to extract entropy out of an invalid dice roll string" do
     dice_rolls = "12345612345612345612345612345612345612345612345612"
 
