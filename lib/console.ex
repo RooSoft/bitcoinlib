@@ -1,9 +1,14 @@
 defmodule BitcoinLib.Console do
   alias BitcoinLib.Key.HD.{ExtendedPrivate, ExtendedPublic}
 
-  def write(%ExtendedPrivate{} = private_key) do
+  @defaults %{serialization_format: nil}
+
+  def write(key, opts \\ [])
+
+  def write(%ExtendedPrivate{} = private_key, opts) do
+    %{serialization_format: _serialization_format} = Enum.into(opts, @defaults)
+
     tabulation = 19
-    serialized = private_key |> ExtendedPrivate.serialize()
     base58_key = Base58.encode(private_key.key)
 
     print_header("PRIVATE_KEY", tabulation)
@@ -14,7 +19,7 @@ defmodule BitcoinLib.Console do
       private_key.fingerprint |> Integer.to_string(16) |> String.downcase()
     )
 
-    print_with_title("serialized", tabulation, serialized)
+    maybe_print_serialized_version(tabulation, private_key)
     print_with_title("key", tabulation, private_key.key, 64)
     print_with_title("base58 key", tabulation, base58_key)
     print_with_title("chain_code", tabulation, private_key.chain_code, 64)
@@ -35,9 +40,10 @@ defmodule BitcoinLib.Console do
     private_key
   end
 
-  def write(%ExtendedPublic{} = public_key) do
+  def write(%ExtendedPublic{} = public_key, opts) do
+    %{serialization_format: serialization_format} = Enum.into(opts, @defaults)
+
     tabulation = 19
-    serialized = public_key |> ExtendedPublic.serialize()
     base58_key = Base58.encode(public_key.key)
 
     IO.puts("PUBLIC KEY")
@@ -49,7 +55,7 @@ defmodule BitcoinLib.Console do
       public_key.fingerprint |> Integer.to_string(16) |> String.downcase()
     )
 
-    print_with_title("serialized", tabulation, serialized)
+    maybe_print_serialized_version(tabulation, public_key, serialization_format)
     print_with_title("key", tabulation, public_key.key, 66)
     print_with_title("base58 key", tabulation, base58_key)
     print_with_title("chain_code", tabulation, public_key.chain_code, 64)
@@ -93,6 +99,17 @@ defmodule BitcoinLib.Console do
 
   defp print_with_title(title, title_length, value) when is_binary(value) do
     IO.puts("#{blue(title |> String.pad_leading(title_length, " "))}: #{yellow(value)}")
+  end
+
+  defp maybe_print_serialized_version(_title_length, _value, nil) do
+  end
+
+  defp maybe_print_serialized_version(title_length, %ExtendedPublic{} = public_key, format) do
+    print_with_title("serialized", title_length, ExtendedPublic.serialize!(public_key, format))
+  end
+
+  defp maybe_print_serialized_version(title_length, %ExtendedPrivate{} = private_key) do
+    print_with_title("serialized", title_length, ExtendedPrivate.serialize(private_key))
   end
 
   defp print_header(header, tabulation) do
