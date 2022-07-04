@@ -28,7 +28,7 @@ defmodule BitcoinLib.Key.HD.EntropyTest do
 
     {:error, message} = Entropy.from_dice_rolls(dice_rolls)
 
-    assert message =~ "You provided 98 dice rolls"
+    assert message =~ "got 98"
   end
 
   test "try to extract entropy out of an invalid dice roll string" do
@@ -36,6 +36,6 @@ defmodule BitcoinLib.Key.HD.EntropyTest do
 
     {:error, message} = Entropy.from_dice_rolls(dice_rolls)
 
-    assert message == "dice_rolls contains invalid characters outside of this range [0,5]"
+    assert message =~ "Please provide characters inside the [0,5] range"
   end
 end
