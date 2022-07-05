@@ -48,6 +48,20 @@ defmodule BitcoinLib.Key.HD.ExtendedPublicTest do
            } == public_key
   end
 
+  test "serialize and deserialize a key and make sure they're the same" do
+    original_public_key = %ExtendedPublic{
+      fingerprint: 0x3442193E,
+      key: 0x339A36013301597DAEF41FBE593A02CC513D0B55527EC2DF1050E2E8FF49C85C2,
+      chain_code: 0x873DFF81C02F525623FD1FE5167EAC3A55A049DE3D314BB42EE227FFED37D508
+    }
+
+    {:ok, serialized} = ExtendedPublic.serialize(original_public_key)
+
+    {:ok, deserialized_public_key} = ExtendedPublic.deserialize(serialized)
+
+    assert deserialized_public_key == original_public_key
+  end
+
   test "derive the first child" do
     public_key = %ExtendedPublic{
       key: 0x252C616D91A2488C1FD1F0F172E98F7D1F6E51F8F389B2F8D632A8B490D5F6DA9,
