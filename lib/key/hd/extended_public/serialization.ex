@@ -3,9 +3,11 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic.Serialization do
   Extended public key serialization module
 
   To test the results, use https://www.npmjs.com/package/@swan-bitcoin/xpub-cli
+  Serialization types: https://github.com/satoshilabs/slips/blob/master/slip-0132.md
   """
-  @bip32_mainnet_version_bytes 0x0488B21E
-  @bip49_mainnet_version_bytes 0x049D7CB2
+
+  @xpub_version_bytes 0x0488B21E
+  @ypub_version_bytes 0x049D7CB2
 
   alias BitcoinLib.Crypto
   alias BitcoinLib.Key.HD.ExtendedPublic
@@ -31,12 +33,12 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic.Serialization do
   """
   @spec serialize(%ExtendedPublic{}, Atom.t()) :: {:ok, String.t()}
   def serialize(%ExtendedPublic{} = pub_key, :xpub) do
-    {:ok, execute(pub_key, @bip32_mainnet_version_bytes)}
+    {:ok, execute(pub_key, @xpub_version_bytes)}
   end
 
   @spec serialize(%ExtendedPublic{}, Atom.t()) :: {:ok, String.t()}
   def serialize(%ExtendedPublic{} = pub_key, :ypub) do
-    {:ok, execute(pub_key, @bip49_mainnet_version_bytes)}
+    {:ok, execute(pub_key, @ypub_version_bytes)}
   end
 
   @spec serialize(%ExtendedPublic{}, Atom.t()) :: {:error, String.t()}
