@@ -152,4 +152,21 @@ defmodule BitcoinLib.Key.HD.ExtendedPublicTest do
              }
            } = derived_key
   end
+
+  @doc """
+  Example straight from this forum page: https://bitcointalk.org/index.php?topic=5229211.msg53930214#msg53930214
+  """
+  test "create the first receive address of a public_key" do
+    public_key = %ExtendedPublic{
+      key: 0x02D0DE0AAEAEFAD02B8BDC8A01A1B8B11C696BD3D66A2C5F10780D95B7DF42645C,
+      chain_code: 0
+    }
+
+    address =
+      public_key
+      |> ExtendedPublic.to_address(:p2sh)
+
+    assert address == "3D9iyFHi1Zs9KoyynUfrL82rGhJfYTfSG4"
+  end
+
 end

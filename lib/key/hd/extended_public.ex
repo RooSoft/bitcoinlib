@@ -7,6 +7,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic do
   defstruct [:key, :chain_code, depth: 0, index: 0, parent_fingerprint: 0, fingerprint: 0]
 
   alias BitcoinLib.Key.HD.ExtendedPublic.{
+    Address,
     ChildFromIndex,
     ChildFromDerivationPath,
     Serialization,
@@ -66,10 +67,9 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic do
     "1BRjWnoAVg3EASJHex5YeyDWC1zZ4CA5vc"
   """
   @spec to_address(%ExtendedPublic{}, :p2pkh | :p2sh) :: String.t()
-  def to_address(%ExtendedPublic{key: key}, type) do
-    key
-    |> BitcoinLib.Key.PublicHash.from_public_key()
-    |> BitcoinLib.Key.Address.from_public_key_hash(type)
+  def to_address(%ExtendedPublic{} = public_key, type) do
+    public_key
+    |> Address.from_extended_public_key(type)
   end
 
   @doc """
