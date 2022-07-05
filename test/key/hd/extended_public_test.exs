@@ -33,6 +33,21 @@ defmodule BitcoinLib.Key.HD.ExtendedPublicTest do
              serialized
   end
 
+  test "deserialize a master public key" do
+    serialized =
+      "xpub661MyMwAqRbcFtXgS5sYJABqqG9YLmC4Q1Rdap9gSE8NqtwybGhePY2gZ29ESFjqJoCu1Rupje8YtGqsefD265TMg7usUDFdp6W1EGMcet8"
+
+    {:ok, public_key} =
+      serialized
+      |> BitcoinLib.Key.HD.ExtendedPublic.deserialize()
+
+    assert %ExtendedPublic{
+             fingerprint: 0x3442193E,
+             key: 0x339A36013301597DAEF41FBE593A02CC513D0B55527EC2DF1050E2E8FF49C85C2,
+             chain_code: 0x873DFF81C02F525623FD1FE5167EAC3A55A049DE3D314BB42EE227FFED37D508
+           } == public_key
+  end
+
   test "derive the first child" do
     public_key = %BitcoinLib.Key.HD.ExtendedPublic{
       key: 0x252C616D91A2488C1FD1F0F172E98F7D1F6E51F8F389B2F8D632A8B490D5F6DA9,
