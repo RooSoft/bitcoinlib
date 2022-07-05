@@ -193,7 +193,8 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic do
         chain_code: 0x05AAE71D7C080474EFAAB01FA79E96F4C6CFE243237780B0DF4BC36106228E31,
         depth: 1,
         index: 0,
-        parent_fingerprint: 0x18C1259
+        parent_fingerprint: 0x18C1259,
+        fingerprint: 0x9680603F
       }
     }
   """
@@ -218,7 +219,8 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic do
       chain_code: 0x05AAE71D7C080474EFAAB01FA79E96F4C6CFE243237780B0DF4BC36106228E31,
       depth: 1,
       index: 0,
-      parent_fingerprint: 0x18C1259
+      parent_fingerprint: 0x18C1259,
+      fingerprint: 0x9680603F
     }
   """
   @spec derive_child!(%ExtendedPublic{}, Integer.t()) :: %ExtendedPublic{}
@@ -244,7 +246,8 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic do
         chain_code: 0x162EEE68F7C3823CAF8BD2615A4A33633673CAAB66FF6F338FB0653FC59D462D,
         depth: 5,
         index: 0,
-        parent_fingerprint: 0xCA2A5281
+        parent_fingerprint: 0xCA2A5281,
+        fingerprint: 0xAEAAB1AD
       }
     }
   """

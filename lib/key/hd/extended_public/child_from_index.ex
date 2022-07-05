@@ -22,6 +22,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic.ChildFromIndex do
     {
       :ok,
       %BitcoinLib.Key.HD.ExtendedPublic{
+        fingerprint: 0x9680603F,
         key: 0x30204D3503024160E8303C0042930EA92A9D671DE9AA139C1867353F6B6664E59,
         chain_code: 0x05AAE71D7C080474EFAAB01FA79E96F4C6CFE243237780B0DF4BC36106228E31,
         depth: 1,
@@ -79,13 +80,17 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic.ChildFromIndex do
       hmac_derived_key
       |> BitcoinLib.Key.Public.from_private_key()
 
+    child_public_key =
+      %ExtendedPublic{
+        key: Secp256k1.add_keys(key, parent_public_key.key),
+        chain_code: child_chain_code,
+        depth: parent_public_key.depth + 1,
+        index: index,
+        parent_fingerprint: parent_fingerprint
+      }
+      |> Fingerprint.append()
+
     hash
-    |> Map.put(:child_public_key, %ExtendedPublic{
-      key: Secp256k1.add_keys(key, parent_public_key.key),
-      chain_code: child_chain_code,
-      depth: parent_public_key.depth + 1,
-      index: index,
-      parent_fingerprint: parent_fingerprint
-    })
+    |> Map.put(:child_public_key, child_public_key)
   end
 end

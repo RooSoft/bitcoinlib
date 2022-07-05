@@ -24,9 +24,10 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic.ChildFromDerivationPath do
         chain_code: 0xD42BD3A1611DF60BE3C23EF0777EFEB4EBB50BAC69C40196471F06EBC7084E8A,
         depth: 4,
         index: 0,
-        parent_fingerprint: 0xF803B513
-        }
+        parent_fingerprint: 0xF803B513,
+        fingerprint: 0x2A6C6B28
       }
+    }
   """
   @spec get(%ExtendedPublic{}, %DerivationPath{}) :: {:ok, %ExtendedPublic{}}
   def get(%ExtendedPublic{} = public_key, %DerivationPath{} = derivation_path) do

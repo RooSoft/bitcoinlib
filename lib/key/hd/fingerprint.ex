@@ -41,6 +41,31 @@ defmodule BitcoinLib.Key.HD.Fingerprint do
     |> Binary.to_integer()
   end
 
+  @doc """
+  Adds a fingerprint to a public key
+
+  ## Examples
+    iex> %BitcoinLib.Key.HD.ExtendedPublic{
+    ...>   key: 0x252C616D91A2488C1FD1F0F172E98F7D1F6E51F8F389B2F8D632A8B490D5F6DA9,
+    ...>   chain_code: 0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B
+    ...> }
+    ...> |> BitcoinLib.Key.HD.Fingerprint.append()
+    %BitcoinLib.Key.HD.ExtendedPublic{
+      fingerprint: 0x18C1259,
+      key: 0x252C616D91A2488C1FD1F0F172E98F7D1F6E51F8F389B2F8D632A8B490D5F6DA9,
+      chain_code: 0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B
+    }
+  """
+  @spec append(%ExtendedPublic{}) :: %ExtendedPublic{}
+  def append(%ExtendedPublic{} = public_key) do
+    fingerprint =
+      public_key
+      |> compute()
+
+    public_key
+    |> Map.put(:fingerprint, fingerprint)
+  end
+
   defp to_public_key(%ExtendedPrivate{} = private_key) do
     private_key
     |> ExtendedPublic.from_private_key()

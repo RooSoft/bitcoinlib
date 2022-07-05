@@ -105,7 +105,8 @@ defmodule BitcoinLib.Key.HD.ExtendedPublicTest do
                chain_code: 0x05AAE71D7C080474EFAAB01FA79E96F4C6CFE243237780B0DF4BC36106228E31,
                depth: 1,
                index: 0,
-               parent_fingerprint: 0x18C1259
+               parent_fingerprint: 0x18C1259,
+               fingerprint: 0x9680603F
              }
            } == result
   end
@@ -125,7 +126,8 @@ defmodule BitcoinLib.Key.HD.ExtendedPublicTest do
              chain_code: 0x05AAE71D7C080474EFAAB01FA79E96F4C6CFE243237780B0DF4BC36106228E31,
              depth: 1,
              index: 0,
-             parent_fingerprint: 0x18C1259
+             parent_fingerprint: 0x18C1259,
+             fingerprint: 0x9680603F
            } == child
   end
 
