@@ -169,4 +169,22 @@ defmodule BitcoinLib.Key.HD.ExtendedPublicTest do
     assert address == "3D9iyFHi1Zs9KoyynUfrL82rGhJfYTfSG4"
   end
 
+  @doc """
+  With https://www.npmjs.com/package/@swan-bitcoin/xpub-cli installed, run this command and get the address below
+
+  `xpub derive ypub6WwZCtcXYyyL6GHQrB8pnaHRNCaAWhuQkQraCKUk7qpF4JmVgwMAvaCu9m6o9nAeyFRqw6xyZxG7CDf16GMHFYbtw8KCtNsgkRoRs7YFJf9 -c0 --purpose p2sh`
+  """
+  test "create the first receive address of a specific ypub" do
+    public_key =
+      "ypub6WwZCtcXYyyL6GHQrB8pnaHRNCaAWhuQkQraCKUk7qpF4JmVgwMAvaCu9m6o9nAeyFRqw6xyZxG7CDf16GMHFYbtw8KCtNsgkRoRs7YFJf9"
+      |> ExtendedPublic.deserialize!()
+      |> ExtendedPublic.derive_child!(0)
+      |> ExtendedPublic.derive_child!(0)
+
+    address =
+      public_key
+      |> ExtendedPublic.to_address(:p2sh)
+
+    assert address == "3Bq68AEDGwkMbVDuzNF2C1CsePJMfckqzG"
+  end
 end
