@@ -130,6 +130,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic do
     {
       :ok,
       %BitcoinLib.Key.HD.ExtendedPublic{
+        fingerprint: 0x3442193E,
         key: 0x339A36013301597DAEF41FBE593A02CC513D0B55527EC2DF1050E2E8FF49C85C2,
         chain_code: 0x873DFF81C02F525623FD1FE5167EAC3A55A049DE3D314BB42EE227FFED37D508,
         depth: 0,
@@ -140,7 +141,10 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic do
   """
   @spec deserialize(String.t()) :: {:ok, %ExtendedPublic{}} | {:error, String.t()}
   def deserialize(serialized_public_key) do
-    Deserialization.deserialize(serialized_public_key)
+    case Deserialization.deserialize(serialized_public_key) do
+      {:ok, public_key} -> {:ok, public_key |> add_fingerprint()}
+      {:error, _} = result -> result
+    end
   end
 
   @doc """
@@ -152,6 +156,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic do
     iex> "xpub661MyMwAqRbcFtXgS5sYJABqqG9YLmC4Q1Rdap9gSE8NqtwybGhePY2gZ29ESFjqJoCu1Rupje8YtGqsefD265TMg7usUDFdp6W1EGMcet8"
     ...> |> BitcoinLib.Key.HD.ExtendedPublic.deserialize!()
     %BitcoinLib.Key.HD.ExtendedPublic{
+      fingerprint: 0x3442193E,
       key: 0x339A36013301597DAEF41FBE593A02CC513D0B55527EC2DF1050E2E8FF49C85C2,
       chain_code: 0x873DFF81C02F525623FD1FE5167EAC3A55A049DE3D314BB42EE227FFED37D508,
       depth: 0,
@@ -161,7 +166,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic do
   """
   @spec deserialize!(String.t()) :: %ExtendedPublic{}
   def deserialize!(serialized_public_key) do
-    {:ok, public_key} = Deserialization.deserialize(serialized_public_key)
+    {:ok, public_key} = deserialize(serialized_public_key)
 
     public_key
   end
