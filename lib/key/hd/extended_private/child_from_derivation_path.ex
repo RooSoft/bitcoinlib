@@ -58,6 +58,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate.ChildFromDerivationPath do
     {:ok, child_private_key} =
       case purpose do
         :bip44 -> ChildFromIndex.get(private_key, 44, true)
+        :bip49 -> ChildFromIndex.get(private_key, 49, true)
         _ -> {:ok, private_key}
       end
 
