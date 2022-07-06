@@ -1,10 +1,13 @@
 defmodule BitcoinLib.MixProject do
   use Mix.Project
 
+  @version "0.1.0"
+
   def project do
     [
       app: :bitcoinlib,
-      version: "0.1.0",
+      version: @version,
+      description: "Generate private/public keys and addresses for the bitcoin network",
       elixir: "~> 1.13",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -14,11 +17,8 @@ defmodule BitcoinLib.MixProject do
       name: "BitcoinLib",
       source_url: "https://github.com/roosoft/bitcoinlib",
       homepage_url: "https://github.com/roosoft/bitcoinlib",
-      docs: [
-        # The main page in the docs
-        main: "BitcoinLib",
-        extras: ["README.md"]
-      ]
+      docs: docs(),
+      package: package()
     ]
   end
 
@@ -26,6 +26,25 @@ defmodule BitcoinLib.MixProject do
   def application do
     [
       extra_applications: [:logger, :crypto]
+    ]
+  end
+
+  def package do
+    [
+      organization: "roosoft",
+      maintainers: ["Marc Lacoursière"],
+      licenses: ["MIT"],
+      links: %{"GitHub" => "https://github.com/roosoft/bitcoinlib"}
+    ]
+  end
+
+  defp docs do
+    [
+      # The main page in the docs
+      main: "BitcoinLib",
+      extras: ["README.md"],
+      source_ref: "v#{@version}",
+      source_url: "https://github.com/roosoft/bitcoinlib"
     ]
   end
 
