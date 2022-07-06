@@ -13,7 +13,7 @@ defmodule BitcoinLib.MixProject do
       # Docs
       name: "BitcoinLib",
       source_url: "https://github.com/roosoft/bitcoinlib",
-      homepage_url: "http://github.com/roosoft/bitcoinlib",
+      homepage_url: "https://github.com/roosoft/bitcoinlib",
       docs: [
         # The main page in the docs
         main: "BitcoinLib",
