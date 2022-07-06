@@ -12,7 +12,7 @@ defmodule BitcoinLib.Key.HD.MnemonicSeed.Wordlist do
     iex> BitcoinLib.Key.HD.MnemonicSeed.Wordlist.get_word(8)
     "absurd"
   """
-  @spec get_word(Integer.t()) :: String.t()
+  @spec get_word(integer()) :: binary()
   def get_word(index) when is_integer(index) do
     all()
     |> Enum.at(index)
@@ -25,7 +25,7 @@ defmodule BitcoinLib.Key.HD.MnemonicSeed.Wordlist do
     iex> BitcoinLib.Key.HD.MnemonicSeed.Wordlist.get_words([8, 2, 5])
     ["absurd", "able", "absent"]
   """
-  @spec get_words(list(Integer.t())) :: list(String.t())
+  @spec get_words(list(integer())) :: list(binary())
   def get_words(indices) do
     indices
     |> Enum.map(&get_word(&1))
@@ -36,13 +36,17 @@ defmodule BitcoinLib.Key.HD.MnemonicSeed.Wordlist do
 
   ## Examples
     iex> BitcoinLib.Key.HD.MnemonicSeed.Wordlist.get_indice("absurd")
-    {:found, 8, "absurd"}
+    {found, 8, "absurd"}
   """
-  @spec get_indice(String.t()) :: Integer.t()
+  @spec get_indice(binary()) :: {:found, integer(), binary()} | {:not_found, integer()}
   def get_indice(word) do
     all()
     |> Enum.reduce_while({:not_found, 0}, fn el, {:not_found, index} ->
-      if el == word, do: {:halt, {:found, index, el}}, else: {:cont, {:not_found, index + 1}}
+      if el == word do
+        {:halt, {:found, index, el}}
+      else
+        {:cont, {:not_found, index + 1}}
+      end
     end)
   end
 
@@ -54,7 +58,7 @@ defmodule BitcoinLib.Key.HD.MnemonicSeed.Wordlist do
     ...> |> BitcoinLib.Key.HD.MnemonicSeed.Wordlist.get_indices()
     [8, 2, 5]
   """
-  @spec get_indices(list(String.t())) :: list(Integer.t())
+  @spec get_indices(list(binary())) :: list(integer())
   def get_indices(words) do
     words
     |> Enum.map(fn word ->
@@ -72,7 +76,7 @@ defmodule BitcoinLib.Key.HD.MnemonicSeed.Wordlist do
     ...> |> Enum.count()
     2048
   """
-  @spec all() :: list(String.t())
+  @spec all() :: list(binary())
   def all do
     [
       "abandon",

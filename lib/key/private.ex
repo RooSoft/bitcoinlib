@@ -21,7 +21,7 @@ defmodule BitcoinLib.Key.Private do
     ...> raw1 == raw2
     false
   """
-  @spec generate() :: %{raw: Integer.t(), wif: String.t()}
+  @spec generate() :: %{raw: integer(), wif: String.t()}
   def generate do
     raw = Enum.random(1..@largest_key)
 

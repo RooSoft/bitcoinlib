@@ -37,7 +37,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic do
       parent_fingerprint: 0
     }
   """
-  @spec from_private_key(%ExtendedPrivate{}) :: {Integer.t(), Integer.t()}
+  @spec from_private_key(%ExtendedPrivate{}) :: {integer(), integer()}
   def from_private_key(%ExtendedPrivate{} = private_key) do
     {_, compressed} =
       private_key.key
@@ -66,7 +66,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic do
     ...> |> BitcoinLib.Key.HD.ExtendedPublic.to_address(:p2pkh)
     "1BRjWnoAVg3EASJHex5YeyDWC1zZ4CA5vc"
   """
-  @spec to_address(%ExtendedPublic{}, :p2pkh | :p2sh | :bech32) :: String.t()
+  @spec to_address(%ExtendedPublic{}, :p2pkh | :p2sh | :bech32) :: binary()
   def to_address(%ExtendedPublic{} = public_key, type) do
     public_key
     |> Address.from_extended_public_key(type)
@@ -91,7 +91,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic do
       "xpub661MyMwAqRbcFtXgS5sYJABqqG9YLmC4Q1Rdap9gSE8NqtwybGhePY2gZ29ESFjqJoCu1Rupje8YtGqsefD265TMg7usUDFdp6W1EGMcet8"
     }
   """
-  @spec serialize(%ExtendedPublic{}, :xpub | :ypub | :zpub) :: {:ok, String.t()} | {:error, String.t()}
+  @spec serialize(%ExtendedPublic{}, :xpub | :ypub | :zpub) :: {:ok, binary()} | {:error, binary()}
   def serialize(public_key, format \\ :xpub) do
     Serialization.serialize(public_key, format)
   end
@@ -112,7 +112,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic do
     ...> |> BitcoinLib.Key.HD.ExtendedPublic.serialize!()
     "xpub661MyMwAqRbcFtXgS5sYJABqqG9YLmC4Q1Rdap9gSE8NqtwybGhePY2gZ29ESFjqJoCu1Rupje8YtGqsefD265TMg7usUDFdp6W1EGMcet8"
   """
-  @spec serialize(%ExtendedPublic{}, :xpub | :ypub) :: String.t()
+  @spec serialize(%ExtendedPublic{}, :xpub | :ypub) :: binary()
   def serialize!(public_key, format \\ :xpub) do
     {:ok, serialized} = serialize(public_key, format)
 
@@ -139,7 +139,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic do
       }
     }
   """
-  @spec deserialize(String.t()) :: {:ok, %ExtendedPublic{}} | {:error, String.t()}
+  @spec deserialize(binary()) :: {:ok, %ExtendedPublic{}} | {:error, binary()}
   def deserialize(serialized_public_key) do
     case Deserialization.deserialize(serialized_public_key) do
       {:ok, public_key} -> {:ok, public_key |> add_fingerprint()}
@@ -164,7 +164,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic do
       parent_fingerprint: 0
     }
   """
-  @spec deserialize!(String.t()) :: %ExtendedPublic{}
+  @spec deserialize!(binary()) :: %ExtendedPublic{}
   def deserialize!(serialized_public_key) do
     {:ok, public_key} = deserialize(serialized_public_key)
 
@@ -198,7 +198,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic do
       }
     }
   """
-  @spec derive_child(%ExtendedPublic{}, Integer.t()) :: {:ok, %ExtendedPublic{}}
+  @spec derive_child(%ExtendedPublic{}, binary()) :: {:ok, %ExtendedPublic{}}
   def derive_child(public_key, index) do
     ChildFromIndex.get(public_key, index)
   end
@@ -223,7 +223,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic do
       fingerprint: 0x9680603F
     }
   """
-  @spec derive_child!(%ExtendedPublic{}, Integer.t()) :: %ExtendedPublic{}
+  @spec derive_child!(%ExtendedPublic{}, integer()) :: %ExtendedPublic{}
   def derive_child!(public_key, index) do
     derive_child(public_key, index)
     |> elem(1)

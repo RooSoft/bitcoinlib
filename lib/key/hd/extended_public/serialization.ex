@@ -32,27 +32,27 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic.Serialization do
       "xpub661MyMwAqRbcFtXgS5sYJABqqG9YLmC4Q1Rdap9gSE8NqtwybGhePY2gZ29ESFjqJoCu1Rupje8YtGqsefD265TMg7usUDFdp6W1EGMcet8"
     }
   """
-  @spec serialize(%ExtendedPublic{}, Atom.t()) :: {:ok, String.t()}
+  @spec serialize(%ExtendedPublic{}, atom()) :: {:ok, binary()}
   def serialize(%ExtendedPublic{} = pub_key, :xpub) do
     {:ok, execute(pub_key, @xpub_version_bytes)}
   end
 
-  @spec serialize(%ExtendedPublic{}, Atom.t()) :: {:ok, String.t()}
+  @spec serialize(%ExtendedPublic{}, atom()) :: {:ok, binary()}
   def serialize(%ExtendedPublic{} = pub_key, :ypub) do
     {:ok, execute(pub_key, @ypub_version_bytes)}
   end
 
-  @spec serialize(%ExtendedPublic{}, Atom.t()) :: {:ok, String.t()}
+  @spec serialize(%ExtendedPublic{}, atom()) :: {:ok, binary()}
   def serialize(%ExtendedPublic{} = pub_key, :zpub) do
     {:ok, execute(pub_key, @zpub_version_bytes)}
   end
 
-  @spec serialize(%ExtendedPublic{}, Atom.t()) :: {:error, String.t()}
+  @spec serialize(%ExtendedPublic{}, atom()) :: {:error, binary()}
   def serialize(%ExtendedPublic{}, _) do
     {:error, "unknown serialization format"}
   end
 
-  @spec execute(%ExtendedPublic{}, String.t()) :: String.t()
+  @spec execute(%ExtendedPublic{}, binary()) :: binary()
   defp execute(
          %ExtendedPublic{
            key: key,

@@ -29,7 +29,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
       fingerprint: 0xB317B417
     }
   """
-  @spec from_seed(String.t()) :: %ExtendedPrivate{}
+  @spec from_seed(binary()) :: %ExtendedPrivate{}
   def from_seed(seed) do
     seed
     |> Base.decode16!(case: :lower)
@@ -52,7 +52,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
       index: 0x0
     }
   """
-  @spec from_mnemonic_phrase(String.t()) :: %ExtendedPrivate{}
+  @spec from_mnemonic_phrase(binary()) :: %ExtendedPrivate{}
   def from_mnemonic_phrase(mnemonic_phrase, passphrase \\ "") do
     mnemonic_phrase
     |> MnemonicSeed.to_seed(passphrase)
@@ -72,7 +72,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
     ...> |> BitcoinLib.Key.HD.ExtendedPrivate.serialize()
     "xprv9s21ZrQH143K3QTDL4LXw2F7HEK3wJUD2nW2nRk4stbPy6cq3jPPqjiChkVvvNKmPGJxWUtg6LnF5kejMRNNU3TGtRBeJgk33yuGBxrMPHi"
   """
-  @spec serialize(%ExtendedPrivate{}) :: String.t()
+  @spec serialize(%ExtendedPrivate{}) :: binary()
   def serialize(%ExtendedPrivate{
         key: key,
         depth: depth,
@@ -115,7 +115,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
       parent_fingerprint: 0
     }
   """
-  @spec deserialize(String.t()) :: %ExtendedPrivate{}
+  @spec deserialize(binary()) :: %ExtendedPrivate{}
   def deserialize(serialized_private_key) do
     <<
       @version_bytes::size(32),
@@ -167,7 +167,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
       }
     }
   """
-  @spec derive_child(%ExtendedPrivate{}, Integer.t(), Boolean.t()) :: {:ok, %ExtendedPrivate{}}
+  @spec derive_child(%ExtendedPrivate{}, integer(), boolean()) :: {:ok, %ExtendedPrivate{}}
   def derive_child(private_key, index, hardened? \\ false) do
     ChildFromIndex.get(private_key, index, hardened?)
   end
@@ -191,7 +191,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
       parent_fingerprint: 0x18C1259
     }
   """
-  @spec derive_child!(%ExtendedPrivate{}, Integer.t(), Boolean.t()) :: %ExtendedPrivate{}
+  @spec derive_child!(%ExtendedPrivate{}, integer(), boolean()) :: %ExtendedPrivate{}
   def derive_child!(private_key, index, hardened? \\ false) do
     derive_child(private_key, index, hardened?)
     |> elem(1)

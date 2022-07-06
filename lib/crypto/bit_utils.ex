@@ -18,7 +18,7 @@ defmodule BitcoinLib.Crypto.BitUtils do
       <<10::size(4)>>
     ]
   """
-  @spec split(Binary.t(), Integer.t()) :: list(Binary.t())
+  @spec split(binary(), integer()) :: list(binary())
   def split(binary, bit_size) do
     split(binary, bit_size, [])
   end
@@ -31,7 +31,7 @@ defmodule BitcoinLib.Crypto.BitUtils do
     ...> |> BitcoinLib.Crypto.BitUtils.combine
     <<6, 199, 171, 47, 150, 26>>
   """
-  @spec combine(list(Binary.t())) :: Binary.t()
+  @spec combine(list(binary())) :: binary()
   def combine(binary_list) do
     binary_list
     |> Enum.reduce(<<>>, fn binary, acc ->

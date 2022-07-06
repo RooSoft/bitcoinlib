@@ -60,7 +60,7 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
       }
     }
   """
-  @spec parse(String.t()) :: {:ok, %BitcoinLib.Key.HD.DerivationPath{}}
+  @spec parse(binary()) :: {:ok, %BitcoinLib.Key.HD.DerivationPath{}}
   def parse(derivation_path) do
     derivation_path
     |> validate

@@ -10,7 +10,7 @@ defmodule BitcoinLib.Key.HD.MnemonicSeed.Checksum do
   @doc """
   Adds checksum at the end of the seed
   """
-  @spec compute_and_append_to_seed(Binary.t()) :: Binary.t()
+  @spec compute_and_append_to_seed(binary()) :: binary()
   def compute_and_append_to_seed(binary_seed) do
     nb_checksum_bits =
       binary_seed
@@ -30,7 +30,7 @@ defmodule BitcoinLib.Key.HD.MnemonicSeed.Checksum do
     ...> |> BitcoinLib.Key.HD.MnemonicSeed.Checksum.compute(4)
     2
   """
-  @spec compute(Binary.t(), Integer.t()) :: Integer.t()
+  @spec compute(binary(), integer()) :: integer()
   def compute(binary_seed, nb_bits_to_keep) do
     binary_seed
     |> compute_sha256()
@@ -45,7 +45,7 @@ defmodule BitcoinLib.Key.HD.MnemonicSeed.Checksum do
     ...> |> BitcoinLib.Key.HD.MnemonicSeed.Checksum.validate_seed()
     true
   """
-  @spec validate_seed(Binary.t()) :: true | false
+  @spec validate_seed(binary()) :: boolean()
   def validate_seed(binary_seed) do
     nb_of_checksum_bits = number_of_checksum_bits(binary_seed)
     {seed, checksum} = split(binary_seed, nb_of_checksum_bits)
@@ -80,7 +80,7 @@ defmodule BitcoinLib.Key.HD.MnemonicSeed.Checksum do
     <<binary_seed::binary, checksum::size(nb_of_checksum_bits)>>
   end
 
-  @spec number_of_checksum_bits(Binary.t()) :: Integer.t()
+  @spec number_of_checksum_bits(binary()) :: integer()
   def number_of_checksum_bits(binary_seed) do
     bit_size(binary_seed)
     |> div(32)

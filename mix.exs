@@ -8,7 +8,17 @@ defmodule BitcoinLib.MixProject do
       elixir: "~> 1.13",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
-      xref: [exclude: [:crypto]]
+      xref: [exclude: [:crypto]],
+
+      # Docs
+      name: "BitcoinLib",
+      source_url: "https://github.com/roosoft/bitcoinlib",
+      homepage_url: "http://github.com/roosoft/bitcoinlib",
+      docs: [
+        # The main page in the docs
+        main: "BitcoinLib",
+        extras: ["README.md"]
+      ]
     ]
   end
 
@@ -22,6 +32,8 @@ defmodule BitcoinLib.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
+      {:ex_doc, "~> 0.27", only: :dev, runtime: false},
+      {:earmark, "~> 1.4", only: [:dev]},
       {:binary, "0.0.4"},
       {:exbase58, "~> 1.0"},
       {:pbkdf2_elixir, "~> 2.0"},

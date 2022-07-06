@@ -17,7 +17,7 @@ defmodule BitcoinLib.Key.Address do
     ...> |> BitcoinLib.Key.Address.from_public_key_hash(:p2pkh)
     "1Ak9NVPmwCHEpsSWvM6cNRC7dsYniRmwMG"
   """
-  @spec from_public_key_hash(Integer.t(), :p2pkh | :p2sh) :: String.t()
+  @spec from_public_key_hash(integer(), :p2pkh | :p2sh) :: String.t()
   def from_public_key_hash(public_key_hash, address_type \\ :p2sh) do
     public_key_hash
     |> Integer.to_string(16)

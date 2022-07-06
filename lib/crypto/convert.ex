@@ -13,7 +13,7 @@ defmodule BitcoinLib.Crypto.Convert do
        91, 98, 127, 244, 77, 18, 5, 149, 96, 172, 212,
        48, 220, 250, 18, 96, 239, 43, 217, 86, 147, 115>>
   """
-  @spec integer_to_binary(Integer.t(), Integer.t()) :: String.t()
+  @spec integer_to_binary(integer(), integer()) :: String.t()
   def integer_to_binary(value, bytes_length \\ 32) do
     value
     |> Binary.from_integer()

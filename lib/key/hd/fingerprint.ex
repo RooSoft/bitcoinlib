@@ -23,14 +23,14 @@ defmodule BitcoinLib.Key.HD.Fingerprint do
     ...> |> BitcoinLib.Key.HD.Fingerprint.compute()
     0x18C1259
   """
-  @spec compute(%ExtendedPrivate{}) :: String.t()
+  @spec compute(%ExtendedPrivate{}) :: binary()
   def compute(%ExtendedPrivate{} = private_key) do
     private_key
     |> to_public_key
     |> compute
   end
 
-  @spec compute(%ExtendedPublic{}) :: String.t()
+  @spec compute(%ExtendedPublic{}) :: binary()
   def compute(%ExtendedPublic{} = public_key) do
     <<raw_fingerprint::binary-4, _rest::binary>> =
       public_key.key

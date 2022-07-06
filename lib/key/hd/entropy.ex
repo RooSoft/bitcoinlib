@@ -14,7 +14,7 @@ defmodule BitcoinLib.Key.HD.Entropy do
     ...> |> elem(1)
     32_310_461_525_491_050_757_677_748_469_648_273_221
   """
-  @spec from_dice_rolls(String.t()) :: {:ok, Integer.t()} | {:error, String.t()}
+  @spec from_dice_rolls(binary()) :: {:ok, integer()} | {:error, binary()}
   def from_dice_rolls(dice_rolls) do
     dice_rolls
     |> validate_rolls
@@ -31,7 +31,7 @@ defmodule BitcoinLib.Key.HD.Entropy do
     ...> |> BitcoinLib.Key.HD.Entropy.from_dice_rolls!()
     32_310_461_525_491_050_757_677_748_469_648_273_221
   """
-  @spec from_dice_rolls!(String.t()) :: Integer.t()
+  @spec from_dice_rolls!(binary()) :: integer()
   def from_dice_rolls!(dice_rolls) do
     from_dice_rolls(dice_rolls)
     |> elem(1)
@@ -63,7 +63,7 @@ defmodule BitcoinLib.Key.HD.Entropy do
 
     {:ok, entropy}
   end
-  
+
   defp maybe_parse_rolls({:error, message}) do
     {:error, message}
   end

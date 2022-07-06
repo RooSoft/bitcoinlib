@@ -33,8 +33,8 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate.ChildFromIndex do
       }
     }
   """
-  @spec get(%ExtendedPrivate{}, Integer.t(), Boolean.t()) ::
-          {:ok, %ExtendedPrivate{}} | {:error, String.t()}
+  @spec get(%ExtendedPrivate{}, integer(), boolean()) ::
+          {:ok, %ExtendedPrivate{}} | {:error, binary()}
   def get(private_key, index, hardened? \\ false)
 
   def get(_, index, _) when is_integer(index) and index > @max_index do
