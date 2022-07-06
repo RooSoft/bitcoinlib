@@ -66,7 +66,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic do
     ...> |> BitcoinLib.Key.HD.ExtendedPublic.to_address(:p2pkh)
     "1BRjWnoAVg3EASJHex5YeyDWC1zZ4CA5vc"
   """
-  @spec to_address(%ExtendedPublic{}, :p2pkh | :p2sh) :: String.t()
+  @spec to_address(%ExtendedPublic{}, :p2pkh | :p2sh | :bech32) :: String.t()
   def to_address(%ExtendedPublic{} = public_key, type) do
     public_key
     |> Address.from_extended_public_key(type)

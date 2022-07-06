@@ -170,6 +170,22 @@ defmodule BitcoinLib.Key.HD.ExtendedPublicTest do
   end
 
   @doc """
+  Source: https://bitcointalk.org/index.php?topic=4992632.0
+  """
+  test "create a bech32 address" do
+    public_key = %ExtendedPublic{
+      key: 0x0279BE667EF9DCBBAC55A06295CE870B07029BFCDB2DCE28D959F2815B16F81798,
+      chain_code: 0
+    }
+
+    address =
+      public_key
+      |> ExtendedPublic.to_address(:bech32)
+
+    assert address == "bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4"
+  end
+
+  @doc """
   With https://www.npmjs.com/package/@swan-bitcoin/xpub-cli installed, run this command and get the address below
 
   `xpub derive ypub6WwZCtcXYyyL6GHQrB8pnaHRNCaAWhuQkQraCKUk7qpF4JmVgwMAvaCu9m6o9nAeyFRqw6xyZxG7CDf16GMHFYbtw8KCtNsgkRoRs7YFJf9 -c0 --purpose p2sh`

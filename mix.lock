@@ -1,5 +1,6 @@
 %{
   "binary": {:hex, :binary, "0.0.4", "dd077db70c0ded3e85c132b802338e14b80694684a7e2277666bfa4004b7fa66", [:mix], [], "hexpm", "a2faf5d5c22caec3efacf95370d8b050c003f48e03c221c37e0d1e2dd515b970"},
+  "bip0173": {:hex, :bip0173, "0.1.2", "b771e275692ed3353ecfecb38330693cbba90d2ac4a2e8fd1908a86ec7e6318f", [:mix], [], "hexpm", "6e12dfe7baacf9b4c422cae8f9cc6bbd791bf5ec3e9055fa3f418071b799b0db"},
   "comeonin": {:hex, :comeonin, "5.3.3", "2c564dac95a35650e9b6acfe6d2952083d8a08e4a89b93a481acb552b325892e", [:mix], [], "hexpm", "3e38c9c2cb080828116597ca8807bb482618a315bfafd98c90bc22a821cc84df"},
   "curvy": {:hex, :curvy, "0.3.0", "cd097f77434baf783cd18a8374e1eae37dc203588902a3b59d1b4056ac9e7366", [:mix], [], "hexpm", "1fa6104cb458cfe6962b8353a0a6563bd191f9e72807fca0fa22b5a61809695c"},
   "exbase58": {:hex, :exbase58, "1.0.2", "2caa5df4d769b5c555cde11b85e93199037ed8b41f1da23e812619c10e3a3424", [:mix], [], "hexpm", "fe6b6b465750bdc1bd01c7b33b265902dabd63061f7db24e663509b45b4bba3c"},
