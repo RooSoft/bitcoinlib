@@ -14,13 +14,18 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic.Address.P2SH do
 
   def from_extended_public_key(%ExtendedPublic{key: key}) do
     key
-    |> Binary.from_integer()
+    |> to_binary
     |> hash160
     |> create_redeem_script
     |> hash160
-    |> add_version_bytes
+    |> prepend_version_bytes
     |> append_checksum
     |> base58_encode
+  end
+
+  defp to_binary(key) do
+    key
+    |> Binary.from_integer()
   end
 
   defp hash160(value) do
@@ -32,13 +37,8 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic.Address.P2SH do
     <<0x14::size(16), public_key_hash::bitstring>>
   end
 
-  defp add_version_bytes(redeem_script) do
+  defp prepend_version_bytes(redeem_script) do
     <<5::size(8), redeem_script::bitstring>>
-  end
-
-  defp base58_encode(value) do
-    value
-    |> Base58.encode()
   end
 
   defp append_checksum(public_key_hash) do
@@ -52,5 +52,10 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic.Address.P2SH do
 
     (hex_public_key_hash <> checksum)
     |> Binary.from_hex()
+  end
+
+  defp base58_encode(value) do
+    value
+    |> Base58.encode()
   end
 end
