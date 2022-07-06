@@ -17,7 +17,7 @@ Bitcoin helpers such as:
     - P2WPKH-nested-in-P2SH - Nested segwit, starting by `3`
     - P2WPKH - Native Segwit, starting by `bc1q`
 
-## referenced bitcoin improvement proposals (bips)
+## Referenced bitcoin improvement proposals (bips)
 - [bip13](https://github.com/bitcoin/bips/blob/master/bip-0013.mediawiki) - Address Format for pay-to-script-hash
 - [bip16](https://github.com/bitcoin/bips/blob/master/bip-0016.mediawiki) - Pay to Script Hash
 - [bip32](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki) - Hierarchical Deterministic Wallets
