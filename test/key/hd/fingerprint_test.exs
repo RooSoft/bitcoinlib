@@ -29,10 +29,10 @@ defmodule BitcoinLib.Key.HD.FingerprintTest do
       |> Fingerprint.append()
 
     assert %ExtendedPrivate{
-      fingerprint: 0x18C1259,
-      key: 0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9,
-      chain_code: 0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B
-    } == new_private_key
+             fingerprint: 0x18C1259,
+             key: 0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9,
+             chain_code: 0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B
+           } == new_private_key
   end
 
   test "compute a public key fingerprint" do
@@ -53,6 +53,7 @@ defmodule BitcoinLib.Key.HD.FingerprintTest do
       key: 0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9,
       chain_code: 0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B
     }
+
     public_key = ExtendedPublic.from_private_key(private_key)
 
     private_fingerprint = Fingerprint.compute(private_key)
