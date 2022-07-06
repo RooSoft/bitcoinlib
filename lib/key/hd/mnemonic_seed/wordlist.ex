@@ -36,7 +36,7 @@ defmodule BitcoinLib.Key.HD.MnemonicSeed.Wordlist do
 
   ## Examples
     iex> BitcoinLib.Key.HD.MnemonicSeed.Wordlist.get_indice("absurd")
-    {found, 8, "absurd"}
+    {:found, 8, "absurd"}
   """
   @spec get_indice(binary()) :: {:found, integer(), binary()} | {:not_found, integer()}
   def get_indice(word) do
