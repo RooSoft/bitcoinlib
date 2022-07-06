@@ -1,0 +1,1 @@
+[Output Types by Count](https://transactionfee.info/charts/output-type-distribution-count/)
