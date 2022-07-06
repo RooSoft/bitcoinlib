@@ -2,7 +2,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic.Address do
   alias BitcoinLib.Key.HD.ExtendedPublic
   alias BitcoinLib.Key.HD.ExtendedPublic.Address.{P2PKH, P2SH, Bech32}
 
-  @spec from_extended_public_key(%ExtendedPublic{}, :p2pkh | :p2sh) :: String.t()
+  @spec from_extended_public_key(%ExtendedPublic{}, :p2pkh | :p2sh | :bech32) :: String.t()
   def from_extended_public_key(%ExtendedPublic{} = public_key, :p2pkh) do
     public_key
     |> P2PKH.from_extended_public_key()
