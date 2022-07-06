@@ -12,6 +12,17 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic.Address.P2SH do
   alias BitcoinLib.Crypto
   alias BitcoinLib.Key.HD.ExtendedPublic
 
+  @doc """
+  Creates a P2SH-P2WPKH address, which is starting by 3, out of an Extended Public Key
+
+  ## Examples
+    iex> %BitcoinLib.Key.HD.ExtendedPublic{
+    ...>  key: 0x02D0DE0AAEAEFAD02B8BDC8A01A1B8B11C696BD3D66A2C5F10780D95B7DF42645C,
+    ...>  chain_code: 0
+    ...> }
+    ...> |> BitcoinLib.Key.HD.ExtendedPublic.Address.P2SH.from_extended_public_key()
+    "3D9iyFHi1Zs9KoyynUfrL82rGhJfYTfSG4"
+  """
   def from_extended_public_key(%ExtendedPublic{key: key}) do
     key
     |> to_binary
