@@ -1,6 +1,7 @@
 defmodule BitcoinLib.Key.HD.ExtendedPublic.Deserialization do
   @bip32_mainnet_human_readable "xpub"
   @bip49_mainnet_human_readable "ypub"
+  @bip84_mainnet_human_readable "zpub"
 
   alias BitcoinLib.Key.HD.ExtendedPublic
 
@@ -27,6 +28,11 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic.Deserialization do
 
   @spec deserialize(binary()) :: {:ok, %ExtendedPublic{}}
   def deserialize(@bip49_mainnet_human_readable <> _data = serialized) do
+    {:ok, execute(serialized)}
+  end
+
+  @spec deserialize(binary()) :: {:ok, %ExtendedPublic{}}
+  def deserialize(@bip84_mainnet_human_readable <> _data = serialized) do
     {:ok, execute(serialized)}
   end
 

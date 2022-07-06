@@ -30,12 +30,12 @@ ss_xpriv =
 
 blue_wallet_pub_key =
   ss_private_key
-  |> ExtendedPrivate.from_derivation_path!("m/49'/0'/0'")
+  |> ExtendedPrivate.from_derivation_path!("m/84'/0'/0'")
   |> ExtendedPublic.from_private_key()
 
 blue_wallet_zpub =
   blue_wallet_pub_key
-  |> ExtendedPublic.serialize(:ypub)
+  |> ExtendedPublic.serialize(:zpub)
 
 blue_wallet_address_0_pub_key =
   blue_wallet_pub_key

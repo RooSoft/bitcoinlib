@@ -90,6 +90,24 @@ defmodule BitcoinLib.Key.HD.ExtendedPublicTest do
            } == public_key
   end
 
+  test "deserialize a zpub into a master public key" do
+    serialized =
+      "zpub6qYAt4j2n3Vp2smwHWGYUctcxqiG6uX5fDqiWcWT98NKhwwEJGwsqaU6rFSbCQL5q7s1FBqgHALYRVQdYKQWgM6cgbA5p81vPp7ST6Aqx9Q"
+
+    {:ok, public_key} =
+      serialized
+      |> ExtendedPublic.deserialize()
+
+    assert %ExtendedPublic{
+             chain_code: 0x727DF8767E0E48B385F26D525504FB2B332A62ECA87B43F07E89DC5AD1503DE5,
+             depth: 0x3,
+             fingerprint: 0x89CEF6CE,
+             index: 0x80000000,
+             key: 0x38BB6501F01333ABF4F350B29D464CCF525BADDD121286E3A55A827EF1EC18CFA,
+             parent_fingerprint: 0x1E33305A
+           } == public_key
+  end
+
   test "serialize and deserialize an xpub key and make sure they're the same" do
     original_public_key = %ExtendedPublic{
       fingerprint: 0x3442193E,
