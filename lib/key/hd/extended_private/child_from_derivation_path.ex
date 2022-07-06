@@ -20,11 +20,11 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate.ChildFromDerivationPath do
     {
       :ok,
       %BitcoinLib.Key.HD.ExtendedPrivate{
-        key: 0xF884F5D6A4CB4F2F859FBE1FE75DFE5A48822FD56A59A0B375FC0BAF8CC5C84E,
-        chain_code: 0xB0B26A820035421BD94DAE603F7354C275EDF007A4086BDD67B327301D852EBE,
-        depth: 4,
+        key: 0x210DDF6EA57B57C4607B17F9774C3F48AC92DA3AE5FF03D215CCE56AA021DAA6,
+        chain_code: 0x143B6DAC88591B42BD7D74AA193D4EFC7826873B4BD5F491B7067E705B8A626E,
+        depth: 5,
         index: 0,
-        parent_fingerprint: 0x7C33408C
+        parent_fingerprint: 0xFFF4D449
         }
       }
   """
@@ -59,6 +59,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate.ChildFromDerivationPath do
       case purpose do
         :bip44 -> ChildFromIndex.get(private_key, 44, true)
         :bip49 -> ChildFromIndex.get(private_key, 49, true)
+        :bip84 -> ChildFromIndex.get(private_key, 84, true)
         _ -> {:ok, private_key}
       end
 

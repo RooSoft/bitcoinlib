@@ -8,6 +8,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic.Serialization do
 
   @xpub_version_bytes 0x0488B21E
   @ypub_version_bytes 0x049D7CB2
+  @zpub_version_bytes 0x04B24746
 
   alias BitcoinLib.Crypto
   alias BitcoinLib.Key.HD.ExtendedPublic
@@ -39,6 +40,11 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic.Serialization do
   @spec serialize(%ExtendedPublic{}, Atom.t()) :: {:ok, String.t()}
   def serialize(%ExtendedPublic{} = pub_key, :ypub) do
     {:ok, execute(pub_key, @ypub_version_bytes)}
+  end
+
+  @spec serialize(%ExtendedPublic{}, Atom.t()) :: {:ok, String.t()}
+  def serialize(%ExtendedPublic{} = pub_key, :zpub) do
+    {:ok, execute(pub_key, @zpub_version_bytes)}
   end
 
   @spec serialize(%ExtendedPublic{}, Atom.t()) :: {:error, String.t()}

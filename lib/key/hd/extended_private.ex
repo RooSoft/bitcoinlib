@@ -250,7 +250,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
       parent_fingerprint: 0x18C1259
     }
   """
-  @spec from_derivation_path!(%ExtendedPrivate{}, any()) :: %ExtendedPrivate{}
+  @spec from_derivation_path!(%ExtendedPrivate{}, %DerivationPath{}) :: %ExtendedPrivate{}
   def from_derivation_path!(%ExtendedPrivate{} = private_key, derivation_path) do
     from_derivation_path(private_key, derivation_path)
     |> elem(1)

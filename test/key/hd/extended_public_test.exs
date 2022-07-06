@@ -45,6 +45,18 @@ defmodule BitcoinLib.Key.HD.ExtendedPublicTest do
              serialized
   end
 
+  test "serialize a master public key using zpub" do
+    public_key = %ExtendedPublic{
+      key: 0x339A36013301597DAEF41FBE593A02CC513D0B55527EC2DF1050E2E8FF49C85C2,
+      chain_code: 0x873DFF81C02F525623FD1FE5167EAC3A55A049DE3D314BB42EE227FFED37D508
+    }
+
+    {:ok, serialized} = ExtendedPublic.serialize(public_key, :zpub)
+
+    assert "zpub6jftahH18ngZxUuv6oSniLNrBCSSE1B4EEU59bwTCEt8x6aS6b2mdfLxbS4QS53g85SWWP6wexqeer516433gYpZQoJie2tcMYdJ1SYYYAL" ==
+             serialized
+  end
+
   test "deserialize a master public key" do
     serialized =
       "xpub661MyMwAqRbcFtXgS5sYJABqqG9YLmC4Q1Rdap9gSE8NqtwybGhePY2gZ29ESFjqJoCu1Rupje8YtGqsefD265TMg7usUDFdp6W1EGMcet8"

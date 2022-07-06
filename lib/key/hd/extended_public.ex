@@ -91,7 +91,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic do
       "xpub661MyMwAqRbcFtXgS5sYJABqqG9YLmC4Q1Rdap9gSE8NqtwybGhePY2gZ29ESFjqJoCu1Rupje8YtGqsefD265TMg7usUDFdp6W1EGMcet8"
     }
   """
-  @spec serialize(%ExtendedPublic{}, :xpub | :ypub) :: {:ok, String.t()} | {:error, String.t()}
+  @spec serialize(%ExtendedPublic{}, :xpub | :ypub | :zpub) :: {:ok, String.t()} | {:error, String.t()}
   def serialize(public_key, format \\ :xpub) do
     Serialization.serialize(public_key, format)
   end
