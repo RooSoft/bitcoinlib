@@ -1,4 +1,14 @@
 defmodule BitcoinLib.Key.HD.ExtendedPublic.Address.P2SH do
+  @moduledoc """
+  Implementation of P2SH-P2WPKH addresses
+
+  BIP13: Address Format for pay-to-script-hash  https://github.com/bitcoin/bips/blob/master/bip-0013.mediawiki
+  BIP16: Pay to Script Hash                     https://github.com/bitcoin/bips/blob/master/bip-0016.mediawiki
+
+
+  Source: https://github.com/bitcoin/bips/blob/master/bip-0013.mediawiki
+  """
+
   alias BitcoinLib.Crypto
   alias BitcoinLib.Key.HD.ExtendedPublic
 
