@@ -20,4 +20,19 @@ defmodule BitcoinLib.Test.Integration.Bip84.Bech32AddressFromZpub do
 
     assert address == "bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu"
   end
+
+  test "generate bech32 address from an alternate mnemonic phrase" do
+    private_key =
+      "rally celery split order almost twenty ignore record legend learn chaos decade"
+      |> MnemonicSeed.to_seed()
+      |> ExtendedPrivate.from_seed()
+
+    address =
+      private_key
+      |> ExtendedPrivate.from_derivation_path!("m/84'/0'/0'/0/0")
+      |> ExtendedPublic.from_private_key()
+      |> ExtendedPublic.to_address(:bech32)
+
+    assert address == "bc1qcmxt22gjgvy74cjtf73r3hzwfg249tql6ps767"
+  end
 end
