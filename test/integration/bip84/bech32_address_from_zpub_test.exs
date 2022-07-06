@@ -6,7 +6,7 @@ defmodule BitcoinLib.Test.Integration.Bip84.Bech32AddressFromZpub do
   @doc """
   based on https://github.com/bitcoin/bips/blob/master/bip-0084.mediawiki#test-vectors
   """
-  test "generate bech32 address from a mnemonic phrase" do
+  test "generate m/84'/0'/0'/0/0 bech32 address from a mnemonic phrase" do
     private_key =
       "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about"
       |> MnemonicSeed.to_seed()
@@ -19,6 +19,42 @@ defmodule BitcoinLib.Test.Integration.Bip84.Bech32AddressFromZpub do
       |> ExtendedPublic.to_address(:bech32)
 
     assert address == "bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu"
+  end
+
+  @doc """
+  based on https://github.com/bitcoin/bips/blob/master/bip-0084.mediawiki#test-vectors
+  """
+  test "generate m/84'/0'/0'/0/1 bech32 address from a mnemonic phrase " do
+    private_key =
+      "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about"
+      |> MnemonicSeed.to_seed()
+      |> ExtendedPrivate.from_seed()
+
+    address =
+      private_key
+      |> ExtendedPrivate.from_derivation_path!("m/84'/0'/0'/0/1")
+      |> ExtendedPublic.from_private_key()
+      |> ExtendedPublic.to_address(:bech32)
+
+    assert address == "bc1qnjg0jd8228aq7egyzacy8cys3knf9xvrerkf9g"
+  end
+
+  @doc """
+  based on https://github.com/bitcoin/bips/blob/master/bip-0084.mediawiki#test-vectors
+  """
+  test "generate m/84'/0'/0'/1/0 bech32 address from a mnemonic phrase" do
+    private_key =
+      "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about"
+      |> MnemonicSeed.to_seed()
+      |> ExtendedPrivate.from_seed()
+
+    address =
+      private_key
+      |> ExtendedPrivate.from_derivation_path!("m/84'/0'/0'/1/0")
+      |> ExtendedPublic.from_private_key()
+      |> ExtendedPublic.to_address(:bech32)
+
+    assert address == "bc1q8c6fshw2dlwun7ekn9qwf37cu2rn755upcp6el"
   end
 
   test "generate bech32 address from an alternate mnemonic phrase" do
