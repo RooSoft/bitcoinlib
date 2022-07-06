@@ -5,3 +5,4 @@
 --ignore-dir=.github
 --ignore-file=is:mix.lock
 --ignore-file=is:erl_crash.dump
+--ignore-dir=doc
