@@ -35,8 +35,8 @@ defmodule BitcoinLib.Key.HD.MnemonicSeed.Wordlist do
   Convert a word into an indice from the wordlist
 
   ## Examples
-    iex> BitcoinLib.Key.HD.MnemonicSeed.Wordlist.get_indice("absurd")
-    {:found, 8, "absurd"}
+      iex> BitcoinLib.Key.HD.MnemonicSeed.Wordlist.get_indice("absurd")
+      {:found, 8, "absurd"}
   """
   @spec get_indice(binary()) :: {:found, integer(), binary()} | {:not_found, integer()}
   def get_indice(word) do
