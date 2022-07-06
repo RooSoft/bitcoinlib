@@ -3,9 +3,19 @@
 Bitcoin helpers such as:
 
 - Creation of
-  - Private Keys
-  - Public Keys
-  - P2PKH addresses
+  - Keys
+    - Public
+    - Private
+  - Hierarchical Deterministic (HD) Wallets
+    - Mnemonic Phrases
+    - Derivation Paths
+    - Key derivation
+  - Private Key Serialization/Deserialization (`xprv`, `yprv`, `zprv`)
+  - Public Key Serialization/Deserialization (`xpub`, `ypub`, `zpub`)
+  - Address Generation
+    - P2PKH - Pay to primary key hash, starting by `1`
+    - P2WPKH-nested-in-P2SH - Nested segwit, starting by `3`
+    - P2WPKH - Native Segwit, starting by `bc1q`
 
 ## referenced bitcoin improvement proposals (bips)
 - [bip13](https://github.com/bitcoin/bips/blob/master/bip-0013.mediawiki) - Address Format for pay-to-script-hash
