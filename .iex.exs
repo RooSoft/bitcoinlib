@@ -3,9 +3,9 @@ alias BitcoinLib.Key.Address
 alias BitcoinLib.Key.HD.{DerivationPath, Entropy, ExtendedPublic, ExtendedPrivate, MnemonicSeed}
 
 # options here https://hexdocs.pm/elixir/1.12/Inspect.Opts.html
-IEx.configure(
-  inspect: [base: :hex]
-)
+# IEx.configure(
+#   inspect: [base: :hex]
+# )
 
 private_key =
   "01234501234501234501234501234501234501234501234501"

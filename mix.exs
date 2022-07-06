@@ -51,7 +51,6 @@ defmodule BitcoinLib.MixProject do
   defp deps do
     [
       {:ex_doc, "~> 0.27", only: :dev, runtime: false},
-      {:earmark, "~> 1.4", only: [:dev]},
       {:binary, "0.0.4"},
       {:exbase58, "~> 1.0"},
       {:pbkdf2_elixir, "~> 2.0"},
