@@ -57,7 +57,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPublicTest do
              serialized
   end
 
-  test "deserialize a master public key" do
+  test "deserialize a xpub into a master public key" do
     serialized =
       "xpub661MyMwAqRbcFtXgS5sYJABqqG9YLmC4Q1Rdap9gSE8NqtwybGhePY2gZ29ESFjqJoCu1Rupje8YtGqsefD265TMg7usUDFdp6W1EGMcet8"
 
@@ -69,6 +69,24 @@ defmodule BitcoinLib.Key.HD.ExtendedPublicTest do
              fingerprint: 0x3442193E,
              key: 0x339A36013301597DAEF41FBE593A02CC513D0B55527EC2DF1050E2E8FF49C85C2,
              chain_code: 0x873DFF81C02F525623FD1FE5167EAC3A55A049DE3D314BB42EE227FFED37D508
+           } == public_key
+  end
+
+  test "deserialize a ypub into a master public key" do
+    serialized =
+      "ypub6WwZCtcXYyyL6GHQrB8pnaHRNCaAWhuQkQraCKUk7qpF4JmVgwMAvaCu9m6o9nAeyFRqw6xyZxG7CDf16GMHFYbtw8KCtNsgkRoRs7YFJf9"
+
+    {:ok, public_key} =
+      serialized
+      |> ExtendedPublic.deserialize()
+
+    assert %ExtendedPublic{
+             chain_code: 0xA2C4FF37835B5F1C50969101C9A35AFAD2AFEC6C0AB8D8D49ADDA9E232488AD4,
+             depth: 3,
+             fingerprint: 0x9A6A4CDE,
+             index: 0x80000000,
+             key: 0x3362BF7EE2FA92C4DB0D125108170EEE65CBB0FB5269A5CAB02703B543052470A,
+             parent_fingerprint: 0x3E374C4A
            } == public_key
   end
 
