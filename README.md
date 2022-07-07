@@ -1,23 +1,29 @@
 # BitcoinLib
 
-Bitcoin helpers such as:
 
-- Creation of
-  - Keys
-    - Public
-    - Private
-  - Hierarchical Deterministic (HD) Wallets
-    - Mnemonic Phrases
-    - Derivation Paths
-    - Key derivation
-  - Private Key Serialization/Deserialization (`xprv`, `yprv`, `zprv`)
-  - Public Key Serialization/Deserialization (`xpub`, `ypub`, `zpub`)
-  - Address Generation
-    - P2PKH - Pay to primary key hash, starting by `1`
-    - P2WPKH-nested-in-P2SH - Nested segwit, starting by `3`
-    - P2WPKH - Native Segwit, starting by `bc1q`
+## Technicalities
 
-## Referenced bitcoin improvement proposals (bips)
+This lib can
+
+- Create private keys out of entropy
+- Derive public keys from private keys
+- Handle Hierarchical Deterministic (HD) Wallets, including
+  - Mnemonic Phrases
+  - Derivation Paths
+- Serialize/Deserialize Private Keys (`xprv`, `yprv`, `zprv`)
+- Serialize/Deserialize Public Keys  (`xpub`, `ypub`, `zpub`)
+- Address Generation
+
+### Address types
+
+| Address Type          | Description             | Starts With  | Supported |
+|-----------------------|-------------------------|--------------|-----------|
+| P2PKH                 | Pay to Primary Key Hash | `1`          | ✅        |
+| P2WPKH-nested-in-P2SH | Nested Segwit           | `3`          | ✅        |
+| P2WPKH                | Native Segwit           | `bc1q`       | ✅        |
+| P2TR                  | Taproot                 | `bc1p`       | Soon...   |
+
+### Referenced bitcoin improvement proposals (bips)
 - [bip13](https://github.com/bitcoin/bips/blob/master/bip-0013.mediawiki) - Address Format for pay-to-script-hash
 - [bip16](https://github.com/bitcoin/bips/blob/master/bip-0016.mediawiki) - Pay to Script Hash
 - [bip32](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki) - Hierarchical Deterministic Wallets
@@ -28,7 +34,9 @@ Bitcoin helpers such as:
 - [bip141](https://github.com/bitcoin/bips/blob/master/bip-0141.mediawiki) - Segregated Witness (Consensus layer)
 - [bip173](https://github.com/bitcoin/bips/blob/master/bip-0173.mediawiki) - Base32 address format for native v0-16 witness outputs
 
-## Private key generation
+### Examples
+
+#### Private key generation
 
 ```elixir
 %{
@@ -44,7 +52,7 @@ Bitcoin helpers such as:
 }
 ```
 
-## Public key derivation
+#### Public key derivation
 
 ```elixir
 private_key = "0a8d286b11b98f6cb2585b627ff44d12059560acd430dcfa1260ef2bd9569373"
@@ -61,7 +69,7 @@ private_key = "0a8d286b11b98f6cb2585b627ff44d12059560acd430dcfa1260ef2bd9569373"
 |}
 ```
 
-## Generate a P2PKH from a public key
+#### Generate a P2PKH from a public key
 
 ```elixir
 compressed_public_key = "020f69ef8f2feb09b29393eef514761f22636b90d8e4d3f2138b2373bd37523053"
