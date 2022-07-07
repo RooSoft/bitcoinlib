@@ -17,8 +17,9 @@ BitcoinLib offers a way to generate very random entropy by rolling 50 or 99 dice
 depending on the level of security you're after. These will introduce either 2¹³²
 or 2²⁶⁴ possibilities, depending on the number of rolls.
 
-Here is an example of private key creation. Note here that every dice roll value has
-been reduced by 1 so that values range from 0 to 5.
+To get to a private key creation, we first need a mnemonic phrase. Dice rolls will
+thus be converted into words. These two notations are equivalent. Note here that 
+every dice roll value has been reduced by 1 so that values range from 0 to 5.
 
 ```elixir
 alias BitcoinLib.Key.HD.{Entropy, MnemonicSeed}
