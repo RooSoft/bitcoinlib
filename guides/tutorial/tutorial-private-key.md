@@ -23,12 +23,15 @@ been reduced by 1 so that values range from 0 to 5.
 ```elixir
 alias BitcoinLib.Key.HD.{Entropy, MnemonicSeed}
 
-wordlist = 
-  "01234501234501234501234501234501234501234501234501"
-  |> Entropy.from_dice_rolls!()
-  |> MnemonicSeed.wordlist_from_entropy()
+"01234501234501234501234501234501234501234501234501"
+|> Entropy.from_dice_rolls!()
+|> MnemonicSeed.wordlist_from_entropy()
+```
 
-assert wordlist == [
+This is the result
+
+```elixir
+[
   "blue", "involve", "cook", "print", 
   "twist", "crystal", "razor", "february",
   "caution", "private", "slim", "medal"
@@ -45,13 +48,4 @@ alias BitcoinLib.Key.HD.ExtendedPrivate
 private_key = 
   "blue involve cook print twist crystal razor february caution private slim medal"
   |> ExtendedPrivate.from_mnemonic_phrase()
-
-assert %BitcoinLib.Key.HD.ExtendedPrivate{
-  chain_code: 98753614235036553155428756621915230475895182258496493972608878370221250684809,
-  depth: 0,
-  fingerprint: 716162062,
-  index: 0,
-  key: 105135741551555958813494755273405117169669837034836946126935268988599184179178,
-  parent_fingerprint: 0
-} = private_key
 ```
