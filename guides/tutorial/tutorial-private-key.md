@@ -49,3 +49,6 @@ private_key =
   "blue involve cook print twist crystal razor february caution private slim medal"
   |> ExtendedPrivate.from_mnemonic_phrase()
 ```
+
+To keep things simple, we won't bother about what's returned as a private key... just know that
+this thing has full access to the wallet that's about to be created in the next steps.
