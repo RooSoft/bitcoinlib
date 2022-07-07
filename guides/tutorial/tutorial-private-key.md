@@ -14,8 +14,8 @@ and then convert it into either a 12 or 24 words `mnemonic phrase`.
 ![99 dices](https://raw.githubusercontent.com/RooSoft/bitcoinlib/main/guides/assets/images/99dice.jpg)
 
 BitcoinLib offers a way to generate very random entropy by rolling 50 or 99 dices,
-depending on the level of security you're after. These will introduce either 2^132
-or 2^264 possibilities, depending on the number of rolls.
+depending on the level of security you're after. These will introduce either 2¹³²
+or 2²⁶⁴ possibilities, depending on the number of rolls.
 
 Here is an example of private key creation. Note here that every dice roll value has
 been reduced by 1 so that values range from 0 to 5.
