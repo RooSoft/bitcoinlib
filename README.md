@@ -1,8 +1,7 @@
 # BitcoinLib
 
-![Bitcoin](/guides/assets/images/bitcoin.svg)
-&nbsp;&nbsp;&nbsp;
-![Elixir](/guides/assets/images/elixir-with-name.svg)
+![Bitcoin](https://raw.githubusercontent.com/RooSoft/bitcoinlib/main/guides/assets/images/bitcoin.svg)
+![Elixir](https://raw.githubusercontent.com/RooSoft/bitcoinlib/main/guides/assets/images/elixir-with-name.svg)
 
 Want to interact with the Bitcoin network through a DIY app? Look no further, this library 
 is about doing it with [Elixir](https://elixir-lang.org), whether you know what it is or not 

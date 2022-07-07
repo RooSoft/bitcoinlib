@@ -41,10 +41,20 @@ defmodule BitcoinLib.MixProject do
     [
       # The main page in the docs
       main: "BitcoinLib",
-      extras: ["README.md"],
+      extras: docs_extras(),
       assets: "/guides/assets",
       source_ref: "v#{@version}",
       source_url: "https://github.com/roosoft/bitcoinlib"
+    ]
+  end
+
+  def docs_extras do
+    [
+      "README.md",
+      "guides/links.md",
+      "guides/examples.md",
+      "guides/tutorial/index.md",
+      "guides/tutorial/private_key.md"
     ]
   end
 
