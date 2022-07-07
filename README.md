@@ -1,5 +1,9 @@
 # BitcoinLib
 
+![Bitcoin](/docs/images/bitcoin.svg)
+&nbsp;&nbsp;&nbsp;
+![Elixir](/docs/images/elixir-with-name.svg)
+
 Want to interact with the Bitcoin network through a DIY app? Look no further, this library 
 is about empowering [Elixir](https://elixir-lang.org) developers doing just that in the 
 simplest way possible. It makes abstraction of most of the cryptography jargon, while sticking
