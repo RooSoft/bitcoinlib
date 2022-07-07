@@ -1,4 +1,4 @@
-# Some Examples
+# Examples
 
 ## Private key generation
 
