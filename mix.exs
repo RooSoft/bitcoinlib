@@ -62,7 +62,7 @@ defmodule BitcoinLib.MixProject do
 
   def docs_groups_for_extras() do
     [
-      Tutorial: ~r"/guides/tutorial/"
+      Tutorial: ~r/guides\/tutorial\/.?/
     ]
   end
 
