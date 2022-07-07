@@ -5,11 +5,11 @@
 ![Elixir](/docs/images/elixir-with-name.svg)
 
 Want to interact with the Bitcoin network through a DIY app? Look no further, this library 
-is about empowering [Elixir](https://elixir-lang.org) developers doing just that in the 
-simplest way possible. It makes abstraction of most of the cryptography jargon, while sticking
+is about doing it with [Elixir](https://elixir-lang.org), whether you know what it is or not 
+in the simplest way possible. It makes abstraction of most of the cryptography jargon, while sticking
 to the [Bitcoin glossary](https://developer.bitcoin.org/glossary.html).
 
-## How to use
+# How to use
 
 For non-elixir developers, here is a [getting started tutorial](docs/tutorial.md)
 
@@ -29,7 +29,7 @@ def deps do
 end
 ```
 
-## Technicalities
+# Technicalities
 
 This lib can
 
@@ -48,7 +48,7 @@ Mid term goals
 - Sign Transactions (PSBT)
 - Taproot support
 
-### Address types
+## Address types
 
 | Address Type          | Description             | Starts With  | Supported     |
 |-----------------------|-------------------------|--------------|---------------|
@@ -57,7 +57,7 @@ Mid term goals
 | P2WPKH                | Native Segwit           | `bc1q`       | ✅            |
 | P2TR                  | Taproot                 | `bc1p`       | Eventually... |
 
-### Referenced bitcoin improvement proposals (bips)
+## Referenced bitcoin improvement proposals (bips)
 - [bip13](https://github.com/bitcoin/bips/blob/master/bip-0013.mediawiki) - Address Format for pay-to-script-hash
 - [bip16](https://github.com/bitcoin/bips/blob/master/bip-0016.mediawiki) - Pay to Script Hash
 - [bip32](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki) - Hierarchical Deterministic Wallets
