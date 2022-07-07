@@ -42,6 +42,7 @@ defmodule BitcoinLib.MixProject do
       # The main page in the docs
       main: "BitcoinLib",
       extras: ["README.md"],
+      assets: "/guides/assets",
       source_ref: "v#{@version}",
       source_url: "https://github.com/roosoft/bitcoinlib"
     ]

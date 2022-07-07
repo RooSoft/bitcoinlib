@@ -1,8 +1,8 @@
 # BitcoinLib
 
-![Bitcoin](/docs/images/bitcoin.svg)
+![Bitcoin](/guides/assets/images/bitcoin.svg)
 &nbsp;&nbsp;&nbsp;
-![Elixir](/docs/images/elixir-with-name.svg)
+![Elixir](/guides/assets/images/elixir-with-name.svg)
 
 Want to interact with the Bitcoin network through a DIY app? Look no further, this library 
 is about doing it with [Elixir](https://elixir-lang.org), whether you know what it is or not 
@@ -11,15 +11,15 @@ to the [Bitcoin glossary](https://developer.bitcoin.org/glossary.html).
 
 # How to use
 
-For non-elixir developers, here is a [getting started tutorial](docs/tutorial.md)
+For non-elixir developers, here is a [getting started tutorial](https://hexdocs.pm/bitcoinlib/guides/tutorial)
 
 Otherwise here are the most useful links 
 
 - [Hex package](https://hex.pm/packages/bitcoinlib) 
 - [Hex documentation](https://hexdocs.pm/bitcoinlib)
 - [Git repository](https://github.com/RooSoft/bitcoinlib)
-- [Useful links](/docs/links.md)
-- [Examples](/docs/examples.md)
+- [Useful links](https://hexdocs.pm/bitcoinlib/guides/links.md)
+- [Examples](https://hexdocs.pm/bitcoinlib/guides/examples.md)
 
 ### Add as a dependency in `mix.exs`
 
