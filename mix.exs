@@ -45,7 +45,7 @@ defmodule BitcoinLib.MixProject do
       extra_section: "GUIDES",
       groups_for_extras: docs_groups_for_extras(),
       assets: "/guides/assets",
-      source_ref: "v#{@version}",
+      source_ref: @version,
       source_url: "https://github.com/roosoft/bitcoinlib"
     ]
   end
