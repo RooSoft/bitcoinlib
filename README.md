@@ -15,7 +15,7 @@ For non-elixir developers, here is a [getting started tutorial](https://hexdocs.
 Otherwise here are the most useful links 
 
 - [Hex package](https://hex.pm/packages/bitcoinlib) 
-- [Hex documentation](https://hexdocs.pm/bitcoinlib)
+- [Hex documentation](https://hexdocs.pm/bitcoinlib/readme.html)
 - [Git repository](https://github.com/RooSoft/bitcoinlib)
 - [Useful links](https://hexdocs.pm/bitcoinlib/links.html)
 - [Examples](https://hexdocs.pm/bitcoinlib/examples.html)
