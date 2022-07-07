@@ -101,4 +101,4 @@ iex(1)>
 
 From now on, and until you type `ctrl-c` twice to get out, you'll be able to use the library.
 
-Let's move on and [create a private key](https://hexdocs.pm/bitcoinlib/guides/tutorial/private_key.html).
+Let's move on and [create a private key](https://hexdocs.pm/bitcoinlib/guides/tutorial-private-key.html).

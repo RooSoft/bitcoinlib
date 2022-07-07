@@ -10,15 +10,15 @@ to the [Bitcoin glossary](https://developer.bitcoin.org/glossary.html).
 
 # How to use
 
-For non-elixir developers, here is a [getting started tutorial](https://hexdocs.pm/bitcoinlib/guides/tutorial)
+For non-elixir developers, here is a [getting started tutorial](https://hexdocs.pm/bitcoinlib/tutorial.html)
 
 Otherwise here are the most useful links 
 
 - [Hex package](https://hex.pm/packages/bitcoinlib) 
 - [Hex documentation](https://hexdocs.pm/bitcoinlib)
 - [Git repository](https://github.com/RooSoft/bitcoinlib)
-- [Useful links](https://hexdocs.pm/bitcoinlib/guides/links.md)
-- [Examples](https://hexdocs.pm/bitcoinlib/guides/examples.md)
+- [Useful links](https://hexdocs.pm/bitcoinlib/links.html)
+- [Examples](https://hexdocs.pm/bitcoinlib/examples.html)
 
 ### Add as a dependency in `mix.exs`
 
