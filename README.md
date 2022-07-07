@@ -21,6 +21,8 @@ Otherwise here are the most useful links
 - [Useful links](/docs/links.md)
 - [Examples](/docs/examples.md)
 
+### Add as a dependency in `mix.exs`
+
 ```elixir
 def deps do
   [
