@@ -1,27 +1,57 @@
 # BitcoinLib
 
+Want to interact with the Bitcoin network through a DIY app? Look no further, this library 
+is about empowering [Elixir](https://elixir-lang.org) developers doing just that in the 
+simplest way possible. It makes abstraction of most of the cryptography jargon, while sticking
+to the [Bitcoin glossary](https://developer.bitcoin.org/glossary.html).
+
+## How to use
+
+For non-elixir developers, here is a [getting started tutorial](docs/tutorial.md)
+
+Otherwise here are the most useful links 
+
+- [Hex package](https://hex.pm/packages/bitcoinlib) 
+- [Hex documentation](https://hexdocs.pm/bitcoinlib)
+- [Git repository](https://github.com/RooSoft/bitcoinlib)
+- [Useful links](/docs/links.md)
+- [Examples](/docs/examples.md)
+
+```elixir
+def deps do
+  [
+    {:bitcoinlib, "~> 0.1.0"}
+  ]
+end
+```
 
 ## Technicalities
 
 This lib can
 
-- Create private keys out of entropy
+- Generate entropy with dice rolls
+- Create private keys
 - Derive public keys from private keys
 - Handle Hierarchical Deterministic (HD) Wallets, including
   - Mnemonic Phrases
   - Derivation Paths
 - Serialize/Deserialize Private Keys (`xprv`, `yprv`, `zprv`)
 - Serialize/Deserialize Public Keys  (`xpub`, `ypub`, `zpub`)
-- Address Generation
+- Generate Addresses
+
+Mid term goals
+
+- Sign Transactions (PSBT)
+- Taproot support
 
 ### Address types
 
-| Address Type          | Description             | Starts With  | Supported |
-|-----------------------|-------------------------|--------------|-----------|
-| P2PKH                 | Pay to Primary Key Hash | `1`          | ✅        |
-| P2WPKH-nested-in-P2SH | Nested Segwit           | `3`          | ✅        |
-| P2WPKH                | Native Segwit           | `bc1q`       | ✅        |
-| P2TR                  | Taproot                 | `bc1p`       | Soon...   |
+| Address Type          | Description             | Starts With  | Supported     |
+|-----------------------|-------------------------|--------------|---------------|
+| P2PKH                 | Pay to Primary Key Hash | `1`          | ✅            |
+| P2WPKH-nested-in-P2SH | Nested Segwit           | `3`          | ✅            |
+| P2WPKH                | Native Segwit           | `bc1q`       | ✅            |
+| P2TR                  | Taproot                 | `bc1p`       | Eventually... |
 
 ### Referenced bitcoin improvement proposals (bips)
 - [bip13](https://github.com/bitcoin/bips/blob/master/bip-0013.mediawiki) - Address Format for pay-to-script-hash
@@ -33,57 +63,3 @@ This lib can
 - [bip84](https://github.com/bitcoin/bips/blob/master/bip-0084.mediawiki) - Derivation scheme for P2WPKH based accounts
 - [bip141](https://github.com/bitcoin/bips/blob/master/bip-0141.mediawiki) - Segregated Witness (Consensus layer)
 - [bip173](https://github.com/bitcoin/bips/blob/master/bip-0173.mediawiki) - Base32 address format for native v0-16 witness outputs
-
-### Examples
-
-#### Private key generation
-
-```elixir
-%{
-  raw: private_key, 
-  wif: wif_version
-} = BitcoinLib.generate_private_key()
-```
-
-```elixir
-%{
-  raw: 85802653936839865013864937414198608060921225918071701559735074585839951298352,
-  wif: "L3aTXceEuyR8roYKSjY4yw6GYchZSRmxoKLHpUKJYkNGeLwccE6b"
-}
-```
-
-#### Public key derivation
-
-```elixir
-private_key = "0a8d286b11b98f6cb2585b627ff44d12059560acd430dcfa1260ef2bd9569373"
-
-{uncompressed, compressed} =
-  private_key
-  |> BitcoinLib.derive_public_key()
-```
-
-```elixir
-{
-  "040f69ef8f2feb09b29393eef514761f22636b90d8e4d3f2138b2373bd37523053002119e16b613619691f760eadd486315fc9e36491c7adb76998d1b903b3dd12",
-  "020f69ef8f2feb09b29393eef514761f22636b90d8e4d3f2138b2373bd37523053"
-|}
-```
-
-#### Generate a P2PKH from a public key
-
-```elixir
-compressed_public_key = "020f69ef8f2feb09b29393eef514761f22636b90d8e4d3f2138b2373bd37523053"
-
-address =
-  compressed_public_key
-  |> BitcoinLib.generate_p2pkh_address()
-```
-
-```elixir
-1Ak9NVPmwCHEpsSWvM6cNRC7dsYniRmwMG
-```
-
-## Useful links
-
-- [BIP32 Deterministic Key Generator](http://bip32.org)
-- [Registered HD version bytes](https://github.com/satoshilabs/slips/blob/master/slip-0132.md#registered-hd-version-bytes)
