@@ -45,3 +45,9 @@ blue_wallet_address_0_pub_key =
 blue_wallet_address_0 =
   blue_wallet_address_0_pub_key
   |> ExtendedPublic.to_address(:p2sh)
+
+
+  yo =
+    "blue involve cook print twist crystal razor february caution private slim medal"
+    |> ExtendedPrivate.from_mnemonic_phrase()
+    |> ExtendedPrivate.from_derivation_path!("m/84'/0'/0'")
