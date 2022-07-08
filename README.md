@@ -25,7 +25,7 @@ Otherwise here are the most useful links
 ```elixir
 def deps do
   [
-    {:bitcoinlib, "~> 0.1.1"}
+    {:bitcoinlib, "~> 0.1.2"}
   ]
 end
 ```

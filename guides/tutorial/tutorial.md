@@ -65,7 +65,7 @@ Get rid of the examples and add `BitcoinLib` to the dependencies, so it ends up 
 ```elixir
   defp deps do
     [
-      {:bitcoinlib, "~> 0.1.1"}
+      {:bitcoinlib, "~> 0.1.2"}
     ]
   end
 ```
