@@ -223,7 +223,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
     ChildFromDerivationPath.get(private_key, derivation_path)
   end
 
-  @spec from_derivation_path(%ExtendedPrivate{}, String.t()) :: {:ok, %ExtendedPrivate{}}
+  @spec from_derivation_path(%ExtendedPrivate{}, binary()) :: {:ok, %ExtendedPrivate{}}
   def from_derivation_path(%ExtendedPrivate{} = private_key, derivation_path_string)
       when is_binary(derivation_path_string) do
     {:ok, derivation_path} = DerivationPath.parse(derivation_path_string)
@@ -251,8 +251,15 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate do
     }
   """
   @spec from_derivation_path!(%ExtendedPrivate{}, %DerivationPath{}) :: %ExtendedPrivate{}
-  def from_derivation_path!(%ExtendedPrivate{} = private_key, derivation_path) do
+  def from_derivation_path!(%ExtendedPrivate{} = private_key, %DerivationPath{} = derivation_path) do
     from_derivation_path(private_key, derivation_path)
+    |> elem(1)
+  end
+
+  @spec from_derivation_path!(%ExtendedPrivate{}, binary()) :: %ExtendedPrivate{}
+  def from_derivation_path!(%ExtendedPrivate{} = private_key, derivation_path_string)
+      when is_binary(derivation_path_string) do
+    from_derivation_path(private_key, derivation_path_string)
     |> elem(1)
   end
 
