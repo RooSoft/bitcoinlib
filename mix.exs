@@ -53,7 +53,6 @@ defmodule BitcoinLib.MixProject do
   def docs_extras do
     [
       "README.md",
-      "guides/tutorial/tutorial.md",
       "guides/tutorial/tutorial-private-key.md",
       "guides/examples.md",
       "guides/links.md"

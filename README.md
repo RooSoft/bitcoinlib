@@ -10,17 +10,10 @@ to the [Bitcoin glossary](https://developer.bitcoin.org/glossary.html).
 
 # How to use
 
-For non-elixir developers, here is a [getting started tutorial](https://hexdocs.pm/bitcoinlib/tutorial.html)
+First, make sure you've got [elixir set up](https://elixir-lang.org/install.html) and that you
+[know the language's basics](https://elixircasts.io/series/learn-elixir).
 
-Otherwise here are the most useful links 
-
-- [Hex package](https://hex.pm/packages/bitcoinlib) 
-- [Hex documentation](https://hexdocs.pm/bitcoinlib/readme.html)
-- [Git repository](https://github.com/RooSoft/bitcoinlib)
-- [Useful links](https://hexdocs.pm/bitcoinlib/links.html)
-- [Examples](https://hexdocs.pm/bitcoinlib/examples.html)
-
-### Add as a dependency in `mix.exs`
+Then, create a project and add the dependency in `mix.exs`.
 
 ```elixir
 def deps do
@@ -30,9 +23,23 @@ def deps do
 end
 ```
 
+Finally, head to the [private key creation](https://hexdocs.pm/bitcoinlib/tutorial-private-key.html) 
+documentation to get started.
+
+# Useful links
+
+Here are the most useful links 
+
+- [Hex package](https://hex.pm/packages/bitcoinlib) 
+- [Hex documentation](https://hexdocs.pm/bitcoinlib/readme.html)
+- [Git repository](https://github.com/RooSoft/bitcoinlib)
+- [Useful links](https://hexdocs.pm/bitcoinlib/links.html)
+- [Examples](https://hexdocs.pm/bitcoinlib/examples.html)
+
+
 # Technicalities
 
-This lib can
+## This lib can
 
 - Generate entropy with dice rolls
 - Create private keys
@@ -44,7 +51,7 @@ This lib can
 - Serialize/Deserialize Public Keys  (`xpub`, `ypub`, `zpub`)
 - Generate Addresses
 
-Mid term goals
+### Mid term goals
 
 - Sign Transactions (PSBT)
 - Taproot support
