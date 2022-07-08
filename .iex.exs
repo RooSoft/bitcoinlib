@@ -8,7 +8,7 @@ alias BitcoinLib.Key.HD.{DerivationPath, Entropy, ExtendedPublic, ExtendedPrivat
 # )
 
 private_key =
-  "01234501234501234501234501234501234501234501234501"
+  "12345612345612345612345612345612345612345612345612"
   |> Entropy.from_dice_rolls!()
   |> MnemonicSeed.wordlist_from_entropy()
   |> MnemonicSeed.to_seed()
