@@ -9,7 +9,7 @@ defmodule BitcoinLib.Key.HD.Entropy do
   creation
 
   ## Examples
-    iex> "01234501234501234501234501234501234501234501234501"
+    iex> "12345612345612345612345612345612345612345612345612"
     ...> |> BitcoinLib.Key.HD.Entropy.from_dice_rolls()
     ...> |> elem(1)
     32_310_461_525_491_050_757_677_748_469_648_273_221
@@ -18,6 +18,7 @@ defmodule BitcoinLib.Key.HD.Entropy do
   def from_dice_rolls(dice_rolls) do
     dice_rolls
     |> validate_rolls
+    |> maybe_decrement_rolls
     |> maybe_parse_rolls
   end
 
@@ -27,7 +28,7 @@ defmodule BitcoinLib.Key.HD.Entropy do
   creation
 
   ## Examples
-    iex> "01234501234501234501234501234501234501234501234501"
+    iex> "12345612345612345612345612345612345612345612345612"
     ...> |> BitcoinLib.Key.HD.Entropy.from_dice_rolls!()
     32_310_461_525_491_050_757_677_748_469_648_273_221
   """
@@ -49,11 +50,22 @@ defmodule BitcoinLib.Key.HD.Entropy do
   end
 
   defp validate_dices(dice_rolls) do
-    case Regex.match?(~r/^[0-5]+$/, dice_rolls) do
+    case Regex.match?(~r/^[1-6]+$/, dice_rolls) do
       true -> {:ok, dice_rolls}
-      false -> {:error, "Please provide characters inside the [0,5] range, got #{dice_rolls}"}
+      false -> {:error, "Please provide characters inside the [1,6] range, got #{dice_rolls}"}
     end
   end
+
+  defp maybe_decrement_rolls({:ok, dice_rolls}) do
+    zero_based_dice_rolls =
+      <<i::8 <- dice_rolls>>
+      |> for(do: <<i - 1>>)
+      |> Enum.join()
+
+    {:ok, zero_based_dice_rolls}
+  end
+
+  defp maybe_decrement_rolls(input), do: input
 
   defp maybe_parse_rolls({:ok, dice_rolls}) do
     entropy =
@@ -64,7 +76,5 @@ defmodule BitcoinLib.Key.HD.Entropy do
     {:ok, entropy}
   end
 
-  defp maybe_parse_rolls({:error, message}) do
-    {:error, message}
-  end
+  defp maybe_parse_rolls(input), do: input
 end

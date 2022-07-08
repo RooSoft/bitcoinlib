@@ -2,7 +2,7 @@ defmodule BitcoinLib.Test.Integration.DiceRollsToPublicKeyTest do
   use ExUnit.Case, async: true
 
   test "create a public key out of dice rolls" do
-    dice_rolls = "01234501234501234501234501234501234501234501234501"
+    dice_rolls = "12345612345612345612345612345612345612345612345612"
 
     public_key = create_public_key(dice_rolls)
 
