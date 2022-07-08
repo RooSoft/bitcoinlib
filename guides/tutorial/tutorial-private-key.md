@@ -32,11 +32,7 @@ alias BitcoinLib.Key.HD.{Entropy, MnemonicSeed}
 This is the result
 
 ```elixir
-[
-  "blue", "involve", "cook", "print", 
-  "twist", "crystal", "razor", "february",
-  "caution", "private", "slim", "medal"
-]
+"blue involve cook print twist crystal razor february caution private slim medal"
 ```
 
 ## Private key from mnemonics
