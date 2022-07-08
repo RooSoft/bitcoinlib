@@ -4,9 +4,9 @@
 ![Elixir](https://raw.githubusercontent.com/RooSoft/bitcoinlib/main/guides/assets/images/elixir-with-name.svg)
 
 Want to interact with the Bitcoin network through a DIY app? Look no further, this library 
-is about doing it with [Elixir](https://elixir-lang.org), whether you know what it is or not 
-in the simplest way possible. It makes abstraction of most of the cryptography jargon, while sticking
-to the [Bitcoin glossary](https://developer.bitcoin.org/glossary.html).
+is about doing it with [Elixir](https://elixir-lang.org) in a very abstract way. It 
+keeps the cryptography jargon to a minimum, while sticking to the 
+[Bitcoin glossary](https://developer.bitcoin.org/glossary.html).
 
 # How to use
 
