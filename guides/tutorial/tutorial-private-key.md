@@ -24,7 +24,7 @@ every dice roll value has been reduced by 1 so that values range from 0 to 5.
 ```elixir
 alias BitcoinLib.Key.HD.{Entropy, MnemonicSeed}
 
-"01234501234501234501234501234501234501234501234501"
+"12345612345612345612345612345612345612345612345612"
 |> Entropy.from_dice_rolls!()
 |> MnemonicSeed.wordlist_from_entropy()
 ```
