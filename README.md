@@ -67,8 +67,8 @@ Here are the most useful links
 
 ## Referenced bips
 
-A bip is a Bitcoin Improvement Proposal. Here is a list of those that are at least
-partially implemented in this library:
+A bip is a [Bitcoin Improvement Proposal](https://github.com/bitcoin/bips). Here is a list 
+of those that are at least partially implemented in this library:
 
 - [bip13](https://github.com/bitcoin/bips/blob/master/bip-0013.mediawiki) - Address Format for pay-to-script-hash
 - [bip16](https://github.com/bitcoin/bips/blob/master/bip-0016.mediawiki) - Pay to Script Hash
