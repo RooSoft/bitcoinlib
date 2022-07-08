@@ -15,10 +15,9 @@ defmodule BitcoinLib.Key.HD.MnemonicSeed do
   ## Examples
     iex> 101_750_443_022_601_924_635_824_320_539_097_414_732
     ...> |> BitcoinLib.Key.HD.MnemonicSeed.wordlist_from_entropy()
-    ...> |> Enum.join(" ")
     "erode gloom apart system broom lemon dismiss post artist slot humor occur"
   """
-  @spec wordlist_from_entropy(integer()) :: list(binary())
+  @spec wordlist_from_entropy(integer()) :: binary()
   def wordlist_from_entropy(entropy) do
     entropy
     |> Binary.from_integer()
@@ -26,6 +25,7 @@ defmodule BitcoinLib.Key.HD.MnemonicSeed do
     |> split_indices
     |> get_word_indices
     |> Wordlist.get_words()
+    |> Enum.join(" ")
   end
 
   @doc """

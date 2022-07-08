@@ -12,20 +12,7 @@ defmodule BitcoinLib.Key.HD.MnemonicSeedTest do
       entropy
       |> MnemonicSeed.wordlist_from_entropy()
 
-    assert wordlist == [
-             "erode",
-             "gloom",
-             "apart",
-             "system",
-             "broom",
-             "lemon",
-             "dismiss",
-             "post",
-             "artist",
-             "slot",
-             "humor",
-             "occur"
-           ]
+    assert wordlist == "erode gloom apart system broom lemon dismiss post artist slot humor occur"
   end
 
   test "convert another 128 bit entropy number into a 12 words list" do
@@ -36,9 +23,7 @@ defmodule BitcoinLib.Key.HD.MnemonicSeedTest do
       |> MnemonicSeed.wordlist_from_entropy()
 
     assert wordlist ==
-             String.split(
-               "brick giggle panic mammal document foam gym canvas wheel among room analyst"
-             )
+             "brick giggle panic mammal document foam gym canvas wheel among room analyst"
   end
 
   test "convert a 256 bit entropy number into a 24 words list" do
@@ -50,10 +35,8 @@ defmodule BitcoinLib.Key.HD.MnemonicSeedTest do
       |> MnemonicSeed.wordlist_from_entropy()
 
     assert wordlist ==
-             String.split(
-               "omit scale diagram cart tray veteran love trial april minute salt actual term " <>
-                 "concert guitar message umbrella animal grain gain mule decide duty trophy"
-             )
+             "omit scale diagram cart tray veteran love trial april minute salt actual term " <>
+               "concert guitar message umbrella animal grain gain mule decide duty trophy"
   end
 
   test "convert a 12 word mnemonic phrase into a seed" do
