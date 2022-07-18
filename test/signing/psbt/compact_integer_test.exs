@@ -17,7 +17,7 @@ defmodule BitcoinLib.Signing.Psbt.CompactIntegerTest do
   end
 
   test "parse a 16 bits compact integer, with no rest" do
-    data = <<0xFD, 0x1, 0x2>>
+    data = <<0xFD, 1, 2>>
 
     {number, rest} =
       data
@@ -28,7 +28,7 @@ defmodule BitcoinLib.Signing.Psbt.CompactIntegerTest do
   end
 
   test "parse a 32 bits compact integer, with no rest" do
-    data = <<0xFE, 0x1, 0x2, 0x3, 0x4>>
+    data = <<0xFE, 1, 2, 3, 4>>
 
     {number, rest} =
       data
@@ -39,7 +39,7 @@ defmodule BitcoinLib.Signing.Psbt.CompactIntegerTest do
   end
 
   test "parse a 64 bits compact integer, with no rest" do
-    data = <<0xFF, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8>>
+    data = <<0xFF, 1, 2, 3, 4, 5, 6, 7, 8>>
 
     {number, rest} =
       data
@@ -58,5 +58,17 @@ defmodule BitcoinLib.Signing.Psbt.CompactIntegerTest do
 
     assert 2 == number
     assert <<3, 4>> == rest
+  end
+
+
+  test "parse a 16 bits compact integer, with something remaining" do
+    data = <<0xFD, 1, 2, 1, 2, 3>>
+
+    {number, rest} =
+      data
+      |> CompactInteger.extract_from()
+
+    assert 0x102 == number
+    assert <<1, 2, 3>> == rest
   end
 end
