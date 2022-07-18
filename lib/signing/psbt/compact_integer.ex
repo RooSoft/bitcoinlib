@@ -5,6 +5,10 @@ defmodule BitcoinLib.Signing.Psbt.CompactInteger do
   based on https://en.bitcoin.it/wiki/Protocol_documentation#Variable_length_integer
   """
 
+  defstruct [:value, :size, :remaining]
+
+  alias BitcoinLib.Signing.Psbt.CompactInteger
+
   @_16_bits_code 0xFD
   @_32_bits_code 0xFE
   @_64_bits_code 0xFF
@@ -33,13 +37,16 @@ defmodule BitcoinLib.Signing.Psbt.CompactInteger do
 
   @spec extract_from(binary()) :: {integer(), binary()}
   def extract_from(<<value::8, remaining::binary>>) do
-    {value, remaining}
+    %CompactInteger{value: value, size: 8, remaining: remaining}
   end
 
   defp extract_size(data, length) do
     case data do
-      <<value::size(length)>> -> {value, <<>>}
-      <<value::size(length), remaining::binary>> -> {value, remaining}
+      <<value::size(length)>> ->
+        %CompactInteger{value: value, size: length, remaining: <<>>}
+
+      <<value::size(length), remaining::binary>> ->
+        %CompactInteger{value: value, size: length, remaining: remaining}
     end
   end
 end
