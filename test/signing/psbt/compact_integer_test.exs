@@ -6,14 +6,14 @@ defmodule BitcoinLib.Signing.Psbt.CompactIntegerTest do
   alias BitcoinLib.Signing.Psbt.CompactInteger
 
   test "parse a 8 bits compact integer, with no rest" do
-    data = <<1, 0>>
+    data = <<2>>
 
     {number, rest} =
       data
       |> CompactInteger.extract_from()
       |> IO.inspect()
 
-    assert 0 == number
+    assert 2 == number
     assert <<>> == rest
   end
 end
