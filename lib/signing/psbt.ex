@@ -11,7 +11,7 @@ defmodule BitcoinLib.Signing.Psbt do
   def parse(encoded) do
     map =
       %{encoded: encoded}
-      |> decode()
+      |> base64_decode()
       |> extract_data()
       |> extract_global()
       |> extract_inputs()
@@ -20,7 +20,7 @@ defmodule BitcoinLib.Signing.Psbt do
     %Psbt{global: map.global, inputs: map.inputs, outputs: map.outputs}
   end
 
-  def decode(%{encoded: encoded} = map) do
+  def base64_decode(%{encoded: encoded} = map) do
     map
     |> Map.put(:decoded, Base.decode64!(encoded))
   end
