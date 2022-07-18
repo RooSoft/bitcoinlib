@@ -84,4 +84,14 @@ defmodule BitcoinLib.Signing.Psbt.CompactIntegerTest do
     assert <<1, 2, 3>> == rest
   end
 
+  test "parse a 64 bits compact integer, with something remaining" do
+    data = <<0xFF, 1, 2, 3, 4, 5, 6, 7, 8, 2, 1>>
+
+    {number, rest} =
+      data
+      |> CompactInteger.extract_from()
+
+    assert 0x102030405060708 == number
+    assert <<2, 1>> == rest
+  end
 end
