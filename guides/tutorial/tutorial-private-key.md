@@ -1,4 +1,4 @@
-# Private key creation
+# Private keys
 
 The private key is your identity. You can use it to receive and spend funds, 
 as well as view how much is associated with it. Banks ask for documents 
