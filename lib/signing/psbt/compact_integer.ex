@@ -6,30 +6,26 @@ defmodule BitcoinLib.Signing.Psbt.CompactInteger do
   @_16_bits 0xFD
   @_32_bits 0xFE
   @_64_bits 0xFF
-  @byte 8
 
   def extract_from(<<@_16_bits::8, data::binary>>) do
     IO.puts("FD")
-    <<length::16, data::binary>> = data
 
     data
-    |> extract_size(length)
+    |> extract_size(16)
   end
 
   def extract_from(<<@_32_bits::8, data::binary>>) do
     IO.puts("FE")
-    <<length::32, data::binary>> = data
 
     data
-    |> extract_size(length)
+    |> extract_size(32)
   end
 
   def extract_from(<<@_64_bits::8, data::binary>>) do
     IO.puts("FF")
-    <<length::64, data::binary>> = data
 
     data
-    |> extract_size(length)
+    |> extract_size(64)
   end
 
   def extract_from(<<value::8, remaining::binary>>) do
@@ -38,8 +34,8 @@ defmodule BitcoinLib.Signing.Psbt.CompactInteger do
 
   def extract_size(data, length) do
     case data do
-      <<value::length*@byte>> -> {value, <<>>}
-      <<value::length*@byte, remaining>> -> {value, remaining}
+      <<value::size(length)>> -> {value, <<>>}
+      <<value::size(length), remaining>> -> {value, remaining}
     end
   end
 end
