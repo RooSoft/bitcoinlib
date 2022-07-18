@@ -56,6 +56,8 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic do
   @doc """
   Converts the public key to an address of the type specified as the second parameter
 
+  Defaults to bech32 address type
+
   ## Examples
     iex> %BitcoinLib.Key.HD.ExtendedPublic{
     ...>   key: 0x3EB181FB7B5CF63D82307188B20828B83008F2D2511E5C6EDCBE171C63DD2CBC1,
@@ -67,7 +69,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic do
     "1BRjWnoAVg3EASJHex5YeyDWC1zZ4CA5vc"
   """
   @spec to_address(%ExtendedPublic{}, :p2pkh | :p2sh | :bech32) :: binary()
-  def to_address(%ExtendedPublic{} = public_key, type) do
+  def to_address(%ExtendedPublic{} = public_key, type \\ :bech32) do
     public_key
     |> Address.from_extended_public_key(type)
   end
