@@ -32,10 +32,10 @@ public_key
 |> ExtendedPublic.serialize!
 ```
 
-results in
+which results in
 
 ```elixir
 "xpub661MyMwAqRbcGiWUazDmCUZbC8Z7WMcjveWgfU92NAu4kvFcpZ8LGV2Y4bRaT8sBUzihLgiyMqsbb61HKFV1sL185uZs1DE15dpWfrQFqBY"
 ```
 
-which can be imported in an online app to generate a `read-only wallet`
+and can then be imported in an online app to generate a `read-only wallet`

@@ -49,3 +49,20 @@ private_key =
 
 To keep things simple, we won't bother about what's returned as a private key... just know that
 this thing has full access to the wallet that's about to be created in the next steps.
+
+## Serialization
+
+A private key can be serialized into an `xprv`
+
+```elixir
+private_key
+|> ExtendedPrivate.serialize
+```
+
+which results in
+
+```elixir
+"xprv9s21ZrQH143K4ES1UxgkqLcre6id6tttZRb5s5jQoqN5t7vUH1p5igi4DKw1E8Dh3EkGtAuKx2RXLTxjJs98uPctYxZrV9TFF1ECi9QNy95"
+```
+
+and can then be imported in a wallet, which will have full access to the funds
