@@ -8,22 +8,16 @@ defmodule BitcoinLib.Signing.Psbt.CompactInteger do
   @_64_bits 0xFF
 
   def extract_from(<<@_16_bits::8, data::binary>>) do
-    IO.puts("FD")
-
     data
     |> extract_size(16)
   end
 
   def extract_from(<<@_32_bits::8, data::binary>>) do
-    IO.puts("FE")
-
     data
     |> extract_size(32)
   end
 
   def extract_from(<<@_64_bits::8, data::binary>>) do
-    IO.puts("FF")
-
     data
     |> extract_size(64)
   end
