@@ -20,27 +20,27 @@ defmodule BitcoinLib.Signing.Psbt do
     %Psbt{global: map.global, inputs: map.inputs, outputs: map.outputs}
   end
 
-  def base64_decode(%{encoded: encoded} = map) do
+  defp base64_decode(%{encoded: encoded} = map) do
     map
     |> Map.put(:decoded, Base.decode64!(encoded))
   end
 
-  def extract_data(%{decoded: <<@magic::32, @separator::8, data::binary>>} = map) do
+  defp extract_data(%{decoded: <<@magic::32, @separator::8, data::binary>>} = map) do
     map
     |> Map.put(:data, data)
   end
 
-  def extract_global(map) do
+  defp extract_global(map) do
     map
     |> Map.put(:global, Global.from_data(map.data))
   end
 
-  def extract_inputs(map) do
+  defp extract_inputs(map) do
     map
     |> Map.put(:inputs, Inputs.from_data(map.data))
   end
 
-  def extract_outputs(map) do
+  defp extract_outputs(map) do
     map
     |> Map.put(:outputs, Outputs.from_data(map.data))
   end
