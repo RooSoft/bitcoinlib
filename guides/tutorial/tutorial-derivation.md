@@ -18,3 +18,5 @@ Starting from a mnemonic phrase, down to the private key
 |> ExtendedPrivate.from_mnemonic_phrase()
 |> ExtendedPrivate.from_derivation_path!("m/84'/0'/0'")
 ```
+
+This will result in a bitcoin bech32 private key that can further be derivated twice
