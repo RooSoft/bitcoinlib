@@ -13,6 +13,10 @@ defmodule BitcoinLib.Signing.Psbt.Keypair.Key do
   alias BitcoinLib.Signing.Psbt.CompactInteger
   alias BitcoinLib.Signing.Psbt.Keypair.Key
 
+  @doc """
+  Extracts a key from some arbitrary data, returning a tuple containing the key and the remaining data
+  """
+  @spec extract_from(binary()) :: {%Key{}, binary}
   def extract_from(data) do
     extracted =
       %{key: %Key{}, data: data}
