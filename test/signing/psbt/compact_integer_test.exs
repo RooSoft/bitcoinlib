@@ -22,7 +22,7 @@ defmodule BitcoinLib.Signing.Psbt.CompactIntegerTest do
       data
       |> CompactInteger.extract_from()
 
-    assert %CompactInteger{value: 0x102, size: 16, remaining: <<>>} == compact_integer
+    assert %CompactInteger{value: 0x201, size: 16, remaining: <<>>} == compact_integer
   end
 
   test "parse a 32 bits compact integer, with no rest" do
@@ -32,7 +32,7 @@ defmodule BitcoinLib.Signing.Psbt.CompactIntegerTest do
       data
       |> CompactInteger.extract_from()
 
-    assert %CompactInteger{value: 0x1020304, size: 32, remaining: <<>>} == compact_integer
+    assert %CompactInteger{value: 0x4030201, size: 32, remaining: <<>>} == compact_integer
   end
 
   test "parse a 64 bits compact integer, with no rest" do
@@ -42,7 +42,7 @@ defmodule BitcoinLib.Signing.Psbt.CompactIntegerTest do
       data
       |> CompactInteger.extract_from()
 
-    assert %CompactInteger{value: 0x102030405060708, size: 64, remaining: <<>>} == compact_integer
+    assert %CompactInteger{value: 0x807060504030201, size: 64, remaining: <<>>} == compact_integer
   end
 
   test "parse a 8 bits compact integer, with something remaining" do
@@ -63,7 +63,7 @@ defmodule BitcoinLib.Signing.Psbt.CompactIntegerTest do
       data
       |> CompactInteger.extract_from()
 
-    assert %CompactInteger{value: 0x102, size: 16, remaining: <<1, 2, 3>>} == compact_integer
+    assert %CompactInteger{value: 0x201, size: 16, remaining: <<1, 2, 3>>} == compact_integer
   end
 
   test "parse a 32 bits compact integer, with something remaining" do
@@ -73,7 +73,7 @@ defmodule BitcoinLib.Signing.Psbt.CompactIntegerTest do
       data
       |> CompactInteger.extract_from()
 
-    assert %CompactInteger{value: 0x1020304, size: 32, remaining: <<1, 2, 3>>} == compact_integer
+    assert %CompactInteger{value: 0x4030201, size: 32, remaining: <<1, 2, 3>>} == compact_integer
   end
 
   test "parse a 64 bits compact integer, with something remaining" do
@@ -83,6 +83,6 @@ defmodule BitcoinLib.Signing.Psbt.CompactIntegerTest do
       data
       |> CompactInteger.extract_from()
 
-    assert %CompactInteger{value: 0x102030405060708, size: 64, remaining: <<2, 1>>} == compact_integer
+    assert %CompactInteger{value: 0x807060504030201, size: 64, remaining: <<2, 1>>} == compact_integer
   end
 end

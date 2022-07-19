@@ -42,10 +42,10 @@ defmodule BitcoinLib.Signing.Psbt.CompactInteger do
 
   defp extract_size(data, length) do
     case data do
-      <<value::size(length)>> ->
+      <<value::little-size(length)>> ->
         %CompactInteger{value: value, size: length, remaining: <<>>}
 
-      <<value::size(length), remaining::binary>> ->
+      <<value::little-size(length), remaining::binary>> ->
         %CompactInteger{value: value, size: length, remaining: remaining}
     end
   end
