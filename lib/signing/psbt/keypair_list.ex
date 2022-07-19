@@ -1,21 +1,23 @@
-defmodule BitcoinLib.Signing.Psbt.Global do
+defmodule BitcoinLib.Signing.Psbt.KeypairList do
   defstruct [:keypairs]
 
   @moduledoc """
-    Extracts the global section of a PSBT from a binary according to the
+    Extracts a Keypair list from from a binary according to the
     [specification](https://github.com/bitcoin/bips/blob/master/bip-0174.mediawiki#specification)
 
     <global-map> := <keypair>* 0x00
+    <input-map> := <keypair>* 0x00
+    <output-map> := <keypair>* 0x00
   """
 
-  alias BitcoinLib.Signing.Psbt.{Global, Keypair}
+  alias BitcoinLib.Signing.Psbt.{KeypairList, Keypair}
 
   def from_data(data) do
     {remaining_data, keypairs} =
       data
       |> extract_keypairs()
 
-    {%Global{keypairs: keypairs}, remaining_data}
+    {%KeypairList{keypairs: keypairs}, remaining_data}
   end
 
   defp extract_keypairs(data) do

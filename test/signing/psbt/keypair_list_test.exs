@@ -1,58 +1,58 @@
-defmodule BitcoinLib.Signing.Psbt.GlobalTest do
+defmodule BitcoinLib.Signing.Psbt.KeypairListTest do
   use ExUnit.Case, async: true
 
-  doctest BitcoinLib.Signing.Psbt.Global
+  doctest BitcoinLib.Signing.Psbt.KeypairList
 
-  alias BitcoinLib.Signing.Psbt.{Global, Keypair}
+  alias BitcoinLib.Signing.Psbt.{KeypairList, Keypair}
   alias BitcoinLib.Signing.Psbt.Keypair.{Key, Value}
 
   @psbt_global_unsigned_tx 0
   @stop 0
 
-  test "extract a global module from a binary, with one keypair and no remaining data" do
+  test "extract a keypair list from a binary, with one keypair and no remaining data" do
     key = <<2, @psbt_global_unsigned_tx, 1>>
     value = <<2, 1, 1>>
     keypair = key <> value
     data = <<keypair::binary, @stop>>
 
-    {global, remaining_data} =
+    {keypair_list, remaining_data} =
       data
-      |> Global.from_data()
+      |> KeypairList.from_data()
 
-    %Keypair{} = keypair1 = global.keypairs |> List.first()
+    %Keypair{} = keypair1 = keypair_list.keypairs |> List.first()
 
-    assert 1 == Enum.count(global.keypairs)
+    assert 1 == Enum.count(keypair_list.keypairs)
     assert %Key{keylen: 2, keytype: @psbt_global_unsigned_tx, keydata: <<1>>} == keypair1.key
     assert %Value{valuelen: 2, valuedata: <<1, 1>>} == keypair1.value
     assert <<>> == remaining_data
   end
 
-  test "extract a global module from a binary, with two keypairs and no remaining data" do
+  test "extract a keypair list from a binary, with two keypairs and no remaining data" do
     key = <<2, @psbt_global_unsigned_tx, 1>>
     value = <<2, 1, 1>>
     keypair = key <> value
     data = <<keypair::binary, keypair::binary, @stop>>
 
-    {global, remaining_data} =
+    {keypair_list, remaining_data} =
       data
-      |> Global.from_data()
+      |> KeypairList.from_data()
 
-    assert 2 == Enum.count(global.keypairs)
+    assert 2 == Enum.count(keypair_list.keypairs)
     assert <<>> == remaining_data
   end
 
-  test "extract a global module from a binary, with two keypairs and some remaining data" do
+  test "extract a keypair list from a binary, with two keypairs and some remaining data" do
     key = <<2, @psbt_global_unsigned_tx, 1>>
     value = <<2, 1, 1>>
     keypair = key <> value
     remaining_data = <<5, 1>>
     data = <<keypair::binary, @stop, remaining_data::binary>>
 
-    {global, remaining_data} =
+    {keypair_list, remaining_data} =
       data
-      |> Global.from_data()
+      |> KeypairList.from_data()
 
-    assert 1 == Enum.count(global.keypairs)
+    assert 1 == Enum.count(keypair_list.keypairs)
     assert <<5, 1>> == remaining_data
   end
 end
