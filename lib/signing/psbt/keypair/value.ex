@@ -5,7 +5,7 @@ defmodule BitcoinLib.Signing.Psbt.Keypair.Value do
 
   <value> := <valuelen> <valuedata>
   """
-  defstruct [:valuelen, :valuedata]
+  defstruct [:length, :data]
 
   alias BitcoinLib.Signing.Psbt.CompactInteger
   alias BitcoinLib.Signing.Psbt.Keypair.Value
@@ -26,19 +26,19 @@ defmodule BitcoinLib.Signing.Psbt.Keypair.Value do
   defp extract_valuelen(%{data: data} = map) do
     %{value: valuelen, remaining: data} = CompactInteger.extract_from(data)
 
-    value = %Value{valuelen: valuelen}
+    value = %Value{length: valuelen}
 
     %{map | value: value, data: data}
   end
 
   defp extract_valuedata(%{value: value, data: data} = map) do
-    valuelen = value.valuelen
+    value_length = value.length
 
-    <<valuedata::binary-size(valuelen), data::bitstring>> = data
+    <<value_data::binary-size(value_length), data::bitstring>> = data
 
     value =
       value
-      |> Map.put(:valuedata, valuedata)
+      |> Map.put(:data, value_data)
 
     %{map | value: value, data: data}
   end

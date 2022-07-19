@@ -19,7 +19,7 @@ defmodule BitcoinLib.Signing.Psbt.Inputs do
 
   defp add_non_witness_utxo(input, value) do
     input
-    |> Map.put(:non_witness_utxo, value.valuedata)
+    |> Map.put(:non_witness_utxo, value.data)
   end
 
   defp add_unknown(input, key, value) do

@@ -23,7 +23,7 @@ defmodule BitcoinLib.Signing.Psbt.KeypairListTest do
 
     assert 1 == Enum.count(keypair_list.keypairs)
     assert %Key{keylen: 2, keytype: @psbt_global_unsigned_tx, keydata: <<1>>} == keypair1.key
-    assert %Value{valuelen: 2, valuedata: <<1, 1>>} == keypair1.value
+    assert %Value{length: 2, data: <<1, 1>>} == keypair1.value
     assert <<>> == remaining_data
   end
 

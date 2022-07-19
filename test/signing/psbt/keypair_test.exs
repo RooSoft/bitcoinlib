@@ -18,7 +18,7 @@ defmodule BitcoinLib.Signing.Psbt.KeypairTest do
       |> Keypair.extract_from()
 
     assert %Key{keylen: 2, keytype: @psbt_global_unsigned_tx, keydata: <<1>>} == keypair.key
-    assert %Value{valuelen: 2, valuedata: <<1, 1>>} == keypair.value
+    assert %Value{length: 2, data: <<1, 1>>} == keypair.value
     assert <<>> == data
   end
 
@@ -33,7 +33,7 @@ defmodule BitcoinLib.Signing.Psbt.KeypairTest do
       |> Keypair.extract_from()
 
     assert %Key{keylen: 3, keytype: @psbt_global_unsigned_tx, keydata: <<9, 8>>} == keypair.key
-    assert %Value{valuelen: 3, valuedata: <<5, 4, 6>>} == keypair.value
+    assert %Value{length: 3, data: <<5, 4, 6>>} == keypair.value
     assert <<4, 5, 6, 3>> == remaining
   end
 end

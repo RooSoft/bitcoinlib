@@ -12,7 +12,7 @@ defmodule BitcoinLib.Signing.Psbt.Keypair.ValueTest do
       data
       |> Value.extract_from()
 
-    assert %Value{valuelen: 2, valuedata: <<1, 1>>} == key
+    assert %Value{length: 2, data: <<1, 1>>} == key
     assert <<>> == data
   end
 
@@ -23,7 +23,7 @@ defmodule BitcoinLib.Signing.Psbt.Keypair.ValueTest do
       data
       |> Value.extract_from()
 
-    assert %Value{valuelen: 2, valuedata: <<3, 4>>} == key
+    assert %Value{length: 2, data: <<3, 4>>} == key
     assert <<2, 3, 4>> == data
   end
 end
