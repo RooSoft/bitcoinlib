@@ -40,4 +40,19 @@ defmodule BitcoinLib.Signing.Psbt.GlobalTest do
     assert 2 == Enum.count(global.keypairs)
     assert <<>> == remaining_data
   end
+
+  test "extract a global module from a binary, with two keypairs and some remaining data" do
+    key = <<2, @psbt_global_unsigned_tx, 1>>
+    value = <<2, 1, 1>>
+    keypair = key <> value
+    remaining_data = <<5, 1>>
+    data = <<keypair::binary, @stop, remaining_data::binary>>
+
+    {global, remaining_data} =
+      data
+      |> Global.from_data()
+
+    assert 1 == Enum.count(global.keypairs)
+    assert <<5, 1>> == remaining_data
+  end
 end
