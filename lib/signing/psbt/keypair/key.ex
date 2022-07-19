@@ -1,32 +1,54 @@
-# defmodule BitcoinLib.Signing.Psbt.Keypair.Key do
-#   @moduledoc """
-#   Extracts a keypair's key from a binary
-#   """
-#   defstruct [:keylen, :keytype, :keydata]
+defmodule BitcoinLib.Signing.Psbt.Keypair.Key do
+  @moduledoc """
+  Extracts a keypair's key from a binary according to the
+  [specification](https://github.com/bitcoin/bips/blob/master/bip-0174.mediawiki#specification)
 
-#   alias BitcoinLib.Signing.Psbt.CompactInteger
+  <key> := <keylen> <keytype> <keydata>
+  <value> := <valuelen> <valuedata>
+  """
+  defstruct [:keylen, :keytype, :keydata]
 
-#   defp extract_from(data) do
-#     {keylen, data} = extract_keylen(data)
-#     {keytype, data} = extract_keytype(data)
-#     {keydata, data} = extract_keydata(data)
+  @byte 8
 
-#   end
+  alias BitcoinLib.Signing.Psbt.CompactInteger
+  alias BitcoinLib.Signing.Psbt.Keypair.Key
 
-#   defp extract_keylen(data) do
-#     {keylen, data} = CompactInteger.extract_from(data)
-#     {keytype, data} = CompactInteger.extract_from(data)
+  def extract_from(data) do
+    extracted =
+      %{key: %Key{}, data: data}
+      |> extract_keylen()
+      |> extract_keytype()
+      |> extract_keydata()
 
-#     keydata_length =
+    {extracted.key, extracted.data}
+  end
 
-#     {keydata, data} =
-#   end
+  defp extract_keylen(%{data: data} = map) do
+    %{value: keylen, remaining: data} = CompactInteger.extract_from(data)
 
-#   defp extract_keytype(data) do
+    key = %Key{keylen: keylen}
 
-#   end
+    %{map | key: key, data: data}
+  end
 
-#   defp extract_keydata(data) do
+  defp extract_keytype(%{key: key, data: data} = map) do
+    %{value: keytype, size: keytype_length, remaining: data} = CompactInteger.extract_from(data)
 
-#   end
-# end
+    key = %Key{key | keytype: keytype}
+
+    %{map | key: key, data: data}
+    |> Map.put(:keytype_length, keytype_length)
+  end
+
+  defp extract_keydata(%{key: key, keytype_length: keytype_length, data: data} = map) do
+    keydata_length = key.keylen * @byte - keytype_length
+
+    <<keydata::size(keydata_length), data::bitstring>> = data
+
+    key =
+      key
+      |> Map.put(:keydata, keydata)
+
+    %{map | key: key, data: data}
+  end
+end
