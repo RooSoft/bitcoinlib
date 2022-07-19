@@ -4,7 +4,6 @@ defmodule BitcoinLib.Signing.Psbt.Keypair.Key do
   [specification](https://github.com/bitcoin/bips/blob/master/bip-0174.mediawiki#specification)
 
   <key> := <keylen> <keytype> <keydata>
-  <value> := <valuelen> <valuedata>
   """
   defstruct [:keylen, :keytype, :keydata]
 
