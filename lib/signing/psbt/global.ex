@@ -1,38 +1,38 @@
 defmodule BitcoinLib.Signing.Psbt.Global do
-  defstruct []
+  defstruct [:keypairs]
 
-  alias BitcoinLib.Signing.Psbt.{CompactInteger, Global}
+  @moduledoc """
+    Extracts the global section of a PSBT from a binary according to the
+    [specification](https://github.com/bitcoin/bips/blob/master/bip-0174.mediawiki#specification)
 
-  def from_data(_data) do
-  #  data
-  #  |> extract_keypairs()
-  #  |> IO.inspect()
+    <global-map> := <keypair>* 0x00
+  """
 
-    %Global{}
+  alias BitcoinLib.Signing.Psbt.{Global, Keypair}
+
+  def from_data(data) do
+    {remaining_data, keypairs} =
+      data
+      |> extract_keypairs()
+
+    {%Global{keypairs: keypairs}, remaining_data}
   end
 
-  # defp extract_keypairs(data) do
-  #   extract_keypairs([], data)
-  # end
+  defp extract_keypairs(data) do
+    extract_keypairs(data, [])
+  end
 
-  # defp extract_keypairs(keypairs, <<0::8, remaining::binary>>), do: {keypairs, remaining}
+  defp extract_keypairs(<<0>>, keypairs), do: {<<>>, keypairs}
+  defp extract_keypairs(<<0, remaining::binary>>, keypairs), do: {remaining, keypairs}
 
-  # defp extract_keypairs(keypairs, <<length::8, data::binary>>) do
-  #   {key, data} = extract_key(data)
-  #   {value, data} = extract_value(data)
+  defp extract_keypairs(data, keypairs) do
+    {keypair, data} = extract_keypair(data)
 
-  #   {keytype, data} = extract_keytype(data)
+    extract_keypairs(data, [keypair | keypairs])
+  end
 
-  #   data_length =
-
-
-  #   extract_keypairs([key | keypairs], data)
-  # end
-
-  # defp extract_key(data) do
-
-  # end
-
-  # defp extract_key(data), do: CompactInteger.extract_from(data)
-  # defp extract_keytype(data), do: CompactInteger.extract_from(data)
+  defp extract_keypair(data) do
+    data
+    |> Keypair.extract_from()
+  end
 end
