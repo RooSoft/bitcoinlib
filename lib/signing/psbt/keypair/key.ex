@@ -46,7 +46,7 @@ defmodule BitcoinLib.Signing.Psbt.Keypair.Key do
   defp extract_keydata(%{key: key, keytype_length: keytype_length, data: data} = map) do
     keydata_length = key.keylen * @byte - keytype_length
 
-    <<keydata::size(keydata_length), data::bitstring>> = data
+    <<keydata::bitstring-size(keydata_length), data::bitstring>> = data
 
     key =
       key

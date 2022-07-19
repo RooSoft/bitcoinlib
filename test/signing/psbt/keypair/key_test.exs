@@ -14,7 +14,7 @@ defmodule BitcoinLib.Signing.Psbt.Keypair.KeyTest do
       data
       |> Key.extract_from()
 
-    assert %Key{keylen: 2, keytype: @psbt_global_unsigned_tx, keydata: 1} == key
+    assert %Key{keylen: 2, keytype: @psbt_global_unsigned_tx, keydata: <<1>>} == key
     assert <<>> == data
   end
 
@@ -25,7 +25,7 @@ defmodule BitcoinLib.Signing.Psbt.Keypair.KeyTest do
       data
       |> Key.extract_from()
 
-    assert %Key{keylen: 2, keytype: @psbt_global_unsigned_tx, keydata: 1} == key
+    assert %Key{keylen: 2, keytype: @psbt_global_unsigned_tx, keydata: <<1>>} == key
     assert <<2, 3, 4>> == data
   end
 end
