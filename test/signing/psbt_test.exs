@@ -4,6 +4,7 @@ defmodule BitcoinLib.Signing.PsbtTest do
   doctest BitcoinLib.Signing.Psbt
 
   alias BitcoinLib.Signing.Psbt
+  alias BitcoinLib.Signing.Psbt.KeypairList
 
   test "parse a base64 PSBT string into a Psbt struct" do
     psbt_string =
@@ -13,6 +14,8 @@ defmodule BitcoinLib.Signing.PsbtTest do
       psbt_string
       |> Psbt.parse()
 
-    assert %Psbt{} = psbt
+    assert %KeypairList{} = psbt.global
+    assert %KeypairList{} = psbt.inputs
+    assert %KeypairList{} = psbt.outputs
   end
 end

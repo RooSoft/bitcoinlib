@@ -31,17 +31,20 @@ defmodule BitcoinLib.Signing.Psbt do
   end
 
   defp extract_global(map) do
-    map
-    |> Map.put(:global, KeypairList.from_data(map.data))
+    {global, remaining_data} = KeypairList.from_data(map.data)
+
+    %{Map.put(map, :global, global) | data: remaining_data}
   end
 
   defp extract_inputs(map) do
-    map
-    |> Map.put(:inputs, KeypairList.from_data(map.data))
+    {inputs, remaining_data} = KeypairList.from_data(map.data)
+
+    %{Map.put(map, :inputs, inputs) | data: remaining_data}
   end
 
   defp extract_outputs(map) do
-    map
-    |> Map.put(:outputs, KeypairList.from_data(map.data))
+    {outputs, remaining_data} = KeypairList.from_data(map.data)
+
+    %{Map.put(map, :outputs, outputs) | data: remaining_data}
   end
 end
