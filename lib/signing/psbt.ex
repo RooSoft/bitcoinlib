@@ -2,7 +2,7 @@ defmodule BitcoinLib.Signing.Psbt do
   defstruct [:global, :inputs, :outputs]
 
   alias BitcoinLib.Signing.Psbt
-  alias BitcoinLib.Signing.Psbt.KeypairList
+  alias BitcoinLib.Signing.Psbt.{KeypairList, Inputs}
 
   @magic 0x70736274
   @separator 0xFF
@@ -37,7 +37,8 @@ defmodule BitcoinLib.Signing.Psbt do
   end
 
   defp extract_inputs(map) do
-    {inputs, remaining_data} = KeypairList.from_data(map.data)
+    {keypairs, remaining_data} = KeypairList.from_data(map.data)
+    inputs = Inputs.from_keypair_list(keypairs)
 
     %{Map.put(map, :inputs, inputs) | data: remaining_data}
   end
