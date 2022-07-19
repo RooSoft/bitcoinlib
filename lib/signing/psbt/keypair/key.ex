@@ -5,7 +5,7 @@ defmodule BitcoinLib.Signing.Psbt.Keypair.Key do
 
   <key> := <keylen> <keytype> <keydata>
   """
-  defstruct [:keylen, :keytype, :keydata]
+  defstruct [:length, :type, :data]
 
   @byte 8
 
@@ -29,28 +29,28 @@ defmodule BitcoinLib.Signing.Psbt.Keypair.Key do
   defp extract_keylen(%{data: data} = map) do
     %{value: keylen, remaining: data} = CompactInteger.extract_from(data)
 
-    key = %Key{keylen: keylen}
+    key = %Key{length: keylen}
 
     %{map | key: key, data: data}
   end
 
   defp extract_keytype(%{key: key, data: data} = map) do
-    %{value: keytype, size: keytype_length, remaining: data} = CompactInteger.extract_from(data)
+    %{value: key_type, size: key_type_length, remaining: data} = CompactInteger.extract_from(data)
 
-    key = %Key{key | keytype: keytype}
+    key = %Key{key | type: key_type}
 
     %{map | key: key, data: data}
-    |> Map.put(:keytype_length, keytype_length)
+    |> Map.put(:key_type_length, key_type_length)
   end
 
-  defp extract_keydata(%{key: key, keytype_length: keytype_length, data: data} = map) do
-    keydata_length = key.keylen * @byte - keytype_length
+  defp extract_keydata(%{key: key, key_type_length: key_type_length, data: data} = map) do
+    key_data_length = key.length * @byte - key_type_length
 
-    <<keydata::bitstring-size(keydata_length), data::bitstring>> = data
+    <<key_data::bitstring-size(key_data_length), data::bitstring>> = data
 
     key =
       key
-      |> Map.put(:keydata, keydata)
+      |> Map.put(:data, key_data)
 
     %{map | key: key, data: data}
   end

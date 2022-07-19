@@ -11,7 +11,7 @@ defmodule BitcoinLib.Signing.Psbt.Inputs do
   end
 
   defp dispatch_keypair(%Keypair{key: key, value: value}, input) do
-    case key.keytype do
+    case key.type do
       @non_witness_utxo -> add_non_witness_utxo(input, value)
       _ -> add_unknown(input, key, value)
     end
