@@ -4,4 +4,6 @@ defmodule BitcoinLib.Signing.Psbt.InputsTest do
   doctest BitcoinLib.Signing.Psbt.Inputs
 
   # to be tested... will probably require somewhat large data such as a non-witness UTXO
+
+  # already tested for now from PsbtTest
 end
