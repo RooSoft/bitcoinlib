@@ -17,30 +17,39 @@ defmodule BitcoinLib.Signing.Psbt.CompactInteger do
   Extracts a variable length integer from a binary according to the spec linked in the moduledoc,
   returns a tuple containing the integer with the remaining of the binary
   """
-  @spec extract_from(binary()) :: {integer(), binary()}
-  def extract_from(<<@_16_bits_code::8, data::binary>>) do
+  @spec extract_from(binary(), :big_endian | :little_endian) :: {integer(), binary()}
+  def extract_from(data, endianness \\ :little_endian)
+
+  def extract_from(<<@_16_bits_code::8, data::binary>>, endianness) do
     data
-    |> extract_size(16)
+    |> extract_size(16, endianness)
   end
 
-  @spec extract_from(binary()) :: {integer(), binary()}
-  def extract_from(<<@_32_bits_code::8, data::binary>>) do
+  def extract_from(<<@_32_bits_code::8, data::binary>>, endianness) do
     data
-    |> extract_size(32)
+    |> extract_size(32, endianness)
   end
 
-  @spec extract_from(binary()) :: {integer(), binary()}
-  def extract_from(<<@_64_bits_code::8, data::binary>>) do
+  def extract_from(<<@_64_bits_code::8, data::binary>>, endianness) do
     data
-    |> extract_size(64)
+    |> extract_size(64, endianness)
   end
 
-  @spec extract_from(binary()) :: {integer(), binary()}
-  def extract_from(<<value::8, remaining::binary>>) do
+  def extract_from(<<value::8, remaining::binary>>, _endianness) do
     %CompactInteger{value: value, size: 8, remaining: remaining}
   end
 
-  defp extract_size(data, length) do
+  defp extract_size(data, length, :big_endian) do
+    case data do
+      <<value::size(length)>> ->
+        %CompactInteger{value: value, size: length, remaining: <<>>}
+
+      <<value::size(length), remaining::binary>> ->
+        %CompactInteger{value: value, size: length, remaining: remaining}
+    end
+  end
+
+  defp extract_size(data, length, :little_endian) do
     case data do
       <<value::little-size(length)>> ->
         %CompactInteger{value: value, size: length, remaining: <<>>}
