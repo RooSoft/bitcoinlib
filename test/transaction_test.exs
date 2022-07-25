@@ -13,6 +13,8 @@ defmodule BitcoinLib.TransactionTest do
 
     transaction = Transaction.decode(raw)
 
+    assert 0xEC148497 == transaction.locktime
+
     assert 1 == Enum.count(transaction.inputs)
     assert 1 == Enum.count(transaction.outputs)
 
