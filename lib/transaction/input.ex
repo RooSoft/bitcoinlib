@@ -5,17 +5,15 @@ defmodule BitcoinLib.Transaction.Input do
   Based on https://learnmeabitcoin.com/technical/input
   """
 
-  @input_termination 0xFFFFFFFF
-
   alias BitcoinLib.Signing.Psbt.CompactInteger
   alias BitcoinLib.Transaction.Input
 
   def extract_from(<<txid::little-256, vout::little-32, remaining::binary>>) do
     {script_sig, remaining} = extract_script_sig(remaining)
-    remaining = terminate(remaining)
+    {sequence, remaining} = extract_sequence(remaining)
 
     {
-      %Input{txid: txid, vout: vout, script_sig: script_sig},
+      %Input{txid: txid, vout: vout, script_sig: script_sig, sequence: sequence},
       remaining
     }
   end
@@ -29,9 +27,9 @@ defmodule BitcoinLib.Transaction.Input do
     {script_sig, remaining}
   end
 
-  defp terminate(remaining) do
-    <<@input_termination::32, remaining::bitstring>> = remaining
+  defp extract_sequence(remaining) do
+    <<sequence::little-32, remaining::bitstring>> = remaining
 
-    remaining
+    {sequence, remaining}
   end
 end
