@@ -2,14 +2,14 @@ defmodule BitcoinLib.Transaction do
   @moduledoc """
   Based on https://learnmeabitcoin.com/technical/transaction-data#fields
   """
-  defstruct [:input_count]
+  defstruct [:inputs, :outputs]
 
   alias BitcoinLib.Signing.Psbt.CompactInteger
   alias BitcoinLib.Transaction
   alias BitcoinLib.Transaction.{Input, Output}
 
   def decode(encoded_transaction) do
-    %{input_count: input_count} =
+    %{inputs: inputs, outputs: outputs} =
       %{remaining: encoded_transaction}
       |> extract_version
       |> extract_input_count
@@ -17,7 +17,7 @@ defmodule BitcoinLib.Transaction do
       |> extract_output_count
       |> extract_outputs
 
-    %Transaction{input_count: input_count}
+    %Transaction{inputs: inputs, outputs: outputs}
   end
 
   defp extract_version(%{remaining: <<version::32, remaining::bitstring>>} = map) do

@@ -7,7 +7,7 @@ defmodule BitcoinLib.TransactionTest do
 
   test "decode a transaction" do
     # should be
-    #{
+    # {
     #     "addresses": [
     #       "1KaNd8ybzTDYKpyMB9X2dstvMwo5ogo5bT"
     #   ],
@@ -49,10 +49,11 @@ defmodule BitcoinLib.TransactionTest do
 
     raw =
       "01000000017b1eabe0209b1fe794124575ef807057c77ada2138ae4fa8d6c4de0398a14f3f0000000000ffffffff01f0ca052a010000001976a914cbc20a7664f2f69e5355aa427045bc15e7c6c77288ac00000000"
-      |> Binary.from_hex
+      |> Binary.from_hex()
 
     transaction = Transaction.decode(raw)
 
-    assert 1 == transaction.input_count
+    assert 1 == Enum.count transaction.inputs
+    assert 1 == Enum.count transaction.outputs
   end
 end
