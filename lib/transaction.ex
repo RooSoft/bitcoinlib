@@ -6,7 +6,7 @@ defmodule BitcoinLib.Transaction do
 
   alias BitcoinLib.Signing.Psbt.CompactInteger
   alias BitcoinLib.Transaction
-  alias BitcoinLib.Transaction.{Input}
+  alias BitcoinLib.Transaction.{Input, Output}
 
   def decode(encoded_transaction) do
     %{input_count: input_count} =
@@ -15,8 +15,7 @@ defmodule BitcoinLib.Transaction do
       |> extract_input_count
       |> extract_inputs
       |> extract_output_count
-
-    #    |> extract_outputs
+      |> extract_outputs
 
     %Transaction{input_count: input_count}
   end
@@ -55,7 +54,16 @@ defmodule BitcoinLib.Transaction do
     |> Map.put(:output_count, output_count)
   end
 
-  # defp extract_outputs(%{output_count: output_count, remaininig: remaining} = map) do
+  defp extract_outputs(%{output_count: output_count, remaining: remaining} = map) do
+    {outputs, remaining} =
+      1..output_count
+      |> Enum.reduce({[], remaining}, fn _nb, {outputs, remaining} ->
+        {output, remaining} = Output.extract_from(remaining)
 
-  # end
+        {[output | outputs], remaining}
+      end)
+
+    %{map | remaining: remaining}
+    |> Map.put(:outputs, outputs)
+  end
 end

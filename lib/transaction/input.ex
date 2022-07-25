@@ -8,7 +8,7 @@ defmodule BitcoinLib.Transaction.Input do
   alias BitcoinLib.Signing.Psbt.CompactInteger
   alias BitcoinLib.Transaction.Input
 
-  def extract_from(<<txid::little-256, vout::little-32, remaining::binary>>) do
+  def extract_from(<<txid::little-256, vout::little-32, remaining::bitstring>>) do
     {script_sig, remaining} = extract_script_sig(remaining)
     {sequence, remaining} = extract_sequence(remaining)
 

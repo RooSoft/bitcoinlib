@@ -14,28 +14,28 @@ defmodule BitcoinLib.Signing.Psbt.CompactInteger do
   @_64_bits_code 0xFF
 
   @doc """
-  Extracts a variable length integer from a binary according to the spec linked in the moduledoc,
-  returns a tuple containing the integer with the remaining of the binary
+  Extracts a variable length integer from a bitstring according to the spec linked in the moduledoc,
+  returns a tuple containing the integer with the remaining of the bitstring
   """
-  @spec extract_from(binary(), :big_endian | :little_endian) :: {integer(), binary()}
+  @spec extract_from(bitstring(), :big_endian | :little_endian) :: {integer(), bitstring()}
   def extract_from(data, endianness \\ :little_endian)
 
-  def extract_from(<<@_16_bits_code::8, data::binary>>, endianness) do
+  def extract_from(<<@_16_bits_code::8, data::bitstring>>, endianness) do
     data
     |> extract_size(16, endianness)
   end
 
-  def extract_from(<<@_32_bits_code::8, data::binary>>, endianness) do
+  def extract_from(<<@_32_bits_code::8, data::bitstring>>, endianness) do
     data
     |> extract_size(32, endianness)
   end
 
-  def extract_from(<<@_64_bits_code::8, data::binary>>, endianness) do
+  def extract_from(<<@_64_bits_code::8, data::bitstring>>, endianness) do
     data
     |> extract_size(64, endianness)
   end
 
-  def extract_from(<<value::8, remaining::binary>>, _endianness) do
+  def extract_from(<<value::8, remaining::bitstring>>, _endianness) do
     %CompactInteger{value: value, size: 8, remaining: remaining}
   end
 
@@ -44,7 +44,7 @@ defmodule BitcoinLib.Signing.Psbt.CompactInteger do
       <<value::size(length)>> ->
         %CompactInteger{value: value, size: length, remaining: <<>>}
 
-      <<value::size(length), remaining::binary>> ->
+      <<value::size(length), remaining::bitstring>> ->
         %CompactInteger{value: value, size: length, remaining: remaining}
     end
   end
@@ -54,7 +54,7 @@ defmodule BitcoinLib.Signing.Psbt.CompactInteger do
       <<value::little-size(length)>> ->
         %CompactInteger{value: value, size: length, remaining: <<>>}
 
-      <<value::little-size(length), remaining::binary>> ->
+      <<value::little-size(length), remaining::bitstring>> ->
         %CompactInteger{value: value, size: length, remaining: remaining}
     end
   end
