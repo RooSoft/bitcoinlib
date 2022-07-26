@@ -4,7 +4,7 @@ defmodule BitcoinLib.Signing.PsbtTest do
   doctest BitcoinLib.Signing.Psbt
 
   alias BitcoinLib.Signing.Psbt
-  alias BitcoinLib.Signing.Psbt.{Global, Inputs}
+  alias BitcoinLib.Signing.Psbt.{Global, Input}
 
   test "parse a base64 PSBT string into a Psbt struct" do
     psbt_string =
@@ -15,8 +15,8 @@ defmodule BitcoinLib.Signing.PsbtTest do
       |> Psbt.parse()
 
     assert %Global{} = psbt.global
-    assert [%Inputs{}] = psbt.inputs
-    # assert %KeypairList{} = psbt.outputs
+    assert [%Input{}] = psbt.inputs
+   # assert [%Outputs{}] = psbt.outputs
   end
 
   # test "a PSBT with a non witness UTXO" do
