@@ -2,6 +2,7 @@ defmodule BitcoinLib.Signing.Psbt.Input do
   defstruct [:utxo, :witness?, unknowns: []]
 
   alias BitcoinLib.Signing.Psbt.{Keypair, KeypairList, Input}
+  alias BitcoinLib.Signing.Psbt.Input.{WitnessUtxo}
 
   @non_witness_utxo 0
   @witness_utxo 1
@@ -9,6 +10,7 @@ defmodule BitcoinLib.Signing.Psbt.Input do
   def from_keypair_list(%KeypairList{} = keypair_list) do
     keypair_list.keypairs
     |> Enum.reduce(%Input{}, &dispatch_keypair/2)
+#    |> IO.inspect()
   end
 
   defp dispatch_keypair(%Keypair{key: key, value: value}, input) do
@@ -21,13 +23,15 @@ defmodule BitcoinLib.Signing.Psbt.Input do
 
   defp add_non_witness_utxo(input, value) do
     input
-    |> Map.put(:utxo, value.data)
+    |> Map.put(:utxo, Binary.to_hex(value.data))
     |> Map.put(:witness?, false)
   end
 
   defp add_witness_utxo(input, value) do
+    {witness_utxo, _remaining} = WitnessUtxo.parse(value.data)
+
     input
-    |> Map.put(:utxo, value.data)
+    |> Map.put(:utxo, witness_utxo)
     |> Map.put(:witness?, true)
   end
 
