@@ -1,4 +1,4 @@
-defmodule BitcoinLib.Signing.Psbt.InputsTest do
+defmodule BitcoinLib.Signing.Psbt.InputTest do
   use ExUnit.Case, async: true
 
   doctest BitcoinLib.Signing.Psbt.Input
