@@ -48,7 +48,13 @@ defmodule BitcoinLib.Signing.Psbt do
   defp extract_keypair_lists(%{data: remaining} = map, keypair_lists) do
     {keypair_list, remaining} = KeypairList.from_data(remaining)
 
-    extract_keypair_lists(%{map | data: remaining}, [keypair_list | keypair_lists])
+    keypair_lists =
+      case keypair_list do
+        nil -> keypair_lists
+        _ -> [keypair_list | keypair_lists]
+      end
+
+    extract_keypair_lists(%{map | data: remaining}, keypair_lists)
   end
 
   defp dispatch_keypair_lists(

@@ -17,7 +17,10 @@ defmodule BitcoinLib.Signing.Psbt.KeypairList do
       data
       |> extract_keypairs()
 
-    {%KeypairList{keypairs: keypairs}, remaining_data}
+    case keypairs do
+      [] -> {nil, remaining_data}
+      _ -> {%KeypairList{keypairs: keypairs}, remaining_data}
+    end
   end
 
   defp extract_keypairs(data) do
