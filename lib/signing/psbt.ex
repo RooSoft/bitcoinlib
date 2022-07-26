@@ -10,14 +10,17 @@ defmodule BitcoinLib.Signing.Psbt do
   @spec parse(binary()) :: %Psbt{}
   def parse(encoded) do
     map =
-      %{encoded: encoded}
+      %{encoded: encoded, keypair_lists: []}
       |> base64_decode()
       |> extract_data()
       |> extract_global()
+      |> extract_keypair_lists()
       |> extract_inputs()
-      |> extract_outputs()
 
-    %Psbt{global: map.global, inputs: map.inputs, outputs: map.outputs}
+    #  |> extract_outputs()
+
+    # , outputs: map.outputs}
+    %Psbt{global: map.global, inputs: map.inputs}
   end
 
   defp base64_decode(%{encoded: encoded} = map) do
@@ -30,6 +33,29 @@ defmodule BitcoinLib.Signing.Psbt do
     |> Map.put(:data, data)
   end
 
+  defp extract_keypair_lists(
+         %{data: <<>>, global: %Global{unsigned_tx: transaction}, keypair_lists: keypair_lists} =
+           map
+       ) do
+    inputs_count = Enum.count(transaction.inputs)
+
+    {input_keypair_lists, output_keypair_lists} =
+      keypair_lists
+      |> Enum.split(inputs_count)
+
+    map
+    |> Map.put(:input_keypair_lists, input_keypair_lists)
+    |> Map.put(:output_keypair_lists, output_keypair_lists)
+  end
+
+  defp extract_keypair_lists(%{data: remaining, keypair_lists: keypair_lists} = map) do
+    {keypair_list, remaining} = KeypairList.from_data(remaining)
+
+    new_map = %{map | data: remaining, keypair_lists: [keypair_list | keypair_lists]}
+
+    extract_keypair_lists(new_map)
+  end
+
   defp extract_global(map) do
     {keypairs, remaining_data} = KeypairList.from_data(map.data)
 
@@ -38,16 +64,21 @@ defmodule BitcoinLib.Signing.Psbt do
     %{Map.put(map, :global, global) | data: remaining_data}
   end
 
-  defp extract_inputs(map) do
-    {keypairs, remaining_data} = KeypairList.from_data(map.data)
-    inputs = Inputs.from_keypair_list(keypairs)
+  defp extract_inputs(%{input_keypair_lists: keypair_lists} = map) do
+    inputs =
+      keypair_lists
+      |> Enum.map(&Inputs.from_keypair_list/1)
 
-    %{Map.put(map, :inputs, inputs) | data: remaining_data}
+    map
+    |> Map.put(:inputs, inputs)
   end
 
-  defp extract_outputs(map) do
-    {outputs, remaining_data} = KeypairList.from_data(map.data)
+  # defp extract_outputs(%{output_keypair_lists: keypair_lists} = map) do
+  #   outputs =
+  #     keypair_lists
+  #     |> Enum.map(&Outputs.from_keypair_list/1)
 
-    %{Map.put(map, :outputs, outputs) | data: remaining_data}
-  end
+  #   map
+  #   |> Map.put(:outputs, outputs)
+  # end
 end
