@@ -67,6 +67,23 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
     |> maybe_parse_valid_derivation_path()
   end
 
+  @doc """
+  Retruns a %DerivationPath from a set of parameters, with these values potentially missing:
+  coin_type, account, change, address_index
+
+  ## Examples
+    iex> BitcoinLib.Key.HD.DerivationPath.from_values("M", 0x80000054, 0x80000000, 0x80000000, 0, 0)
+    %BitcoinLib.Key.HD.DerivationPath{
+      type: "M",
+      purpose: 0x80000054,
+      coin_type: 0x80000000,
+      account: 0x80000000,
+      change: 0,
+      address_index: 0
+    }
+  """
+  @spec from_values(binary(), integer(), integer(), integer(), integer(), integer()) ::
+          %DerivationPath{}
   def from_values(
         type,
         purpose,
