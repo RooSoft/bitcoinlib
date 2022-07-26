@@ -67,6 +67,24 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
     |> maybe_parse_valid_derivation_path()
   end
 
+  def from_values(
+        type,
+        purpose,
+        coin_type \\ nil,
+        account \\ nil,
+        change \\ nil,
+        address_index \\ nil
+      ) do
+    %DerivationPath{
+      type: type,
+      purpose: purpose,
+      coin_type: coin_type,
+      account: account,
+      change: change,
+      address_index: address_index
+    }
+  end
+
   defp validate(derivation_path) do
     trimmed_path =
       derivation_path
@@ -139,16 +157,20 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
     end)
   end
 
+  defp parse_purpose(purpose) when is_integer(purpose) do
+    case purpose do
+      @bip44_purpose -> @bip44_atom
+      @bip49_purpose -> @bip49_atom
+      @bip84_purpose -> @bip84_atom
+      _ -> @invalid_atom
+    end
+  end
+
   defp parse_purpose(%{purpose: %{hardened?: true, value: value}} = hash) do
     hash
     |> Map.put(
       :purpose,
-      case value do
-        @bip44_purpose -> @bip44_atom
-        @bip49_purpose -> @bip49_atom
-        @bip84_purpose -> @bip84_atom
-        _ -> @invalid_atom
-      end
+      parse_purpose(value)
     )
   end
 
