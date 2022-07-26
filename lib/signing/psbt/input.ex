@@ -22,7 +22,6 @@ defmodule BitcoinLib.Signing.Psbt.Input do
   def from_keypair_list(%KeypairList{} = keypair_list) do
     keypair_list.keypairs
     |> Enum.reduce(%Input{}, &dispatch_keypair/2)
-    |> IO.inspect()
   end
 
   defp dispatch_keypair(%Keypair{key: key, value: value}, input) do

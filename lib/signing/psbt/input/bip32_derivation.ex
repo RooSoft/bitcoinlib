@@ -2,6 +2,7 @@ defmodule BitcoinLib.Signing.Psbt.Input.Bip32Derivation do
   defstruct [:pub_key, :fingerprint, :derivation_path]
 
   alias BitcoinLib.Signing.Psbt.Input.Bip32Derivation
+  #alias BitcoinLib.Key.HD.DerivationPath
 
   def parse(binary_pub_key, remaining) do
     {fingerprint, remaining} = extract_fingerprint(remaining)
@@ -10,6 +11,7 @@ defmodule BitcoinLib.Signing.Psbt.Input.Bip32Derivation do
     %Bip32Derivation{
       pub_key: Binary.to_hex(binary_pub_key),
       fingerprint: Integer.to_string(fingerprint, 16) |> String.downcase(),
+      # DerivationPath.from_values(["M" | derivation_path])
       derivation_path: derivation_path
     }
   end
