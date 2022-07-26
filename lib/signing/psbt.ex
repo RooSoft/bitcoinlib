@@ -40,7 +40,7 @@ defmodule BitcoinLib.Signing.Psbt do
     %{Map.put(map, :global, global) | data: remaining_data}
   end
 
-  defp extract_keypair_lists(%{data: <<>>} = map, keypair_lists) do
+  defp extract_keypair_lists(%{data: <<0>>} = map, keypair_lists) do
     map
     |> Map.put(:keypair_lists, Enum.reverse(keypair_lists))
   end

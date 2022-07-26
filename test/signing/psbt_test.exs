@@ -16,7 +16,7 @@ defmodule BitcoinLib.Signing.PsbtTest do
 
     assert %Global{} = psbt.global
     assert [%Input{}] = psbt.inputs
-    assert [%Output{}] = psbt.outputs
+    assert [] = psbt.outputs
   end
 
   # test "a PSBT with a non witness UTXO" do
