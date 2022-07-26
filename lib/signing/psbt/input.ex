@@ -1,5 +1,14 @@
 defmodule BitcoinLib.Signing.Psbt.Input do
-  defstruct [:utxo, :witness?, :partial_sig, :redeem_script, :witness_script, bip32_derivations: [], unknowns: []]
+  defstruct [
+    :utxo,
+    :witness?,
+    :partial_sig,
+    :redeem_script,
+    :witness_script,
+    :final_script_sig,
+    bip32_derivations: [],
+    unknowns: []
+  ]
 
   alias BitcoinLib.Signing.Psbt.{Keypair, KeypairList, Input}
 
@@ -9,7 +18,8 @@ defmodule BitcoinLib.Signing.Psbt.Input do
     PartialSig,
     RedeemScript,
     WitnessScript,
-    Bip32Derivation
+    Bip32Derivation,
+    FinalScriptSig
   }
 
   @non_witness_utxo 0
@@ -18,6 +28,7 @@ defmodule BitcoinLib.Signing.Psbt.Input do
   @redeem_script 4
   @witness_script 5
   @bip32_derivation 6
+  @final_script_sig 7
 
   def from_keypair_list(%KeypairList{} = keypair_list) do
     keypair_list.keypairs
@@ -32,6 +43,7 @@ defmodule BitcoinLib.Signing.Psbt.Input do
       @redeem_script -> add_redeem_script(input, value)
       @witness_script -> add_witness_script(input, value)
       @bip32_derivation -> add_bip32_derivation(input, key.data, value)
+      @final_script_sig -> add_final_script_sig(input, value)
       _ -> add_unknown(input, key, value)
     end
   end
@@ -70,6 +82,11 @@ defmodule BitcoinLib.Signing.Psbt.Input do
 
     input
     |> Map.put(:bip32_derivations, [derivation | derivations])
+  end
+
+  defp add_final_script_sig(input, value) do
+    input
+    |> Map.put(:final_script_sig, FinalScriptSig.parse(value.data))
   end
 
   defp add_unknown(input, key, value) do

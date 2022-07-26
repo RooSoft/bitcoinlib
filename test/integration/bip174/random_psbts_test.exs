@@ -6,6 +6,7 @@ defmodule BitcoinLib.Test.Integration.Bip84.RandomPsbtsTest do
 
   alias BitcoinLib.Signing.Psbt
   alias BitcoinLib.Signing.Psbt.{Input}
+  alias BitcoinLib.Signing.Psbt.Input.{WitnessUtxo, FinalScriptSig}
 
   @doc """
   based on https://github.com/bitcoin/bips/blob/master/bip-0084.mediawiki#test-vectors
@@ -17,6 +18,23 @@ defmodule BitcoinLib.Test.Integration.Bip84.RandomPsbtsTest do
     psbt = base_64 |> Psbt.parse()
 
     assert [%Input{utxo: %BitcoinLib.Signing.Psbt.Input.NonWitnessUtxo{}}] = psbt.inputs
+    assert [] = psbt.outputs
+  end
+
+  test "Case: PSBT with one P2PKH input and one P2SH-P2WPKH input. First input is signed and finalized. Outputs are empty" do
+    base_64 =
+      "cHNidP8BAKACAAAAAqsJSaCMWvfEm4IS9Bfi8Vqz9cM9zxU4IagTn4d6W3vkAAAAAAD+////qwlJoIxa98SbghL0F+LxWrP1wz3PFTghqBOfh3pbe+QBAAAAAP7///8CYDvqCwAAAAAZdqkUdopAu9dAy+gdmI5x3ipNXHE5ax2IrI4kAAAAAAAAGXapFG9GILVT+glechue4O/p+gOcykWXiKwAAAAAAAEHakcwRAIgR1lmF5fAGwNrJZKJSGhiGDR9iYZLcZ4ff89X0eURZYcCIFMJ6r9Wqk2Ikf/REf3xM286KdqGbX+EhtdVRs7tr5MZASEDXNxh/HupccC1AaZGoqg7ECy0OIEhfKaC3Ibi1z+ogpIAAQEgAOH1BQAAAAAXqRQ1RebjO4MsRwUPJNPuuTycA5SLx4cBBBYAFIXRNTfy4mVAWjTbr6nj3aAfuCMIAAAA"
+
+    psbt = base_64 |> Psbt.parse()
+
+    assert [
+             %Input{
+               utxo: nil,
+               final_script_sig: %FinalScriptSig{}
+             },
+             %Input{utxo: %WitnessUtxo{}}
+           ] = psbt.inputs
+
     assert [] = psbt.outputs
   end
 end
