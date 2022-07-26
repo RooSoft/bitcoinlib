@@ -36,12 +36,18 @@ defmodule BitcoinLib.Transaction do
 
   defp extract_inputs(%{input_count: input_count, remaining: remaining} = map) do
     {inputs, remaining} =
-      1..input_count
-      |> Enum.reduce({[], remaining}, fn _nb, {inputs, remaining} ->
-        {input, remaining} = Input.extract_from(remaining)
+      case input_count do
+        0 ->
+          {[], remaining}
 
-        {[input | inputs], remaining}
-      end)
+        _ ->
+          1..input_count
+          |> Enum.reduce({[], remaining}, fn _nb, {inputs, remaining} ->
+            {input, remaining} = Input.extract_from(remaining)
+
+            {[input | inputs], remaining}
+          end)
+      end
 
     %{map | remaining: remaining}
     |> Map.put(:inputs, inputs)
