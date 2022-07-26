@@ -10,11 +10,12 @@ defmodule BitcoinLib.Signing.Psbt do
   @spec parse(binary()) :: %Psbt{}
   def parse(encoded) do
     map =
-      %{encoded: encoded, keypair_lists: []}
+      %{encoded: encoded}
       |> base64_decode()
       |> extract_data()
       |> extract_global()
-      |> extract_keypair_lists()
+      |> extract_keypair_lists([])
+      |> dispatch_keypair_lists()
       |> extract_inputs()
       |> extract_outputs()
 
@@ -31,9 +32,27 @@ defmodule BitcoinLib.Signing.Psbt do
     |> Map.put(:data, data)
   end
 
-  defp extract_keypair_lists(
-         %{data: <<>>, global: %Global{unsigned_tx: transaction}, keypair_lists: keypair_lists} =
-           map
+  defp extract_global(map) do
+    {keypairs, remaining_data} = KeypairList.from_data(map.data)
+
+    global = Global.from_keypair_list(keypairs)
+
+    %{Map.put(map, :global, global) | data: remaining_data}
+  end
+
+  defp extract_keypair_lists(%{data: <<>>} = map, keypair_lists) do
+    map
+    |> Map.put(:keypair_lists, Enum.reverse(keypair_lists))
+  end
+
+  defp extract_keypair_lists(%{data: remaining} = map, keypair_lists) do
+    {keypair_list, remaining} = KeypairList.from_data(remaining)
+
+    extract_keypair_lists(%{map | data: remaining}, [keypair_list | keypair_lists])
+  end
+
+  defp dispatch_keypair_lists(
+         %{global: %Global{unsigned_tx: transaction}, keypair_lists: keypair_lists} = map
        ) do
     inputs_count = Enum.count(transaction.inputs)
 
@@ -44,22 +63,6 @@ defmodule BitcoinLib.Signing.Psbt do
     map
     |> Map.put(:input_keypair_lists, input_keypair_lists)
     |> Map.put(:output_keypair_lists, output_keypair_lists)
-  end
-
-  defp extract_keypair_lists(%{data: remaining, keypair_lists: keypair_lists} = map) do
-    {keypair_list, remaining} = KeypairList.from_data(remaining)
-
-    new_map = %{map | data: remaining, keypair_lists: [keypair_list | keypair_lists]}
-
-    extract_keypair_lists(new_map)
-  end
-
-  defp extract_global(map) do
-    {keypairs, remaining_data} = KeypairList.from_data(map.data)
-
-    global = Global.from_keypair_list(keypairs)
-
-    %{Map.put(map, :global, global) | data: remaining_data}
   end
 
   defp extract_inputs(%{input_keypair_lists: keypair_lists} = map) do

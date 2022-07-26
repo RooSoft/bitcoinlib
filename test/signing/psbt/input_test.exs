@@ -3,7 +3,7 @@ defmodule BitcoinLib.Signing.Psbt.InputTest do
 
   doctest BitcoinLib.Signing.Psbt.Input
 
-  # to be tested... will probably require somewhat large data such as a non-witness UTXO
-
-  # already tested for now from PsbtTest
+  # test "an input with a non-witness UTXO" do
+  #   assert true
+  # end
 end
