@@ -183,6 +183,26 @@ defmodule BitcoinLib.Key.HD.DerivationPathTest do
     purpose = @hardened + 84
     coin_type = @hardened
     account = @hardened
+    change = 0
+    address_index = 0
+
+    derivation_path = DerivationPath.from_values(type, purpose, coin_type, account, change, address_index)
+
+    assert %DerivationPath{
+             type: "M",
+             purpose: 0x8000054,
+             coin_type: 0x8000000,
+             account: 0x8000000,
+             change: 0,
+             address_index: 0
+           } = derivation_path
+  end
+
+  test "derivation path from values, some missing" do
+    type = "M"
+    purpose = @hardened + 84
+    coin_type = @hardened
+    account = @hardened
 
     derivation_path = DerivationPath.from_values(type, purpose, coin_type, account)
 
