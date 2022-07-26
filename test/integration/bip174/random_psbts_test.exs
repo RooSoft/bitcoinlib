@@ -1,4 +1,7 @@
 defmodule BitcoinLib.Test.Integration.Bip84.RandomPsbtsTest do
+  @moduledoc """
+  These are from the valid PSBT section of this document https://github.com/bitcoin/bips/blob/master/bip-0174.mediawiki#test-vectors
+  """
   use ExUnit.Case, async: true
 
   alias BitcoinLib.Signing.Psbt
