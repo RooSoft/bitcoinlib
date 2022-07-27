@@ -1,4 +1,4 @@
-defmodule BitcoinLib.Test.Integration.Bip174.RandomPsbtsTest do
+defmodule BitcoinLib.Test.Integration.Bip174.ValidPsbtsTest do
   @moduledoc """
   These are from the valid PSBT section of this document https://github.com/bitcoin/bips/blob/master/bip-0174.mediawiki#test-vectors
   """
