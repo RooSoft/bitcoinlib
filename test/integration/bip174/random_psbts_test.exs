@@ -1,11 +1,11 @@
-defmodule BitcoinLib.Test.Integration.Bip84.RandomPsbtsTest do
+defmodule BitcoinLib.Test.Integration.Bip174.RandomPsbtsTest do
   @moduledoc """
   These are from the valid PSBT section of this document https://github.com/bitcoin/bips/blob/master/bip-0174.mediawiki#test-vectors
   """
   use ExUnit.Case, async: true
 
   alias BitcoinLib.Signing.Psbt
-  alias BitcoinLib.Signing.Psbt.{Input}
+  alias BitcoinLib.Signing.Psbt.{Input, Output}
   alias BitcoinLib.Signing.Psbt.Input.{NonWitnessUtxo, WitnessUtxo, FinalScriptSig, SighashType}
 
   @doc """
@@ -47,5 +47,19 @@ defmodule BitcoinLib.Test.Integration.Bip84.RandomPsbtsTest do
     assert [%Input{utxo: %NonWitnessUtxo{}, sighash_type: %SighashType{}}] = psbt.inputs
 
     assert [] = psbt.outputs
+  end
+
+  test "Case: PSBT with one P2PKH input and one P2SH-P2WPKH input both with non-final scriptSigs. P2SH-P2WPKH input's redeemScript is available. Outputs filled." do
+    base_64 =
+      "cHNidP8BAKACAAAAAqsJSaCMWvfEm4IS9Bfi8Vqz9cM9zxU4IagTn4d6W3vkAAAAAAD+////qwlJoIxa98SbghL0F+LxWrP1wz3PFTghqBOfh3pbe+QBAAAAAP7///8CYDvqCwAAAAAZdqkUdopAu9dAy+gdmI5x3ipNXHE5ax2IrI4kAAAAAAAAGXapFG9GILVT+glechue4O/p+gOcykWXiKwAAAAAAAEA3wIAAAABJoFxNx7f8oXpN63upLN7eAAMBWbLs61kZBcTykIXG/YAAAAAakcwRAIgcLIkUSPmv0dNYMW1DAQ9TGkaXSQ18Jo0p2YqncJReQoCIAEynKnazygL3zB0DsA5BCJCLIHLRYOUV663b8Eu3ZWzASECZX0RjTNXuOD0ws1G23s59tnDjZpwq8ubLeXcjb/kzjH+////AtPf9QUAAAAAGXapFNDFmQPFusKGh2DpD9UhpGZap2UgiKwA4fUFAAAAABepFDVF5uM7gyxHBQ8k0+65PJwDlIvHh7MuEwAAAQEgAOH1BQAAAAAXqRQ1RebjO4MsRwUPJNPuuTycA5SLx4cBBBYAFIXRNTfy4mVAWjTbr6nj3aAfuCMIACICAurVlmh8qAYEPtw94RbN8p1eklfBls0FXPaYyNAr8k6ZELSmumcAAACAAAAAgAIAAIAAIgIDlPYr6d8ZlSxVh3aK63aYBhrSxKJciU9H2MFitNchPQUQtKa6ZwAAAIABAACAAgAAgAA="
+
+    psbt = base_64 |> Psbt.parse()
+
+    assert [
+             %Input{utxo: %NonWitnessUtxo{}},
+             %Input{utxo: %WitnessUtxo{}}
+           ] = psbt.inputs
+
+    assert [%Output{}, %Output{}] = psbt.outputs
   end
 end

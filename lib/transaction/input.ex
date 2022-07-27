@@ -13,7 +13,12 @@ defmodule BitcoinLib.Transaction.Input do
     {sequence, remaining} = extract_sequence(remaining)
 
     {
-      %Input{txid: txid, vout: vout, script_sig: script_sig, sequence: sequence},
+      %Input{
+        txid: txid,
+        vout: vout,
+        script_sig: script_sig,
+        sequence: sequence
+      },
       remaining
     }
   end

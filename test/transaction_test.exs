@@ -13,8 +13,8 @@ defmodule BitcoinLib.TransactionTest do
 
     transaction = Transaction.decode(raw)
 
-    assert 0x1 = transaction.version
-    assert 0xEC148497 == transaction.locktime
+    assert 1 == transaction.version
+    assert 0 == transaction.locktime
 
     assert 1 == Enum.count(transaction.inputs)
     assert 1 == Enum.count(transaction.outputs)
@@ -27,7 +27,7 @@ defmodule BitcoinLib.TransactionTest do
            } = List.first(transaction.inputs)
 
     assert %Output{
-             script_pub_key: 0xED5229,
+             script_pub_key: "76a914cbc20a7664f2f69e5355aa427045bc15e7c6c77288ac",
              value: 0x12A05CAF0
            } = List.first(transaction.outputs)
   end

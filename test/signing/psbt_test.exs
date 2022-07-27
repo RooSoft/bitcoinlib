@@ -49,19 +49,7 @@ defmodule BitcoinLib.Signing.PsbtTest do
 
     assert false == input.witness?
 
-    assert %BitcoinLib.Signing.Psbt.Input.NonWitnessUtxo{
-             transaction: %BitcoinLib.Transaction{
-               inputs: [],
-               locktime: 0x14001617,
-               outputs: [
-                 %BitcoinLib.Transaction.Output{
-                   script_pub_key: 0x371BBBA4CC698FA295C9463AFA2E397F8533CCB62F9567E501000000,
-                   value: 0x204DAB1EC7A38902
-                 }
-               ],
-               version: 1
-             }
-           } == input.utxo
+    assert %BitcoinLib.Signing.Psbt.Input.NonWitnessUtxo{} = input.utxo
   end
 
   # test "a PSBT without any output" do

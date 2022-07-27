@@ -50,7 +50,7 @@ defmodule BitcoinLib.Transaction do
       end
 
     %{map | remaining: remaining}
-    |> Map.put(:inputs, inputs)
+    |> Map.put(:inputs, Enum.reverse(inputs))
   end
 
   defp extract_output_count(%{remaining: remaining} = map) do
