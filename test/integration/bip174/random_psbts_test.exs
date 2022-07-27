@@ -144,4 +144,13 @@ defmodule BitcoinLib.Test.Integration.Bip174.RandomPsbtsTest do
     assert [] = psbt.inputs
     assert [] = psbt.outputs
   end
+
+  test "Case: PSBT with 0 inputs" do
+    base_64 =
+      "cHNidP8BAEwCAAAAAALT3/UFAAAAABl2qRTQxZkDxbrChodg6Q/VIaRmWqdlIIisAOH1BQAAAAAXqRQ1RebjO4MsRwUPJNPuuTycA5SLx4ezLhMAAAAA"
+
+    psbt = base_64 |> Psbt.parse()
+
+    assert [] = psbt.inputs
+  end
 end
