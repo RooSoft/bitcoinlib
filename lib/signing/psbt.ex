@@ -7,7 +7,7 @@ defmodule BitcoinLib.Signing.Psbt do
   @magic 0x70736274
   @separator 0xFF
 
-  @spec parse(binary()) :: %Psbt{}
+  @spec parse(binary()) :: {:ok, %Psbt{}} | {:error, binary()}
   def parse(encoded) do
     map =
       %{encoded: encoded}
@@ -19,7 +19,13 @@ defmodule BitcoinLib.Signing.Psbt do
       |> extract_inputs()
       |> extract_outputs()
 
-    %Psbt{global: map.global, inputs: map.inputs, outputs: map.outputs}
+    case Map.get(map, :error) do
+      nil ->
+        {:ok, %Psbt{global: map.global, inputs: map.inputs, outputs: map.outputs}}
+
+      message ->
+        {:error, message}
+    end
   end
 
   defp base64_decode(%{encoded: encoded} = map) do
@@ -32,12 +38,25 @@ defmodule BitcoinLib.Signing.Psbt do
     |> Map.put(:data, data)
   end
 
+  defp extract_data(map) do
+    map
+    |> Map.put(:error, "magic bytes missing")
+  end
+
+  defp extract_global(%{error: error} = map) when is_binary(error) do
+    map
+  end
+
   defp extract_global(map) do
     {keypairs, remaining_data} = KeypairList.from_data(map.data)
 
     global = Global.from_keypair_list(keypairs)
 
     %{Map.put(map, :global, global) | data: remaining_data}
+  end
+
+  defp extract_keypair_lists(%{error: error} = map, _) when is_binary(error) do
+    map
   end
 
   defp extract_keypair_lists(%{data: <<0>>} = map, keypair_lists) do
@@ -62,6 +81,10 @@ defmodule BitcoinLib.Signing.Psbt do
     extract_keypair_lists(%{map | data: remaining}, keypair_lists)
   end
 
+  defp dispatch_keypair_lists(%{error: error} = map) when is_binary(error) do
+    map
+  end
+
   defp dispatch_keypair_lists(
          %{global: %Global{unsigned_tx: transaction}, keypair_lists: keypair_lists} = map
        ) do
@@ -76,6 +99,10 @@ defmodule BitcoinLib.Signing.Psbt do
     |> Map.put(:output_keypair_lists, output_keypair_lists)
   end
 
+  defp extract_inputs(%{error: error} = map) when is_binary(error) do
+    map
+  end
+
   defp extract_inputs(%{input_keypair_lists: keypair_lists} = map) do
     inputs =
       keypair_lists
@@ -83,6 +110,10 @@ defmodule BitcoinLib.Signing.Psbt do
 
     map
     |> Map.put(:inputs, inputs)
+  end
+
+  defp extract_outputs(%{error: error} = map) when is_binary(error) do
+    map
   end
 
   defp extract_outputs(%{output_keypair_lists: keypair_lists} = map) do
