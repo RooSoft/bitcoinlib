@@ -4,6 +4,7 @@ defmodule BitcoinLib.Test.Integration.Bip174.RandomPsbtsTest do
   """
   use ExUnit.Case, async: true
 
+  alias BitcoinLib.Transaction
   alias BitcoinLib.Signing.Psbt
   alias BitcoinLib.Signing.Psbt.{Global, Input, Output, Keypair}
 
@@ -131,5 +132,16 @@ defmodule BitcoinLib.Test.Integration.Bip174.RandomPsbtsTest do
     psbt = base_64 |> Psbt.parse()
 
     assert %Global{xpubs: [%Xpub{}]} = psbt.global
+  end
+
+  test "Case: PSBT with global unsigned tx that has 0 inputs and 0 outputs" do
+    base_64 =
+      "cHNidP8BAEwCAAAAAALT3/UFAAAAABl2qRTQxZkDxbrChodg6Q/VIaRmWqdlIIisAOH1BQAAAAAXqRQ1RebjO4MsRwUPJNPuuTycA5SLx4ezLhMAAAAA"
+
+    psbt = base_64 |> Psbt.parse()
+
+    assert %Global{unsigned_tx: %Transaction{}} = psbt.global
+    assert [] = psbt.inputs
+    assert [] = psbt.outputs
   end
 end
