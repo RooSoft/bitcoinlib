@@ -5,7 +5,9 @@ defmodule BitcoinLib.Test.Integration.Bip174.RandomPsbtsTest do
   use ExUnit.Case, async: true
 
   alias BitcoinLib.Signing.Psbt
-  alias BitcoinLib.Signing.Psbt.{Input, Output}
+  alias BitcoinLib.Signing.Psbt.{Global, Input, Output}
+
+  alias BitcoinLib.Signing.Psbt.Global.{Xpub}
 
   alias BitcoinLib.Signing.Psbt.Input.{
     NonWitnessUtxo,
@@ -88,5 +90,26 @@ defmodule BitcoinLib.Test.Integration.Bip174.RandomPsbtsTest do
            ] = psbt.inputs
 
     assert [] = psbt.outputs
+  end
+
+  test "Case: PSBT with one P2WSH input of a 2-of-2 multisig. witnessScript, keypaths, and global xpubs are available. Contains no signatures. Outputs filled." do
+    base_64 =
+      "cHNidP8BAFICAAAAAZ38ZijCbFiZ/hvT3DOGZb/VXXraEPYiCXPfLTht7BJ2AQAAAAD/////AfA9zR0AAAAAFgAUezoAv9wU0neVwrdJAdCdpu8TNXkAAAAATwEENYfPAto/0AiAAAAAlwSLGtBEWx7IJ1UXcnyHtOTrwYogP/oPlMAVZr046QADUbdDiH7h1A3DKmBDck8tZFmztaTXPa7I+64EcvO8Q+IM2QxqT64AAIAAAACATwEENYfPAto/0AiAAAABuQRSQnE5zXjCz/JES+NTzVhgXj5RMoXlKLQH+uP2FzUD0wpel8itvFV9rCrZp+OcFyLrrGnmaLbyZnzB1nHIPKsM2QxqT64AAIABAACAAAEBKwBlzR0AAAAAIgAgLFSGEmxJeAeagU4TcV1l82RZ5NbMre0mbQUIZFuvpjIBBUdSIQKdoSzbWyNWkrkVNq/v5ckcOrlHPY5DtTODarRWKZyIcSEDNys0I07Xz5wf6l0F1EFVeSe+lUKxYusC4ass6AIkwAtSriIGAp2hLNtbI1aSuRU2r+/lyRw6uUc9jkO1M4NqtFYpnIhxENkMak+uAACAAAAAgAAAAAAiBgM3KzQjTtfPnB/qXQXUQVV5J76VQrFi6wLhqyzoAiTACxDZDGpPrgAAgAEAAIAAAAAAACICA57/H1R6HV+S36K6evaslxpL0DukpzSwMVaiVritOh75EO3kXMUAAACAAAAAgAEAAIAA"
+
+    psbt = base_64 |> Psbt.parse()
+
+    assert %Global{
+             xpubs: [%Xpub{}, %Xpub{}]
+           } = psbt.global
+
+    assert [
+             %Input{
+               utxo: %WitnessUtxo{},
+               bip32_derivations: [%Bip32Derivation{}, %Bip32Derivation{}],
+               witness_script: %WitnessScript{}
+             }
+           ] = psbt.inputs
+
+    assert [%Output{}] = psbt.outputs
   end
 end
