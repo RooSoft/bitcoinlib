@@ -38,7 +38,7 @@ defmodule BitcoinLib.Signing.Psbt.Input do
     |> Enum.reduce(%Input{}, &dispatch_keypair/2)
   end
 
-  defp dispatch_keypair(%Keypair{key: key, value: value}, input) do
+  defp dispatch_keypair(%Keypair{key: key, value: value} = keypair, input) do
     case key.type do
       @non_witness_utxo -> add_non_witness_utxo(input, value)
       @witness_utxo -> add_witness_utxo(input, value)
@@ -48,7 +48,7 @@ defmodule BitcoinLib.Signing.Psbt.Input do
       @witness_script -> add_witness_script(input, value)
       @bip32_derivation -> add_bip32_derivation(input, key.data, value)
       @final_script_sig -> add_final_script_sig(input, value)
-      _ -> add_unknown(input, key, value)
+      _ -> add_unknown(input, keypair)
     end
   end
 
@@ -98,8 +98,8 @@ defmodule BitcoinLib.Signing.Psbt.Input do
     |> Map.put(:final_script_sig, FinalScriptSig.parse(value.data))
   end
 
-  defp add_unknown(input, key, value) do
+  defp add_unknown(input, keypair) do
     input
-    |> Map.put(:unknowns, [{key, value} | input.unknowns])
+    |> Map.put(:unknowns, [keypair | input.unknowns])
   end
 end
