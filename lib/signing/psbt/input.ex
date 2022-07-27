@@ -3,6 +3,7 @@ defmodule BitcoinLib.Signing.Psbt.Input do
     :utxo,
     :witness?,
     :partial_sig,
+    :sighash_type,
     :redeem_script,
     :witness_script,
     :final_script_sig,
@@ -16,6 +17,7 @@ defmodule BitcoinLib.Signing.Psbt.Input do
     NonWitnessUtxo,
     WitnessUtxo,
     PartialSig,
+    SighashType,
     RedeemScript,
     WitnessScript,
     Bip32Derivation,
@@ -25,6 +27,7 @@ defmodule BitcoinLib.Signing.Psbt.Input do
   @non_witness_utxo 0
   @witness_utxo 1
   @partial_sig 2
+  @sighash_type 3
   @redeem_script 4
   @witness_script 5
   @bip32_derivation 6
@@ -40,6 +43,7 @@ defmodule BitcoinLib.Signing.Psbt.Input do
       @non_witness_utxo -> add_non_witness_utxo(input, value)
       @witness_utxo -> add_witness_utxo(input, value)
       @partial_sig -> add_partial_sig(input, key.data, value)
+      @sighash_type -> add_sighash_type(input, value)
       @redeem_script -> add_redeem_script(input, value)
       @witness_script -> add_witness_script(input, value)
       @bip32_derivation -> add_bip32_derivation(input, key.data, value)
@@ -65,6 +69,11 @@ defmodule BitcoinLib.Signing.Psbt.Input do
   defp add_partial_sig(input, key_value, value) do
     input
     |> Map.put(:partial_sig, PartialSig.parse(key_value, value.data))
+  end
+
+  defp add_sighash_type(input, value) do
+    input
+    |> Map.put(:sighash_type, SighashType.parse(value.data))
   end
 
   defp add_redeem_script(input, value) do
