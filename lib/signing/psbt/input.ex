@@ -39,7 +39,36 @@ defmodule BitcoinLib.Signing.Psbt.Input do
 
   def from_keypair_list(%KeypairList{} = keypair_list) do
     keypair_list.keypairs
-    |> Enum.reduce(%Input{}, &dispatch_keypair/2)
+    |> validate_keys
+    |> dispatch_keypairs
+  end
+
+  defp validate_keys(keypairs) do
+    keys =
+      keypairs
+      |> Enum.map(& &1.key)
+
+    duplicate_keys = keys -- Enum.uniq(keys)
+
+    case duplicate_keys do
+      [] ->
+        {:ok, keypairs}
+
+      duplicates ->
+        {:error, "duplicate keys: #{inspect(duplicates)}"}
+    end
+  end
+
+  defp dispatch_keypairs({:error, message}) do
+    {:error, message}
+  end
+
+  defp dispatch_keypairs({:ok, keypairs}) do
+    inputs =
+      keypairs
+      |> Enum.reduce(%Input{}, &dispatch_keypair/2)
+
+    {:ok, inputs}
   end
 
   defp dispatch_keypair(%Keypair{key: key, value: value} = keypair, input) do

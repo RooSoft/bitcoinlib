@@ -2,7 +2,7 @@ defmodule BitcoinLib.Signing.Psbt do
   defstruct [:global, :inputs, :outputs]
 
   alias BitcoinLib.Signing.Psbt
-  alias BitcoinLib.Signing.Psbt.{KeypairList, Global, Input, Output}
+  alias BitcoinLib.Signing.Psbt.{KeypairList, Global, InputList, Output}
 
   @magic 0x70736274
   @separator 0xFF
@@ -116,13 +116,15 @@ defmodule BitcoinLib.Signing.Psbt do
   end
 
   defp extract_inputs(%{input_keypair_lists: keypair_lists} = map) do
-    inputs =
-      keypair_lists
-      |> Enum.map(&Input.from_keypair_list/1)
-      |> Enum.filter(&(!is_nil(&1)))
+    case InputList.extract(keypair_lists) do
+      {:ok, inputs} ->
+        map
+        |> Map.put(:inputs, inputs)
 
-    map
-    |> Map.put(:inputs, inputs)
+      {:error, message} ->
+        map
+        |> Map.put(:error, message)
+    end
   end
 
   defp extract_outputs(%{error: error} = map) when is_binary(error) do
