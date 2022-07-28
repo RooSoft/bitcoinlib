@@ -60,6 +60,8 @@ defmodule BitcoinLib.Signing.Psbt do
   end
 
   defp extract_keypair_lists(%{data: <<0>>} = map, keypair_lists) do
+    keypair_lists = [nil | keypair_lists]
+
     map
     |> Map.put(:keypair_lists, Enum.reverse(keypair_lists))
   end
@@ -72,11 +74,7 @@ defmodule BitcoinLib.Signing.Psbt do
   defp extract_keypair_lists(%{data: remaining} = map, keypair_lists) do
     {keypair_list, remaining} = KeypairList.from_data(remaining)
 
-    keypair_lists =
-      case keypair_list do
-        nil -> keypair_lists
-        _ -> [keypair_list | keypair_lists]
-      end
+    keypair_lists = [keypair_list | keypair_lists]
 
     extract_keypair_lists(%{map | data: remaining}, keypair_lists)
   end
@@ -86,13 +84,14 @@ defmodule BitcoinLib.Signing.Psbt do
   end
 
   defp dispatch_keypair_lists(
-         %{global: %Global{unsigned_tx: transaction}, keypair_lists: keypair_lists} = map
+         %{global: %Global{unsigned_tx: transaction}, keypair_lists: remaining_keypair_lists} =
+           map
        ) do
-    inputs_count = Enum.count(transaction.inputs)
+    transaction_inputs_count = Enum.count(transaction.inputs)
 
     {input_keypair_lists, output_keypair_lists} =
-      keypair_lists
-      |> Enum.split(inputs_count)
+      remaining_keypair_lists
+      |> Enum.split(transaction_inputs_count)
 
     map
     |> Map.put(:input_keypair_lists, input_keypair_lists)
@@ -107,6 +106,7 @@ defmodule BitcoinLib.Signing.Psbt do
     inputs =
       keypair_lists
       |> Enum.map(&Input.from_keypair_list/1)
+      |> Enum.filter(&(!is_nil(&1)))
 
     map
     |> Map.put(:inputs, inputs)
@@ -116,10 +116,16 @@ defmodule BitcoinLib.Signing.Psbt do
     map
   end
 
+  defp extract_outputs(%{output_keypair_lists: []} = map) do
+    map
+    |> Map.put(:error, "missing outputs section")
+  end
+
   defp extract_outputs(%{output_keypair_lists: keypair_lists} = map) do
     outputs =
       keypair_lists
       |> Enum.map(&Output.from_keypair_list/1)
+      |> Enum.filter(&(!is_nil(&1)))
 
     map
     |> Map.put(:outputs, outputs)

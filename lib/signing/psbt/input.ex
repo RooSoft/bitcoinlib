@@ -33,6 +33,10 @@ defmodule BitcoinLib.Signing.Psbt.Input do
   @bip32_derivation 6
   @final_script_sig 7
 
+  def from_keypair_list(nil) do
+    nil
+  end
+
   def from_keypair_list(%KeypairList{} = keypair_list) do
     keypair_list.keypairs
     |> Enum.reduce(%Input{}, &dispatch_keypair/2)

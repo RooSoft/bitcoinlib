@@ -3,6 +3,10 @@ defmodule BitcoinLib.Signing.Psbt.Output do
 
   alias BitcoinLib.Signing.Psbt.{Keypair, KeypairList, Output}
 
+  def from_keypair_list(nil) do
+    nil
+  end
+
   def from_keypair_list(%KeypairList{} = keypair_list) do
     keypair_list.keypairs
     |> Enum.reduce(%Output{}, &dispatch_keypair/2)

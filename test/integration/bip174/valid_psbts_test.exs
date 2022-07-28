@@ -89,8 +89,6 @@ defmodule BitcoinLib.Test.Integration.Bip174.ValidPsbtsTest do
                witness_script: %WitnessScript{}
              }
            ] = psbt.inputs
-
-    assert [] = psbt.outputs
   end
 
   test "Case: PSBT with one P2WSH input of a 2-of-2 multisig. witnessScript, keypaths, and global xpubs are available. Contains no signatures. Outputs filled." do

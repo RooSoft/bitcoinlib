@@ -1,5 +1,5 @@
 defmodule BitcoinLib.Signing.Psbt.KeypairList do
-  defstruct [:keypairs]
+  defstruct keypairs: []
 
   @moduledoc """
     Extracts a Keypair list from from a binary according to the
