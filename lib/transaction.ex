@@ -21,6 +21,13 @@ defmodule BitcoinLib.Transaction do
     %Transaction{version: version, inputs: inputs, outputs: outputs, locktime: locktime}
   end
 
+  def check_if_unsigned(%Transaction{} = transaction) do
+    transaction.inputs
+    |> Enum.reduce(true, fn input, unsigned? ->
+      unsigned? && input.script_sig == 0
+    end)
+  end
+
   defp extract_version(%{remaining: <<version::little-32, remaining::bitstring>>} = map) do
     %{map | remaining: remaining}
     |> Map.put(:version, version)

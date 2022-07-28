@@ -50,9 +50,10 @@ defmodule BitcoinLib.Signing.Psbt do
   defp extract_global(map) do
     {keypairs, remaining_data} = KeypairList.from_data(map.data)
 
-    global = Global.from_keypair_list(keypairs)
-
-    %{Map.put(map, :global, global) | data: remaining_data}
+    case Global.from_keypair_list(keypairs) do
+      {:ok, global} -> %{Map.put(map, :global, global) | data: remaining_data}
+      {:error, message} -> %{Map.put(map, :error, message) | data: remaining_data}
+    end
   end
 
   defp extract_keypair_lists(%{error: error} = map, _) when is_binary(error) do

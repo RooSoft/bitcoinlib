@@ -10,8 +10,23 @@ defmodule BitcoinLib.Signing.Psbt.Global do
   @tx_version 2
 
   def from_keypair_list(%KeypairList{} = keypair_list) do
-    keypair_list.keypairs
-    |> Enum.reduce(%Global{}, &dispatch_keypair/2)
+    data =
+      keypair_list.keypairs
+      |> Enum.reduce(%{xpubs: [], unknowns: []}, &dispatch_keypair/2)
+
+    case Map.get(data, :error) do
+      nil ->
+        {:ok,
+         %Global{
+           unsigned_tx: data |> Map.get(:unsigned_tx),
+           tx_version: data |> Map.get(:tx_version),
+           xpubs: data |> Map.get(:xpubs),
+           unknowns: data |> Map.get(:unknowns)
+         }}
+
+      message ->
+        {:error, message}
+    end
   end
 
   defp dispatch_keypair(%Keypair{key: key, value: value}, input) do
@@ -26,8 +41,15 @@ defmodule BitcoinLib.Signing.Psbt.Global do
   defp add_unsigned_tx(input, value) do
     unsigned_tx = Transaction.decode(value.data)
 
-    input
-    |> Map.put(:unsigned_tx, unsigned_tx)
+    case Transaction.check_if_unsigned(unsigned_tx) do
+      true ->
+        input
+        |> Map.put(:unsigned_tx, unsigned_tx)
+
+      false ->
+        input
+        |> Map.put(:error, "the supposedly unsigned transaction has already been signed")
+    end
   end
 
   defp add_xpub(%{xpubs: xpubs} = input, value) do

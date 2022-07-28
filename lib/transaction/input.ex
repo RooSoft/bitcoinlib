@@ -5,6 +5,8 @@ defmodule BitcoinLib.Transaction.Input do
   Based on https://learnmeabitcoin.com/technical/input
   """
 
+  @bits 8
+
   alias BitcoinLib.Signing.Psbt.CompactInteger
   alias BitcoinLib.Transaction.Input
 
@@ -27,7 +29,9 @@ defmodule BitcoinLib.Transaction.Input do
     %CompactInteger{value: script_sig_size, remaining: remaining} =
       CompactInteger.extract_from(remaining)
 
-    <<script_sig::size(script_sig_size), remaining::bitstring>> = remaining
+    script_sig_bit_size = script_sig_size * @bits
+
+    <<script_sig::size(script_sig_bit_size), remaining::bitstring>> = remaining
 
     {script_sig, remaining}
   end
