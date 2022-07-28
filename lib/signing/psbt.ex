@@ -84,6 +84,18 @@ defmodule BitcoinLib.Signing.Psbt do
     map
   end
 
+  defp dispatch_keypair_lists(%{global: %Global{unsigned_tx: nil}, keypair_lists: []} = map) do
+    map
+  end
+
+  defp dispatch_keypair_lists(%{global: %Global{unsigned_tx: nil}, keypair_lists: _} = map) do
+    map
+    |> Map.put(
+      :error,
+      "inputs and/or outputs in PSBT without an unsigned transaction in the global section"
+    )
+  end
+
   defp dispatch_keypair_lists(
          %{global: %Global{unsigned_tx: transaction}, keypair_lists: remaining_keypair_lists} =
            map

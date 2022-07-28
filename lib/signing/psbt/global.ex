@@ -9,6 +9,10 @@ defmodule BitcoinLib.Signing.Psbt.Global do
   @xpub 1
   @tx_version 2
 
+  def from_keypair_list(nil) do
+    {:ok, %Global{}}
+  end
+
   def from_keypair_list(%KeypairList{} = keypair_list) do
     data =
       keypair_list.keypairs
