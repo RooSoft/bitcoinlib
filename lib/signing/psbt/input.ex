@@ -84,7 +84,7 @@ defmodule BitcoinLib.Signing.Psbt.Input do
       @partial_sig -> add_partial_sig(input, key.data, value)
       @sighash_type -> add_sighash_type(input, value)
       @redeem_script -> add_redeem_script(input, keypair)
-      @witness_script -> add_witness_script(input, value)
+      @witness_script -> add_witness_script(input, keypair)
       @bip32_derivation -> add_bip32_derivation(input, key.data, value)
       @final_script_sig -> add_final_script_sig(input, value)
       _ -> add_unknown(input, keypair)
@@ -135,9 +135,13 @@ defmodule BitcoinLib.Signing.Psbt.Input do
     end
   end
 
-  defp add_witness_script(input, value) do
-    input
-    |> Map.put(:witness_script, WitnessScript.parse(value.data))
+  defp add_witness_script(input, keypair) do
+    witness_script = WitnessScript.parse(keypair)
+
+    case Map.get(witness_script, :error) do
+      nil -> input |> Map.put(:witness_script, witness_script)
+      message -> input |> Map.put(:error, message)
+    end
   end
 
   defp add_bip32_derivation(%{bip32_derivations: derivations} = input, key_value, value) do
