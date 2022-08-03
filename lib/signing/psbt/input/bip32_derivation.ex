@@ -59,11 +59,11 @@ defmodule BitcoinLib.Signing.Psbt.Input.Bip32Derivation do
     end
   end
 
-  defp validate_purpose(%DerivationPath{purpose: :invalid} = derivation_path) do
-    derivation_path
-    |> Map.put(:error, "invalid purpose in derivation path")
-    |> IO.inspect()
-  end
+  # defp validate_purpose(%DerivationPath{purpose: :invalid} = derivation_path) do
+  #   derivation_path
+  #   |> Map.put(:error, "invalid purpose in derivation path")
+  #   |> IO.inspect()
+  # end
 
   defp validate_purpose(derivation_path), do: derivation_path
 
