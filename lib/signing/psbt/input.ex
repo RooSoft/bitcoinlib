@@ -115,6 +115,18 @@ defmodule BitcoinLib.Signing.Psbt.Input do
   defp add_partial_sig(input, key_value, value) do
     input
     |> Map.put(:partial_sig, PartialSig.parse(key_value, value.data))
+
+    partial_sig = PartialSig.parse(key_value, value.data)
+
+    case Map.get(partial_sig, :error) do
+      nil ->
+        input
+        |> Map.put(:partial_sig, PartialSig.parse(key_value, value.data))
+
+      message ->
+        input
+        |> Map.put(:error, message)
+    end
   end
 
   defp add_sighash_type(input, value) do
