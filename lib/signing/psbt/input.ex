@@ -38,9 +38,18 @@ defmodule BitcoinLib.Signing.Psbt.Input do
   end
 
   def from_keypair_list(%KeypairList{} = keypair_list) do
-    keypair_list.keypairs
-    |> validate_keys
-    |> dispatch_keypairs
+    result =
+      keypair_list.keypairs
+      |> validate_keys
+      |> dispatch_keypairs
+
+    case result do
+      {:error, message} ->
+        {:error, message}
+
+      _ ->
+        result
+    end
   end
 
   defp validate_keys(keypairs) do
@@ -60,21 +69,18 @@ defmodule BitcoinLib.Signing.Psbt.Input do
   end
 
   defp dispatch_keypairs({:error, message}) do
-    {:error, message}
+    %{error: message}
   end
 
   defp dispatch_keypairs({:ok, keypairs}) do
-    inputs =
-      keypairs
-      |> Enum.reduce(%Input{}, &dispatch_keypair/2)
-
-    {:ok, inputs}
+    keypairs
+    |> Enum.reduce(%Input{}, &dispatch_keypair/2)
   end
 
   defp dispatch_keypair(%Keypair{key: key, value: value} = keypair, input) do
     case key.type do
       @non_witness_utxo -> add_non_witness_utxo(input, value)
-      @witness_utxo -> add_witness_utxo(input, value)
+      @witness_utxo -> add_witness_utxo(input, keypair)
       @partial_sig -> add_partial_sig(input, key.data, value)
       @sighash_type -> add_sighash_type(input, value)
       @redeem_script -> add_redeem_script(input, value)
@@ -91,12 +97,19 @@ defmodule BitcoinLib.Signing.Psbt.Input do
     |> Map.put(:witness?, false)
   end
 
-  defp add_witness_utxo(input, value) do
-    {witness_utxo, _remaining} = WitnessUtxo.parse(value.data)
+  defp add_witness_utxo(input, keypair) do
+    utxo = WitnessUtxo.parse(keypair)
 
-    input
-    |> Map.put(:utxo, witness_utxo)
-    |> Map.put(:witness?, true)
+    case Map.get(utxo, :error) do
+      nil ->
+        input
+        |> Map.put(:utxo, utxo)
+        |> Map.put(:witness?, true)
+
+      message ->
+        input
+        |> Map.put(:error, message)
+    end
   end
 
   defp add_partial_sig(input, key_value, value) do
