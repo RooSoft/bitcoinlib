@@ -5,7 +5,7 @@ defmodule BitcoinLib.Signing.Psbt.Input.NonWitnessUtxo do
   alias BitcoinLib.Signing.Psbt.Keypair
   alias BitcoinLib.Signing.Psbt.Keypair.{Key, Value}
 
-  # alias BitcoinLib.Transaction
+  alias BitcoinLib.Transaction
 
   def parse(keypair) do
     %{keypair: keypair, non_witness_utxo: %NonWitnessUtxo{}}
@@ -30,11 +30,8 @@ defmodule BitcoinLib.Signing.Psbt.Input.NonWitnessUtxo do
     do: non_witness_utxo
 
   defp extract_transaction(%{keypair: %Keypair{value: %Value{data: data}}}) do
-    # IO.puts "----- PARSING NON-WITNESS UTXO"
+    transaction = Transaction.decode(data)
 
-    # transaction = Transaction.decode(remaining)
-
-    # %NonWitnessUtxo{transaction: transaction}
-    %NonWitnessUtxo{transaction: data}
+    %NonWitnessUtxo{transaction: transaction}
   end
 end
