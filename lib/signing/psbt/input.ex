@@ -83,7 +83,7 @@ defmodule BitcoinLib.Signing.Psbt.Input do
       @witness_utxo -> add_witness_utxo(input, keypair)
       @partial_sig -> add_partial_sig(input, key.data, value)
       @sighash_type -> add_sighash_type(input, value)
-      @redeem_script -> add_redeem_script(input, value)
+      @redeem_script -> add_redeem_script(input, keypair)
       @witness_script -> add_witness_script(input, value)
       @bip32_derivation -> add_bip32_derivation(input, key.data, value)
       @final_script_sig -> add_final_script_sig(input, value)
@@ -113,19 +113,11 @@ defmodule BitcoinLib.Signing.Psbt.Input do
   end
 
   defp add_partial_sig(input, key_value, value) do
-    input
-    |> Map.put(:partial_sig, PartialSig.parse(key_value, value.data))
-
     partial_sig = PartialSig.parse(key_value, value.data)
 
     case Map.get(partial_sig, :error) do
-      nil ->
-        input
-        |> Map.put(:partial_sig, PartialSig.parse(key_value, value.data))
-
-      message ->
-        input
-        |> Map.put(:error, message)
+      nil -> input |> Map.put(:partial_sig, partial_sig)
+      message -> input |> Map.put(:error, message)
     end
   end
 
@@ -134,9 +126,13 @@ defmodule BitcoinLib.Signing.Psbt.Input do
     |> Map.put(:sighash_type, SighashType.parse(value.data))
   end
 
-  defp add_redeem_script(input, value) do
-    input
-    |> Map.put(:redeem_script, RedeemScript.parse(value.data))
+  defp add_redeem_script(input, keypair) do
+    redeem_script = RedeemScript.parse(keypair)
+
+    case Map.get(redeem_script, :error) do
+      nil -> input |> Map.put(:redeem_script, redeem_script)
+      message -> input |> Map.put(:error, message)
+    end
   end
 
   defp add_witness_script(input, value) do
