@@ -65,7 +65,7 @@ defmodule BitcoinLib.Signing.Psbt.Input.Bip32Derivation do
   #   |> IO.inspect()
   # end
 
-  defp validate_purpose(derivation_path), do: derivation_path
+  # defp validate_purpose(derivation_path), do: derivation_path
 
   defp validate_coin_type(%DerivationPath{coin_type: :invalid} = derivation_path) do
     derivation_path
