@@ -79,7 +79,7 @@ defmodule BitcoinLib.Signing.Psbt.Input do
 
   defp dispatch_keypair(%Keypair{key: key, value: value} = keypair, input) do
     case key.type do
-      @non_witness_utxo -> add_non_witness_utxo(input, value)
+      @non_witness_utxo -> add_non_witness_utxo(input, keypair)
       @witness_utxo -> add_witness_utxo(input, keypair)
       @partial_sig -> add_partial_sig(input, key.data, value)
       @sighash_type -> add_sighash_type(input, value)
@@ -91,10 +91,19 @@ defmodule BitcoinLib.Signing.Psbt.Input do
     end
   end
 
-  defp add_non_witness_utxo(input, value) do
-    input
-    |> Map.put(:utxo, NonWitnessUtxo.parse(value.data))
-    |> Map.put(:witness?, false)
+  defp add_non_witness_utxo(input, keypair) do
+    utxo = NonWitnessUtxo.parse(keypair)
+
+    case Map.get(utxo, :error) do
+      nil ->
+        input
+        |> Map.put(:utxo, utxo)
+        |> Map.put(:witness?, false)
+
+      message ->
+        input
+        |> Map.put(:error, message)
+    end
   end
 
   defp add_witness_utxo(input, keypair) do
