@@ -147,8 +147,14 @@ defmodule BitcoinLib.Signing.Psbt.Input do
   defp add_bip32_derivation(%{bip32_derivations: derivations} = input, key_value, value) do
     derivation = Bip32Derivation.parse(key_value, value.data)
 
-    input
-    |> Map.put(:bip32_derivations, [derivation | derivations])
+    case Map.get(derivation, :error) do
+      nil ->
+        input
+        |> Map.put(:bip32_derivations, [derivation | derivations])
+
+      message ->
+        input |> Map.put(:error, message)
+    end
   end
 
   defp add_final_script_sig(input, value) do

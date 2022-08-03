@@ -14,7 +14,9 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
   defstruct [:type, :purpose, :coin_type, :account, :change, :address_index]
 
   alias BitcoinLib.Key.HD.DerivationPath
-  alias BitcoinLib.Key.HD.DerivationPath.Level
+  alias BitcoinLib.Key.HD.DerivationPath.{Level, PathValues}
+
+  @hardened 0x80000000
 
   # https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki#purpose
   @bip44_purpose 44
@@ -75,8 +77,8 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
     iex> BitcoinLib.Key.HD.DerivationPath.from_values("M", 0x80000054, 0x80000000, 0x80000000, 0, 0)
     %BitcoinLib.Key.HD.DerivationPath{
       type: "M",
-      purpose: 0x80000054,
-      coin_type: 0x80000000,
+      purpose: :bip84,
+      coin_type: :bitcoin,
       account: 0x80000000,
       change: 0,
       address_index: 0
@@ -94,12 +96,25 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
       ) do
     %DerivationPath{
       type: type,
+      purpose: parse_purpose(purpose - @hardened),
+      coin_type: parse_coin_type(coin_type - @hardened),
+      account: account,
+      change: change,
+      address_index: address_index
+    }
+  end
+
+  def from_list(values_list) do
+    %PathValues{
+      type: type,
       purpose: purpose,
       coin_type: coin_type,
       account: account,
       change: change,
       address_index: address_index
-    }
+    } = PathValues.from_list(values_list)
+
+    from_values(type, purpose, coin_type, account, change, address_index)
   end
 
   defp validate(derivation_path) do
@@ -113,8 +128,8 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
     end
   end
 
-  defp maybe_parse_valid_derivation_path({:error, _}) do
-    {:error, "Invalid derivation path"}
+  defp maybe_parse_valid_derivation_path({:error, message}) do
+    {:error, message}
   end
 
   defp maybe_parse_valid_derivation_path({:ok, derivation_path}) do
@@ -193,15 +208,19 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
 
   defp parse_purpose(hash), do: hash
 
+  defp parse_coin_type(value) when is_integer(value) do
+    case value do
+      @bitcoin_coin_type_value -> @bitcoin_atom
+      @bitcoin_testnet_coin_type_value -> @bitcoin_testnet_atom
+      _ -> @invalid_atom
+    end
+  end
+
   defp parse_coin_type(%{coin_type: %{hardened?: true, value: value}} = hash) do
     hash
     |> Map.put(
       :coin_type,
-      case value do
-        @bitcoin_coin_type_value -> @bitcoin_atom
-        @bitcoin_testnet_coin_type_value -> @bitcoin_testnet_atom
-        _ -> @invalid_atom
-      end
+      parse_coin_type(value)
     )
   end
 

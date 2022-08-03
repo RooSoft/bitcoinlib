@@ -3,7 +3,7 @@ defmodule BitcoinLib.Key.HD.DerivationPathTest do
 
   doctest BitcoinLib.Key.HD.DerivationPath
 
-  @hardened 0x8000000
+  @hardened 0x80000000
 
   alias BitcoinLib.Key.HD.DerivationPath
   alias BitcoinLib.Key.HD.DerivationPath.{Level}
@@ -190,9 +190,9 @@ defmodule BitcoinLib.Key.HD.DerivationPathTest do
 
     assert %DerivationPath{
              type: "M",
-             purpose: 0x8000054,
-             coin_type: 0x8000000,
-             account: 0x8000000,
+             purpose: :bip84,
+             coin_type: :bitcoin,
+             account: 0x80000000,
              change: 0,
              address_index: 0
            } = derivation_path
@@ -208,9 +208,9 @@ defmodule BitcoinLib.Key.HD.DerivationPathTest do
 
     assert %DerivationPath{
              type: "M",
-             purpose: 0x8000054,
-             coin_type: 0x8000000,
-             account: 0x8000000,
+             purpose: :bip84,
+             coin_type: :bitcoin,
+             account: 0x80000000,
              change: nil,
              address_index: nil
            } = derivation_path
