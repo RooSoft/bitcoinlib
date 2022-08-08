@@ -2,8 +2,9 @@ defmodule BitcoinLib.Signing.Psbt.Output do
   defstruct unknowns: []
 
   alias BitcoinLib.Signing.Psbt.{Keypair, KeypairList, Output}
-  alias BitcoinLib.Signing.Psbt.Output.{Bip32Derivation}
+  alias BitcoinLib.Signing.Psbt.Output.{RedeemScript, Bip32Derivation}
 
+  @redeem_script 0
   @bip32_derivation 2
 
   def from_keypair_list(nil) do
@@ -43,8 +44,23 @@ defmodule BitcoinLib.Signing.Psbt.Output do
 
   defp dispatch_keypair(%Keypair{key: key, value: value} = keypair, output) do
     case key.type do
+      @redeem_script -> add_redeem_script(output, keypair)
       @bip32_derivation -> add_bip32_derivation(output, keypair)
       _ -> add_unknown(output, key, value)
+    end
+  end
+
+  defp add_redeem_script(output, keypair) do
+    redeem_script = RedeemScript.parse(keypair)
+
+    case Map.get(redeem_script, :error) do
+      nil ->
+        output
+        |> Map.put(:redeem_script, redeem_script)
+
+      message ->
+        output
+        |> Map.put(:error, message)
     end
   end
 
