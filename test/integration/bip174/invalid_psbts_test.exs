@@ -159,4 +159,13 @@ defmodule BitcoinLib.Test.Integration.Bip174.InvalidPsbtsTest do
 
     assert message =~ "invalid redeemscript typed key"
   end
+
+  test "Case: PSBT with invalid output witnessScript typed key" do
+    base_64 =
+      "cHNidP8BAHMCAAAAATAa6YblFqHsisW0vGVz0y+DtGXiOtdhZ9aLOOcwtNvbAAAAAAD/////AnR7AQAAAAAAF6kUA6oXrogrXQ1Usl1jEE5P/s57nqKHYEOZOwAAAAAXqRS5IbG6b3IuS/qDtlV6MTmYakLsg4cAAAAAAAEBHwDKmjsAAAAAFgAU0tlLZK4IWH7vyO6xh8YB6Tn5A3wAAQAWABRi6emC//NN2COWEDFrCQzSo7dHywABACIAIIdrrYMvHRaAFe1BIyqeploYFdnvE8Dvh1n2S1srJ4plIQEAJVEhA7fOI6AcW0vwCmQlN836uzFbZoMyhnR471EwnQbVf4qHUa4A"
+
+    {:error, message} = base_64 |> Psbt.parse()
+
+    assert message =~ "invalid witnessscript typed key"
+  end
 end
