@@ -29,8 +29,6 @@ defmodule BitcoinLib.Signing.PsbtTest do
 
     [%Input{} = input] = psbt.inputs
 
-    assert true == input.witness?
-
     assert %BitcoinLib.Signing.Psbt.Input.WitnessUtxo{
              pub_key: "a9146345200f68d189e1adc0df1c4d16ea8f14c0dbeb87",
              sixty_four: "955eea0b00000000"
@@ -46,8 +44,6 @@ defmodule BitcoinLib.Signing.PsbtTest do
       |> Psbt.parse()
 
     [%Input{} = input] = psbt.inputs
-
-    assert false == input.witness?
 
     assert %BitcoinLib.Signing.Psbt.Input.NonWitnessUtxo{} = input.utxo
   end

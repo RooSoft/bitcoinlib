@@ -1,7 +1,6 @@
 defmodule BitcoinLib.Signing.Psbt.Input do
   defstruct [
     :utxo,
-    :witness?,
     :partial_sig,
     :sighash_type,
     :redeem_script,
@@ -92,7 +91,6 @@ defmodule BitcoinLib.Signing.Psbt.Input do
       nil ->
         input
         |> Map.put(:utxo, utxo)
-        |> Map.put(:witness?, false)
 
       message ->
         input
@@ -107,7 +105,6 @@ defmodule BitcoinLib.Signing.Psbt.Input do
       nil ->
         input
         |> Map.put(:utxo, utxo)
-        |> Map.put(:witness?, true)
 
       message ->
         input
