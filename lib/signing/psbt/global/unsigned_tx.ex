@@ -22,11 +22,15 @@ defmodule BitcoinLib.Signing.Psbt.Global.UnsignedTx do
   end
 
   defp decode_transaction({:ok, keypair}) do
-    unsigned_tx = Transaction.decode(keypair.value.data)
+    case Transaction.decode(keypair.value.data) do
+      {:error, message} ->
+        {:error, message}
 
-    case Transaction.check_if_unsigned(unsigned_tx) do
-      true -> {:ok, unsigned_tx}
-      false -> {:error, "the supposedly unsigned transaction has already been signed"}
+      {:ok, unsigned_tx} ->
+        case Transaction.check_if_unsigned(unsigned_tx) do
+          true -> {:ok, unsigned_tx}
+          false -> {:error, "the supposedly unsigned transaction has already been signed"}
+        end
     end
   end
 end

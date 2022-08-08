@@ -9,7 +9,7 @@ defmodule BitcoinLib.Transaction do
   alias BitcoinLib.Transaction.{Input, Output}
 
   def decode(encoded_transaction) do
-    %{version: version, inputs: inputs, outputs: outputs, locktime: locktime} =
+    result =
       %{remaining: encoded_transaction}
       |> extract_version
       |> extract_input_count
@@ -17,8 +17,16 @@ defmodule BitcoinLib.Transaction do
       |> extract_output_count
       |> extract_outputs
       |> extract_locktime
+      |> validate_outputs
 
-    %Transaction{version: version, inputs: inputs, outputs: outputs, locktime: locktime}
+    case result do
+      %{error: message} ->
+        {:error, message}
+
+      %{version: version, inputs: inputs, outputs: outputs, locktime: locktime} ->
+        {:ok,
+         %Transaction{version: version, inputs: inputs, outputs: outputs, locktime: locktime}}
+    end
   end
 
   def check_if_unsigned(%Transaction{} = transaction) do
@@ -86,5 +94,22 @@ defmodule BitcoinLib.Transaction do
 
     %{map | remaining: remaining}
     |> Map.put(:locktime, locktime)
+  end
+
+  defp validate_outputs(%{outputs: outputs} = map) do
+    error =
+      outputs
+      |> Enum.find_value(fn output ->
+        Map.get(output, :error)
+      end)
+
+    case error do
+      nil ->
+        map
+
+      message ->
+        map
+        |> Map.put(:error, message)
+    end
   end
 end
