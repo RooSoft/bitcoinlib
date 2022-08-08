@@ -8,4 +8,8 @@ defmodule BitcoinLib.Signing.Psbt.Input.SighashType do
       value: value
     }
   end
+
+  def parse(_) do
+    %{error: "invalid sighash type"}
+  end
 end

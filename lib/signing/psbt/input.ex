@@ -125,8 +125,16 @@ defmodule BitcoinLib.Signing.Psbt.Input do
   end
 
   defp add_sighash_type(input, value) do
-    input
-    |> Map.put(:sighash_type, SighashType.parse(value.data))
+    sighash_type = SighashType.parse(value.data)
+
+    case sighash_type do
+      %SighashType{} ->
+        input
+        |> Map.put(:sighash_type, sighash_type)
+
+      %{error: message} ->
+        input |> Map.put(:error, message)
+    end
   end
 
   defp add_redeem_script(input, keypair) do
