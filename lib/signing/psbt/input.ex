@@ -40,18 +40,9 @@ defmodule BitcoinLib.Signing.Psbt.Input do
   end
 
   def from_keypair_list(%KeypairList{} = keypair_list) do
-    result =
-      keypair_list.keypairs
-      |> validate_keys
-      |> dispatch_keypairs
-
-    case result do
-      {:error, message} ->
-        {:error, message}
-
-      _ ->
-        result
-    end
+    keypair_list.keypairs
+    |> validate_keys
+    |> dispatch_keypairs
   end
 
   defp validate_keys(keypairs) do

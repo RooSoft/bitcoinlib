@@ -2,7 +2,7 @@ defmodule BitcoinLib.Signing.Psbt do
   defstruct [:global, :inputs, :outputs]
 
   alias BitcoinLib.Signing.Psbt
-  alias BitcoinLib.Signing.Psbt.{KeypairList, Global, InputList, Output}
+  alias BitcoinLib.Signing.Psbt.{KeypairList, Global, InputList, OutputList}
 
   @magic 0x70736274
   @separator 0xFF
@@ -60,13 +60,6 @@ defmodule BitcoinLib.Signing.Psbt do
     map
   end
 
-  defp extract_keypair_lists(%{data: <<0>>} = map, keypair_lists) do
-    keypair_lists = [nil | keypair_lists]
-
-    map
-    |> Map.put(:keypair_lists, Enum.reverse(keypair_lists))
-  end
-
   defp extract_keypair_lists(%{data: <<>>} = map, keypair_lists) do
     map
     |> Map.put(:keypair_lists, Enum.reverse(keypair_lists))
@@ -101,14 +94,22 @@ defmodule BitcoinLib.Signing.Psbt do
            map
        ) do
     transaction_inputs_count = Enum.count(transaction.inputs)
+    transaction_output_count = Enum.count(transaction.outputs)
 
     {input_keypair_lists, output_keypair_lists} =
       remaining_keypair_lists
       |> Enum.split(transaction_inputs_count)
 
-    map
-    |> Map.put(:input_keypair_lists, input_keypair_lists)
-    |> Map.put(:output_keypair_lists, output_keypair_lists)
+    case output_keypair_lists |> Enum.count() < transaction_output_count do
+      true ->
+        map
+        |> Map.put(:error, "some outputs are missing")
+
+      false ->
+        map
+        |> Map.put(:input_keypair_lists, input_keypair_lists)
+        |> Map.put(:output_keypair_lists, output_keypair_lists)
+    end
   end
 
   defp extract_inputs(%{error: error} = map) when is_binary(error) do
@@ -131,18 +132,19 @@ defmodule BitcoinLib.Signing.Psbt do
     map
   end
 
-  defp extract_outputs(%{output_keypair_lists: []} = map) do
+  defp extract_outputs(%{error: error} = map) when is_binary(error) do
     map
-    |> Map.put(:error, "missing outputs section")
   end
 
   defp extract_outputs(%{output_keypair_lists: keypair_lists} = map) do
-    outputs =
-      keypair_lists
-      |> Enum.map(&Output.from_keypair_list/1)
-      |> Enum.filter(&(!is_nil(&1)))
+    case OutputList.extract(keypair_lists) do
+      {:ok, outputs} ->
+        map
+        |> Map.put(:outputs, outputs)
 
-    map
-    |> Map.put(:outputs, outputs)
+      {:error, message} ->
+        map
+        |> Map.put(:error, message)
+    end
   end
 end
