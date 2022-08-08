@@ -19,12 +19,6 @@ defmodule BitcoinLib.Signing.Psbt do
       |> extract_inputs()
       |> extract_outputs()
 
-    # map.inputs
-    # |> IO.inspect(label: "INPUTS")
-
-    # map.global.unsigned_tx
-    # |> IO.inspect(label: "UNSIGNED TX")
-
     case Map.get(map, :error) do
       nil ->
         {:ok, %Psbt{global: map.global, inputs: map.inputs, outputs: map.outputs}}
