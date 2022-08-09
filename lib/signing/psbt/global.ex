@@ -1,12 +1,13 @@
 defmodule BitcoinLib.Signing.Psbt.Global do
   defstruct [:unsigned_tx, tx_version: 0, xpubs: [], unknowns: []]
 
-  alias BitcoinLib.Signing.Psbt.Global.{Xpub, UnsignedTx}
+  alias BitcoinLib.Signing.Psbt.Global.{Xpub, UnsignedTx, Version}
   alias BitcoinLib.Signing.Psbt.{Keypair, KeypairList, Global}
 
   @unsigned_tx 0
   @xpub 1
   @tx_version 2
+  @version 0xFB
 
   def from_keypair_list(nil) do
     {:ok, %Global{}}
@@ -37,6 +38,7 @@ defmodule BitcoinLib.Signing.Psbt.Global do
       @unsigned_tx -> add_unsigned_tx(input, keypair)
       @xpub -> add_xpub(input, value)
       @tx_version -> add_tx_version(input, value)
+      @version -> add_version(input, value)
       _ -> add_unknown(input, key, value)
     end
   end
@@ -63,6 +65,20 @@ defmodule BitcoinLib.Signing.Psbt.Global do
   defp add_tx_version(input, value) do
     input
     |> Map.put(:tx_version, value.data)
+  end
+
+  defp add_version(input, value) do
+    version = Version.parse(value.data)
+
+    case Map.get(version, :error) do
+      nil ->
+        input
+        |> Map.put(:version, version)
+
+      message ->
+        input
+        |> Map.put(:error, message)
+    end
   end
 
   defp add_unknown(input, key, value) do
