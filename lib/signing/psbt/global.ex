@@ -1,7 +1,8 @@
 defmodule BitcoinLib.Signing.Psbt.Global do
   defstruct [:unsigned_tx, tx_version: 0, xpubs: [], unknowns: []]
 
-  alias BitcoinLib.Signing.Psbt.Global.{Xpub, UnsignedTx, Version, Proprietary}
+  alias BitcoinLib.Signing.Psbt.GenericProperties.{Proprietary}
+  alias BitcoinLib.Signing.Psbt.Global.{Xpub, UnsignedTx, Version}
   alias BitcoinLib.Signing.Psbt.{Keypair, KeypairList, Global}
 
   @unsigned_tx 0
