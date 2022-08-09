@@ -21,18 +21,20 @@ defmodule BitcoinLib.Signing.Psbt.Input do
     WitnessScript,
     Bip32Derivation,
     FinalScriptSig,
-    FinalScriptWitness
+    FinalScriptWitness,
+    OutputIndex
   }
 
-  @non_witness_utxo 0
-  @witness_utxo 1
-  @partial_sig 2
-  @sighash_type 3
-  @redeem_script 4
-  @witness_script 5
-  @bip32_derivation 6
-  @final_script_sig 7
-  @final_script_witness 8
+  @non_witness_utxo 0x0
+  @witness_utxo 0x1
+  @partial_sig 0x2
+  @sighash_type 0x3
+  @redeem_script 0x4
+  @witness_script 0x5
+  @bip32_derivation 0x6
+  @final_script_sig 0x7
+  @final_script_witness 0x8
+  @output_index 0xF
 
   def from_keypair_list(nil) do
     nil
@@ -80,6 +82,7 @@ defmodule BitcoinLib.Signing.Psbt.Input do
       @bip32_derivation -> add_bip32_derivation(input, key.data, value)
       @final_script_sig -> add_final_script_sig(input, keypair)
       @final_script_witness -> add_final_script_witness(input, keypair)
+      @output_index -> add_output_index(input, keypair)
       _ -> add_unknown(input, keypair)
     end
   end
@@ -186,6 +189,20 @@ defmodule BitcoinLib.Signing.Psbt.Input do
       nil ->
         input
         |> Map.put(:final_script_witness, final_script_witness)
+
+      message ->
+        input
+        |> Map.put(:error, message)
+    end
+  end
+
+  defp add_output_index(input, keypair) do
+    output_index = OutputIndex.parse(keypair)
+
+    case Map.get(output_index, :error) do
+      nil ->
+        input
+        |> Map.put(:output_index, output_index)
 
       message ->
         input
