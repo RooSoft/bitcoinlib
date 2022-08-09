@@ -4,7 +4,7 @@ defmodule BitcoinLib.Test.Integration.Bip174.FailsSignerChecksTest do
   """
   use ExUnit.Case, async: true
 
-  alias BitcoinLib.Signing.Psbt
+#  alias BitcoinLib.Signing.Psbt
 
   # test "Case: A Witness UTXO is provided for a non-witness input" do
   #   base_64 =

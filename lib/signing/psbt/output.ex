@@ -43,12 +43,12 @@ defmodule BitcoinLib.Signing.Psbt.Output do
     |> Enum.reduce(%Output{}, &dispatch_keypair/2)
   end
 
-  defp dispatch_keypair(%Keypair{key: key, value: value} = keypair, output) do
+  defp dispatch_keypair(%Keypair{key: key} = keypair, output) do
     case key.type do
       @redeem_script -> add_redeem_script(output, keypair)
       @witness_script -> add_witness_script(output, keypair)
       @bip32_derivation -> add_bip32_derivation(output, keypair)
-      _ -> add_unknown(output, key, value)
+      _ -> add_unknown(output, keypair)
     end
   end
 
@@ -94,8 +94,8 @@ defmodule BitcoinLib.Signing.Psbt.Output do
     end
   end
 
-  defp add_unknown(input, key, value) do
+  defp add_unknown(input, keypair) do
     input
-    |> Map.put(:unknowns, [{key, value} | input.unknowns])
+    |> Map.put(:unknowns, [keypair | input.unknowns])
   end
 end
