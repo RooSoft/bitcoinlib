@@ -22,6 +22,7 @@ defmodule BitcoinLib.Signing.Psbt.Input do
     Bip32Derivation,
     FinalScriptSig,
     FinalScriptWitness,
+    ProofOfReservesCommitment,
     OutputIndex
   }
 
@@ -34,6 +35,7 @@ defmodule BitcoinLib.Signing.Psbt.Input do
   @bip32_derivation 0x6
   @final_script_sig 0x7
   @final_script_witness 0x8
+  @proof_of_reserves_commitment 0x9
   @output_index 0xF
 
   def from_keypair_list(nil) do
@@ -82,6 +84,7 @@ defmodule BitcoinLib.Signing.Psbt.Input do
       @bip32_derivation -> add_bip32_derivation(input, key.data, value)
       @final_script_sig -> add_final_script_sig(input, keypair)
       @final_script_witness -> add_final_script_witness(input, keypair)
+      @proof_of_reserves_commitment -> add_proof_of_reserves_commitment(input, keypair)
       @output_index -> add_output_index(input, keypair)
       _ -> add_unknown(input, keypair)
     end
@@ -194,6 +197,13 @@ defmodule BitcoinLib.Signing.Psbt.Input do
         input
         |> Map.put(:error, message)
     end
+  end
+
+  defp add_proof_of_reserves_commitment(input, keypair) do
+    proof_of_reserves_commitment = ProofOfReservesCommitment.parse(keypair)
+
+    input
+    |> Map.put(:proof_of_reserves_commitment, proof_of_reserves_commitment)
   end
 
   defp add_output_index(input, keypair) do
