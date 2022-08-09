@@ -40,7 +40,7 @@ defmodule BitcoinLib.Signing.Psbt.Global do
       @xpub -> add_xpub(input, value)
       @tx_version -> add_tx_version(input, value)
       @version -> add_version(input, value)
-      @proprietary -> add_proprietary(input, value)
+      @proprietary -> add_proprietary(input, keypair)
       _ -> add_unknown(input, key, value)
     end
   end
@@ -83,9 +83,9 @@ defmodule BitcoinLib.Signing.Psbt.Global do
     end
   end
 
-  defp add_proprietary(input, value) do
+  defp add_proprietary(input, keypair) do
     input
-    |> Map.put(:proprietary, Proprietary.parse(value))
+    |> Map.put(:proprietary, Proprietary.parse(keypair))
   end
 
   defp add_unknown(input, key, value) do
