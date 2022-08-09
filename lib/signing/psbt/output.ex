@@ -1,12 +1,14 @@
 defmodule BitcoinLib.Signing.Psbt.Output do
   defstruct unknowns: []
 
+  alias BitcoinLib.Signing.Psbt.GenericProperties.{Proprietary}
   alias BitcoinLib.Signing.Psbt.{Keypair, KeypairList, Output}
   alias BitcoinLib.Signing.Psbt.Output.{RedeemScript, WitnessScript, Bip32Derivation}
 
-  @redeem_script 0
-  @witness_script 1
-  @bip32_derivation 2
+  @redeem_script 0x0
+  @witness_script 0x1
+  @bip32_derivation 0x2
+  @proprietary 0xFC
 
   def from_keypair_list(nil) do
     nil
@@ -48,6 +50,7 @@ defmodule BitcoinLib.Signing.Psbt.Output do
       @redeem_script -> add_redeem_script(output, keypair)
       @witness_script -> add_witness_script(output, keypair)
       @bip32_derivation -> add_bip32_derivation(output, keypair)
+      @proprietary -> add_proprietary(output, keypair)
       _ -> add_unknown(output, keypair)
     end
   end
@@ -92,6 +95,11 @@ defmodule BitcoinLib.Signing.Psbt.Output do
         output
         |> Map.put(:error, message)
     end
+  end
+
+  defp add_proprietary(input, keypair) do
+    input
+    |> Map.put(:proprietary, Proprietary.parse(keypair))
   end
 
   defp add_unknown(input, keypair) do
