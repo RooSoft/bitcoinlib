@@ -12,6 +12,8 @@ defmodule BitcoinLib.Signing.Psbt.Input do
 
   alias BitcoinLib.Signing.Psbt.{Keypair, KeypairList, Input}
 
+  alias BitcoinLib.Signing.Psbt.GenericProperties.{Proprietary}
+
   alias BitcoinLib.Signing.Psbt.Input.{
     NonWitnessUtxo,
     WitnessUtxo,
@@ -45,6 +47,7 @@ defmodule BitcoinLib.Signing.Psbt.Input do
   @hash160_preimage 0xC
   @hash256_preimage 0xD
   @output_index 0xF
+  @proprietary 0xFC
 
   def from_keypair_list(nil) do
     nil
@@ -98,6 +101,7 @@ defmodule BitcoinLib.Signing.Psbt.Input do
       @hash160_preimage -> add_hash160_preimage(input, keypair)
       @hash256_preimage -> add_hash256_preimage(input, keypair)
       @output_index -> add_output_index(input, keypair)
+      @proprietary -> add_proprietary(input, keypair)
       _ -> add_unknown(input, keypair)
     end
   end
@@ -286,6 +290,11 @@ defmodule BitcoinLib.Signing.Psbt.Input do
         input
         |> Map.put(:error, message)
     end
+  end
+
+  defp add_proprietary(input, keypair) do
+    input
+    |> Map.put(:proprietary, Proprietary.parse(keypair))
   end
 
   defp add_unknown(input, keypair) do
