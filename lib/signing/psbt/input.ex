@@ -25,6 +25,7 @@ defmodule BitcoinLib.Signing.Psbt.Input do
     ProofOfReservesCommitment,
     Ripemd160Preimage,
     Sha256Preimage,
+    Hash160Preimage,
     OutputIndex
   }
 
@@ -40,6 +41,7 @@ defmodule BitcoinLib.Signing.Psbt.Input do
   @proof_of_reserves_commitment 0x9
   @ripemd160_preimage 0xA
   @sha256_preimage 0xB
+  @hash160_preimage 0xC
   @output_index 0xF
 
   def from_keypair_list(nil) do
@@ -91,6 +93,7 @@ defmodule BitcoinLib.Signing.Psbt.Input do
       @proof_of_reserves_commitment -> add_proof_of_reserves_commitment(input, keypair)
       @ripemd160_preimage -> add_ripemd160_preimage(input, keypair)
       @sha256_preimage -> add_sha256_preimage(input, keypair)
+      @hash160_preimage -> add_hash160_preimage(input, keypair)
       @output_index -> add_output_index(input, keypair)
       _ -> add_unknown(input, keypair)
     end
@@ -233,6 +236,20 @@ defmodule BitcoinLib.Signing.Psbt.Input do
       nil ->
         input
         |> Map.put(:sha256_preimage, sha256_preimage)
+
+      message ->
+        input
+        |> Map.put(:error, message)
+    end
+  end
+
+  defp add_hash160_preimage(input, keypair) do
+    hash160_preimage = Hash160Preimage.parse(keypair.key, keypair.value)
+
+    case Map.get(hash160_preimage, :error) do
+      nil ->
+        input
+        |> Map.put(:hash160_preimage, hash160_preimage)
 
       message ->
         input
