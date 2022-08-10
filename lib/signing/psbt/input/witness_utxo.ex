@@ -1,5 +1,5 @@
 defmodule BitcoinLib.Signing.Psbt.Input.WitnessUtxo do
-  defstruct [:amount, :pub_key]
+  defstruct [:amount, :script_pub_key]
 
   alias BitcoinLib.Signing.Psbt.Input.WitnessUtxo
   alias BitcoinLib.Signing.Psbt.Keypair
@@ -11,7 +11,7 @@ defmodule BitcoinLib.Signing.Psbt.Input.WitnessUtxo do
       %{keypair: keypair, witness_utxo: %WitnessUtxo{}}
       |> validate_keypair()
       |> extract_amount()
-      |> extract_pub_key()
+      |> extract_script_pub_key()
 
     witness_utxo
   end
@@ -40,18 +40,18 @@ defmodule BitcoinLib.Signing.Psbt.Input.WitnessUtxo do
     |> Map.put(:remaining, remaining)
   end
 
-  defp extract_pub_key(%{witness_utxo: %{error: _message}} = map), do: map
+  defp extract_script_pub_key(%{witness_utxo: %{error: _message}} = map), do: map
 
-  defp extract_pub_key(%{remaining: remaining, witness_utxo: witness_utxo} = map) do
-    %CompactInteger{value: pub_key_length, remaining: remaining} =
+  defp extract_script_pub_key(%{remaining: remaining, witness_utxo: witness_utxo} = map) do
+    %CompactInteger{value: script_pub_key_length, remaining: remaining} =
       CompactInteger.extract_from(remaining)
 
-    <<pub_key::binary-size(pub_key_length), remaining::bitstring>> = remaining
+    <<script_pub_key::binary-size(script_pub_key_length), remaining::bitstring>> = remaining
 
     %{
       map
       | remaining: remaining,
-        witness_utxo: Map.put(witness_utxo, :pub_key, Binary.to_hex(pub_key))
+        witness_utxo: Map.put(witness_utxo, :script_pub_key, Binary.to_hex(script_pub_key))
     }
   end
 end
