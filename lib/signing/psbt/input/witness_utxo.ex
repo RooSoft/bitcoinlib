@@ -1,5 +1,5 @@
 defmodule BitcoinLib.Signing.Psbt.Input.WitnessUtxo do
-  defstruct [:sixty_four, :pub_key]
+  defstruct [:amount, :pub_key]
 
   alias BitcoinLib.Signing.Psbt.Input.WitnessUtxo
   alias BitcoinLib.Signing.Psbt.Keypair
@@ -10,7 +10,7 @@ defmodule BitcoinLib.Signing.Psbt.Input.WitnessUtxo do
     %{witness_utxo: witness_utxo} =
       %{keypair: keypair, witness_utxo: %WitnessUtxo{}}
       |> validate_keypair()
-      |> extract_sixty_four()
+      |> extract_amount()
       |> extract_pub_key()
 
     witness_utxo
@@ -26,17 +26,17 @@ defmodule BitcoinLib.Signing.Psbt.Input.WitnessUtxo do
     end
   end
 
-  defp extract_sixty_four(%{witness_utxo: %{error: _message}} = map), do: map
+  defp extract_amount(%{witness_utxo: %{error: _message}} = map), do: map
 
-  defp extract_sixty_four(
+  defp extract_amount(
          %{
            keypair: %Keypair{
-             value: %Value{data: <<sixty_four::binary-8, remaining::bitstring>>}
+             value: %Value{data: <<amount::little-64, remaining::bitstring>>}
            },
            witness_utxo: witness_utxo
          } = map
        ) do
-    %{map | witness_utxo: Map.put(witness_utxo, :sixty_four, Binary.to_hex(sixty_four))}
+    %{map | witness_utxo: Map.put(witness_utxo, :amount, amount)}
     |> Map.put(:remaining, remaining)
   end
 
