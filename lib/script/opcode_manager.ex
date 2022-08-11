@@ -1,7 +1,8 @@
 defmodule BitcoinLib.Script.OpcodeManager do
-  alias BitcoinLib.Script.Opcodes.{Stack}
+  alias BitcoinLib.Script.Opcodes.{Stack, BitwiseLogic}
 
   @dup Stack.Dup.v()
+  @equal BitwiseLogic.Equal.v()
 
   @doc """
   Extract the opcode on the top of the stack given as an argument
@@ -13,6 +14,10 @@ defmodule BitcoinLib.Script.OpcodeManager do
 
   def extract_from_script(<<@dup::8, remaining::bitstring>>) do
     {:ok, %Stack.Dup{}, remaining}
+  end
+
+  def extract_from_script(<<@equal::8, remaining::bitstring>>) do
+    {:ok, %BitwiseLogic.Equal{}, remaining}
   end
 
   def extract_from_script(<<unknown_upcode::8, remaining::bitstring>>) do

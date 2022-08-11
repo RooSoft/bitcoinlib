@@ -10,7 +10,7 @@ defmodule BitcoinLib.Script do
 
   defp execute_next_opcode({:error, message}), do: {:error, message}
 
-  defp execute_next_opcode({:empty_script, [true]}), do: {:ok, true}
+  defp execute_next_opcode({:empty_script, [1]}), do: {:ok, true}
   defp execute_next_opcode({:empty_script, _}), do: {:ok, false}
 
   defp execute_next_opcode({:ok, stack, script}) do
@@ -26,7 +26,10 @@ defmodule BitcoinLib.Script do
     {:error, message}
   end
 
-  defp execute_opcode({:ok, _, remaining}, stack) do
-    {:ok, stack, remaining}
+  defp execute_opcode({:ok, opcode, remaining}, stack) do
+    case opcode.type.execute(stack) do
+      {:ok, stack} -> {:ok, stack, remaining}
+      {:error, message} -> {:error, message}
+    end
   end
 end

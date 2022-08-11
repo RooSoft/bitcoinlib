@@ -8,8 +8,18 @@ defmodule BitcoinLib.ScriptTest do
 
   @dup Stack.Dup.v()
   @hash_160 Crypto.Hash160.v()
+  @equal BitwiseLogic.Equal.v()
   @equal_verify BitwiseLogic.EqualVerify.v()
   @check_sig Crypto.CheckSig.v()
+
+  test "script duplicating the input and verifying both resulting elements are the same" do
+    input = [0x3]
+    script = <<@dup::8, @equal::8>>
+
+    {:ok, result} = Script.execute(script, input)
+
+    assert true == result
+  end
 
   test "parse a standard transaction to bitcoin address (pay-to-pubkey-hash)" do
     pub_key_hash = 0x12AB8DC588CA9D5787DDE7EB29569DA63C3A238C
