@@ -1,4 +1,4 @@
-defmodule BitcoinLib.Script.Opcode do
+defmodule BitcoinLib.Script.OpcodeManager do
   alias BitcoinLib.Script.Opcodes.{Stack}
 
   @dup Stack.Dup.v()
