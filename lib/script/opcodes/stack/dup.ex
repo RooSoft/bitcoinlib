@@ -1,4 +1,6 @@
 defmodule BitcoinLib.Script.Opcodes.Stack.Dup do
+  @behaviour BitcoinLib.Script.Opcode
+
   defstruct []
 
   @value 0x76
