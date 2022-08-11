@@ -22,8 +22,8 @@ defmodule BitcoinLib.ScriptTest do
     pub_key =
       0x044D05240CFBD8A2786EDA9DADD520C1609B8593FF8641018D57703D02BA687CF2F187F0CEE2221C3AFB1B5FF7888CACED2423916B61444666CA1216F26181398C
 
-    result = Script.execute(script, [sig, pub_key])
+    {:error, message} = Script.execute(script, [sig, pub_key])
 
-    assert result
+    assert message =~ "trying to extract an unknown upcode"
   end
 end
