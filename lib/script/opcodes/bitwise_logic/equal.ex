@@ -11,8 +11,8 @@ defmodule BitcoinLib.Script.Opcodes.BitwiseLogic.Equal do
 
   def execute([]), do: {:error, "trying to execute OP_EQUAL on an empty stack"}
 
-  def execute([_ | []]),
-    do: {:error, "trying to execute OP_EQUAL on a stack with a single element"}
+  def execute([element | []]),
+    do: {:error, "trying to execute OP_EQUAL on a stack with a single element #{element}"}
 
   def execute([first_element | [second_element | remaining]]) do
     case first_element == second_element do
