@@ -5,7 +5,7 @@ defmodule BitcoinLib.Script.Opcodes.Stack.DupTest do
 
   alias BitcoinLib.Script.Opcodes.Stack.Dup
 
-  @opcode_value 0x76
+  @opcode_value Dup.v()
 
   test "OP_DUP opcode has the 0x76 value" do
     result = Dup.v()
