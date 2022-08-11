@@ -12,4 +12,20 @@ defmodule BitcoinLib.Script.Opcodes.Stack.DupTest do
 
     assert @opcode_value = result
   end
+
+  test "execute OP_DUP on a stack" do
+    stack = [1, 2, 3, 4]
+
+    {:ok, result} = Dup.execute(stack)
+
+    assert [1, 1, 2, 3, 4] == result
+  end
+
+  test "execute OP_DUP on an empty stack" do
+    stack = []
+
+    {:error, message} = Dup.execute(stack)
+
+    assert "trying to execute OP_DUP on an empty stack" == message
+  end
 end
