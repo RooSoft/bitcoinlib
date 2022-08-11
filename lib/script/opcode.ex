@@ -1,4 +1,8 @@
 defmodule BitcoinLib.Script.Opcode do
+  @moduledoc """
+  Opcode behaviour, allowing execution and returning the opcode's integer value
+  """
+
   @doc """
   Returns the opcode's value
   """
