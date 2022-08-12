@@ -26,10 +26,14 @@ defmodule BitcoinLib.Script do
     {:error, message}
   end
 
-  defp execute_opcode({:ok, opcode, remaining}, stack) do
+  defp execute_opcode({:opcode, opcode, remaining}, stack) do
     case opcode.type.execute(stack) do
       {:ok, stack} -> {:ok, stack, remaining}
       {:error, message} -> {:error, message}
     end
+  end
+
+  defp execute_opcode({:data, data, remaining}, stack) do
+    {:ok, [data | stack], remaining}
   end
 end
