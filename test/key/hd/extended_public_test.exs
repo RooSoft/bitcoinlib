@@ -273,6 +273,6 @@ defmodule BitcoinLib.Key.HD.ExtendedPublicTest do
       public_key
       |> ExtendedPublic.to_address(:p2sh, :testnet)
 
-    assert address == "35VWn5EwcFJZhkJJ5p1J2weMjWYxDDrYk2"
+    assert address == "2Mw3iqpAyDhouuXvqkwdAetdcwrm7yFLW14"
   end
 end

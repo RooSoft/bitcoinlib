@@ -29,6 +29,6 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic.Address.P2SHTest do
       public_key
       |> P2SH.from_extended_public_key(:testnet)
 
-    assert "3D9iyFHi1Zs9KoyynUfrL82rGhJfYTfSG4" == address
+    assert "2N4hw2zDjd2NVXbcXTcHix527V3WqLjqqve" == address
   end
 end

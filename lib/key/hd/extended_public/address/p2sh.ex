@@ -29,7 +29,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic.Address.P2SH do
     |> hash160
     |> create_redeem_script
     |> hash160
-    |> prepend_version_bytes
+    |> prepend_version_bytes(network)
     |> append_checksum
     |> base58_encode
   end
@@ -48,8 +48,12 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic.Address.P2SH do
     <<0x14::size(16), public_key_hash::bitstring>>
   end
 
-  defp prepend_version_bytes(redeem_script) do
+  defp prepend_version_bytes(redeem_script, :mainnet) do
     <<5::size(8), redeem_script::bitstring>>
+  end
+
+  defp prepend_version_bytes(redeem_script, :testnet) do
+    <<0xC4::size(8), redeem_script::bitstring>>
   end
 
   defp append_checksum(public_key_hash) do
