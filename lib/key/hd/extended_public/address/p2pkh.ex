@@ -19,9 +19,9 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic.Address.P2PKH do
     ...> } |> BitcoinLib.Key.HD.ExtendedPublic.Address.P2PKH.from_extended_public_key()
     "1LoVGDgRs9hTfTNJNuXKSpywcbdvwRXpmK"
   """
-  def from_extended_public_key(%ExtendedPublic{key: key}) do
+  def from_extended_public_key(%ExtendedPublic{key: key}, network \\ :mainnet) do
     key
     |> BitcoinLib.Key.PublicHash.from_public_key()
-    |> BitcoinLib.Key.Address.from_public_key_hash(:p2pkh)
+    |> BitcoinLib.Key.Address.from_public_key_hash(:p2pkh, network)
   end
 end

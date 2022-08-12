@@ -69,9 +69,9 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic do
     "1BRjWnoAVg3EASJHex5YeyDWC1zZ4CA5vc"
   """
   @spec to_address(%ExtendedPublic{}, :p2pkh | :p2sh | :bech32) :: binary()
-  def to_address(%ExtendedPublic{} = public_key, type \\ :bech32) do
+  def to_address(%ExtendedPublic{} = public_key, type \\ :bech32, network \\ :mainnet) do
     public_key
-    |> Address.from_extended_public_key(type)
+    |> Address.from_extended_public_key(type, network)
   end
 
   @doc """
