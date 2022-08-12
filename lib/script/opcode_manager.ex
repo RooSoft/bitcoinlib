@@ -7,6 +7,8 @@ defmodule BitcoinLib.Script.OpcodeManager do
   @hash160 Crypto.Hash160.v()
   @check_sig Crypto.CheckSig.v()
 
+  alias BitcoinLib.Signing.Psbt.CompactInteger
+
   @doc """
   Extract the opcode on the top of the stack given as an argument
   """
@@ -16,26 +18,38 @@ defmodule BitcoinLib.Script.OpcodeManager do
   def extract_from_script(<<>>), do: {:empty_script}
 
   def extract_from_script(<<@dup::8, remaining::bitstring>>) do
-    {:ok, %Stack.Dup{}, remaining}
+    {:opcode, %Stack.Dup{}, remaining}
   end
 
   def extract_from_script(<<@equal::8, remaining::bitstring>>) do
-    {:ok, %BitwiseLogic.Equal{}, remaining}
+    {:opcode, %BitwiseLogic.Equal{}, remaining}
   end
 
   def extract_from_script(<<@equal_verify::8, remaining::bitstring>>) do
-    {:ok, %BitwiseLogic.EqualVerify{}, remaining}
+    {:opcode, %BitwiseLogic.EqualVerify{}, remaining}
   end
 
   def extract_from_script(<<@hash160::8, remaining::bitstring>>) do
-    {:ok, %Crypto.Hash160{}, remaining}
+    {:opcode, %Crypto.Hash160{}, remaining}
   end
 
   def extract_from_script(<<@check_sig::8, remaining::bitstring>>) do
-    {:ok, %Crypto.CheckSig{}, remaining}
+    {:opcode, %Crypto.CheckSig{}, remaining}
   end
 
-  def extract_from_script(<<unknown_upcode::8, remaining::bitstring>>) do
-    {:error, "trying to extract an unknown upcode: #{unknown_upcode}", remaining}
+  def extract_from_script(<<unknown_upcode::8, remaining::bitstring>> = script) do
+    case unknown_upcode do
+      x when x in 0x01..0x4B -> extract_and_return_data(script)
+      _ -> {:error, "trying to extract an unknown upcode: #{unknown_upcode}", remaining}
+    end
+  end
+
+  defp extract_and_return_data(script) do
+    %CompactInteger{value: data_length, remaining: remaining} =
+      CompactInteger.extract_from(script)
+
+    <<data::binary-size(data_length), remaining::bitstring>> = remaining
+
+    {:data, data, remaining}
   end
 end
