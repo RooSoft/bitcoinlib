@@ -23,7 +23,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic.Address.P2SH do
     ...> |> BitcoinLib.Key.HD.ExtendedPublic.Address.P2SH.from_extended_public_key()
     "3D9iyFHi1Zs9KoyynUfrL82rGhJfYTfSG4"
   """
-  def from_extended_public_key(%ExtendedPublic{key: key}) do
+  def from_extended_public_key(%ExtendedPublic{key: key}, network \\ :mainnet) do
     key
     |> to_binary
     |> hash160
