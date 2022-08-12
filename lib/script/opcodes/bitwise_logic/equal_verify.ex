@@ -1,5 +1,7 @@
 defmodule BitcoinLib.Script.Opcodes.BitwiseLogic.EqualVerify do
-  defstruct []
+  @behaviour BitcoinLib.Script.Opcode
+
+  defstruct type: BitcoinLib.Script.Opcodes.BitwiseLogic.EqualVerify
 
   alias BitcoinLib.Script.Opcodes.BitwiseLogic.Equal
   alias BitcoinLib.Script.Opcodes.FlowControl.Verify
