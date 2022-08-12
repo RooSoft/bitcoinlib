@@ -47,8 +47,10 @@ blue_wallet_address_0 =
   blue_wallet_address_0_pub_key
   |> ExtendedPublic.to_address(:p2sh)
 
+p2pkh_testnet_address = 
+  0x93CE48570B55C42C2AF816AEABA06CFEE1224FAE
+  |> BitcoinLib.Key.Address.from_public_key_hash(:p2pkh, :testnet)
 
-  yo =
-    "blue involve cook print twist crystal razor february caution private slim medal"
-    |> ExtendedPrivate.from_mnemonic_phrase()
-    |> ExtendedPrivate.from_derivation_path!("m/84'/0'/0'")
+p2sh_testnet_address = 
+  0x93CE48570B55C42C2AF816AEABA06CFEE1224FAE
+  |> BitcoinLib.Key.Address.from_public_key_hash(:p2sh, :testnet)
