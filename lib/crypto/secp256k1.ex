@@ -24,6 +24,25 @@ defmodule BitcoinLib.Crypto.Secp256k1 do
     |> to_integer()
   end
 
+  @doc """
+  Signs a message using a private key
+
+  ## Examples
+    iex> message = "76a914c825a1ecf2a6830c4401620c3a16f1995057c2ab88ac"
+    ...> private_key = "5d56c06f7aff6e62d909e786f4e869b8fb6c031b877e494149ca126bd550fc30"
+    ...> BitcoinLib.Crypto.Secp256k1.sign(message, private_key)
+    "304402207c2650166f802c3d4bdc6b636bf0678dce4ffb72008e292ac7e628f7a066f321022038876bf9cd69cb1e676429d0fdac17dffa0e10c265b8d9f508c42bff53fe23d6"
+  """
+  def sign(message, private_key) do
+    key =
+      private_key
+      |> Binary.from_hex()
+      |> Key.from_privkey()
+
+    Curvy.sign(message, key)
+    |> Binary.to_hex()
+  end
+
   defp get_point(key) do
     key
     |> Binary.from_integer()
