@@ -263,4 +263,16 @@ defmodule BitcoinLib.Key.HD.ExtendedPublicTest do
 
     assert address == "mubRhU6Y9DFNQfxqrqwfMKCbXHRgq6NBmq"
   end
+
+  test "create a testnet P2SH address" do
+    public_key =
+      "ypub6WwZCtcXYyyL6GHQrB8pnaHRNCaAWhuQkQraCKUk7qpF4JmVgwMAvaCu9m6o9nAeyFRqw6xyZxG7CDf16GMHFYbtw8KCtNsgkRoRs7YFJf9"
+      |> ExtendedPublic.deserialize!()
+
+    address =
+      public_key
+      |> ExtendedPublic.to_address(:p2sh, :testnet)
+
+    assert address == "35VWn5EwcFJZhkJJ5p1J2weMjWYxDDrYk2"
+  end
 end
