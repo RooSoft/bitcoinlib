@@ -22,13 +22,13 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic.Address.Bech32 do
     ...> } |> BitcoinLib.Key.HD.ExtendedPublic.Address.Bech32.from_extended_public_key()
     "bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4"
   """
-  def from_extended_public_key(%ExtendedPublic{key: key}) do
+  def from_extended_public_key(%ExtendedPublic{key: key}, network \\ :mainnet) do
     key
     |> to_binary
     |> hash160
     |> to_base5_array
     |> prepend_witness_version(0)
-    |> encode
+    |> encode(network)
   end
 
   defp to_binary(key) do
@@ -51,7 +51,11 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic.Address.Bech32 do
     [witness_version | base5array]
   end
 
-  defp encode(base5array) do
+  defp encode(base5array, :mainnet) do
     Bech32.encode("bc", base5array)
+  end
+
+  defp encode(base5array, :testnet) do
+    Bech32.encode("tc", base5array)
   end
 end

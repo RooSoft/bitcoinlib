@@ -16,6 +16,9 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic.Address do
   def from_extended_public_key(%ExtendedPublic{} = public_key, :p2sh, :testnet),
     do: P2SH.from_extended_public_key(public_key, :testnet)
 
-  def from_extended_public_key(%ExtendedPublic{} = public_key, :bech32, _),
+  def from_extended_public_key(%ExtendedPublic{} = public_key, :bech32, :mainnet),
     do: Bech32.from_extended_public_key(public_key)
+
+  def from_extended_public_key(%ExtendedPublic{} = public_key, :bech32, :testnet),
+    do: Bech32.from_extended_public_key(public_key, :testnet)
 end
