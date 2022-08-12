@@ -275,4 +275,17 @@ defmodule BitcoinLib.Key.HD.ExtendedPublicTest do
 
     assert address == "2Mw3iqpAyDhouuXvqkwdAetdcwrm7yFLW14"
   end
+
+  test "create a testnet bech32 address" do
+    public_key = %ExtendedPublic{
+      key: 0x0279BE667EF9DCBBAC55A06295CE870B07029BFCDB2DCE28D959F2815B16F81798,
+      chain_code: 0
+    }
+
+    address =
+      public_key
+      |> ExtendedPublic.to_address(:bech32, :testnet)
+
+    assert address == "tc1qw508d6qejxtdg4y5r3zarvary0c5xw7kg3g4ty"
+  end
 end
