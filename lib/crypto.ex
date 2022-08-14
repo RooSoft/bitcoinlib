@@ -93,11 +93,20 @@ defmodule BitcoinLib.Crypto do
 
     iex> "6c7ab2f961a1bc3f13cdc08dc41c3f439adebd549a8ef1c089e81a5907376107"
     ...> |> BitcoinLib.Crypto.hash160()
-    "e96b467ff579a0b4bbb3941ef91442262af8fa39"
+    "273f29c643d908664fcc61aa2ec76e4f21196fcb"
   """
   @spec hash160(String.t()) :: String.t()
   def hash160(str) when is_binary(str) do
     str
+    |> Binary.from_hex()
+    |> hash160_bitstring()
+    |> Base.encode16(case: :lower)
+  end
+
+  @spec hash160(Integer.t()) :: String.t()
+  def hash160(value) when is_integer(value) do
+    value
+    |> Binary.from_integer()
     |> hash160_bitstring()
     |> Base.encode16(case: :lower)
   end

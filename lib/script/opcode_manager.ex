@@ -1,6 +1,8 @@
 defmodule BitcoinLib.Script.OpcodeManager do
   alias BitcoinLib.Script.Opcodes.{BitwiseLogic, Crypto, Stack}
 
+  @byte 8
+
   @dup Stack.Dup.v()
   @equal BitwiseLogic.Equal.v()
   @equal_verify BitwiseLogic.EqualVerify.v()
@@ -48,8 +50,12 @@ defmodule BitcoinLib.Script.OpcodeManager do
     %CompactInteger{value: data_length, remaining: remaining} =
       CompactInteger.extract_from(script)
 
-    <<data::binary-size(data_length), remaining::bitstring>> = remaining
+    data_length = data_length * @byte
 
-    {:data, data, remaining}
+    <<data::size(data_length), remaining::bitstring>> = remaining
+
+    encoded_data = data |> Integer.to_string(16) |> String.downcase()
+
+    {:data, encoded_data, remaining}
   end
 end

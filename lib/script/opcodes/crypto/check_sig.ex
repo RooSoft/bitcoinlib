@@ -9,7 +9,10 @@ defmodule BitcoinLib.Script.Opcodes.Crypto.CheckSig do
     @value
   end
 
-  def execute([_sig_pub_key | remaining]) do
+  def execute([sig_pub_key | [sig | remaining]]) do
+ #   IO.inspect(sig_pub_key, label: "SIG PUB KEY")
+ #   IO.inspect(sig, label: "SIG")
+
     {:ok, [1 | remaining]}
   end
 end

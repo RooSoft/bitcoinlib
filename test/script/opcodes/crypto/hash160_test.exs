@@ -18,7 +18,7 @@ defmodule BitcoinLib.Script.Opcodes.Crypto.Hash160Test do
 
     {:ok, result} = Hash160.execute(stack)
 
-    assert ["e96b467ff579a0b4bbb3941ef91442262af8fa39"] == result
+    assert ["273f29c643d908664fcc61aa2ec76e4f21196fcb"] == result
   end
 
   test "execute OP_HASH160 on an empty stack" do

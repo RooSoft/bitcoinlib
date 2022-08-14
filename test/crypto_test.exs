@@ -82,7 +82,7 @@ defmodule BitcoinLib.CryptoTest do
       value
       |> Crypto.hash160()
 
-    assert "e96b467ff579a0b4bbb3941ef91442262af8fa39" == hash
+    assert "273f29c643d908664fcc61aa2ec76e4f21196fcb" == hash
   end
 
   test "makes a hash160 of a bitstring" do

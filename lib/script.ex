@@ -1,9 +1,7 @@
 defmodule BitcoinLib.Script do
   alias BitcoinLib.Script.OpcodeManager
 
-  def execute(script, input) when is_bitstring(script) do
-    stack = input |> Enum.reverse()
-
+  def execute(script, stack) when is_bitstring(script) do
     {:ok, stack, script}
     |> execute_next_opcode
   end
