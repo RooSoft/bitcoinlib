@@ -56,7 +56,7 @@ defmodule BitcoinLib.Test.Integration.Bip44.P2pkhScriptExecutionTest do
         script_sig
       ])
 
-    assert {:error, _} = result
+    assert {:ok, true} = result
 
     # assert 0x3EB181FB7B5CF63D82307188B20828B83008F2D2511E5C6EDCBE171C63DD2CBC1 = public_key.key
 

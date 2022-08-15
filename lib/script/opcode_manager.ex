@@ -52,10 +52,8 @@ defmodule BitcoinLib.Script.OpcodeManager do
 
     data_length = data_length * @byte
 
-    <<data::size(data_length), remaining::bitstring>> = remaining
+    <<data::bitstring-size(data_length), remaining::bitstring>> = remaining
 
-    encoded_data = data |> Integer.to_string(16) |> String.downcase()
-
-    {:data, encoded_data, remaining}
+    {:data, data, remaining}
   end
 end
