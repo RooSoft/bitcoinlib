@@ -43,13 +43,13 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic.Deserialization do
 
   defp execute(serialized_public_key) do
     <<
-      _::size(32),
-      depth::size(8),
-      parent_fingerprint::size(32),
-      index::size(32),
-      chain_code::size(256),
-      key::size(264),
-      _checksum::size(32)
+      _::32,
+      depth::8,
+      parent_fingerprint::bitstring-32,
+      index::32,
+      chain_code::bitstring-256,
+      key::bitstring-264,
+      _checksum::32
     >> =
       serialized_public_key
       |> Base58.decode()

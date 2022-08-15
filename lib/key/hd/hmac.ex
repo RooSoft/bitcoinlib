@@ -13,13 +13,13 @@ defmodule BitcoinLib.Key.HD.Hmac do
 
   ## Examples
     iex> %BitcoinLib.Key.HD.ExtendedPrivate {
-    ...>   key: 0xE8F32E723DECF4051AEFAC8E2C93C9C5B214313817CDB01A1494B917C8436B35,
-    ...>   chain_code: 0x873DFF81C02F525623FD1FE5167EAC3A55A049DE3D314BB42EE227FFED37D508
+    ...>   key: <<0xE8F32E723DECF4051AEFAC8E2C93C9C5B214313817CDB01A1494B917C8436B35::256>>,
+    ...>   chain_code: <<0x873DFF81C02F525623FD1FE5167EAC3A55A049DE3D314BB42EE227FFED37D508::256>>
     ...> }
     ...> |> BitcoinLib.Key.HD.Hmac.compute(0)
     {
-      0x6539AE80B3618C22F5F8CC4171D04835570BDA8DB11B5BF1779AFAE7EC7C79C3,
-      0xD323F1BE5AF39A2D2F08F5E8F664633849653DBE329802E9847CFC85F8D7B52A
+      <<0x6539AE80B3618C22F5F8CC4171D04835570BDA8DB11B5BF1779AFAE7EC7C79C3::256>>,
+      <<0xD323F1BE5AF39A2D2F08F5E8F664633849653DBE329802E9847CFC85F8D7B52A::256>>
     }
   """
   def compute(private_key, index, hardened? \\ false)
@@ -42,22 +42,20 @@ defmodule BitcoinLib.Key.HD.Hmac do
 
   defp get_input(%ExtendedPrivate{} = private_key, index, _hardened? = true)
        when is_integer(index) do
-    binary_private_key = Binary.from_integer(private_key.key)
-
-    <<(<<0>>), binary_private_key::bitstring, index::size(32)>>
+    <<(<<0>>), private_key.key::bitstring, index::size(32)>>
   end
 
   defp get_input(%ExtendedPublic{} = public_key, index, _hardened? = false)
        when is_integer(index) do
-    binary_public_key = Binary.from_integer(public_key.key)
+    key = public_key.key
 
-    <<binary_public_key::bitstring, index::size(32)>>
+    <<key::bitstring, index::size(32)>>
   end
 
   defp execute(hmac_input, chain_code) do
-    <<derived_key::256, child_chain::256>> =
+    <<derived_key::bitstring-256, child_chain::bitstring-256>> =
       hmac_input
-      |> Crypto.hmac_bitstring(chain_code |> Binary.from_integer())
+      |> Crypto.hmac_bitstring(chain_code)
 
     {derived_key, child_chain}
   end

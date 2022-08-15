@@ -17,26 +17,20 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic.Address.P2SH do
 
   ## Examples
     iex> %BitcoinLib.Key.HD.ExtendedPublic{
-    ...>  key: 0x02D0DE0AAEAEFAD02B8BDC8A01A1B8B11C696BD3D66A2C5F10780D95B7DF42645C,
-    ...>  chain_code: 0
+    ...>  key: <<0x02D0DE0AAEAEFAD02B8BDC8A01A1B8B11C696BD3D66A2C5F10780D95B7DF42645C::264>>,
+    ...>  chain_code: <<0::256>>
     ...> }
     ...> |> BitcoinLib.Key.HD.ExtendedPublic.Address.P2SH.from_extended_public_key()
     "3D9iyFHi1Zs9KoyynUfrL82rGhJfYTfSG4"
   """
   def from_extended_public_key(%ExtendedPublic{key: key}, network \\ :mainnet) do
     key
-    |> to_binary
     |> hash160
     |> create_redeem_script
     |> hash160
     |> prepend_version_bytes(network)
     |> append_checksum
     |> base58_encode
-  end
-
-  defp to_binary(key) do
-    key
-    |> Binary.from_integer()
   end
 
   defp hash160(value) do

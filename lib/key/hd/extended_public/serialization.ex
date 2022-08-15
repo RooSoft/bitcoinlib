@@ -64,12 +64,12 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic.Serialization do
          version_bytes
        ) do
     data = <<
-      version_bytes::size(32),
-      depth::size(8),
-      parent_fingerprint::size(32),
-      index::size(32),
-      chain_code::size(256),
-      key::size(264)
+      version_bytes::32,
+      depth::8,
+      parent_fingerprint::bitstring-32,
+      index::32,
+      chain_code::bitstring-256,
+      key::bitstring-264
     >>
 
     <<

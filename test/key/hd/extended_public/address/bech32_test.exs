@@ -8,7 +8,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic.Address.Bech32Test do
 
   test "create a bech32 address from an extended public key" do
     public_key = %ExtendedPublic{
-      key: 0x0279BE667EF9DCBBAC55A06295CE870B07029BFCDB2DCE28D959F2815B16F81798,
+      key: <<0x0279BE667EF9DCBBAC55A06295CE870B07029BFCDB2DCE28D959F2815B16F81798::264>>,
       chain_code: 0
     }
 
@@ -21,7 +21,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic.Address.Bech32Test do
 
   test "create a testnet bech32 address from an extended public key" do
     public_key = %ExtendedPublic{
-      key: 0x0279BE667EF9DCBBAC55A06295CE870B07029BFCDB2DCE28D959F2815B16F81798,
+      key: <<0x0279BE667EF9DCBBAC55A06295CE870B07029BFCDB2DCE28D959F2815B16F81798::264>>,
       chain_code: 0
     }
 

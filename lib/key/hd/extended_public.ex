@@ -4,7 +4,14 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic do
   """
 
   @enforce_keys [:key, :chain_code]
-  defstruct [:key, :chain_code, depth: 0, index: 0, parent_fingerprint: 0, fingerprint: 0]
+  defstruct [
+    :key,
+    :chain_code,
+    depth: 0,
+    index: 0,
+    parent_fingerprint: <<0::32>>,
+    fingerprint: <<0::32>>
+  ]
 
   alias BitcoinLib.Key.HD.ExtendedPublic.{
     Address,
@@ -24,17 +31,17 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic do
 
   ## Examples
     iex> %BitcoinLib.Key.HD.ExtendedPrivate{
-    ...>   key: 0x081549973BAFBBA825B31BCC402A3C4ED8E3185C2F3A31C75E55F423E9629AA3,
-    ...>   chain_code: 0x1D7D2A4C940BE028B945302AD79DD2CE2AFE5ED55E1A2937A5AF57F8401E73DD
+    ...>   key: <<0x081549973BAFBBA825B31BCC402A3C4ED8E3185C2F3A31C75E55F423E9629AA3::264>>,
+    ...>   chain_code: <<0x1D7D2A4C940BE028B945302AD79DD2CE2AFE5ED55E1A2937A5AF57F8401E73DD::256>>
     ...> }
     ...> |> BitcoinLib.Key.HD.ExtendedPublic.from_private_key()
     %BitcoinLib.Key.HD.ExtendedPublic{
-      fingerprint: 0xED104CB8,
-      key: 0x0343B337DEC65A47B3362C9620A6E6FF39A1DDFA908ABAB1666C8A30A3F8A7CCCC,
-      chain_code: 0x1D7D2A4C940BE028B945302AD79DD2CE2AFE5ED55E1A2937A5AF57F8401E73DD,
+      fingerprint: <<0xED104CB8::32>>,
+      key: <<0x0343B337DEC65A47B3362C9620A6E6FF39A1DDFA908ABAB1666C8A30A3F8A7CCCC::264>>,
+      chain_code: <<0x1D7D2A4C940BE028B945302AD79DD2CE2AFE5ED55E1A2937A5AF57F8401E73DD::256>>,
       depth: 0,
       index: 0,
-      parent_fingerprint: 0
+      parent_fingerprint: <<0::32>>
     }
   """
   @spec from_private_key(%ExtendedPrivate{}) :: {integer(), integer()}
@@ -60,8 +67,8 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic do
 
   ## Examples
     iex> %BitcoinLib.Key.HD.ExtendedPublic{
-    ...>   key: 0x3EB181FB7B5CF63D82307188B20828B83008F2D2511E5C6EDCBE171C63DD2CBC1,
-    ...>   chain_code: 0x581F15490635CF8CD0AEEF556562F52C60179E0E87E0EA92977E364D949DC2E4,
+    ...>   key: <<0x3EB181FB7B5CF63D82307188B20828B83008F2D2511E5C6EDCBE171C63DD2CBC1::264>>,
+    ...>   chain_code: <<0x581F15490635CF8CD0AEEF556562F52C60179E0E87E0EA92977E364D949DC2E4::256>>,
     ...>   depth: 0x5,
     ...>   index: 0x0
     ...> }
@@ -81,11 +88,11 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic do
     values from https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki#test-vector-1
 
     iex> %BitcoinLib.Key.HD.ExtendedPublic{
-    ...>   key: 0x339A36013301597DAEF41FBE593A02CC513D0B55527EC2DF1050E2E8FF49C85C2,
-    ...>   chain_code: 0x873DFF81C02F525623FD1FE5167EAC3A55A049DE3D314BB42EE227FFED37D508,
+    ...>   key: <<0x339A36013301597DAEF41FBE593A02CC513D0B55527EC2DF1050E2E8FF49C85C2::264>>,
+    ...>   chain_code: <<0x873DFF81C02F525623FD1FE5167EAC3A55A049DE3D314BB42EE227FFED37D508::256>>,
     ...>   depth: 0,
     ...>   index: 0,
-    ...>   parent_fingerprint: 0
+    ...>   parent_fingerprint: <<0::32>>
     ...> }
     ...> |> BitcoinLib.Key.HD.ExtendedPublic.serialize()
     {
@@ -106,11 +113,11 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic do
     values from https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki#test-vector-1
 
     iex> %BitcoinLib.Key.HD.ExtendedPublic{
-    ...>   key: 0x339A36013301597DAEF41FBE593A02CC513D0B55527EC2DF1050E2E8FF49C85C2,
-    ...>   chain_code: 0x873DFF81C02F525623FD1FE5167EAC3A55A049DE3D314BB42EE227FFED37D508,
+    ...>   key: <<0x339A36013301597DAEF41FBE593A02CC513D0B55527EC2DF1050E2E8FF49C85C2::264>>,
+    ...>   chain_code: <<0x873DFF81C02F525623FD1FE5167EAC3A55A049DE3D314BB42EE227FFED37D508::256>>,
     ...>   depth: 0,
     ...>   index: 0,
-    ...>   parent_fingerprint: 0
+    ...>   parent_fingerprint: <<0::32>>
     ...> }
     ...> |> BitcoinLib.Key.HD.ExtendedPublic.serialize!()
     "xpub661MyMwAqRbcFtXgS5sYJABqqG9YLmC4Q1Rdap9gSE8NqtwybGhePY2gZ29ESFjqJoCu1Rupje8YtGqsefD265TMg7usUDFdp6W1EGMcet8"
@@ -133,12 +140,12 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic do
     {
       :ok,
       %BitcoinLib.Key.HD.ExtendedPublic{
-        fingerprint: 0x3442193E,
-        key: 0x339A36013301597DAEF41FBE593A02CC513D0B55527EC2DF1050E2E8FF49C85C2,
-        chain_code: 0x873DFF81C02F525623FD1FE5167EAC3A55A049DE3D314BB42EE227FFED37D508,
+        fingerprint: <<0x3442193E::32>>,
+        key: <<0x339A36013301597DAEF41FBE593A02CC513D0B55527EC2DF1050E2E8FF49C85C2::264>>,
+        chain_code: <<0x873DFF81C02F525623FD1FE5167EAC3A55A049DE3D314BB42EE227FFED37D508::256>>,
         depth: 0,
         index: 0,
-        parent_fingerprint: 0
+        parent_fingerprint: <<0::32>>
       }
     }
   """
@@ -159,12 +166,12 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic do
     iex> "xpub661MyMwAqRbcFtXgS5sYJABqqG9YLmC4Q1Rdap9gSE8NqtwybGhePY2gZ29ESFjqJoCu1Rupje8YtGqsefD265TMg7usUDFdp6W1EGMcet8"
     ...> |> BitcoinLib.Key.HD.ExtendedPublic.deserialize!()
     %BitcoinLib.Key.HD.ExtendedPublic{
-      fingerprint: 0x3442193E,
-      key: 0x339A36013301597DAEF41FBE593A02CC513D0B55527EC2DF1050E2E8FF49C85C2,
-      chain_code: 0x873DFF81C02F525623FD1FE5167EAC3A55A049DE3D314BB42EE227FFED37D508,
+      fingerprint: <<0x3442193E::32>>,
+      key: <<0x339A36013301597DAEF41FBE593A02CC513D0B55527EC2DF1050E2E8FF49C85C2::264>>,
+      chain_code: <<0x873DFF81C02F525623FD1FE5167EAC3A55A049DE3D314BB42EE227FFED37D508::256>>,
       depth: 0,
       index: 0,
-      parent_fingerprint: 0
+      parent_fingerprint: <<0::32>>
     }
   """
   @spec deserialize!(binary()) :: %ExtendedPublic{}
@@ -184,20 +191,20 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic do
 
   ## Examples
     iex> public_key = %BitcoinLib.Key.HD.ExtendedPublic{
-    ...>  key: 0x252C616D91A2488C1FD1F0F172E98F7D1F6E51F8F389B2F8D632A8B490D5F6DA9,
-    ...>  chain_code: 0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B
+    ...>  key: <<0x252C616D91A2488C1FD1F0F172E98F7D1F6E51F8F389B2F8D632A8B490D5F6DA9::264>>,
+    ...>  chain_code: <<0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B::256>>
     ...> }
     ...> index = 0
     ...> BitcoinLib.Key.HD.ExtendedPublic.derive_child(public_key, index)
     {
       :ok,
       %BitcoinLib.Key.HD.ExtendedPublic{
-        key: 0x30204D3503024160E8303C0042930EA92A9D671DE9AA139C1867353F6B6664E59,
-        chain_code: 0x05AAE71D7C080474EFAAB01FA79E96F4C6CFE243237780B0DF4BC36106228E31,
+        key: <<0x30204D3503024160E8303C0042930EA92A9D671DE9AA139C1867353F6B6664E59::264>>,
+        chain_code: <<0x05AAE71D7C080474EFAAB01FA79E96F4C6CFE243237780B0DF4BC36106228E31::256>>,
         depth: 1,
         index: 0,
-        parent_fingerprint: 0x18C1259,
-        fingerprint: 0x9680603F
+        parent_fingerprint: <<0x18C1259::32>>,
+        fingerprint: <<0x9680603F::32>>
       }
     }
   """
@@ -212,18 +219,18 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic do
 
   ## Examples
     iex> public_key = %BitcoinLib.Key.HD.ExtendedPublic{
-    ...>  key: 0x252C616D91A2488C1FD1F0F172E98F7D1F6E51F8F389B2F8D632A8B490D5F6DA9,
-    ...>  chain_code: 0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B
+    ...>  key: <<0x252C616D91A2488C1FD1F0F172E98F7D1F6E51F8F389B2F8D632A8B490D5F6DA9::264>>,
+    ...>  chain_code: <<0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B::256>>
     ...> }
     ...> index = 0
     ...> BitcoinLib.Key.HD.ExtendedPublic.derive_child!(public_key, index)
     %BitcoinLib.Key.HD.ExtendedPublic{
-      key: 0x30204D3503024160E8303C0042930EA92A9D671DE9AA139C1867353F6B6664E59,
-      chain_code: 0x05AAE71D7C080474EFAAB01FA79E96F4C6CFE243237780B0DF4BC36106228E31,
+      key: <<0x30204D3503024160E8303C0042930EA92A9D671DE9AA139C1867353F6B6664E59::264>>,
+      chain_code: <<0x05AAE71D7C080474EFAAB01FA79E96F4C6CFE243237780B0DF4BC36106228E31::256>>,
       depth: 1,
       index: 0,
-      parent_fingerprint: 0x18C1259,
-      fingerprint: 0x9680603F
+      parent_fingerprint: <<0x18C1259::32>>,
+      fingerprint: <<0x9680603F::32>>
     }
   """
   @spec derive_child!(%ExtendedPublic{}, integer()) :: %ExtendedPublic{}
@@ -237,20 +244,20 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic do
 
   ## Examples
     iex> public_key = %BitcoinLib.Key.HD.ExtendedPublic{
-    ...>   key: 0x252C616D91A2488C1FD1F0F172E98F7D1F6E51F8F389B2F8D632A8B490D5F6DA9,
-    ...>   chain_code: 0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B
+    ...>   key: <<0x252C616D91A2488C1FD1F0F172E98F7D1F6E51F8F389B2F8D632A8B490D5F6DA9::264>>,
+    ...>   chain_code: <<0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B::256>>
     ...> }
     ...> {:ok, derivation_path} = BitcoinLib.Key.HD.DerivationPath.parse("M/44'/0'/0'/0/0")
     ...> BitcoinLib.Key.HD.ExtendedPublic.from_derivation_path(public_key, derivation_path)
     {
       :ok,
       %BitcoinLib.Key.HD.ExtendedPublic{
-        key: 0x29DCAFD0D7D67B13657CC9EE7C8976E141F20F0684BF3FC83CAF068E74186BCDC,
-        chain_code: 0x162EEE68F7C3823CAF8BD2615A4A33633673CAAB66FF6F338FB0653FC59D462D,
+        key: <<0x29DCAFD0D7D67B13657CC9EE7C8976E141F20F0684BF3FC83CAF068E74186BCDC::264>>,
+        chain_code: <<0x162EEE68F7C3823CAF8BD2615A4A33633673CAAB66FF6F338FB0653FC59D462D::256>>,
         depth: 5,
         index: 0,
-        parent_fingerprint: 0xCA2A5281,
-        fingerprint: 0xAEAAB1AD
+        parent_fingerprint: <<0xCA2A5281::32>>,
+        fingerprint: <<0xAEAAB1AD::32>>
       }
     }
   """
@@ -264,11 +271,11 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic do
 
   ## Examples
     iex> %BitcoinLib.Key.HD.ExtendedPublic{
-    ...>   key: 0x0343B337DEC65A47B3362C9620A6E6FF39A1DDFA908ABAB1666C8A30A3F8A7CCCC,
-    ...>   chain_code: 0x1D7D2A4C940BE028B945302AD79DD2CE2AFE5ED55E1A2937A5AF57F8401E73DD
+    ...>   key: <<0x0343B337DEC65A47B3362C9620A6E6FF39A1DDFA908ABAB1666C8A30A3F8A7CCCC::264>>,
+    ...>   chain_code: <<0x1D7D2A4C940BE028B945302AD79DD2CE2AFE5ED55E1A2937A5AF57F8401E73DD::256>>
     ...> }
     ...> |> BitcoinLib.Key.HD.ExtendedPublic.get_hash()
-    0xED104CB8EF3ADABEC5D2BE8178C99847F9694269
+    <<0xED104CB8EF3ADABEC5D2BE8178C99847F9694269::160>>
   """
   def get_hash(%ExtendedPublic{} = public_key) do
     BitcoinLib.Key.PublicHash.from_public_key(public_key.key)

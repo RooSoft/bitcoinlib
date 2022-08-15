@@ -13,14 +13,14 @@ defmodule BitcoinLib.Key.Address do
   Details can be found here: https://en.bitcoin.it/wiki/Technical_background_of_version_1_Bitcoin_addresses
 
   ## Examples
-    iex> 0x6ae201797de3fa7d1d95510f50c1a9c50ce4cc36
+    iex> <<0x6ae201797de3fa7d1d95510f50c1a9c50ce4cc36::160>>
     ...> |> BitcoinLib.Key.Address.from_public_key_hash(:p2pkh)
     "1Ak9NVPmwCHEpsSWvM6cNRC7dsYniRmwMG"
   """
   @spec from_public_key_hash(integer(), :p2pkh | :p2sh, :mainnet | :testnet) :: String.t()
   def from_public_key_hash(public_key_hash, address_type \\ :p2sh, network \\ :mainnet) do
     public_key_hash
-    |> Integer.to_string(16)
+    |> Binary.to_hex()
     |> prepend_prefix(address_type, network)
     |> append_checksum
     |> Binary.from_hex()

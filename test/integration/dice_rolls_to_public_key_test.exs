@@ -6,7 +6,7 @@ defmodule BitcoinLib.Test.Integration.DiceRollsToPublicKeyTest do
 
     public_key = create_public_key(dice_rolls)
 
-    assert 0x3254ED681B40913A4A9C4DC22B920F4BF56CC93AD442F8F9F7E976E166FE9CC56 == public_key.key
+    assert <<0x3254ED681B40913A4A9C4DC22B920F4BF56CC93AD442F8F9F7E976E166FE9CC56::264>> == public_key.key
   end
 
   defp create_public_key(dice_rolls) do

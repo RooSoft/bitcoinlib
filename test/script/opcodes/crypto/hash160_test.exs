@@ -14,11 +14,11 @@ defmodule BitcoinLib.Script.Opcodes.Crypto.Hash160Test do
   end
 
   test "execute OP_HASH160 on a stack" do
-    stack = ["6c7ab2f961a1bc3f13cdc08dc41c3f439adebd549a8ef1c089e81a5907376107"]
+    stack = [<<0x6c7ab2f961a1bc3f13cdc08dc41c3f439adebd549a8ef1c089e81a5907376107::256>>]
 
     {:ok, result} = Hash160.execute(stack)
 
-    assert ["273f29c643d908664fcc61aa2ec76e4f21196fcb"] == result
+    assert [<<0x273f29c643d908664fcc61aa2ec76e4f21196fcb::160>>] == result
   end
 
   test "execute OP_HASH160 on an empty stack" do

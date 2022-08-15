@@ -22,8 +22,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate.ChildFromDerivationPathTest do
              key: 0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9,
              chain_code: 0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B,
              depth: 0,
-             index: 0,
-             parent_fingerprint: 0
+             index: 0
            } = child_private_key
   end
 end

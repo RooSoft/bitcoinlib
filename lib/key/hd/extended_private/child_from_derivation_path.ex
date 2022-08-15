@@ -13,18 +13,18 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate.ChildFromDerivationPath do
   ## Examples
     iex> { :ok, derivation_path } = BitcoinLib.Key.HD.DerivationPath.parse("m/84'/0'/0'/0/0")
     ...> %BitcoinLib.Key.HD.ExtendedPrivate{
-    ...>  key: 0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9,
-    ...>  chain_code: 0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B
+    ...>  key: <<0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9::256>>,
+    ...>  chain_code: <<0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B::256>>
     ...> }
     ...> |> BitcoinLib.Key.HD.ExtendedPrivate.ChildFromDerivationPath.get(derivation_path)
     {
       :ok,
       %BitcoinLib.Key.HD.ExtendedPrivate{
-        key: 0x210DDF6EA57B57C4607B17F9774C3F48AC92DA3AE5FF03D215CCE56AA021DAA6,
-        chain_code: 0x143B6DAC88591B42BD7D74AA193D4EFC7826873B4BD5F491B7067E705B8A626E,
+        key: <<0x210DDF6EA57B57C4607B17F9774C3F48AC92DA3AE5FF03D215CCE56AA021DAA6::256>>,
+        chain_code: <<0x143B6DAC88591B42BD7D74AA193D4EFC7826873B4BD5F491B7067E705B8A626E::256>>,
         depth: 5,
         index: 0,
-        parent_fingerprint: 0xFFF4D449
+        parent_fingerprint: <<0xFFF4D449::32>>
         }
       }
   """

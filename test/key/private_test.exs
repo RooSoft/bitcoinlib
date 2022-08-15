@@ -6,7 +6,9 @@ defmodule BitcoinLib.Key.PrivateTest do
   alias BitcoinLib.Key.Private
 
   test "creates a WIF from a private key" do
-    private_key = 0x6C7AB2F961A1BC3F13CDC08DC41C3F439ADEBD549A8EF1C089E81A5907376107
+    private_key =
+      <<108, 122, 178, 249, 97, 161, 188, 63, 19, 205, 192, 141, 196, 28, 63, 67, 154, 222, 189,
+        84, 154, 142, 241, 192, 137, 232, 26, 89, 7, 55, 97, 7>>
 
     wif =
       private_key

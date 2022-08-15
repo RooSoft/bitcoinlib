@@ -14,8 +14,9 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
       |> ExtendedPrivate.from_seed()
 
     assert %ExtendedPrivate{
-             key: 0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9,
-             chain_code: 0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B
+             key: <<0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9::256>>,
+             chain_code:
+               <<0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B::256>>
            } = extended_private_key
   end
 
@@ -31,18 +32,19 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
       |> ExtendedPrivate.from_mnemonic_phrase()
 
     %ExtendedPrivate{
-      key: 0x30A6B59CCCC924FC9FFD4AB08C5C01F0D6A4046797BB255D8919EB3E95C08871,
-      chain_code: 0xE08FCC54429E47AC55FEBD4DC9EDCCC88D292EB40AA3765AF3DA7178A14AA114,
+      key: <<0x30A6B59CCCC924FC9FFD4AB08C5C01F0D6A4046797BB255D8919EB3E95C08871::256>>,
+      chain_code: <<0xE08FCC54429E47AC55FEBD4DC9EDCCC88D292EB40AA3765AF3DA7178A14AA114::256>>,
       depth: 0,
       index: 0,
-      parent_fingerprint: 0
+      fingerprint: <<0x1CF14AB4::32>>,
+      parent_fingerprint: <<0::32>>
     } = private_key
   end
 
   test "derive the first child of a private key" do
     private_key = %ExtendedPrivate{
-      key: 0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9,
-      chain_code: 0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B
+      key: <<0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9::256>>,
+      chain_code: <<0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B::256>>
     }
 
     index = 0
@@ -50,22 +52,22 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
     {:ok, child_private_key} = ExtendedPrivate.derive_child(private_key, index)
 
     %ExtendedPrivate{
-      key: 0x39F329FEDBA2A68E2A804FCD9AEEA4104ACE9080212A52CE8B52C1FB89850C72,
-      chain_code: 0x05AAE71D7C080474EFAAB01FA79E96F4C6CFE243237780B0DF4BC36106228E31,
+      key: <<0x39F329FEDBA2A68E2A804FCD9AEEA4104ACE9080212A52CE8B52C1FB89850C72::256>>,
+      chain_code: <<0x05AAE71D7C080474EFAAB01FA79E96F4C6CFE243237780B0DF4BC36106228E31::256>>,
       depth: 1,
       index: 0,
-      parent_fingerprint: 0x18C1259
+      parent_fingerprint: <<0x18C1259::32>>
     } = child_private_key
   end
 
   test "serialize a master private key" do
     serialized =
       %ExtendedPrivate{
-        key: 0xE8F32E723DECF4051AEFAC8E2C93C9C5B214313817CDB01A1494B917C8436B35,
-        chain_code: 0x873DFF81C02F525623FD1FE5167EAC3A55A049DE3D314BB42EE227FFED37D508,
+        key: <<0xE8F32E723DECF4051AEFAC8E2C93C9C5B214313817CDB01A1494B917C8436B35::256>>,
+        chain_code: <<0x873DFF81C02F525623FD1FE5167EAC3A55A049DE3D314BB42EE227FFED37D508::256>>,
         depth: 0,
         index: 0,
-        parent_fingerprint: 0
+        parent_fingerprint: <<0::32>>
       }
       |> BitcoinLib.Key.HD.ExtendedPrivate.serialize()
 
@@ -82,18 +84,18 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
       |> BitcoinLib.Key.HD.ExtendedPrivate.deserialize()
 
     assert %ExtendedPrivate{
-             key: 0x81549973BAFBBA825B31BCC402A3C4ED8E3185C2F3A31C75E55F423E9629AA3,
-             chain_code: 0x1D7D2A4C940BE028B945302AD79DD2CE2AFE5ED55E1A2937A5AF57F8401E73DD,
+             key: <<0x81549973BAFBBA825B31BCC402A3C4ED8E3185C2F3A31C75E55F423E9629AA3::256>>,
+             chain_code:
+               <<0x1D7D2A4C940BE028B945302AD79DD2CE2AFE5ED55E1A2937A5AF57F8401E73DD::256>>,
              depth: 0,
-             index: 0,
-             parent_fingerprint: 0
+             index: 0
            } == private_key
   end
 
   test "get private key according to the minimal derivation path" do
     private_key = %ExtendedPrivate{
-      key: 0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9,
-      chain_code: 0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B
+      key: <<0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9::256>>,
+      chain_code: <<0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B::256>>
     }
 
     {:ok, child_private_key} =
@@ -103,18 +105,19 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
       )
 
     assert %ExtendedPrivate{
-             key: 0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9,
-             chain_code: 0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B,
+             key: <<0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9::256>>,
+             chain_code:
+               <<0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B::256>>,
              depth: 0,
              index: 0,
-             parent_fingerprint: 0
+             parent_fingerprint: <<0::32>>
            } = child_private_key
   end
 
   test "get private key straight from a derivation path as a string" do
     private_key = %ExtendedPrivate{
-      key: 0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9,
-      chain_code: 0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B
+      key: <<0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9::256>>,
+      chain_code: <<0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B::256>>
     }
 
     child_private_key =
@@ -124,18 +127,19 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
       )
 
     assert %ExtendedPrivate{
-             key: 0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9,
-             chain_code: 0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B,
+             key: <<0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9::256>>,
+             chain_code:
+               <<0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B::256>>,
              depth: 0,
              index: 0,
-             parent_fingerprint: 0
+             parent_fingerprint: <<0::32>>
            } = child_private_key
   end
 
   test "get private master bip44 key" do
     private_key = %ExtendedPrivate{
-      key: 0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9,
-      chain_code: 0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B
+      key: <<0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9::256>>,
+      chain_code: <<0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B::256>>
     }
 
     {:ok, derivation_path} = DerivationPath.parse("m/44'")
@@ -147,18 +151,19 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
       )
 
     assert %ExtendedPrivate{
-             key: 0x4E59086C1DEC6D081986CB079F536E38B3D2B6DA7A8EDCFFB1942AE8B9FDF156,
-             chain_code: 0xF42DE823EE78F6227822D79BC6F6101D084D7F0F876B7828BF027D681294E538,
+             key: <<0x4E59086C1DEC6D081986CB079F536E38B3D2B6DA7A8EDCFFB1942AE8B9FDF156::256>>,
+             chain_code:
+               <<0xF42DE823EE78F6227822D79BC6F6101D084D7F0F876B7828BF027D681294E538::256>>,
              depth: 1,
              index: 0x8000002C,
-             parent_fingerprint: 0x18C1259
+             parent_fingerprint: <<0x18C1259::32>>
            } = child_private_key
   end
 
   test "derive child without using the %DerivationPath struct" do
     private_key = %ExtendedPrivate{
-      key: 0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9,
-      chain_code: 0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B
+      key: <<0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9::256>>,
+      chain_code: <<0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B::256>>
     }
 
     {:ok, child_private_key} =
@@ -168,18 +173,19 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
       )
 
     assert %ExtendedPrivate{
-             key: 0x4E59086C1DEC6D081986CB079F536E38B3D2B6DA7A8EDCFFB1942AE8B9FDF156,
-             chain_code: 0xF42DE823EE78F6227822D79BC6F6101D084D7F0F876B7828BF027D681294E538,
+             key: <<0x4E59086C1DEC6D081986CB079F536E38B3D2B6DA7A8EDCFFB1942AE8B9FDF156::256>>,
+             chain_code:
+               <<0xF42DE823EE78F6227822D79BC6F6101D084D7F0F876B7828BF027D681294E538::256>>,
              depth: 1,
              index: 0x8000002C,
-             parent_fingerprint: 0x18C1259
+             parent_fingerprint: <<0x18C1259::32>>
            } = child_private_key
   end
 
   test "get private master bip44, bitcoin mainnet key" do
     private_key = %ExtendedPrivate{
-      key: 0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9,
-      chain_code: 0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B
+      key: <<0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9::256>>,
+      chain_code: <<0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B::256>>
     }
 
     {:ok, derivation_path} = DerivationPath.parse("m/44'/0'")
@@ -191,18 +197,19 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
       )
 
     assert %ExtendedPrivate{
-             key: 0xD5FF7F3CDA0028C81AB6E4137BB0F391049EB35608FDF84B0305F283A93A1963,
-             chain_code: 0x121AD45C595D75BE41D6578BEB92AD464243C9C60F7CD51DBC70007FC2E1DF14,
+             key: <<0xD5FF7F3CDA0028C81AB6E4137BB0F391049EB35608FDF84B0305F283A93A1963::256>>,
+             chain_code:
+               <<0x121AD45C595D75BE41D6578BEB92AD464243C9C60F7CD51DBC70007FC2E1DF14::256>>,
              depth: 2,
              index: 0x80000000,
-             parent_fingerprint: 0x68B1F6F8
+             parent_fingerprint: <<0x68B1F6F8::32>>
            } = child_private_key
   end
 
   test "get private master bip44, bitcoin mainnet, account 0 key" do
     private_key = %ExtendedPrivate{
-      key: 0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9,
-      chain_code: 0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B
+      key: <<0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9::256>>,
+      chain_code: <<0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B::256>>
     }
 
     {:ok, derivation_path} = DerivationPath.parse("m/44'/0'/0'")
@@ -214,18 +221,19 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
       )
 
     assert %ExtendedPrivate{
-             key: 0x762C3ABCFFBB912B86DD72D6ACA0D02127CF93DB04C96130A43BBBE724F938C5,
-             chain_code: 0xF1DCD43D3F65B67ECC7140BBD6FD3422DCB1CBD1FAA610140D89743D1623DE50,
+             key: <<0x762C3ABCFFBB912B86DD72D6ACA0D02127CF93DB04C96130A43BBBE724F938C5::256>>,
+             chain_code:
+               <<0xF1DCD43D3F65B67ECC7140BBD6FD3422DCB1CBD1FAA610140D89743D1623DE50::256>>,
              depth: 3,
              index: 0x80000000,
-             parent_fingerprint: 0xB9CC499A
+             parent_fingerprint: <<0xB9CC499A::32>>
            } = child_private_key
   end
 
   test "get private master bip44, bitcoin mainnet, account 0, change key" do
     private_key = %ExtendedPrivate{
-      key: 0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9,
-      chain_code: 0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B
+      key: <<0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9::256>>,
+      chain_code: <<0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B::256>>
     }
 
     {:ok, derivation_path} = DerivationPath.parse("m/44'/0'/0'/1")
@@ -237,18 +245,19 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
       )
 
     assert %ExtendedPrivate{
-             key: 0x41C5644125161F1B3382A175442F545815302D60F1D0F4D52B097B67C6B8C8F9,
-             chain_code: 0xAFC5B0F32E8D0028F19B3D664192A3A7FBC8EC6269F2BEF42897148BC34CA2ED,
+             key: <<0x41C5644125161F1B3382A175442F545815302D60F1D0F4D52B097B67C6B8C8F9::256>>,
+             chain_code:
+               <<0xAFC5B0F32E8D0028F19B3D664192A3A7FBC8EC6269F2BEF42897148BC34CA2ED::256>>,
              depth: 4,
              index: 1,
-             parent_fingerprint: 0x8DF69D92
+             parent_fingerprint: <<0x8DF69D92::32>>
            } == child_private_key
   end
 
   test "get private master bip44, bitcoin mainnet, account 0, change, index 0 key" do
     private_key = %ExtendedPrivate{
-      key: 0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9,
-      chain_code: 0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B
+      key: <<0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9::256>>,
+      chain_code: <<0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B::256>>
     }
 
     {:ok, derivation_path} = DerivationPath.parse("m/44'/0'/0'/1/0")
@@ -260,11 +269,12 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
       )
 
     assert %ExtendedPrivate{
-             key: 0x181DCB172F5B56DB39B6C8544068FEE69928556230B41E115BDB22BF82A06FF3,
-             chain_code: 0xAB3ECF35A71958C7E7A0E9A47C4E538CCF1D933554BC36CBE234B94056CDDBF,
+             key: <<0x181DCB172F5B56DB39B6C8544068FEE69928556230B41E115BDB22BF82A06FF3::256>>,
+             chain_code:
+               <<0xAB3ECF35A71958C7E7A0E9A47C4E538CCF1D933554BC36CBE234B94056CDDBF::256>>,
              depth: 5,
              index: 0,
-             parent_fingerprint: 0xB4EA7AF3
+             parent_fingerprint: <<0xB4EA7AF3::32>>
            } = child_private_key
   end
 end
