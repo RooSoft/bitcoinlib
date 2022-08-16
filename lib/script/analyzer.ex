@@ -2,12 +2,16 @@ defmodule BitcoinLib.Script.Analyzer do
   alias BitcoinLib.Script.Opcodes.{BitwiseLogic, Crypto, Stack}
 
   @pub_key_hash_size 20
+  @uncompressed_pub_key_size 65
 
   @dup Stack.Dup.v()
   @equal BitwiseLogic.Equal.v()
   @equal_verify BitwiseLogic.EqualVerify.v()
   @hash160 Crypto.Hash160.v()
   @check_sig Crypto.CheckSig.v()
+
+  def identify(<<@uncompressed_pub_key_size::8, _pub_key::bitstring-520, @check_sig::8>>),
+    do: :p2pk
 
   def identify(
         <<@dup::8, @hash160::8, @pub_key_hash_size::8, _pub_key_hash::bitstring-160,
