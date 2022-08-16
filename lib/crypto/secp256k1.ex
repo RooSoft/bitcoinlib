@@ -5,6 +5,7 @@ defmodule BitcoinLib.Crypto.Secp256k1 do
   Based on https://hexdocs.pm/curvy/Curvy.html
   """
 
+  # , Signature}
   alias Curvy.{Point, Key}
 
   @doc """
@@ -27,18 +28,30 @@ defmodule BitcoinLib.Crypto.Secp256k1 do
   @doc """
   Signs a message using a private key
 
+  Below is an example of a signature... this doctest doesn't end with a value, because the signature
+  is different on every call, and even can have different lengths.
+
   ## Examples
     iex> message = "76a914c825a1ecf2a6830c4401620c3a16f1995057c2ab88ac"
-    ...> private_key = <<0x5d56c06f7aff6e62d909e786f4e869b8fb6c031b877e494149ca126bd550fc30::256>>
+    ...> private_key = <<0xd6ead233e06c068585976b5c8373861d77e7f030ec452e65ee81c85fa6906970::256>>
     ...> BitcoinLib.Crypto.Secp256k1.sign(message, private_key)
-    <<0x304402207c2650166f802c3d4bdc6b636bf0678dce4ffb72008e292ac7e628f7a066f321022038876bf9cd69cb1e676429d0fdac17dffa0e10c265b8d9f508c42bff53fe23d6::560>>
   """
   def sign(message, private_key) do
-    key =
-      private_key
-      |> Key.from_privkey()
+    :crypto.sign(:ecdsa, :sha256, message, [private_key, :secp256k1])
+  end
 
-    Curvy.sign(message, key)
+  @doc """
+  Validates a signature
+
+  ## Examples
+    iex> signature = <<0x304402202a849a7fc3ba88a8c8958ae525b2fcd4f24dc58f22bbc5c461c24c1c54b985c60220711e2bb8a18eefd5c58e9191fb66b42846a1b8233846a41908059be65ffa1dcc::560>>
+    ...> message = "76a914725ebac06343111227573d0b5287954ef9b88aae88ac"
+    ...> public_key = <<0x02702ded1cca9816fa1a94787ffc6f3ace62cd3b63164f76d227d0935a33ee48c3::264>>
+    ...> BitcoinLib.Crypto.Secp256k1.validate(signature, message, public_key)
+    true
+  """
+  def validate(signature, message, public_key) do
+    :crypto.verify(:ecdsa, :sha256, message, signature, [public_key, :secp256k1])
   end
 
   defp get_point(key) do
