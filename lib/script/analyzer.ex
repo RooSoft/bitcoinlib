@@ -4,6 +4,7 @@ defmodule BitcoinLib.Script.Analyzer do
   @pub_key_hash_size 20
 
   @dup Stack.Dup.v()
+  @equal BitwiseLogic.Equal.v()
   @equal_verify BitwiseLogic.EqualVerify.v()
   @hash160 Crypto.Hash160.v()
   @check_sig Crypto.CheckSig.v()
@@ -13,6 +14,8 @@ defmodule BitcoinLib.Script.Analyzer do
           @equal_verify::8, @check_sig::8>>
       ),
       do: :p2pkh
+
+  def identify(<<@hash160, @pub_key_hash_size, _script_hash::bitstring-160, @equal>>), do: :p2sh
 
   def identify(script) when is_bitstring(script), do: :unknown
 end
