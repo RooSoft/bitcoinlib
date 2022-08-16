@@ -6,7 +6,7 @@ defmodule BitcoinLib.Script.Opcode do
   @doc """
   Returns the opcode's value
   """
-  @callback v() :: String.t()
+  @callback v() :: byte()
 
   @doc """
   Attemps to execute the opcode against the stack given as an argument,
