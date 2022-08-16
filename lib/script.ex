@@ -1,10 +1,16 @@
 defmodule BitcoinLib.Script do
-  alias BitcoinLib.Script.OpcodeManager
+  alias BitcoinLib.Script.{Analyzer, OpcodeManager}
 
   @spec execute(bitstring(), list()) :: {:ok, boolean()} | {:error, binary()}
   def execute(script, stack) when is_bitstring(script) do
     {:ok, stack, script, script}
     |> execute_next_opcode
+  end
+
+  @spec identify(bitstring()) :: :unknown | :p2pk | :p2pkh | :p2sh
+  def identify(script) when is_bitstring(script) do
+    script
+    |> Analyzer.identify()
   end
 
   defp execute_next_opcode({:error, message}), do: {:error, message}
