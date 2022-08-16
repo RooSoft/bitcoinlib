@@ -52,11 +52,13 @@ defmodule BitcoinLib.Key.Private do
   @doc """
   Signs a message using a private key
 
+  Below is an example of a signature... this doctest doesn't end with a value, because the signature
+  is different on every call, and even can have different lengths.
+
   ## Examples
     iex> message = "76a914c825a1ecf2a6830c4401620c3a16f1995057c2ab88ac"
-    ...> private_key = <<0x5d56c06f7aff6e62d909e786f4e869b8fb6c031b877e494149ca126bd550fc30::256>>
-    ...> BitcoinLib.Key.Private.sign_message(message, private_key)
-    <<0x304402207c2650166f802c3d4bdc6b636bf0678dce4ffb72008e292ac7e628f7a066f321022038876bf9cd69cb1e676429d0fdac17dffa0e10c265b8d9f508c42bff53fe23d6::560>>
+    ...> private_key = <<0xd6ead233e06c068585976b5c8373861d77e7f030ec452e65ee81c85fa6906970::256>>
+    ...> BitcoinLib.Crypto.Secp256k1.sign(message, private_key)
   """
   def sign_message(message, private_key) do
     message
