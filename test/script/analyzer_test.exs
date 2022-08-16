@@ -27,4 +27,12 @@ defmodule BitcoinLib.Script.AnalyzerTest do
 
     assert :p2sh == script_type
   end
+
+  test "identify garbage as an unknown script" do
+    script = <<0>>
+
+    script_type = Analyzer.identify(script)
+
+    assert :unknown == script_type
+  end
 end
