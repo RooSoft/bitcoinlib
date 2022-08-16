@@ -12,5 +12,5 @@ defmodule BitcoinLib.Script.Opcode do
   Attemps to execute the opcode against the stack given as an argument,
   returning either the altered stack or an error
   """
-  @callback execute(bitstring()) :: {:ok, list()} | {:error, binary()}
+  @callback execute(any(), list()) :: {:ok, list()} | {:error, binary()}
 end

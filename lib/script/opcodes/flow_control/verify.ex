@@ -11,9 +11,9 @@ defmodule BitcoinLib.Script.Opcodes.FlowControl.Verify do
     @value
   end
 
-  def execute([]), do: {:error, "trying to execute OP_VERIFY on an empty stack"}
+  def execute(_opcode, []), do: {:error, "trying to execute OP_VERIFY on an empty stack"}
 
-  def execute([first_element | remaining]) do
+  def execute(_opcode, [first_element | remaining]) do
     case Value.is_true?(first_element) do
       true ->
         {:ok, remaining}

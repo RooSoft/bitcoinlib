@@ -11,9 +11,9 @@ defmodule BitcoinLib.Script.Opcodes.Crypto.Hash160 do
     @value
   end
 
-  def execute([]), do: {:error, "trying to execute OP_HASH160 on an empty stack"}
+  def execute(_opcode, []), do: {:error, "trying to execute OP_HASH160 on an empty stack"}
 
-  def execute([first_element | remaining]) do
+  def execute(_opcode, [first_element | remaining]) do
     hash = Crypto.hash160_bitstring(first_element)
 
     {:ok, [hash | remaining]}

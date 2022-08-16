@@ -1,6 +1,8 @@
 defmodule BitcoinLib.Test.Integration.Secp256k1.SignAndVerivy do
   use ExUnit.Case, async: true
 
+  alias BitcoinLib.Key.HD.{ExtendedPrivate, MnemonicSeed}
+
   test "sign a message and make sure it verifies to true" do
     {pub, prv} =
       :crypto.generate_key(
@@ -66,5 +68,23 @@ defmodule BitcoinLib.Test.Integration.Secp256k1.SignAndVerivy do
     assert sig1 != sig2
     assert sig2 != sig3
     assert sig3 != sig4
+  end
+
+  test "sign a message with private key from a mnemonic phrase and make sure it verifies to true" do
+    extended_private_key =
+      "rally celery split order almost twenty ignore record legend learn chaos decade"
+      |> MnemonicSeed.to_seed()
+      |> ExtendedPrivate.from_seed()
+      |> ExtendedPrivate.from_derivation_path!("m/44'/0'/0'/0/0")
+
+    extended_public_key =
+      extended_private_key
+      |> BitcoinLib.Key.HD.ExtendedPublic.from_private_key()
+
+    message = "76a914725ebac06343111227573d0b5287954ef9b88aae88ac"
+
+    signature = BitcoinLib.Crypto.Secp256k1.sign(message, extended_private_key.key)
+
+    assert BitcoinLib.Crypto.Secp256k1.validate(signature, message, extended_public_key.key)
   end
 end

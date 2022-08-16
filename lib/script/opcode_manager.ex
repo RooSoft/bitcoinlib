@@ -14,32 +14,31 @@ defmodule BitcoinLib.Script.OpcodeManager do
   @doc """
   Extract the opcode on the top of the stack given as an argument
   """
-  @spec extract_from_script(bitstring()) ::
+  @spec extract_from_script(bitstring(), bitstring()) ::
           {:empty_script} | {:ok, %Stack.Dup{}, bitstring()} | {:error, binary()}
+  def extract_from_script(<<>>, _whole_script), do: {:empty_script}
 
-  def extract_from_script(<<>>), do: {:empty_script}
-
-  def extract_from_script(<<@dup::8, remaining::bitstring>>) do
+  def extract_from_script(<<@dup::8, remaining::bitstring>>, _whole_script) do
     {:opcode, %Stack.Dup{}, remaining}
   end
 
-  def extract_from_script(<<@equal::8, remaining::bitstring>>) do
+  def extract_from_script(<<@equal::8, remaining::bitstring>>, _whole_script) do
     {:opcode, %BitwiseLogic.Equal{}, remaining}
   end
 
-  def extract_from_script(<<@equal_verify::8, remaining::bitstring>>) do
+  def extract_from_script(<<@equal_verify::8, remaining::bitstring>>, _whole_script) do
     {:opcode, %BitwiseLogic.EqualVerify{}, remaining}
   end
 
-  def extract_from_script(<<@hash160::8, remaining::bitstring>>) do
+  def extract_from_script(<<@hash160::8, remaining::bitstring>>, _whole_script) do
     {:opcode, %Crypto.Hash160{}, remaining}
   end
 
-  def extract_from_script(<<@check_sig::8, remaining::bitstring>>) do
-    {:opcode, %Crypto.CheckSig{}, remaining}
+  def extract_from_script(<<@check_sig::8, remaining::bitstring>>, whole_script) do
+    {:opcode, %Crypto.CheckSig{script: whole_script}, remaining}
   end
 
-  def extract_from_script(<<unknown_upcode::8, remaining::bitstring>> = script) do
+  def extract_from_script(<<unknown_upcode::8, remaining::bitstring>> = script, _whole_script) do
     case unknown_upcode do
       x when x in 0x01..0x4B -> extract_and_return_data(script)
       _ -> {:error, "trying to extract an unknown upcode: #{unknown_upcode}", remaining}

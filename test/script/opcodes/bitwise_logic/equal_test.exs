@@ -16,7 +16,7 @@ defmodule BitcoinLib.Script.Opcodes.BitwiseLogic.EqualTest do
   test "execute OP_EQUAL on a stack" do
     stack = [4, 4]
 
-    {:ok, result} = Equal.execute(stack)
+    {:ok, result} = Equal.execute(%Equal{}, stack)
 
     assert [1] == result
   end
@@ -24,7 +24,7 @@ defmodule BitcoinLib.Script.Opcodes.BitwiseLogic.EqualTest do
   test "execute OP_EQUAL on an empty stack" do
     stack = []
 
-    {:error, message} = Equal.execute(stack)
+    {:error, message} = Equal.execute(%Equal{}, stack)
 
     assert "trying to execute OP_EQUAL on an empty stack" == message
   end
@@ -32,7 +32,7 @@ defmodule BitcoinLib.Script.Opcodes.BitwiseLogic.EqualTest do
   test "execute OP_EQUAL on a stack with a single item" do
     stack = [1]
 
-    {:error, message} = Equal.execute(stack)
+    {:error, message} = Equal.execute(%Equal{}, stack)
 
     assert message =~ "trying to execute OP_EQUAL on a stack with a single element"
   end

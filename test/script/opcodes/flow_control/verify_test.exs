@@ -16,7 +16,7 @@ defmodule BitcoinLib.Script.Opcodes.FlowControl.VerifyTest do
   test "execute OP_VERIFY on an empty stack" do
     stack = []
 
-    {:error, message} = Verify.execute(stack)
+    {:error, message} = Verify.execute(%Verify{}, stack)
 
     assert "trying to execute OP_VERIFY on an empty stack" == message
   end
@@ -24,7 +24,7 @@ defmodule BitcoinLib.Script.Opcodes.FlowControl.VerifyTest do
   test "execute OP_VERIFY on a stack containing a truthy value on top" do
     stack = [4, 5, 6]
 
-    {:ok, result} = Verify.execute(stack)
+    {:ok, result} = Verify.execute(%Verify{}, stack)
 
     assert [5, 6] == result
   end
@@ -32,7 +32,7 @@ defmodule BitcoinLib.Script.Opcodes.FlowControl.VerifyTest do
   test "execute OP_VERIFY on a stack containing a falsy value on top" do
     stack = [0, 4, 5]
 
-    {:error, message} = Verify.execute(stack)
+    {:error, message} = Verify.execute(%Verify{}, stack)
 
     assert message =~ "the script is invalid, it doesn't pass the OP_VERIFY test"
   end
