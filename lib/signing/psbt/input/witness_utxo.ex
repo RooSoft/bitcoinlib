@@ -5,6 +5,7 @@ defmodule BitcoinLib.Signing.Psbt.Input.WitnessUtxo do
   alias BitcoinLib.Signing.Psbt.Keypair
   alias BitcoinLib.Signing.Psbt.Keypair.{Key, Value}
   alias BitcoinLib.Signing.Psbt.CompactInteger
+  alias BitcoinLib.Script
 
   def parse(keypair) do
     %{witness_utxo: witness_utxo} =
@@ -12,6 +13,7 @@ defmodule BitcoinLib.Signing.Psbt.Input.WitnessUtxo do
       |> validate_keypair()
       |> extract_amount()
       |> extract_script_pub_key()
+      |> validate_script_pub_key()
 
     witness_utxo
   end
@@ -53,5 +55,33 @@ defmodule BitcoinLib.Signing.Psbt.Input.WitnessUtxo do
       | remaining: remaining,
         witness_utxo: Map.put(witness_utxo, :script_pub_key, Binary.to_hex(script_pub_key))
     }
+  end
+
+  defp validate_script_pub_key(%{witness_utxo: %{error: _message}} = map), do: map
+
+  defp validate_script_pub_key(
+         %{witness_utxo: %WitnessUtxo{script_pub_key: script_pub_key} = witness_utxo} = map
+       ) do
+    id =
+      script_pub_key
+      |> Binary.from_hex()
+      |> Script.Analyzer.identify()
+
+    case id do
+      :p2sh ->
+        map
+
+      :p2wsh ->
+        map
+
+      :p2wpkh ->
+        map
+
+      script_type ->
+        formatted_script_type = Atom.to_string(script_type) |> String.upcase()
+        message = "a witness UTXO contains a #{formatted_script_type} script"
+
+        %{map | witness_utxo: Map.put(witness_utxo, :error, message)}
+    end
   end
 end
