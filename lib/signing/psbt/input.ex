@@ -12,7 +12,7 @@ defmodule BitcoinLib.Signing.Psbt.Input do
 
   alias BitcoinLib.Signing.Psbt.{Keypair, KeypairList, Input}
 
-  alias BitcoinLib.Signing.Psbt.GenericProperties.{Proprietary, WitnessScript}
+  alias BitcoinLib.Signing.Psbt.GenericProperties.{Bip32Derivation, Proprietary, WitnessScript}
 
   alias BitcoinLib.Signing.Psbt.Input.{
     NonWitnessUtxo,
@@ -20,7 +20,6 @@ defmodule BitcoinLib.Signing.Psbt.Input do
     PartialSig,
     SighashType,
     RedeemScript,
-    Bip32Derivation,
     FinalScriptSig,
     FinalScriptWitness,
     ProofOfReservesCommitment,
@@ -91,7 +90,7 @@ defmodule BitcoinLib.Signing.Psbt.Input do
       @sighash_type -> add_sighash_type(input, value)
       @redeem_script -> add_redeem_script(input, keypair)
       @witness_script -> add_witness_script(input, keypair)
-      @bip32_derivation -> add_bip32_derivation(input, key.data, value)
+      @bip32_derivation -> add_bip32_derivation(input, keypair)
       @final_script_sig -> add_final_script_sig(input, keypair)
       @final_script_witness -> add_final_script_witness(input, keypair)
       @proof_of_reserves_commitment -> add_proof_of_reserves_commitment(input, keypair)
@@ -173,8 +172,8 @@ defmodule BitcoinLib.Signing.Psbt.Input do
     end
   end
 
-  defp add_bip32_derivation(%{bip32_derivations: derivations} = input, key_value, value) do
-    derivation = Bip32Derivation.parse(key_value, value.data)
+  defp add_bip32_derivation(%{bip32_derivations: derivations} = input, keypair) do
+    derivation = Bip32Derivation.parse(keypair)
 
     case Map.get(derivation, :error) do
       nil ->

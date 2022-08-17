@@ -10,12 +10,13 @@ defmodule BitcoinLib.Test.Integration.Bip174.ValidPsbtsTest do
 
   alias BitcoinLib.Signing.Psbt.Global.{Xpub}
 
+  alias BitcoinLib.Signing.Psbt.GenericProperties.{Bip32Derivation}
+
   alias BitcoinLib.Signing.Psbt.Input.{
     NonWitnessUtxo,
     WitnessUtxo,
-    FinalScriptSig,
+    FinalScriptSig
     #   SighashType,
-    Bip32Derivation,
   }
 
   ### CASE THAT https://bip174.org CAN'T EVEN PARSE
@@ -85,8 +86,10 @@ defmodule BitcoinLib.Test.Integration.Bip174.ValidPsbtsTest do
              %Input{
                utxo: %WitnessUtxo{},
                bip32_derivations: [%Bip32Derivation{}, %Bip32Derivation{}],
-               redeem_script: <<0x0020771fd18ad459666dd49f3d564e3dbc42f4c84774e360ada16816a8ed488d5681::272>>,
-               witness_script: <<0x522103b1341ccba7683b6af4f1238cd6e97e7167d569fac47f1e48d47541844355bd462103de55d1e1dac805e3f8a58c1fbf9b94c02f3dbaafe127fefca4995f26f82083bd52ae::568>>
+               redeem_script:
+                 <<0x0020771FD18AD459666DD49F3D564E3DBC42F4C84774E360ADA16816A8ED488D5681::272>>,
+               witness_script:
+                 <<0x522103B1341CCBA7683B6AF4F1238CD6E97E7167D569FAC47F1E48D47541844355BD462103DE55D1E1DAC805E3F8A58C1FBF9B94C02F3DBAAFE127FEFCA4995F26F82083BD52AE::568>>
              }
            ] = psbt.inputs
   end
