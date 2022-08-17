@@ -16,7 +16,7 @@ defmodule BitcoinLib.Transaction.Input do
 
     {
       %Input{
-        txid: txid,
+        txid: Integer.to_string(txid, 16) |> String.downcase(),
         vout: vout,
         script_sig: script_sig,
         sequence: sequence

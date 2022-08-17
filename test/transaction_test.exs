@@ -22,7 +22,7 @@ defmodule BitcoinLib.TransactionTest do
     assert %Input{
              script_sig: <<>>,
              sequence: 0xFFFFFFFF,
-             txid: 0x3F4FA19803DEC4D6A84FAE3821DA7AC7577080EF75451294E71F9B20E0AB1E7B,
+             txid: "3f4fa19803dec4d6a84fae3821da7ac7577080ef75451294e71f9b20e0ab1e7b",
              vout: 0x0
            } = List.first(transaction.inputs)
 
