@@ -1,8 +1,8 @@
 defmodule BitcoinLib.Signing.Psbt.GenericProperties.Bip32Derivation do
   defstruct [:pub_key, :fingerprint, :derivation_path]
 
-  @compressed_pub_key_hex_size 66
-  @uncompressed_pub_key_hex_size 130
+  @compressed_pub_key_size 33
+  @uncompressed_pub_key_size 65
 
   alias BitcoinLib.Signing.Psbt.Keypair
   alias BitcoinLib.Signing.Psbt.Keypair.{Key, Value}
@@ -14,15 +14,15 @@ defmodule BitcoinLib.Signing.Psbt.GenericProperties.Bip32Derivation do
     {derivation_path, _remaining} = extract_derivation_path(remaining, [])
 
     %Bip32Derivation{
-      pub_key: Binary.to_hex(binary_pub_key),
-      fingerprint: Integer.to_string(fingerprint, 16) |> String.downcase(),
+      pub_key: binary_pub_key,
+      fingerprint: fingerprint,
       derivation_path: DerivationPath.from_list(["M" | derivation_path])
     }
     |> validate_pub_key()
     |> validate_derivation_path()
   end
 
-  defp extract_fingerprint(<<fingerprint::32, remaining::bitstring>>) do
+  defp extract_fingerprint(<<fingerprint::bitstring-32, remaining::bitstring>>) do
     {fingerprint, remaining}
   end
 
@@ -36,10 +36,10 @@ defmodule BitcoinLib.Signing.Psbt.GenericProperties.Bip32Derivation do
 
   defp validate_pub_key(%Bip32Derivation{pub_key: pub_key} = bip32_derivation) do
     case byte_size(pub_key) do
-      @compressed_pub_key_hex_size ->
+      @compressed_pub_key_size ->
         bip32_derivation
 
-      @uncompressed_pub_key_hex_size ->
+      @uncompressed_pub_key_size ->
         bip32_derivation
 
       wrong_size ->
