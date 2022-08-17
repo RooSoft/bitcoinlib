@@ -1,4 +1,8 @@
 defmodule BitcoinLib.Script.Analyzer do
+  @moduledoc """
+  Based on that table https://i.stack.imgur.com/iXfVX.png
+  """
+
   alias BitcoinLib.Script.Opcodes.{BitwiseLogic, Constants, Crypto, Stack}
 
   @pub_key_hash_size 20
@@ -42,4 +46,3 @@ defmodule BitcoinLib.Script.Analyzer do
 
   def identify(script) when is_bitstring(script), do: :unknown
 end
-
