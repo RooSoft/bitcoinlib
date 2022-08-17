@@ -151,7 +151,7 @@ defmodule BitcoinLib.Signing.Psbt.Input do
     case sighash_type do
       %SighashType{} ->
         input
-        |> Map.put(:sighash_type, sighash_type)
+        |> Map.put(:sighash_type, sighash_type.value)
 
       %{error: message} ->
         input |> Map.put(:error, message)
