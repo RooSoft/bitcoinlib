@@ -24,6 +24,6 @@ defmodule BitcoinLib.Signing.Psbt.Input.RedeemScript do
     do: redeem_script
 
   defp extract_redeem_script(%{keypair: keypair}) do
-    %RedeemScript{script: Binary.to_hex(keypair.value.data)}
+    %RedeemScript{script: keypair.value.data}
   end
 end
