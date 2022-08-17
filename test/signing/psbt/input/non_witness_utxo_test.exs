@@ -30,4 +30,17 @@ defmodule BitcoinLib.Signing.Psbt.Input.NonWitnessUtxoTest do
     assert 1 == Enum.count(inputs)
     assert 2 == Enum.count(outputs)
   end
+
+  test "get an error parsing a non-witness UTXO from a keypair with data in the key" do
+    keypair = %Keypair{
+      key: %Key{data: <<1>>, length: 1, type: 0},
+      value: %Value{data: <<>>, length: 0}
+    }
+
+    %NonWitnessUtxo{} = non_witness_utxo = NonWitnessUtxo.parse(keypair)
+
+    assert "invalid non-witness utxo key" == Map.get(non_witness_utxo, :error, non_witness_utxo)
+  end
+
+  ## TODO: must eventually test with an invalid transaction
 end
