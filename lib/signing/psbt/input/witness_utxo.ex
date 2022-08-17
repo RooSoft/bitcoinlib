@@ -50,9 +50,10 @@ defmodule BitcoinLib.Signing.Psbt.Input.WitnessUtxo do
     %CompactInteger{value: script_pub_key_length, remaining: remaining} =
       CompactInteger.extract_from(remaining)
 
-      script_pub_key_length_in_bits = script_pub_key_length * @bits
+    script_pub_key_length_in_bits = script_pub_key_length * @bits
 
-    <<script_pub_key::bitstring-size(script_pub_key_length_in_bits), remaining::bitstring>> = remaining
+    <<script_pub_key::bitstring-size(script_pub_key_length_in_bits), remaining::bitstring>> =
+      remaining
 
     %{
       map
