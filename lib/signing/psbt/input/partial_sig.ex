@@ -28,8 +28,8 @@ defmodule BitcoinLib.Signing.Psbt.Input.PartialSig do
 
   defp create_partial_sig({pub_key, signature, %{error: nil}}) do
     partial_sig = %PartialSig{
-      pub_key: Binary.to_hex(pub_key),
-      signature: Binary.to_hex(signature)
+      pub_key: pub_key,
+      signature: signature
     }
 
     {pub_key, signature, partial_sig}
