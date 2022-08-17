@@ -27,7 +27,7 @@ defmodule BitcoinLib.TransactionTest do
            } = List.first(transaction.inputs)
 
     assert %Output{
-             script_pub_key: "76a914cbc20a7664f2f69e5355aa427045bc15e7c6c77288ac",
+             script_pub_key: <<0x76a914cbc20a7664f2f69e5355aa427045bc15e7c6c77288ac::200>>,
              value: 0x12A05CAF0
            } = List.first(transaction.outputs)
   end

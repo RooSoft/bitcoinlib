@@ -8,10 +8,12 @@ defmodule BitcoinLib.Transaction.Output do
   alias BitcoinLib.Signing.Psbt.CompactInteger
   alias BitcoinLib.Transaction.Output
 
+  @byte 8
+
   def extract_from(<<value::little-64, remaining::bitstring>>) do
     case extract_script_pub_key(remaining) do
       {:ok, script_pub_key, remaining} ->
-        output = %Output{value: value, script_pub_key: Binary.to_hex(script_pub_key)}
+        output = %Output{value: value, script_pub_key: script_pub_key}
         {output, remaining}
 
       {:error, message} ->
@@ -25,7 +27,10 @@ defmodule BitcoinLib.Transaction.Output do
 
     case script_pub_key_size <= byte_size(remaining) do
       true ->
-        <<script_pub_key::binary-size(script_pub_key_size), remaining::bitstring>> = remaining
+        script_pub_key_bit_size = script_pub_key_size * @byte
+        <<script_pub_key::bitstring-size(script_pub_key_bit_size), remaining::bitstring>> =
+          remaining
+
         {:ok, script_pub_key, remaining}
 
       false ->

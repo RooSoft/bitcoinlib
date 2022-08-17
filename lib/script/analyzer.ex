@@ -42,3 +42,4 @@ defmodule BitcoinLib.Script.Analyzer do
 
   def identify(script) when is_bitstring(script), do: :unknown
 end
+
