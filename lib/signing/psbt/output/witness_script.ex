@@ -27,6 +27,6 @@ defmodule BitcoinLib.Signing.Psbt.Output.WitnessScript do
     do: witness_script
 
   defp extract_witness_script(%{keypair: keypair}) do
-    %WitnessScript{script: Binary.to_hex(keypair.value.data)}
+    %WitnessScript{script: keypair.value.data}
   end
 end

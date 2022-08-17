@@ -75,7 +75,7 @@ defmodule BitcoinLib.Signing.Psbt.Output do
     case Map.get(witness_script, :error) do
       nil ->
         output
-        |> Map.put(:witness_script, witness_script)
+        |> Map.put(:witness_script, witness_script.script)
 
       message ->
         output
