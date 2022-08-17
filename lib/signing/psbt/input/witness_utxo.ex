@@ -7,6 +7,8 @@ defmodule BitcoinLib.Signing.Psbt.Input.WitnessUtxo do
   alias BitcoinLib.Signing.Psbt.CompactInteger
   alias BitcoinLib.Script
 
+  @bits 8
+
   def parse(keypair) do
     %{witness_utxo: witness_utxo} =
       %{keypair: keypair, witness_utxo: %WitnessUtxo{}}
@@ -48,12 +50,14 @@ defmodule BitcoinLib.Signing.Psbt.Input.WitnessUtxo do
     %CompactInteger{value: script_pub_key_length, remaining: remaining} =
       CompactInteger.extract_from(remaining)
 
-    <<script_pub_key::binary-size(script_pub_key_length), remaining::bitstring>> = remaining
+      script_pub_key_length_in_bits = script_pub_key_length * @bits
+
+    <<script_pub_key::bitstring-size(script_pub_key_length_in_bits), remaining::bitstring>> = remaining
 
     %{
       map
       | remaining: remaining,
-        witness_utxo: Map.put(witness_utxo, :script_pub_key, Binary.to_hex(script_pub_key))
+        witness_utxo: Map.put(witness_utxo, :script_pub_key, script_pub_key)
     }
   end
 
@@ -64,7 +68,6 @@ defmodule BitcoinLib.Signing.Psbt.Input.WitnessUtxo do
        ) do
     id =
       script_pub_key
-      |> Binary.from_hex()
       |> Script.Analyzer.identify()
 
     case id do
