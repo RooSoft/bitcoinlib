@@ -28,6 +28,6 @@ defmodule BitcoinLib.Signing.Psbt.Input.FinalScriptSig do
     do: final_script_sig
 
   defp extract_final_script_sig(%{keypair: keypair}) do
-    %FinalScriptSig{script_sig: Binary.to_hex(keypair.value.data)}
+    %FinalScriptSig{script_sig: keypair.value.data}
   end
 end

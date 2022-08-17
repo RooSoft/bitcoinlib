@@ -14,8 +14,7 @@ defmodule BitcoinLib.Test.Integration.Bip174.ValidPsbtsTest do
 
   alias BitcoinLib.Signing.Psbt.Input.{
     NonWitnessUtxo,
-    WitnessUtxo,
-    FinalScriptSig
+    WitnessUtxo
     #   SighashType,
   }
 
@@ -42,7 +41,8 @@ defmodule BitcoinLib.Test.Integration.Bip174.ValidPsbtsTest do
     assert [
              %Input{
                utxo: nil,
-               final_script_sig: %FinalScriptSig{}
+               final_script_sig:
+                 <<0x47304402204759661797C01B036B25928948686218347D89864B719E1F7FCF57D1E511658702205309EABF56AA4D8891FFD111FDF1336F3A29DA866D7F8486D75546CEEDAF93190121035CDC61FC7BA971C0B501A646A2A83B102CB43881217CA682DC86E2D73FA88292::848>>
              },
              %Input{utxo: %WitnessUtxo{}}
            ] = psbt.inputs
