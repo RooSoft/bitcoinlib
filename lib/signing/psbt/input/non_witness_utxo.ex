@@ -30,8 +30,9 @@ defmodule BitcoinLib.Signing.Psbt.Input.NonWitnessUtxo do
     do: non_witness_utxo
 
   defp extract_transaction(%{keypair: %Keypair{value: %Value{data: data}}}) do
-    transaction = Transaction.decode(data)
-
-    %NonWitnessUtxo{transaction: transaction}
+    case Transaction.decode(data) do
+      {:ok, transaction} -> %NonWitnessUtxo{transaction: transaction}
+      {:error, message} -> %NonWitnessUtxo{} |> Map.put(:error, message)
+    end
   end
 end
