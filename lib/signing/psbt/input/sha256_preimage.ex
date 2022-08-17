@@ -4,7 +4,7 @@ defmodule BitcoinLib.Signing.Psbt.Input.Sha256Preimage do
   alias BitcoinLib.Signing.Psbt.Input.Sha256Preimage
   alias BitcoinLib.Crypto
 
-  def parse(<<preimage_hash::binary-size(32)>>, <<preimage::binary>>) do
+  def parse(<<preimage_hash::bitstring-256>>, <<preimage::bitstring>>) do
     case validate(preimage_hash, preimage) do
       true ->
         %Sha256Preimage{
@@ -24,6 +24,6 @@ defmodule BitcoinLib.Signing.Psbt.Input.Sha256Preimage do
   defp validate(hash, preimage) do
     hash ==
       preimage
-      |> Crypto.sha256()
+      |> Crypto.sha256_bitstring()
   end
 end
