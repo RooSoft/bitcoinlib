@@ -221,7 +221,7 @@ defmodule BitcoinLib.Signing.Psbt.Input do
     proof_of_reserves_commitment = ProofOfReservesCommitment.parse(keypair)
 
     input
-    |> Map.put(:proof_of_reserves_commitment, proof_of_reserves_commitment)
+    |> Map.put(:proof_of_reserves_commitment, proof_of_reserves_commitment.value)
   end
 
   defp add_ripemd160_preimage(input, keypair) do

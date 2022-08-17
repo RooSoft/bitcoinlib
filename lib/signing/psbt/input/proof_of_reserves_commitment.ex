@@ -3,7 +3,7 @@ defmodule BitcoinLib.Signing.Psbt.Input.ProofOfReservesCommitment do
 
   alias BitcoinLib.Signing.Psbt.Input.ProofOfReservesCommitment
 
-  def parse(<<value::binary>>) do
+  def parse(<<value::bitstring>>) do
     %ProofOfReservesCommitment{
       value: value
     }
