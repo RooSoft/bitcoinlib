@@ -14,7 +14,7 @@ defmodule BitcoinLib.Test.Integration.Bip174.ValidPsbtsTest do
     NonWitnessUtxo,
     WitnessUtxo,
     FinalScriptSig,
- #   SighashType,
+    #   SighashType,
     Bip32Derivation,
     RedeemScript,
     WitnessScript
@@ -87,7 +87,7 @@ defmodule BitcoinLib.Test.Integration.Bip174.ValidPsbtsTest do
              %Input{
                utxo: %WitnessUtxo{},
                bip32_derivations: [%Bip32Derivation{}, %Bip32Derivation{}],
-               redeem_script: %RedeemScript{},
+               redeem_script: _redeem_script,
                witness_script: %WitnessScript{}
              }
            ] = psbt.inputs
