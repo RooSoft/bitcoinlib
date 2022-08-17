@@ -1,7 +1,7 @@
-defmodule BitcoinLib.Signing.Psbt.Input.RedeemScript do
+defmodule BitcoinLib.Signing.Psbt.GenericProperties.RedeemScript do
   defstruct [:script]
 
-  alias BitcoinLib.Signing.Psbt.Input.RedeemScript
+  alias BitcoinLib.Signing.Psbt.GenericProperties.RedeemScript
   alias BitcoinLib.Signing.Psbt.Keypair.{Key}
 
   def parse(keypair) do

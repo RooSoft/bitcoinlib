@@ -12,14 +12,18 @@ defmodule BitcoinLib.Signing.Psbt.Input do
 
   alias BitcoinLib.Signing.Psbt.{Keypair, KeypairList, Input}
 
-  alias BitcoinLib.Signing.Psbt.GenericProperties.{Bip32Derivation, Proprietary, WitnessScript}
+  alias BitcoinLib.Signing.Psbt.GenericProperties.{
+    Bip32Derivation,
+    Proprietary,
+    RedeemScript,
+    WitnessScript
+  }
 
   alias BitcoinLib.Signing.Psbt.Input.{
     NonWitnessUtxo,
     WitnessUtxo,
     PartialSig,
     SighashType,
-    RedeemScript,
     FinalScriptSig,
     FinalScriptWitness,
     ProofOfReservesCommitment,
