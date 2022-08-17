@@ -1,8 +1,8 @@
 defmodule BitcoinLib.Signing.Psbt.Output.Bip32Derivation do
   defstruct [:pub_key, :fingerprint, :derivation_path]
 
-  @compressed_pub_key_hex_size 66
-  @uncompressed_pub_key_hex_size 130
+  @compressed_pub_key_hex_size 33
+  @uncompressed_pub_key_hex_size 65
 
   alias BitcoinLib.Signing.Psbt.Output.Bip32Derivation
   alias BitcoinLib.Signing.Psbt.Keypair
@@ -14,7 +14,7 @@ defmodule BitcoinLib.Signing.Psbt.Output.Bip32Derivation do
     {derivation_path, _remaining} = extract_derivation_path(remaining, [])
 
     %Bip32Derivation{
-      pub_key: Binary.to_hex(binary_pub_key),
+      pub_key: binary_pub_key,
       fingerprint: Integer.to_string(fingerprint, 16) |> String.downcase(),
       derivation_path: DerivationPath.from_list(["M" | derivation_path])
     }
