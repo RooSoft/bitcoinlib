@@ -12,7 +12,7 @@ defmodule BitcoinLib.Signing.Psbt.Input do
 
   alias BitcoinLib.Signing.Psbt.{Keypair, KeypairList, Input}
 
-  alias BitcoinLib.Signing.Psbt.GenericProperties.{Proprietary}
+  alias BitcoinLib.Signing.Psbt.GenericProperties.{Proprietary, WitnessScript}
 
   alias BitcoinLib.Signing.Psbt.Input.{
     NonWitnessUtxo,
@@ -20,7 +20,6 @@ defmodule BitcoinLib.Signing.Psbt.Input do
     PartialSig,
     SighashType,
     RedeemScript,
-    WitnessScript,
     Bip32Derivation,
     FinalScriptSig,
     FinalScriptWitness,
@@ -169,7 +168,7 @@ defmodule BitcoinLib.Signing.Psbt.Input do
     witness_script = WitnessScript.parse(keypair)
 
     case Map.get(witness_script, :error) do
-      nil -> input |> Map.put(:witness_script, witness_script)
+      nil -> input |> Map.put(:witness_script, witness_script.script)
       message -> input |> Map.put(:error, message)
     end
   end

@@ -1,9 +1,9 @@
 defmodule BitcoinLib.Signing.Psbt.Output do
   defstruct unknowns: []
 
-  alias BitcoinLib.Signing.Psbt.GenericProperties.{Proprietary}
   alias BitcoinLib.Signing.Psbt.{Keypair, KeypairList, Output}
-  alias BitcoinLib.Signing.Psbt.Output.{RedeemScript, WitnessScript, Bip32Derivation}
+  alias BitcoinLib.Signing.Psbt.GenericProperties.{Proprietary, WitnessScript}
+  alias BitcoinLib.Signing.Psbt.Output.{RedeemScript, Bip32Derivation}
 
   @redeem_script 0x0
   @witness_script 0x1

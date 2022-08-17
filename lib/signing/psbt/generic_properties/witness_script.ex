@@ -1,7 +1,7 @@
-defmodule BitcoinLib.Signing.Psbt.Output.WitnessScript do
+defmodule BitcoinLib.Signing.Psbt.GenericProperties.WitnessScript do
   defstruct [:script]
 
-  alias BitcoinLib.Signing.Psbt.Output.WitnessScript
+  alias BitcoinLib.Signing.Psbt.GenericProperties.WitnessScript
   alias BitcoinLib.Signing.Psbt.Keypair.{Key}
 
   def parse(keypair) do

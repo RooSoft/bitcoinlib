@@ -16,8 +16,6 @@ defmodule BitcoinLib.Test.Integration.Bip174.ValidPsbtsTest do
     FinalScriptSig,
     #   SighashType,
     Bip32Derivation,
-    RedeemScript,
-    WitnessScript
   }
 
   ### CASE THAT https://bip174.org CAN'T EVEN PARSE
@@ -87,8 +85,8 @@ defmodule BitcoinLib.Test.Integration.Bip174.ValidPsbtsTest do
              %Input{
                utxo: %WitnessUtxo{},
                bip32_derivations: [%Bip32Derivation{}, %Bip32Derivation{}],
-               redeem_script: _redeem_script,
-               witness_script: %WitnessScript{}
+               redeem_script: <<0x0020771fd18ad459666dd49f3d564e3dbc42f4c84774e360ada16816a8ed488d5681::272>>,
+               witness_script: <<0x522103b1341ccba7683b6af4f1238cd6e97e7167d569fac47f1e48d47541844355bd462103de55d1e1dac805e3f8a58c1fbf9b94c02f3dbaafe127fefca4995f26f82083bd52ae::568>>
              }
            ] = psbt.inputs
   end
@@ -107,7 +105,8 @@ defmodule BitcoinLib.Test.Integration.Bip174.ValidPsbtsTest do
              %Input{
                utxo: %WitnessUtxo{},
                bip32_derivations: [%Bip32Derivation{}, %Bip32Derivation{}],
-               witness_script: %WitnessScript{}
+               witness_script:
+                 <<0x5221029DA12CDB5B235692B91536AFEFE5C91C3AB9473D8E43B533836AB456299C88712103372B34234ED7CF9C1FEA5D05D441557927BE9542B162EB02E1AB2CE80224C00B52AE::568>>
              }
            ] = psbt.inputs
 
