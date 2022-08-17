@@ -31,7 +31,7 @@ defmodule BitcoinLib.Transaction.Input do
 
     script_sig_bit_size = script_sig_size * @bits
 
-    <<script_sig::size(script_sig_bit_size), remaining::bitstring>> = remaining
+    <<script_sig::bitstring-size(script_sig_bit_size), remaining::bitstring>> = remaining
 
     {script_sig, remaining}
   end
