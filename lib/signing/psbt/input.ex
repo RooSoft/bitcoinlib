@@ -209,7 +209,7 @@ defmodule BitcoinLib.Signing.Psbt.Input do
     case Map.get(final_script_witness, :error) do
       nil ->
         input
-        |> Map.put(:final_script_witness, final_script_witness)
+        |> Map.put(:final_script_witness, final_script_witness.script_witness)
 
       message ->
         input

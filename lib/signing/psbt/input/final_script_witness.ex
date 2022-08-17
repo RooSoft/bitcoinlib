@@ -30,6 +30,6 @@ defmodule BitcoinLib.Signing.Psbt.Input.FinalScriptWitness do
        do: final_script_witness
 
   defp extract_final_script_witness(%{keypair: keypair}) do
-    %FinalScriptWitness{script_witness: Binary.to_hex(keypair.value.data)}
+    %FinalScriptWitness{script_witness: keypair.value.data}
   end
 end
