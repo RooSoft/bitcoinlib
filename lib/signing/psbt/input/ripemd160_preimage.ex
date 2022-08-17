@@ -4,7 +4,7 @@ defmodule BitcoinLib.Signing.Psbt.Input.Ripemd160Preimage do
   alias BitcoinLib.Signing.Psbt.Input.Ripemd160Preimage
   alias BitcoinLib.Crypto
 
-  def parse(<<preimage_hash::binary-size(20)>>, <<preimage::binary>>) do
+  def parse(<<preimage_hash::bitstring-160>>, <<preimage::bitstring>>) do
     case validate(preimage_hash, preimage) do
       true ->
         %Ripemd160Preimage{
@@ -24,6 +24,6 @@ defmodule BitcoinLib.Signing.Psbt.Input.Ripemd160Preimage do
   defp validate(hash, preimage) do
     hash ==
       preimage
-      |> Crypto.ripemd160()
+      |> Crypto.ripemd160_bitstring()
   end
 end
