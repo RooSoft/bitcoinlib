@@ -63,18 +63,30 @@ defmodule BitcoinLib.ScriptTest do
 
     opcodes = Script.parse(redeem_script)
 
-    assert(
-      [
-        %Constants.Two{},
-        %Data{
-          value: <<0x029583BF39AE0A609747AD199ADDD634FA6108559D6C5CD39B4C2183F1AB96E07F::264>>
-        },
-        %Data{
-          value: <<0x02DAB61FF49A14DB6A7D02B0CD1FBB78FC4B18312B5B4E54DAE4DBA2FBFEF536D7::264>>
-        },
-        %Constants.Two{},
-        %Crypto.CheckMultiSigVerify{}
-      ] = opcodes
-    )
+    assert [
+             %Constants.Two{},
+             %Data{
+               value:
+                 <<0x029583BF39AE0A609747AD199ADDD634FA6108559D6C5CD39B4C2183F1AB96E07F::264>>
+             },
+             %Data{
+               value:
+                 <<0x02DAB61FF49A14DB6A7D02B0CD1FBB78FC4B18312B5B4E54DAE4DBA2FBFEF536D7::264>>
+             },
+             %Constants.Two{},
+             %Crypto.CheckMultiSigVerify{}
+           ] = opcodes
+  end
+
+  test "parse a script pub key" do
+    script_pub_key = <<0xA91429CA74F8A08F81999428185C97B5D852E4063F6187::184>>
+
+    opcodes = Script.parse(script_pub_key)
+
+    assert [
+             %Crypto.Hash160{},
+             %Data{value: <<0x29CA74F8A08F81999428185C97B5D852E4063F61::160>>},
+             %BitwiseLogic.Equal{}
+           ] = opcodes
   end
 end
