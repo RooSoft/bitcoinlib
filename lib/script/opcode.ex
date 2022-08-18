@@ -13,4 +13,16 @@ defmodule BitcoinLib.Script.Opcode do
   returning either the altered stack or an error
   """
   @callback execute(any(), list()) :: {:ok, list()} | {:error, binary()}
+
+  alias BitcoinLib.Script.Opcodes.Data
+
+  @spec execute(%Data{}, list()) :: {:ok, list()}
+  def execute(%Data{value: value}, stack) do
+    {:ok, [value | stack]}
+  end
+
+  @spec execute(module(), list()) :: {:ok, list()}
+  def execute(opcode, stack) do
+    opcode.__struct__.execute(opcode, stack)
+  end
 end

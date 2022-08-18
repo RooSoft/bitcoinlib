@@ -10,6 +10,7 @@ defmodule BitcoinLib.Script do
   @spec execute(bitstring(), list()) :: {:ok, boolean()} | {:error, binary()}
   def execute(script, stack) when is_bitstring(script) do
     script
+    |> Parser.parse()
     |> Runner.execute(stack)
   end
 

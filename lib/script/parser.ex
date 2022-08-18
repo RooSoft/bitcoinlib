@@ -2,6 +2,7 @@ defmodule BitcoinLib.Script.Parser do
   alias BitcoinLib.Script.{OpcodeManager}
   alias BitcoinLib.Script.Opcodes.Data
 
+  @spec parse(binary()) :: list()
   def parse(script) do
     iterate(%{script: script, opcodes: [], whole_script: script})
   end
