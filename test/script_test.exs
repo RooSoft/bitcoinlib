@@ -4,7 +4,7 @@ defmodule BitcoinLib.ScriptTest do
   doctest BitcoinLib.Script
 
   alias BitcoinLib.Script
-  alias BitcoinLib.Script.Opcodes.{Stack, Crypto, BitwiseLogic}
+  alias BitcoinLib.Script.Opcodes.{BitwiseLogic, Constants, Crypto, Data, Stack}
 
   @dup Stack.Dup.v()
   @hash_160 Crypto.Hash160.v()
@@ -55,5 +55,30 @@ defmodule BitcoinLib.ScriptTest do
     opcodes = Script.parse(script)
 
     assert 1 = Enum.count(opcodes)
+  end
+
+  test "parse a redeem script" do
+    redeem_script =
+      <<0x5221029583BF39AE0A609747AD199ADDD634FA6108559D6C5CD39B4C2183F1AB96E07F2102DAB61FF49A14DB6A7D02B0CD1FBB78FC4B18312B5B4E54DAE4DBA2FBFEF536D752AF::568>>
+
+    opcodes = Script.parse(redeem_script)
+
+    assert(
+      [
+        %Constants.Two{},
+        %Data{
+          value:
+            <<2, 149, 131, 191, 57, 174, 10, 96, 151, 71, 173, 25, 154, 221, 214, 52, 250, 97, 8,
+              85, 157, 108, 92, 211, 155, 76, 33, 131, 241, 171, 150, 224, 127>>
+        },
+        %Data{
+          value:
+            <<2, 218, 182, 31, 244, 154, 20, 219, 106, 125, 2, 176, 205, 31, 187, 120, 252, 75,
+              24, 49, 43, 91, 78, 84, 218, 228, 219, 162, 251, 254, 245, 54, 215>>
+        },
+        %Constants.Two{},
+        %Crypto.CheckMultiSigVerify{}
+      ] = opcodes
+    )
   end
 end
