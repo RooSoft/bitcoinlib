@@ -48,4 +48,12 @@ defmodule BitcoinLib.ScriptTest do
 
     assert :p2sh == script_type
   end
+
+  test "parse the simplest of scripts" do
+    script = <<0>>
+
+    opcodes = Script.parse(script)
+
+    assert 1 = Enum.count(opcodes)
+  end
 end

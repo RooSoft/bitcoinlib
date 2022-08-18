@@ -1,5 +1,10 @@
 defmodule BitcoinLib.Script do
-  alias BitcoinLib.Script.{Analyzer, OpcodeManager}
+  alias BitcoinLib.Script.{Analyzer, OpcodeManager, Parser}
+
+  @spec parse(bitstring()) :: list()
+  def parse(script) when is_bitstring(script) do
+    Parser.parse(script)
+  end
 
   @spec execute(bitstring(), list()) :: {:ok, boolean()} | {:error, binary()}
   def execute(script, stack) when is_bitstring(script) do
