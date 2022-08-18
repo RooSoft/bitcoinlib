@@ -67,14 +67,10 @@ defmodule BitcoinLib.ScriptTest do
       [
         %Constants.Two{},
         %Data{
-          value:
-            <<2, 149, 131, 191, 57, 174, 10, 96, 151, 71, 173, 25, 154, 221, 214, 52, 250, 97, 8,
-              85, 157, 108, 92, 211, 155, 76, 33, 131, 241, 171, 150, 224, 127>>
+          value: <<0x029583BF39AE0A609747AD199ADDD634FA6108559D6C5CD39B4C2183F1AB96E07F::264>>
         },
         %Data{
-          value:
-            <<2, 218, 182, 31, 244, 154, 20, 219, 106, 125, 2, 176, 205, 31, 187, 120, 252, 75,
-              24, 49, 43, 91, 78, 84, 218, 228, 219, 162, 251, 254, 245, 54, 215>>
+          value: <<0x02DAB61FF49A14DB6A7D02B0CD1FBB78FC4B18312B5B4E54DAE4DBA2FBFEF536D7::264>>
         },
         %Constants.Two{},
         %Crypto.CheckMultiSigVerify{}
