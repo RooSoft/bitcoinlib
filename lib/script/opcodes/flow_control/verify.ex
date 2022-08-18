@@ -1,7 +1,7 @@
 defmodule BitcoinLib.Script.Opcodes.FlowControl.Verify do
   @behaviour BitcoinLib.Script.Opcode
 
-  defstruct type: BitcoinLib.Script.Opcodes.FlowControl.Verify
+  defstruct []
 
   alias BitcoinLib.Script.Value
 

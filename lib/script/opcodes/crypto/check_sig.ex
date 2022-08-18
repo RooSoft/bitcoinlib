@@ -1,7 +1,7 @@
 defmodule BitcoinLib.Script.Opcodes.Crypto.CheckSig do
   @behaviour BitcoinLib.Script.Opcode
 
-  defstruct [:script, type: BitcoinLib.Script.Opcodes.Crypto.CheckSig]
+  defstruct [:script]
 
   alias BitcoinLib.Crypto.Secp256k1
   alias BitcoinLib.Script.Opcodes.Crypto.CheckSig

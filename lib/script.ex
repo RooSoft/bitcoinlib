@@ -37,7 +37,7 @@ defmodule BitcoinLib.Script do
   end
 
   defp execute_opcode({:opcode, opcode, remaining}, stack, whole_script) do
-    case opcode.type.execute(opcode, stack) do
+    case opcode.__struct__.execute(opcode, stack) do
       {:ok, stack} -> {:ok, stack, remaining, whole_script}
       {:error, message} -> {:error, message}
     end

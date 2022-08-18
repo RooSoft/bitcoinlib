@@ -1,7 +1,7 @@
 defmodule BitcoinLib.Script.Opcodes.Constants.Zero do
   @behaviour BitcoinLib.Script.Opcode
 
-  defstruct type: BitcoinLib.Script.Opcodes.Constants.Zero
+  defstruct []
 
   alias BitcoinLib.Script.Opcodes.Constants.Zero
 

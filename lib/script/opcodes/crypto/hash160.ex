@@ -1,7 +1,7 @@
 defmodule BitcoinLib.Script.Opcodes.Crypto.Hash160 do
   @behaviour BitcoinLib.Script.Opcode
 
-  defstruct type: BitcoinLib.Script.Opcodes.Crypto.Hash160
+  defstruct []
 
   alias BitcoinLib.Crypto
 

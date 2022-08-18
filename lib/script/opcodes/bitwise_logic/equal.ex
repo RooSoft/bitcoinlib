@@ -1,7 +1,7 @@
 defmodule BitcoinLib.Script.Opcodes.BitwiseLogic.Equal do
   @behaviour BitcoinLib.Script.Opcode
 
-  defstruct type: BitcoinLib.Script.Opcodes.BitwiseLogic.Equal
+  defstruct []
 
   @value 0x87
 
