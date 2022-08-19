@@ -21,7 +21,7 @@ defmodule BitcoinLib.Test.Integration.Bip174.FailsSignerChecksTest do
 
     {:ok, psbt} = base_64 |> Psbt.parse()
 
-    IO.inspect(psbt.inputs |> List.first(), limit: :infinity)
+  #  IO.inspect(psbt.inputs |> List.first(), limit: :infinity)
 
     # assert "a non-witness UTXO contains unsupported script pub keys" == message
   end
