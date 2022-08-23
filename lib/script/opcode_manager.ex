@@ -10,6 +10,7 @@ defmodule BitcoinLib.Script.OpcodeManager do
   @equal_verify BitwiseLogic.EqualVerify.v()
   @hash160 Crypto.Hash160.v()
   @check_sig Crypto.CheckSig.v()
+  @check_multi_sig Crypto.CheckMultiSig.v()
   @check_multi_sig_verify Crypto.CheckMultiSigVerify.v()
 
   alias BitcoinLib.Signing.Psbt.CompactInteger
@@ -47,6 +48,10 @@ defmodule BitcoinLib.Script.OpcodeManager do
 
   def extract_from_script(<<@check_sig::8, remaining::bitstring>>, whole_script) do
     {:opcode, %Crypto.CheckSig{script: whole_script}, remaining}
+  end
+
+  def extract_from_script(<<@check_multi_sig::8, remaining::bitstring>>, _whole_script) do
+    {:opcode, %Crypto.CheckMultiSig{}, remaining}
   end
 
   def extract_from_script(<<@check_multi_sig_verify::8, remaining::bitstring>>, _whole_script) do
