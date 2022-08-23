@@ -1,7 +1,7 @@
 alias BitcoinLib.Console
 alias BitcoinLib.Crypto
-alias BitcoinLib.Key.Address
-alias BitcoinLib.Key.HD.{DerivationPath, Entropy, ExtendedPublic, ExtendedPrivate, MnemonicSeed}
+alias BitcoinLib.Key.{Address, PrivateKey}
+alias BitcoinLib.Key.HD.{DerivationPath, Entropy, ExtendedPublic, MnemonicSeed}
 
 # options here https://hexdocs.pm/elixir/1.12/Inspect.Opts.html
 #IEx.configure(
@@ -13,25 +13,25 @@ private_key =
   |> Entropy.from_dice_rolls!()
   |> MnemonicSeed.wordlist_from_entropy()
   |> MnemonicSeed.to_seed()
-  |> ExtendedPrivate.from_seed()
+  |> PrivateKey.from_seed()
 
 public_key =
   private_key
   |> ExtendedPublic.from_private_key()
 
 ss_private_key =
-  ExtendedPrivate.from_mnemonic_phrase("rally celery split order almost twenty ignore record legend learn chaos decade")
+  PrivateKey.from_mnemonic_phrase("rally celery split order almost twenty ignore record legend learn chaos decade")
 
 ss_xpriv =
   ss_private_key
   # this child is: bip 44 bitcoin mainnet account 0 receiving index 0
-  |> ExtendedPrivate.from_derivation_path!("m/49'/0'/0'/0/0")
-  |> ExtendedPrivate.serialize()
+  |> PrivateKey.from_derivation_path!("m/49'/0'/0'/0/0")
+  |> PrivateKey.serialize()
 
 
 blue_wallet_pub_key =
   ss_private_key
-  |> ExtendedPrivate.from_derivation_path!("m/84'/0'/0'")
+  |> PrivateKey.from_derivation_path!("m/84'/0'/0'")
   |> ExtendedPublic.from_private_key()
 
 blue_wallet_zpub =

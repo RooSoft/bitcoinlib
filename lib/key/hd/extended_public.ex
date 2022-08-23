@@ -21,7 +21,8 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic do
     Deserialization
   }
 
-  alias BitcoinLib.Key.HD.{DerivationPath, ExtendedPrivate, ExtendedPublic, Fingerprint}
+  alias BitcoinLib.Key.{PrivateKey}
+  alias BitcoinLib.Key.HD.{DerivationPath, ExtendedPublic, Fingerprint}
 
   @doc """
   Derives an extended public key from an extended private key. Happens to be the same process
@@ -30,7 +31,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic do
   Inspired by https://learnmeabitcoin.com/technical/hd-wallets#master-private-key
 
   ## Examples
-    iex> %BitcoinLib.Key.HD.ExtendedPrivate{
+    iex> %BitcoinLib.Key.PrivateKey{
     ...>   key: <<0x081549973BAFBBA825B31BCC402A3C4ED8E3185C2F3A31C75E55F423E9629AA3::264>>,
     ...>   chain_code: <<0x1D7D2A4C940BE028B945302AD79DD2CE2AFE5ED55E1A2937A5AF57F8401E73DD::256>>
     ...> }
@@ -44,8 +45,8 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic do
       parent_fingerprint: <<0::32>>
     }
   """
-  @spec from_private_key(%ExtendedPrivate{}) :: {integer(), integer()}
-  def from_private_key(%ExtendedPrivate{} = private_key) do
+  @spec from_private_key(%PrivateKey{}) :: {integer(), integer()}
+  def from_private_key(%PrivateKey{} = private_key) do
     {_, compressed} =
       private_key.key
       |> BitcoinLib.Key.Public.from_private_key()

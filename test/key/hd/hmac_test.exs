@@ -3,10 +3,11 @@ defmodule BitcoinLib.Key.HD.HmacTest do
 
   doctest BitcoinLib.Key.HD.Hmac
 
-  alias BitcoinLib.Key.HD.{Hmac, ExtendedPrivate}
+  alias BitcoinLib.Key.PrivateKey
+  alias BitcoinLib.Key.HD.{Hmac}
 
   test "compute HMAC on a private key" do
-    private_key = %ExtendedPrivate{
+    private_key = %PrivateKey{
       key: <<0xE8F32E723DECF4051AEFAC8E2C93C9C5B214313817CDB01A1494B917C8436B35::256>>,
       chain_code: <<0x873DFF81C02F525623FD1FE5167EAC3A55A049DE3D314BB42EE227FFED37D508::256>>
     }

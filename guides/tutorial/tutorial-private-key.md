@@ -40,11 +40,11 @@ This is the result
 This mnemonic phrase can then be converted into a `private key`
 
 ```elixir
-alias BitcoinLib.Key.HD.ExtendedPrivate
+alias BitcoinLib.Key.PrivateKey
 
 private_key = 
   "blue involve cook print twist crystal razor february caution private slim medal"
-  |> ExtendedPrivate.from_mnemonic_phrase()
+  |> PrivateKey.from_mnemonic_phrase()
 ```
 
 To keep things simple, we won't bother about what's returned as a private key... just know that
@@ -56,7 +56,7 @@ A private key can be serialized into an `xprv`
 
 ```elixir
 private_key
-|> ExtendedPrivate.serialize
+|> PrivateKey.serialize
 ```
 
 which results in

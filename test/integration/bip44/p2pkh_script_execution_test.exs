@@ -4,8 +4,8 @@ defmodule BitcoinLib.Test.Integration.Bip44.P2pkhScriptExecutionTest do
   """
   use ExUnit.Case, async: true
 
-  alias BitcoinLib.Key.{PublicHash}
-  alias BitcoinLib.Key.HD.{ExtendedPrivate, MnemonicSeed}
+  alias BitcoinLib.Key.{PrivateKey, PublicHash}
+  alias BitcoinLib.Key.HD.{MnemonicSeed}
 
   alias BitcoinLib.Script
   alias BitcoinLib.Script.Opcodes.{Stack, Crypto, BitwiseLogic}
@@ -21,8 +21,8 @@ defmodule BitcoinLib.Test.Integration.Bip44.P2pkhScriptExecutionTest do
     extended_private_key =
       "rally celery split order almost twenty ignore record legend learn chaos decade"
       |> MnemonicSeed.to_seed()
-      |> ExtendedPrivate.from_seed()
-      |> ExtendedPrivate.from_derivation_path!("m/44'/0'/0'/0/0")
+      |> PrivateKey.from_seed()
+      |> PrivateKey.from_derivation_path!("m/44'/0'/0'/0/0")
 
     public_key =
       extended_private_key
@@ -31,8 +31,7 @@ defmodule BitcoinLib.Test.Integration.Bip44.P2pkhScriptExecutionTest do
 
     private_key = extended_private_key |> Map.get(:key)
 
-    public_key_hash =
-      public_key |> PublicHash.from_public_key()
+    public_key_hash = public_key |> PublicHash.from_public_key()
 
     # 76 a9 14 725ebac06343111227573d0b5287954ef9b88aae 88 ac
     # OP_DUP OP_HASH160 OP_PUSHBYTES_20 725ebac06343111227573d0b5287954ef9b88aae OP_EQUALVERIFY OP_CHECKSIG

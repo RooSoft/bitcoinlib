@@ -1,7 +1,8 @@
 defmodule BitcoinLib.Test.Integration.Bip84.ZpubFromMnemonicTest do
   use ExUnit.Case, async: true
 
-  alias BitcoinLib.Key.HD.{MnemonicSeed, ExtendedPublic, ExtendedPrivate}
+  alias BitcoinLib.Key.{PrivateKey}
+  alias BitcoinLib.Key.HD.{MnemonicSeed, ExtendedPublic}
 
   @doc """
   based on https://github.com/bitcoin/bips/blob/master/bip-0084.mediawiki#test-vectors
@@ -10,11 +11,11 @@ defmodule BitcoinLib.Test.Integration.Bip84.ZpubFromMnemonicTest do
     private_key =
       "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about"
       |> MnemonicSeed.to_seed()
-      |> ExtendedPrivate.from_seed()
+      |> PrivateKey.from_seed()
 
     {:ok, zpub} =
       private_key
-      |> ExtendedPrivate.from_derivation_path!("m/84'/0'/0'")
+      |> PrivateKey.from_derivation_path!("m/84'/0'/0'")
       |> ExtendedPublic.from_private_key()
       |> ExtendedPublic.serialize(:zpub)
 
@@ -26,11 +27,11 @@ defmodule BitcoinLib.Test.Integration.Bip84.ZpubFromMnemonicTest do
     private_key =
       "rally celery split order almost twenty ignore record legend learn chaos decade"
       |> MnemonicSeed.to_seed()
-      |> ExtendedPrivate.from_seed()
+      |> PrivateKey.from_seed()
 
     {:ok, zpub} =
       private_key
-      |> ExtendedPrivate.from_derivation_path!("m/84'/0'/0'")
+      |> PrivateKey.from_derivation_path!("m/84'/0'/0'")
       |> ExtendedPublic.from_private_key()
       |> ExtendedPublic.serialize(:zpub)
 

@@ -1,9 +1,10 @@
-defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
+defmodule BitcoinLib.Key.HD.PrivateKeyTest do
   use ExUnit.Case, async: true
 
-  doctest BitcoinLib.Key.HD.ExtendedPrivate
+  doctest BitcoinLib.Key.PrivateKey
 
-  alias BitcoinLib.Key.HD.{DerivationPath, ExtendedPrivate}
+  alias BitcoinLib.Key.PrivateKey
+  alias BitcoinLib.Key.HD.{DerivationPath}
 
   test "creates a WIF from a private key" do
     private_key =
@@ -12,7 +13,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
 
     wif =
       private_key
-      |> ExtendedPrivate.to_wif()
+      |> PrivateKey.to_wif()
 
     assert wif == "KzractrYn5gnDNVwBDy7sYhAkyMvX4WeYQpwyhCAUKDogJTzYsUc"
   end
@@ -23,9 +24,9 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
 
     extended_private_key =
       seed
-      |> ExtendedPrivate.from_seed()
+      |> PrivateKey.from_seed()
 
-    assert %ExtendedPrivate{
+    assert %PrivateKey{
              key: <<0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9::256>>,
              chain_code:
                <<0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B::256>>
@@ -41,9 +42,9 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
 
     private_key =
       mnemonic
-      |> ExtendedPrivate.from_mnemonic_phrase()
+      |> PrivateKey.from_mnemonic_phrase()
 
-    %ExtendedPrivate{
+    %PrivateKey{
       key: <<0x30A6B59CCCC924FC9FFD4AB08C5C01F0D6A4046797BB255D8919EB3E95C08871::256>>,
       chain_code: <<0xE08FCC54429E47AC55FEBD4DC9EDCCC88D292EB40AA3765AF3DA7178A14AA114::256>>,
       depth: 0,
@@ -54,16 +55,16 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
   end
 
   test "derive the first child of a private key" do
-    private_key = %ExtendedPrivate{
+    private_key = %PrivateKey{
       key: <<0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9::256>>,
       chain_code: <<0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B::256>>
     }
 
     index = 0
 
-    {:ok, child_private_key} = ExtendedPrivate.derive_child(private_key, index)
+    {:ok, child_private_key} = PrivateKey.derive_child(private_key, index)
 
-    %ExtendedPrivate{
+    %PrivateKey{
       key: <<0x39F329FEDBA2A68E2A804FCD9AEEA4104ACE9080212A52CE8B52C1FB89850C72::256>>,
       chain_code: <<0x05AAE71D7C080474EFAAB01FA79E96F4C6CFE243237780B0DF4BC36106228E31::256>>,
       depth: 1,
@@ -74,14 +75,14 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
 
   test "serialize a master private key" do
     serialized =
-      %ExtendedPrivate{
+      %PrivateKey{
         key: <<0xE8F32E723DECF4051AEFAC8E2C93C9C5B214313817CDB01A1494B917C8436B35::256>>,
         chain_code: <<0x873DFF81C02F525623FD1FE5167EAC3A55A049DE3D314BB42EE227FFED37D508::256>>,
         depth: 0,
         index: 0,
         parent_fingerprint: <<0::32>>
       }
-      |> BitcoinLib.Key.HD.ExtendedPrivate.serialize()
+      |> PrivateKey.serialize()
 
     assert "xprv9s21ZrQH143K3QTDL4LXw2F7HEK3wJUD2nW2nRk4stbPy6cq3jPPqjiChkVvvNKmPGJxWUtg6LnF5kejMRNNU3TGtRBeJgk33yuGBxrMPHi" ==
              serialized
@@ -93,9 +94,9 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
 
     private_key =
       serialized
-      |> BitcoinLib.Key.HD.ExtendedPrivate.deserialize()
+      |> PrivateKey.deserialize()
 
-    assert %ExtendedPrivate{
+    assert %PrivateKey{
              key: <<0x81549973BAFBBA825B31BCC402A3C4ED8E3185C2F3A31C75E55F423E9629AA3::256>>,
              chain_code:
                <<0x1D7D2A4C940BE028B945302AD79DD2CE2AFE5ED55E1A2937A5AF57F8401E73DD::256>>,
@@ -105,18 +106,18 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
   end
 
   test "get private key according to the minimal derivation path" do
-    private_key = %ExtendedPrivate{
+    private_key = %PrivateKey{
       key: <<0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9::256>>,
       chain_code: <<0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B::256>>
     }
 
     {:ok, child_private_key} =
-      ExtendedPrivate.from_derivation_path(
+      PrivateKey.from_derivation_path(
         private_key,
         "m"
       )
 
-    assert %ExtendedPrivate{
+    assert %PrivateKey{
              key: <<0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9::256>>,
              chain_code:
                <<0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B::256>>,
@@ -127,18 +128,18 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
   end
 
   test "get private key straight from a derivation path as a string" do
-    private_key = %ExtendedPrivate{
+    private_key = %PrivateKey{
       key: <<0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9::256>>,
       chain_code: <<0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B::256>>
     }
 
     child_private_key =
-      ExtendedPrivate.from_derivation_path!(
+      PrivateKey.from_derivation_path!(
         private_key,
         "m"
       )
 
-    assert %ExtendedPrivate{
+    assert %PrivateKey{
              key: <<0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9::256>>,
              chain_code:
                <<0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B::256>>,
@@ -149,7 +150,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
   end
 
   test "get private master bip44 key" do
-    private_key = %ExtendedPrivate{
+    private_key = %PrivateKey{
       key: <<0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9::256>>,
       chain_code: <<0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B::256>>
     }
@@ -157,12 +158,12 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
     {:ok, derivation_path} = DerivationPath.parse("m/44'")
 
     {:ok, child_private_key} =
-      ExtendedPrivate.from_derivation_path(
+      PrivateKey.from_derivation_path(
         private_key,
         derivation_path
       )
 
-    assert %ExtendedPrivate{
+    assert %PrivateKey{
              key: <<0x4E59086C1DEC6D081986CB079F536E38B3D2B6DA7A8EDCFFB1942AE8B9FDF156::256>>,
              chain_code:
                <<0xF42DE823EE78F6227822D79BC6F6101D084D7F0F876B7828BF027D681294E538::256>>,
@@ -173,18 +174,18 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
   end
 
   test "derive child without using the %DerivationPath struct" do
-    private_key = %ExtendedPrivate{
+    private_key = %PrivateKey{
       key: <<0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9::256>>,
       chain_code: <<0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B::256>>
     }
 
     {:ok, child_private_key} =
-      ExtendedPrivate.from_derivation_path(
+      PrivateKey.from_derivation_path(
         private_key,
         "m/44'"
       )
 
-    assert %ExtendedPrivate{
+    assert %PrivateKey{
              key: <<0x4E59086C1DEC6D081986CB079F536E38B3D2B6DA7A8EDCFFB1942AE8B9FDF156::256>>,
              chain_code:
                <<0xF42DE823EE78F6227822D79BC6F6101D084D7F0F876B7828BF027D681294E538::256>>,
@@ -195,7 +196,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
   end
 
   test "get private master bip44, bitcoin mainnet key" do
-    private_key = %ExtendedPrivate{
+    private_key = %PrivateKey{
       key: <<0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9::256>>,
       chain_code: <<0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B::256>>
     }
@@ -203,12 +204,12 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
     {:ok, derivation_path} = DerivationPath.parse("m/44'/0'")
 
     {:ok, child_private_key} =
-      ExtendedPrivate.from_derivation_path(
+      PrivateKey.from_derivation_path(
         private_key,
         derivation_path
       )
 
-    assert %ExtendedPrivate{
+    assert %PrivateKey{
              key: <<0xD5FF7F3CDA0028C81AB6E4137BB0F391049EB35608FDF84B0305F283A93A1963::256>>,
              chain_code:
                <<0x121AD45C595D75BE41D6578BEB92AD464243C9C60F7CD51DBC70007FC2E1DF14::256>>,
@@ -219,7 +220,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
   end
 
   test "get private master bip44, bitcoin mainnet, account 0 key" do
-    private_key = %ExtendedPrivate{
+    private_key = %PrivateKey{
       key: <<0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9::256>>,
       chain_code: <<0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B::256>>
     }
@@ -227,12 +228,12 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
     {:ok, derivation_path} = DerivationPath.parse("m/44'/0'/0'")
 
     {:ok, child_private_key} =
-      ExtendedPrivate.from_derivation_path(
+      PrivateKey.from_derivation_path(
         private_key,
         derivation_path
       )
 
-    assert %ExtendedPrivate{
+    assert %PrivateKey{
              key: <<0x762C3ABCFFBB912B86DD72D6ACA0D02127CF93DB04C96130A43BBBE724F938C5::256>>,
              chain_code:
                <<0xF1DCD43D3F65B67ECC7140BBD6FD3422DCB1CBD1FAA610140D89743D1623DE50::256>>,
@@ -243,7 +244,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
   end
 
   test "get private master bip44, bitcoin mainnet, account 0, change key" do
-    private_key = %ExtendedPrivate{
+    private_key = %PrivateKey{
       key: <<0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9::256>>,
       chain_code: <<0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B::256>>
     }
@@ -251,12 +252,12 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
     {:ok, derivation_path} = DerivationPath.parse("m/44'/0'/0'/1")
 
     {:ok, child_private_key} =
-      ExtendedPrivate.from_derivation_path(
+      PrivateKey.from_derivation_path(
         private_key,
         derivation_path
       )
 
-    assert %ExtendedPrivate{
+    assert %PrivateKey{
              key: <<0x41C5644125161F1B3382A175442F545815302D60F1D0F4D52B097B67C6B8C8F9::256>>,
              chain_code:
                <<0xAFC5B0F32E8D0028F19B3D664192A3A7FBC8EC6269F2BEF42897148BC34CA2ED::256>>,
@@ -267,7 +268,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
   end
 
   test "get private master bip44, bitcoin mainnet, account 0, change, index 0 key" do
-    private_key = %ExtendedPrivate{
+    private_key = %PrivateKey{
       key: <<0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9::256>>,
       chain_code: <<0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B::256>>
     }
@@ -275,12 +276,12 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
     {:ok, derivation_path} = DerivationPath.parse("m/44'/0'/0'/1/0")
 
     {:ok, child_private_key} =
-      ExtendedPrivate.from_derivation_path(
+      PrivateKey.from_derivation_path(
         private_key,
         derivation_path
       )
 
-    assert %ExtendedPrivate{
+    assert %PrivateKey{
              key: <<0x181DCB172F5B56DB39B6C8544068FEE69928556230B41E115BDB22BF82A06FF3::256>>,
              chain_code:
                <<0xAB3ECF35A71958C7E7A0E9A47C4E538CCF1D933554BC36CBE234B94056CDDBF::256>>,

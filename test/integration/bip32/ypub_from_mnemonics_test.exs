@@ -1,17 +1,18 @@
 defmodule BitcoinLib.Test.Integration.Bip32.YpubFromMnemonicsTest do
   use ExUnit.Case, async: true
 
-  alias BitcoinLib.Key.HD.{ExtendedPrivate, ExtendedPublic, MnemonicSeed}
+  alias BitcoinLib.Key.{PrivateKey}
+  alias BitcoinLib.Key.HD.{ExtendedPublic, MnemonicSeed}
 
   test "convert a mnemonic phrase into a ypub" do
     private_key =
       "rally celery split order almost twenty ignore record legend learn chaos decade"
       |> MnemonicSeed.to_seed()
-      |> ExtendedPrivate.from_seed()
+      |> PrivateKey.from_seed()
 
     public_key =
       private_key
-      |> ExtendedPrivate.from_derivation_path!("m/49'/0'/0'")
+      |> PrivateKey.from_derivation_path!("m/49'/0'/0'")
       |> ExtendedPublic.from_private_key()
 
     {:ok, ypub} =

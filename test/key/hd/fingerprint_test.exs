@@ -3,10 +3,11 @@ defmodule BitcoinLib.Key.HD.FingerprintTest do
 
   doctest BitcoinLib.Key.HD.Fingerprint
 
-  alias BitcoinLib.Key.HD.{Fingerprint, ExtendedPublic, ExtendedPrivate}
+  alias BitcoinLib.Key.PrivateKey
+  alias BitcoinLib.Key.HD.{Fingerprint, ExtendedPublic}
 
   test "compute a private key fingerprint" do
-    private_key = %ExtendedPrivate{
+    private_key = %PrivateKey{
       key: <<0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9::256>>,
       chain_code: <<0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B::256>>
     }
@@ -19,7 +20,7 @@ defmodule BitcoinLib.Key.HD.FingerprintTest do
   end
 
   test "append a private key fingerprint" do
-    private_key = %ExtendedPrivate{
+    private_key = %PrivateKey{
       key: <<0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9::256>>,
       chain_code: <<0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B::256>>
     }
@@ -28,10 +29,11 @@ defmodule BitcoinLib.Key.HD.FingerprintTest do
       private_key
       |> Fingerprint.append()
 
-    assert %ExtendedPrivate{
+    assert %PrivateKey{
              fingerprint: <<0x18C1259::32>>,
              key: <<0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9::256>>,
-             chain_code: <<0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B::256>>
+             chain_code:
+               <<0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B::256>>
            } == new_private_key
   end
 
@@ -49,7 +51,7 @@ defmodule BitcoinLib.Key.HD.FingerprintTest do
   end
 
   test "make sure public and private keys issue the same fingerprint" do
-    private_key = %ExtendedPrivate{
+    private_key = %PrivateKey{
       key: <<0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9::256>>,
       chain_code: <<0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B::256>>
     }

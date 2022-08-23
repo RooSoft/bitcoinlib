@@ -7,11 +7,11 @@ Addresses are derived from a public key and can be used to receive funds or trac
 First, we need a public key
 
 ```elixir
-alias BitcoinLib.Key.HD.ExtendedPrivate
+alias BitcoinLib.Key.PrivateKey
 
 public_key = 
   "blue involve cook print twist crystal razor february caution private slim medal"
-  |> ExtendedPrivate.from_mnemonic_phrase()
+  |> PrivateKey.from_mnemonic_phrase()
   |> ExtendedPublic.from_private_key
 ```
 

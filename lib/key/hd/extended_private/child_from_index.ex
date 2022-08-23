@@ -3,7 +3,8 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate.ChildFromIndex do
   Calculates direct childs from a private key based on a given index, and maybe a hardened flag
   """
 
-  alias BitcoinLib.Key.HD.ExtendedPrivate
+  alias BitcoinLib.Key.PrivateKey
+  alias BitcoinLib.Key.HD.{Fingerprint, Hmac}
 
   @max_index 0x7FFFFFFF
   @hardened 0x80000000
@@ -11,20 +12,18 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate.ChildFromIndex do
   # this is n, as found here https://en.bitcoin.it/wiki/Secp256k1
   @order_of_the_curve 0xFFFFFFFF_FFFFFFFF_FFFFFFFF_FFFFFFFE_BAAEDCE6_AF48A03B_BFD25E8C_D0364141
 
-  alias BitcoinLib.Key.HD.{Fingerprint, Hmac, ExtendedPrivate}
-
   @doc """
   Calculates a direct child from a private key based on a given index, and maybe a hardened flag
 
   ## Examples
-    iex> %BitcoinLib.Key.HD.ExtendedPrivate{
+    iex> %BitcoinLib.Key.PrivateKey{
     ...>  key: <<0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9::256>>,
     ...>  chain_code: <<0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B::256>>
     ...> }
     ...> |> BitcoinLib.Key.HD.ExtendedPrivate.ChildFromIndex.get(0)
     {
       :ok,
-      %BitcoinLib.Key.HD.ExtendedPrivate{
+      %BitcoinLib.Key.PrivateKey{
         key: <<0x39F329FEDBA2A68E2A804FCD9AEEA4104ACE9080212A52CE8B52C1FB89850C72::256>>,
         chain_code: <<0x05AAE71D7C080474EFAAB01FA79E96F4C6CFE243237780B0DF4BC36106228E31::256>>,
         depth: 1,
@@ -33,15 +32,15 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate.ChildFromIndex do
       }
     }
   """
-  @spec get(%ExtendedPrivate{}, integer(), boolean()) ::
-          {:ok, %ExtendedPrivate{}} | {:error, binary()}
+  @spec get(%PrivateKey{}, integer(), boolean()) ::
+          {:ok, %PrivateKey{}} | {:error, binary()}
   def get(private_key, index, hardened? \\ false)
 
   def get(_, index, _) when is_integer(index) and index > @max_index do
     {:error, "#{index} is too large of an index"}
   end
 
-  def get(%ExtendedPrivate{} = private_key, index, hardened?) when is_integer(index) do
+  def get(%PrivateKey{} = private_key, index, hardened?) when is_integer(index) do
     index =
       case hardened? do
         true -> @hardened + index
@@ -89,7 +88,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate.ChildFromIndex do
       |> Binary.from_integer()
 
     hash
-    |> Map.put(:child_private_key, %ExtendedPrivate{
+    |> Map.put(:child_private_key, %PrivateKey{
       key: child_private_key,
       chain_code: child_chain_code,
       depth: parent_private_key.depth + 1,

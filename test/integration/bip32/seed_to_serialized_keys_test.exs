@@ -5,7 +5,8 @@ defmodule BitcoinLib.Test.Integration.Bip32.SeedToSerializedKeysTest do
 
   use ExUnit.Case, async: true
 
-  alias BitcoinLib.Key.HD.{ExtendedPrivate, ExtendedPublic}
+  alias BitcoinLib.Key.{PrivateKey}
+  alias BitcoinLib.Key.HD.{ExtendedPublic}
 
   test "create a private key from a specific seed and output the xprv string" do
     seed = "000102030405060708090a0b0c0d0e0f"
@@ -27,13 +28,13 @@ defmodule BitcoinLib.Test.Integration.Bip32.SeedToSerializedKeysTest do
 
   defp create_serialized_master_private_key(seed) do
     seed
-    |> ExtendedPrivate.from_seed()
-    |> ExtendedPrivate.serialize()
+    |> PrivateKey.from_seed()
+    |> PrivateKey.serialize()
   end
 
   defp create_serialized_master_public_key(seed) do
     seed
-    |> ExtendedPrivate.from_seed()
+    |> PrivateKey.from_seed()
     |> ExtendedPublic.from_private_key()
     |> ExtendedPublic.serialize!()
   end

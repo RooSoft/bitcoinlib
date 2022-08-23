@@ -3,7 +3,8 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate.ChildFromDerivationPath do
   Computes a private key from a derivation path
   """
 
-  alias BitcoinLib.Key.HD.{DerivationPath, ExtendedPrivate}
+  alias BitcoinLib.Key.PrivateKey
+  alias BitcoinLib.Key.HD.{DerivationPath}
   alias BitcoinLib.Key.HD.DerivationPath.{Level}
   alias BitcoinLib.Key.HD.ExtendedPrivate.{ChildFromIndex}
 
@@ -12,14 +13,14 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate.ChildFromDerivationPath do
 
   ## Examples
     iex> { :ok, derivation_path } = BitcoinLib.Key.HD.DerivationPath.parse("m/84'/0'/0'/0/0")
-    ...> %BitcoinLib.Key.HD.ExtendedPrivate{
+    ...> %BitcoinLib.Key.PrivateKey{
     ...>  key: <<0xF79BB0D317B310B261A55A8AB393B4C8A1ABA6FA4D08AEF379CABA502D5D67F9::256>>,
     ...>  chain_code: <<0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B::256>>
     ...> }
     ...> |> BitcoinLib.Key.HD.ExtendedPrivate.ChildFromDerivationPath.get(derivation_path)
     {
       :ok,
-      %BitcoinLib.Key.HD.ExtendedPrivate{
+      %BitcoinLib.Key.PrivateKey{
         key: <<0x210DDF6EA57B57C4607B17F9774C3F48AC92DA3AE5FF03D215CCE56AA021DAA6::256>>,
         chain_code: <<0x143B6DAC88591B42BD7D74AA193D4EFC7826873B4BD5F491B7067E705B8A626E::256>>,
         depth: 5,
@@ -28,15 +29,15 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate.ChildFromDerivationPath do
         }
       }
   """
-  @spec get(%ExtendedPrivate{}, %DerivationPath{}) :: {:ok, %ExtendedPrivate{}}
-  def get(%ExtendedPrivate{} = private_key, %DerivationPath{} = derivation_path) do
+  @spec get(%PrivateKey{}, %DerivationPath{}) :: {:ok, %PrivateKey{}}
+  def get(%PrivateKey{} = private_key, %DerivationPath{} = derivation_path) do
     case derivation_path.type == :private do
       true -> derive(private_key, derivation_path)
       false -> {:error, "wrong derivation path type"}
     end
   end
 
-  defp derive(%ExtendedPrivate{} = private_key, %DerivationPath{} = derivation_path) do
+  defp derive(%PrivateKey{} = private_key, %DerivationPath{} = derivation_path) do
     {child_private_key, _} =
       {private_key, derivation_path}
       |> maybe_derive_purpose
@@ -48,12 +49,12 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate.ChildFromDerivationPath do
     {:ok, child_private_key}
   end
 
-  defp maybe_derive_purpose({%ExtendedPrivate{}, %DerivationPath{purpose: nil}} = hash) do
+  defp maybe_derive_purpose({%PrivateKey{}, %DerivationPath{purpose: nil}} = hash) do
     hash
   end
 
   defp maybe_derive_purpose(
-         {%ExtendedPrivate{} = private_key, %DerivationPath{purpose: purpose} = derivation_path}
+         {%PrivateKey{} = private_key, %DerivationPath{purpose: purpose} = derivation_path}
        ) do
     {:ok, child_private_key} =
       case purpose do
@@ -66,13 +67,12 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate.ChildFromDerivationPath do
     {child_private_key, derivation_path}
   end
 
-  defp maybe_derive_coin_type({%ExtendedPrivate{}, %DerivationPath{coin_type: nil}} = hash) do
+  defp maybe_derive_coin_type({%PrivateKey{}, %DerivationPath{coin_type: nil}} = hash) do
     hash
   end
 
   defp maybe_derive_coin_type(
-         {%ExtendedPrivate{} = private_key,
-          %DerivationPath{coin_type: coin_type} = derivation_path}
+         {%PrivateKey{} = private_key, %DerivationPath{coin_type: coin_type} = derivation_path}
        ) do
     {:ok, child_private_key} =
       case coin_type do
@@ -84,7 +84,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate.ChildFromDerivationPath do
     {child_private_key, derivation_path}
   end
 
-  defp maybe_derive_account({%ExtendedPrivate{}, %DerivationPath{account: nil}} = hash) do
+  defp maybe_derive_account({%PrivateKey{}, %DerivationPath{account: nil}} = hash) do
     hash
   end
 
@@ -97,7 +97,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate.ChildFromDerivationPath do
     {child_private_key, derivation_path}
   end
 
-  defp maybe_derive_change({%ExtendedPrivate{}, %DerivationPath{change: nil}} = hash) do
+  defp maybe_derive_change({%PrivateKey{}, %DerivationPath{change: nil}} = hash) do
     hash
   end
 
@@ -112,9 +112,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivate.ChildFromDerivationPath do
     {child_private_key, derivation_path}
   end
 
-  defp maybe_derive_address_index(
-         {%ExtendedPrivate{}, %DerivationPath{address_index: nil}} = hash
-       ) do
+  defp maybe_derive_address_index({%PrivateKey{}, %DerivationPath{address_index: nil}} = hash) do
     hash
   end
 

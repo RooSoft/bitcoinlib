@@ -1,11 +1,12 @@
 defmodule BitcoinLib.Console do
-  alias BitcoinLib.Key.HD.{ExtendedPrivate, ExtendedPublic}
+  alias BitcoinLib.Key.{PrivateKey}
+  alias BitcoinLib.Key.HD.{ExtendedPublic}
 
   @defaults %{serialization_format: nil}
 
   def write(key, opts \\ [])
 
-  def write(%ExtendedPrivate{} = private_key, opts) do
+  def write(%PrivateKey{} = private_key, opts) do
     %{serialization_format: _serialization_format} = Enum.into(opts, @defaults)
 
     tabulation = 19
@@ -108,8 +109,8 @@ defmodule BitcoinLib.Console do
     print_with_title("serialized", title_length, ExtendedPublic.serialize!(public_key, format))
   end
 
-  defp maybe_print_serialized_version(title_length, %ExtendedPrivate{} = private_key) do
-    print_with_title("serialized", title_length, ExtendedPrivate.serialize(private_key))
+  defp maybe_print_serialized_version(title_length, %PrivateKey{} = private_key) do
+    print_with_title("serialized", title_length, PrivateKey.serialize(private_key))
   end
 
   defp print_header(header, tabulation) do
