@@ -1,11 +1,11 @@
-defmodule BitcoinLib.Key.HD.ExtendedPrivate.ChildFromDerivationPathTest do
+defmodule BitcoinLib.Key.PrivateKey.ChildFromDerivationPathTest do
   use ExUnit.Case, async: true
 
-  doctest BitcoinLib.Key.HD.ExtendedPrivate.ChildFromDerivationPath
+  doctest BitcoinLib.Key.PrivateKey.ChildFromDerivationPath
 
   alias BitcoinLib.Key.{PrivateKey}
   alias BitcoinLib.Key.HD.{DerivationPath}
-  alias BitcoinLib.Key.HD.ExtendedPrivate.ChildFromDerivationPath
+  alias BitcoinLib.Key.PrivateKey.ChildFromDerivationPath
 
   test "Get a private key child from a derivation path" do
     private_key = %PrivateKey{

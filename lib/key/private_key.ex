@@ -26,7 +26,7 @@ defmodule BitcoinLib.Key.PrivateKey do
   alias BitcoinLib.Crypto.{Wif, Secp256k1}
   alias BitcoinLib.Key.{PrivateKey}
   alias BitcoinLib.Key.HD.{DerivationPath, Fingerprint, MnemonicSeed}
-  alias BitcoinLib.Key.HD.ExtendedPrivate.{ChildFromIndex, ChildFromDerivationPath}
+  alias BitcoinLib.Key.PrivateKey.{ChildFromIndex, ChildFromDerivationPath}
 
   @doc """
   Converts a seed into a master private key hash containing the key itself and the chain code
