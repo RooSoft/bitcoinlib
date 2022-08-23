@@ -5,6 +5,18 @@ defmodule BitcoinLib.Key.HD.ExtendedPrivateTest do
 
   alias BitcoinLib.Key.HD.{DerivationPath, ExtendedPrivate}
 
+  test "creates a WIF from a private key" do
+    private_key =
+      <<108, 122, 178, 249, 97, 161, 188, 63, 19, 205, 192, 141, 196, 28, 63, 67, 154, 222, 189,
+        84, 154, 142, 241, 192, 137, 232, 26, 89, 7, 55, 97, 7>>
+
+    wif =
+      private_key
+      |> ExtendedPrivate.to_wif()
+
+    assert wif == "KzractrYn5gnDNVwBDy7sYhAkyMvX4WeYQpwyhCAUKDogJTzYsUc"
+  end
+
   test "returns an extended private key from a seed" do
     seed =
       "67f93560761e20617de26e0cb84f7234aaf373ed2e66295c3d7397e6d7ebe882ea396d5d293808b0defd7edd2babd4c091ad942e6a9351e6d075a29d4df872af"
