@@ -93,8 +93,19 @@ defmodule BitcoinLib.Test.Integration.Bip174.ValidPsbtsTest do
                      <<0x771FD18AD459666DD49F3D564E3DBC42F4C84774E360ADA16816A8ED488D5681::256>>
                  }
                ],
-               witness_script:
-                 <<0x522103B1341CCBA7683B6AF4F1238CD6E97E7167D569FAC47F1E48D47541844355BD462103DE55D1E1DAC805E3F8A58C1FBF9B94C02F3DBAAFE127FEFCA4995F26F82083BD52AE::568>>
+               witness_script: [
+                 %BitcoinLib.Script.Opcodes.Constants.Two{},
+                 %BitcoinLib.Script.Opcodes.Data{
+                   value:
+                     <<0x03B1341CCBA7683B6AF4F1238CD6E97E7167D569FAC47F1E48D47541844355BD46::264>>
+                 },
+                 %BitcoinLib.Script.Opcodes.Data{
+                   value:
+                     <<0x03DE55D1E1DAC805E3F8A58C1FBF9B94C02F3DBAAFE127FEFCA4995F26F82083BD::264>>
+                 },
+                 %BitcoinLib.Script.Opcodes.Constants.Two{},
+                 %BitcoinLib.Script.Opcodes.Crypto.CheckMultiSig{}
+               ]
              }
            ] = psbt.inputs
   end
@@ -113,8 +124,19 @@ defmodule BitcoinLib.Test.Integration.Bip174.ValidPsbtsTest do
              %Input{
                utxo: %WitnessUtxo{},
                bip32_derivations: [%Bip32Derivation{}, %Bip32Derivation{}],
-               witness_script:
-                 <<0x5221029DA12CDB5B235692B91536AFEFE5C91C3AB9473D8E43B533836AB456299C88712103372B34234ED7CF9C1FEA5D05D441557927BE9542B162EB02E1AB2CE80224C00B52AE::568>>
+               witness_script: [
+                 %BitcoinLib.Script.Opcodes.Constants.Two{},
+                 %BitcoinLib.Script.Opcodes.Data{
+                   value:
+                     <<0x029DA12CDB5B235692B91536AFEFE5C91C3AB9473D8E43B533836AB456299C8871::264>>
+                 },
+                 %BitcoinLib.Script.Opcodes.Data{
+                   value:
+                     <<0x03372B34234ED7CF9C1FEA5D05D441557927BE9542B162EB02E1AB2CE80224C00B::264>>
+                 },
+                 %BitcoinLib.Script.Opcodes.Constants.Two{},
+                 %BitcoinLib.Script.Opcodes.Crypto.CheckMultiSig{}
+               ]
              }
            ] = psbt.inputs
 

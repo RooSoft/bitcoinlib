@@ -4,6 +4,7 @@ defmodule BitcoinLib.Script.OpcodeManager do
   @byte 8
 
   @zero Constants.Zero.v()
+  @one Constants.One.v()
   @two Constants.Two.v()
   @dup Stack.Dup.v()
   @equal BitwiseLogic.Equal.v()
@@ -24,6 +25,10 @@ defmodule BitcoinLib.Script.OpcodeManager do
 
   def extract_from_script(<<@zero::8, remaining::bitstring>>, _whole_script) do
     {:opcode, %Constants.Zero{}, remaining}
+  end
+
+  def extract_from_script(<<@one::8, remaining::bitstring>>, _whole_script) do
+    {:opcode, %Constants.One{}, remaining}
   end
 
   def extract_from_script(<<@two::8, remaining::bitstring>>, _whole_script) do

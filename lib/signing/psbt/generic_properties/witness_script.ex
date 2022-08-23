@@ -3,6 +3,7 @@ defmodule BitcoinLib.Signing.Psbt.GenericProperties.WitnessScript do
 
   alias BitcoinLib.Signing.Psbt.GenericProperties.WitnessScript
   alias BitcoinLib.Signing.Psbt.Keypair.{Key}
+  alias BitcoinLib.Script
 
   def parse(keypair) do
     %{keypair: keypair, witness_script: %WitnessScript{}}
@@ -27,6 +28,10 @@ defmodule BitcoinLib.Signing.Psbt.GenericProperties.WitnessScript do
     do: witness_script
 
   defp extract_witness_script(%{keypair: keypair}) do
-    %WitnessScript{script: keypair.value.data}
+    script =
+      keypair.value.data
+      |> Script.parse()
+
+    %WitnessScript{script: script}
   end
 end
