@@ -21,3 +21,16 @@ defmodule BitcoinLib.Script.Opcodes.Crypto.CheckSig do
     end
   end
 end
+
+defimpl Inspect, for: BitcoinLib.Script.Opcodes.Crypto.CheckSig do
+  @byte 8
+
+  alias BitcoinLib.Script.Opcodes.Crypto.CheckSig
+
+  def inspect(%CheckSig{script: script}, _opts) do
+    hex_script = Base.encode16(script.value, case: :lower)
+    script_size = byte_size(script.value) * @byte
+
+    "%BitcoinLib.Script.Opcodes.Data{value: <<0x#{hex_script}::#{script_size}>>}"
+  end
+end
