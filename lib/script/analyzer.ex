@@ -1,6 +1,9 @@
 defmodule BitcoinLib.Script.Analyzer do
   @moduledoc """
   Based on that table https://i.stack.imgur.com/iXfVX.png
+
+  useful links:
+  - https://learnmeabitcoin.com/technical/scriptPubKey#standard-scripts
   """
 
   alias BitcoinLib.Script.Opcodes.{BitwiseLogic, Constants, Crypto, Stack}
