@@ -3,6 +3,7 @@ defmodule BitcoinLib.Signing.Psbt.GenericProperties.RedeemScript do
 
   alias BitcoinLib.Signing.Psbt.GenericProperties.RedeemScript
   alias BitcoinLib.Signing.Psbt.Keypair.{Key}
+  alias BitcoinLib.Script
 
   def parse(keypair) do
     %{keypair: keypair, redeem_script: %RedeemScript{}}
@@ -24,6 +25,10 @@ defmodule BitcoinLib.Signing.Psbt.GenericProperties.RedeemScript do
     do: redeem_script
 
   defp extract_redeem_script(%{keypair: keypair}) do
-    %RedeemScript{script: keypair.value.data}
+    script =
+      keypair.value.data
+      |> Script.parse()
+
+    %RedeemScript{script: script}
   end
 end

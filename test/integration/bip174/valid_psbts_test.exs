@@ -86,8 +86,13 @@ defmodule BitcoinLib.Test.Integration.Bip174.ValidPsbtsTest do
              %Input{
                utxo: %WitnessUtxo{},
                bip32_derivations: [%Bip32Derivation{}, %Bip32Derivation{}],
-               redeem_script:
-                 <<0x0020771FD18AD459666DD49F3D564E3DBC42F4C84774E360ADA16816A8ED488D5681::272>>,
+               redeem_script: [
+                 %BitcoinLib.Script.Opcodes.Constants.Zero{},
+                 %BitcoinLib.Script.Opcodes.Data{
+                   value:
+                     <<0x771FD18AD459666DD49F3D564E3DBC42F4C84774E360ADA16816A8ED488D5681::256>>
+                 }
+               ],
                witness_script:
                  <<0x522103B1341CCBA7683B6AF4F1238CD6E97E7167D569FAC47F1E48D47541844355BD462103DE55D1E1DAC805E3F8A58C1FBF9B94C02F3DBAAFE127FEFCA4995F26F82083BD52AE::568>>
              }
