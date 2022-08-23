@@ -9,6 +9,7 @@ defmodule BitcoinLib.Transaction.Input do
 
   alias BitcoinLib.Signing.Psbt.CompactInteger
   alias BitcoinLib.Transaction.Input
+  alias BitcoinLib.Script
 
   def extract_from(<<txid::little-256, vout::little-32, remaining::bitstring>>) do
     {script_sig, remaining} = extract_script_sig(remaining)
@@ -32,6 +33,10 @@ defmodule BitcoinLib.Transaction.Input do
     script_sig_bit_size = script_sig_size * @bits
 
     <<script_sig::bitstring-size(script_sig_bit_size), remaining::bitstring>> = remaining
+
+    script_sig =
+      script_sig
+      |> Script.parse()
 
     {script_sig, remaining}
   end

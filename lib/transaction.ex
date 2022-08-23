@@ -29,10 +29,10 @@ defmodule BitcoinLib.Transaction do
     end
   end
 
-  def check_if_unsigned(%Transaction{} = transaction) do
-    transaction.inputs
+  def check_if_unsigned(%Transaction{inputs: inputs}) do
+    inputs
     |> Enum.reduce(true, fn input, unsigned? ->
-      unsigned? && input.script_sig == <<>>
+      unsigned? && input.script_sig == []
     end)
   end
 

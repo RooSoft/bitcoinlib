@@ -20,7 +20,7 @@ defmodule BitcoinLib.TransactionTest do
     assert 1 == Enum.count(transaction.outputs)
 
     assert %Input{
-             script_sig: <<>>,
+             script_sig: [],
              sequence: 0xFFFFFFFF,
              txid: "3f4fa19803dec4d6a84fae3821da7ac7577080ef75451294e71f9b20e0ab1e7b",
              vout: 0x0
