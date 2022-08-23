@@ -32,8 +32,8 @@ defmodule BitcoinLib.Script do
     |> Runner.execute(stack)
   end
 
-  @spec identify(bitstring()) :: :unknown | :p2pk | :p2pkh | :p2sh
-  def identify(script) when is_bitstring(script) do
+  @spec identify(bitstring() | list()) :: :unknown | :p2pk | :p2pkh | :p2sh
+  def identify(script) do
     script
     |> Analyzer.identify()
   end

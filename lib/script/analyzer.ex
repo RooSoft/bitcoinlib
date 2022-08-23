@@ -32,10 +32,28 @@ defmodule BitcoinLib.Script.Analyzer do
       ),
       do: :p2pkh
 
+  def identify([
+        %BitcoinLib.Script.Opcodes.Stack.Dup{},
+        %BitcoinLib.Script.Opcodes.Crypto.Hash160{},
+        %BitcoinLib.Script.Opcodes.Data{},
+        %BitcoinLib.Script.Opcodes.BitwiseLogic.EqualVerify{},
+        %BitcoinLib.Script.Opcodes.Crypto.CheckSig{}
+      ]),
+      do: :p2pkh
+
   # address example: 3J98t1WpEZ73CNmQviecrnyiWrnqRhWNLy
   # a9 14 <<_script_hash::160>> 87
   def identify(<<@hash160::8, @pub_key_hash_size::8, _script_hash::bitstring-160, @equal>>),
     do: :p2sh
+
+  def identify([
+        %BitcoinLib.Script.Opcodes.Crypto.Hash160{},
+        %BitcoinLib.Script.Opcodes.Data{
+          value: _script_hash
+        },
+        %BitcoinLib.Script.Opcodes.BitwiseLogic.Equal{}
+      ]),
+      do: :p2sh
 
   # see https://bitcoincore.org/en/segwit_wallet_dev/#native-pay-to-witness-public-key-hash-p2wpkh
   # address example: bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq

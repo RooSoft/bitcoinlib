@@ -7,6 +7,7 @@ defmodule BitcoinLib.Transaction.Output do
 
   alias BitcoinLib.Signing.Psbt.CompactInteger
   alias BitcoinLib.Transaction.Output
+  alias BitcoinLib.Script
 
   @byte 8
 
@@ -28,8 +29,13 @@ defmodule BitcoinLib.Transaction.Output do
     case script_pub_key_size <= byte_size(remaining) do
       true ->
         script_pub_key_bit_size = script_pub_key_size * @byte
+
         <<script_pub_key::bitstring-size(script_pub_key_bit_size), remaining::bitstring>> =
           remaining
+
+        script_pub_key =
+          script_pub_key
+          |> Script.parse()
 
         {:ok, script_pub_key, remaining}
 

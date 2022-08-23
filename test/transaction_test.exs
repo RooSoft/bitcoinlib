@@ -27,7 +27,19 @@ defmodule BitcoinLib.TransactionTest do
            } = List.first(transaction.inputs)
 
     assert %Output{
-             script_pub_key: <<0x76A914CBC20A7664F2F69E5355AA427045BC15E7C6C77288AC::200>>,
+             script_pub_key: [
+               %BitcoinLib.Script.Opcodes.Stack.Dup{},
+               %BitcoinLib.Script.Opcodes.Crypto.Hash160{},
+               %BitcoinLib.Script.Opcodes.Data{
+                 value: <<0xCBC20A7664F2F69E5355AA427045BC15E7C6C772::160>>
+               },
+               %BitcoinLib.Script.Opcodes.BitwiseLogic.EqualVerify{},
+               %BitcoinLib.Script.Opcodes.Crypto.CheckSig{
+                 script:
+                   <<118, 169, 20, 203, 194, 10, 118, 100, 242, 246, 158, 83, 85, 170, 66, 112,
+                     69, 188, 21, 231, 198, 199, 114, 136, 172>>
+               }
+             ],
              value: 0x12A05CAF0
            } = List.first(transaction.outputs)
   end

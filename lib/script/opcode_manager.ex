@@ -1,11 +1,13 @@
 defmodule BitcoinLib.Script.OpcodeManager do
-  alias BitcoinLib.Script.Opcodes.{BitwiseLogic, Constants, Crypto, Stack}
+  alias BitcoinLib.Script.Opcodes.{BitwiseLogic, Constants, Crypto, FlowControl, Stack}
 
   @byte 8
 
   @zero Constants.Zero.v()
   @one Constants.One.v()
   @two Constants.Two.v()
+  @verify FlowControl.Verify.v()
+  @return FlowControl.Return.v()
   @dup Stack.Dup.v()
   @equal BitwiseLogic.Equal.v()
   @equal_verify BitwiseLogic.EqualVerify.v()
@@ -33,6 +35,14 @@ defmodule BitcoinLib.Script.OpcodeManager do
 
   def extract_from_script(<<@two::8, remaining::bitstring>>, _whole_script) do
     {:opcode, %Constants.Two{}, remaining}
+  end
+
+  def extract_from_script(<<@verify::8, remaining::bitstring>>, _whole_script) do
+    {:opcode, %FlowControl.Verify{}, remaining}
+  end
+
+  def extract_from_script(<<@return::8, remaining::bitstring>>, _whole_script) do
+    {:opcode, %FlowControl.Return{}, remaining}
   end
 
   def extract_from_script(<<@dup::8, remaining::bitstring>>, _whole_script) do
