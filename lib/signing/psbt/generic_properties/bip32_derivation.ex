@@ -7,6 +7,7 @@ defmodule BitcoinLib.Signing.Psbt.GenericProperties.Bip32Derivation do
   alias BitcoinLib.Signing.Psbt.Keypair
   alias BitcoinLib.Signing.Psbt.Keypair.{Key, Value}
   alias BitcoinLib.Signing.Psbt.GenericProperties.Bip32Derivation
+  alias BitcoinLib.Key.PublicKey
   alias BitcoinLib.Key.HD.DerivationPath
 
   def parse(%Keypair{key: %Key{data: binary_pub_key}, value: %Value{data: remaining}}) do
@@ -14,7 +15,7 @@ defmodule BitcoinLib.Signing.Psbt.GenericProperties.Bip32Derivation do
     {derivation_path, _remaining} = extract_derivation_path(remaining, [])
 
     %Bip32Derivation{
-      pub_key: binary_pub_key,
+      pub_key: %PublicKey{key: binary_pub_key},
       fingerprint: fingerprint,
       derivation_path: DerivationPath.from_list(["M" | derivation_path])
     }
@@ -35,7 +36,7 @@ defmodule BitcoinLib.Signing.Psbt.GenericProperties.Bip32Derivation do
   end
 
   defp validate_pub_key(%Bip32Derivation{pub_key: pub_key} = bip32_derivation) do
-    case byte_size(pub_key) do
+    case byte_size(pub_key.key) do
       @compressed_pub_key_size ->
         bip32_derivation
 
