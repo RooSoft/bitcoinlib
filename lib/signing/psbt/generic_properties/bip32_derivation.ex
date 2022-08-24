@@ -1,5 +1,5 @@
 defmodule BitcoinLib.Signing.Psbt.GenericProperties.Bip32Derivation do
-  defstruct [:pub_key, :fingerprint, :derivation_path]
+  defstruct [:pub_key, :master_key_fingerprint, :derivation_path]
 
   @compressed_pub_key_size 33
   @uncompressed_pub_key_size 65
@@ -11,19 +11,19 @@ defmodule BitcoinLib.Signing.Psbt.GenericProperties.Bip32Derivation do
   alias BitcoinLib.Key.HD.DerivationPath
 
   def parse(%Keypair{key: %Key{data: binary_pub_key}, value: %Value{data: remaining}}) do
-    {fingerprint, remaining} = extract_fingerprint(remaining)
+    {master_key_fingerprint, remaining} = extract_master_key_fingerprint(remaining)
     {derivation_path, _remaining} = extract_derivation_path(remaining, [])
 
     %Bip32Derivation{
       pub_key: %PublicKey{key: binary_pub_key},
-      fingerprint: fingerprint,
+      master_key_fingerprint: master_key_fingerprint,
       derivation_path: DerivationPath.from_list(["M" | derivation_path])
     }
     |> validate_pub_key()
     |> validate_derivation_path()
   end
 
-  defp extract_fingerprint(<<fingerprint::bitstring-32, remaining::bitstring>>) do
+  defp extract_master_key_fingerprint(<<fingerprint::bitstring-32, remaining::bitstring>>) do
     {fingerprint, remaining}
   end
 
@@ -80,4 +80,17 @@ defmodule BitcoinLib.Signing.Psbt.GenericProperties.Bip32Derivation do
   end
 
   defp validate_coin_type(derivation_path), do: derivation_path
+end
+
+defimpl Inspect, for: BitcoinLib.Signing.Psbt.GenericProperties.Bip32Derivation do
+  alias BitcoinLib.Signing.Psbt.GenericProperties.Bip32Derivation
+  alias BitcoinLib.Formatting.HexBinary
+
+  def inspect(%Bip32Derivation{} = bip32_derivation, opts) do
+    %{
+      bip32_derivation
+      | master_key_fingerprint: %HexBinary{data: bip32_derivation.master_key_fingerprint}
+    }
+    |> Inspect.Map.inspect(Code.Identifier.inspect_as_atom(Bip32Derivation), opts)
+  end
 end
