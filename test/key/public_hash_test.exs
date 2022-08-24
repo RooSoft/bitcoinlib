@@ -1,9 +1,9 @@
-defmodule BitcoinLib.Key.PublicHashTest do
+defmodule BitcoinLib.Key.PublicKeyHashTest do
   use ExUnit.Case, async: true
 
-  doctest BitcoinLib.Key.PublicHash
+  doctest BitcoinLib.Key.PublicKeyHash
 
-  alias BitcoinLib.Key.{PublicKey, PublicHash}
+  alias BitcoinLib.Key.{PublicKey, PublicKeyHash}
 
   test "creates a public key hash from a public key" do
     public_key = %PublicKey{
@@ -12,7 +12,7 @@ defmodule BitcoinLib.Key.PublicHashTest do
 
     hash =
       public_key
-      |> PublicHash.from_public_key()
+      |> PublicKeyHash.from_public_key()
 
     assert hash == <<0x93CE48570B55C42C2AF816AEABA06CFEE1224FAE::160>>
   end

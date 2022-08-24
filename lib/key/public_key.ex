@@ -23,7 +23,7 @@ defmodule BitcoinLib.Key.PublicKey do
   }
 
   alias BitcoinLib.Crypto
-  alias BitcoinLib.Key.{PrivateKey, PublicKey}
+  alias BitcoinLib.Key.{PrivateKey, PublicKey, PublicKeyHash}
   alias BitcoinLib.Key.HD.{DerivationPath, Fingerprint}
 
   @doc """
@@ -283,7 +283,7 @@ defmodule BitcoinLib.Key.PublicKey do
     <<0xED104CB8EF3ADABEC5D2BE8178C99847F9694269::160>>
   """
   def get_hash(%PublicKey{} = public_key) do
-    BitcoinLib.Key.PublicHash.from_public_key(public_key)
+    PublicKeyHash.from_public_key(public_key)
   end
 
   defp add_fingerprint(%PublicKey{} = public_key) do

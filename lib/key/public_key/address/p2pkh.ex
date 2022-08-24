@@ -7,7 +7,7 @@ defmodule BitcoinLib.Key.PublicKey.Address.P2PKH do
   - https://en.bitcoinwiki.org/wiki/Pay-to-Pubkey_Hash
   """
 
-  alias BitcoinLib.Key.PublicKey
+  alias BitcoinLib.Key.{PublicKey, PublicKeyHash, Address}
 
   @doc """
   Converts an extended public key into a P2PKH address starting by 1
@@ -21,7 +21,7 @@ defmodule BitcoinLib.Key.PublicKey.Address.P2PKH do
   """
   def from_public_key(%PublicKey{} = public_key, network \\ :mainnet) do
     public_key
-    |> BitcoinLib.Key.PublicHash.from_public_key()
-    |> BitcoinLib.Key.Address.from_public_key_hash(:p2pkh, network)
+    |> PublicKeyHash.from_public_key()
+    |> Address.from_public_key_hash(:p2pkh, network)
   end
 end

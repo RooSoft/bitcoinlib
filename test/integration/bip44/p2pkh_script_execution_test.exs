@@ -4,7 +4,7 @@ defmodule BitcoinLib.Test.Integration.Bip44.P2pkhScriptExecutionTest do
   """
   use ExUnit.Case, async: true
 
-  alias BitcoinLib.Key.{PrivateKey, PublicHash, PublicKey}
+  alias BitcoinLib.Key.{PrivateKey, PublicKeyHash, PublicKey}
   alias BitcoinLib.Key.HD.{MnemonicSeed}
 
   alias BitcoinLib.Script
@@ -28,7 +28,7 @@ defmodule BitcoinLib.Test.Integration.Bip44.P2pkhScriptExecutionTest do
       private_key
       |> PublicKey.from_private_key()
 
-    public_key_hash = public_key |> PublicHash.from_public_key()
+    public_key_hash = public_key |> PublicKeyHash.from_public_key()
 
     # 76 a9 14 725ebac06343111227573d0b5287954ef9b88aae 88 ac
     # OP_DUP OP_HASH160 OP_PUSHBYTES_20 725ebac06343111227573d0b5287954ef9b88aae OP_EQUALVERIFY OP_CHECKSIG

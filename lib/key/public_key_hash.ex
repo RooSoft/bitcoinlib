@@ -1,4 +1,4 @@
-defmodule BitcoinLib.Key.PublicHash do
+defmodule BitcoinLib.Key.PublicKeyHash do
   @moduledoc """
   Bitcoin Public Key Hash module
   """
@@ -15,7 +15,7 @@ defmodule BitcoinLib.Key.PublicHash do
     iex> %BitcoinLib.Key.PublicKey{
     ...>   key: <<0x02b4632d08485ff1df2db55b9dafd23347d1c47a457072a1e87be26896549a8737::264>>
     ...> }
-    ...> |> BitcoinLib.Key.PublicHash.from_public_key()
+    ...> |> BitcoinLib.Key.PublicKeyHash.from_public_key()
     <<0x93ce48570b55c42c2af816aeaba06cfee1224fae::160>>
   """
   @spec from_public_key(%PublicKey{}) :: bitstring()
