@@ -38,7 +38,7 @@ defmodule BitcoinLib.Test.Integration.Bip44.P2pkhScriptExecutionTest do
 
     hex_script = script |> Binary.to_hex()
 
-    script_sig = BitcoinLib.Crypto.Secp256k1.sign(hex_script, private_key.key)
+    script_sig = BitcoinLib.Crypto.Secp256k1.sign(hex_script, private_key)
 
     result = Script.execute(script, [public_key.key, script_sig])
 

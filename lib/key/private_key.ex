@@ -323,9 +323,10 @@ defmodule BitcoinLib.Key.PrivateKey do
 
   ## Examples
     iex> message = "76a914c825a1ecf2a6830c4401620c3a16f1995057c2ab88ac"
-    ...> private_key = <<0xd6ead233e06c068585976b5c8373861d77e7f030ec452e65ee81c85fa6906970::256>>
+    ...> private_key = %BitcoinLib.Key.PrivateKey{key: <<0xd6ead233e06c068585976b5c8373861d77e7f030ec452e65ee81c85fa6906970::256>>}
     ...> BitcoinLib.Crypto.Secp256k1.sign(message, private_key)
   """
+  @spec sign_message(binary(), %PrivateKey{}) :: binary()
   def sign_message(message, private_key) do
     message
     |> Secp256k1.sign(private_key)

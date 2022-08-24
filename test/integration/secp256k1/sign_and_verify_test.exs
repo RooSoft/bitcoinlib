@@ -15,7 +15,7 @@ defmodule BitcoinLib.Test.Integration.Secp256k1.SignAndVerivy do
 
     message = "76a914725ebac06343111227573d0b5287954ef9b88aae88ac"
 
-    signature = Secp256k1.sign(message, prv)
+    signature = Secp256k1.sign(message, %PrivateKey{key: prv})
 
     assert Secp256k1.validate(signature, message, pub)
   end
@@ -31,7 +31,7 @@ defmodule BitcoinLib.Test.Integration.Secp256k1.SignAndVerivy do
 
     message = "76a914725ebac06343111227573d0b5287954ef9b88aae88ac"
 
-    signature = Secp256k1.sign(message, private_key.key)
+    signature = Secp256k1.sign(message, private_key)
 
     assert Secp256k1.validate(signature, message, public_key.key)
   end
@@ -81,7 +81,7 @@ defmodule BitcoinLib.Test.Integration.Secp256k1.SignAndVerivy do
 
     message = "76a914725ebac06343111227573d0b5287954ef9b88aae88ac"
 
-    signature = Secp256k1.sign(message, private_key.key)
+    signature = Secp256k1.sign(message, private_key)
 
     assert Secp256k1.validate(signature, message, public_key.key)
   end
