@@ -1,7 +1,7 @@
 alias BitcoinLib.Console
 alias BitcoinLib.Crypto
-alias BitcoinLib.Key.{Address, PrivateKey}
-alias BitcoinLib.Key.HD.{DerivationPath, Entropy, ExtendedPublic, MnemonicSeed}
+alias BitcoinLib.Key.{Address, PrivateKey, PublicKey}
+alias BitcoinLib.Key.HD.{DerivationPath, Entropy, MnemonicSeed}
 
 # options here https://hexdocs.pm/elixir/1.12/Inspect.Opts.html
 #IEx.configure(
@@ -17,7 +17,7 @@ private_key =
 
 public_key =
   private_key
-  |> ExtendedPublic.from_private_key()
+  |> PublicKey.from_private_key()
 
 ss_private_key =
   PrivateKey.from_mnemonic_phrase("rally celery split order almost twenty ignore record legend learn chaos decade")
@@ -32,20 +32,20 @@ ss_xpriv =
 blue_wallet_pub_key =
   ss_private_key
   |> PrivateKey.from_derivation_path!("m/84'/0'/0'")
-  |> ExtendedPublic.from_private_key()
+  |> PublicKey.from_private_key()
 
 blue_wallet_zpub =
   blue_wallet_pub_key
-  |> ExtendedPublic.serialize(:zpub)
+  |> PublicKey.serialize(:zpub)
 
 blue_wallet_address_0_pub_key =
   blue_wallet_pub_key
-  |> ExtendedPublic.derive_child!(0)
-  |> ExtendedPublic.derive_child!(0)
+  |> PublicKey.derive_child!(0)
+  |> PublicKey.derive_child!(0)
 
 blue_wallet_address_0 =
   blue_wallet_address_0_pub_key
-  |> ExtendedPublic.to_address(:p2sh)
+  |> PublicKey.to_address(:p2sh)
 
 p2pkh_testnet_address =
   <<0x93CE48570B55C42C2AF816AEABA06CFEE1224FAE::160>>

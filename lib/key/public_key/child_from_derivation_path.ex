@@ -1,12 +1,12 @@
-defmodule BitcoinLib.Key.HD.ExtendedPublic.ChildFromDerivationPath do
+defmodule BitcoinLib.Key.PublicKey.ChildFromDerivationPath do
   @moduledoc """
   Computes a public key from a derivation path
   """
 
   alias BitcoinLib.Key.PublicKey
+  alias BitcoinLib.Key.PublicKey.{ChildFromIndex}
   alias BitcoinLib.Key.HD.{DerivationPath}
   alias BitcoinLib.Key.HD.DerivationPath.{Level}
-  alias BitcoinLib.Key.HD.ExtendedPublic.{ChildFromIndex}
 
   @doc """
   Computes a public key from a derivation path
@@ -17,7 +17,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic.ChildFromDerivationPath do
     ...>  key: <<0x252C616D91A2488C1FD1F0F172E98F7D1F6E51F8F389B2F8D632A8B490D5F6DA9::264>>,
     ...>  chain_code: <<0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B::256>>
     ...> }
-    ...> |> BitcoinLib.Key.HD.ExtendedPublic.ChildFromDerivationPath.get(derivation_path)
+    ...> |> BitcoinLib.Key.PublicKey.ChildFromDerivationPath.get(derivation_path)
     {
       :ok,
       %BitcoinLib.Key.PublicKey{

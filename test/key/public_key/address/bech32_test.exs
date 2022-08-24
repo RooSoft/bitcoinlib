@@ -1,10 +1,10 @@
-defmodule BitcoinLib.Key.HD.ExtendedPublic.Address.Bech32Test do
+defmodule BitcoinLib.Key.PublicKey.Address.Bech32Test do
   use ExUnit.Case, async: true
 
-  doctest BitcoinLib.Key.HD.ExtendedPublic.Address.Bech32
+  doctest BitcoinLib.Key.PublicKey.Address.Bech32
 
   alias BitcoinLib.Key.PublicKey
-  alias BitcoinLib.Key.HD.ExtendedPublic.Address.Bech32
+  alias BitcoinLib.Key.PublicKey.Address.Bech32
 
   test "create a bech32 address from an extended public key" do
     public_key = %PublicKey{

@@ -14,7 +14,7 @@ defmodule BitcoinLib.Key.PublicKey do
     fingerprint: <<0::32>>
   ]
 
-  alias BitcoinLib.Key.HD.ExtendedPublic.{
+  alias BitcoinLib.Key.PublicKey.{
     Address,
     ChildFromIndex,
     ChildFromDerivationPath,

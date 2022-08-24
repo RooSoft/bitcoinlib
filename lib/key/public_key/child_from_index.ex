@@ -1,4 +1,4 @@
-defmodule BitcoinLib.Key.HD.ExtendedPublic.ChildFromIndex do
+defmodule BitcoinLib.Key.PublicKey.ChildFromIndex do
   @moduledoc """
   Calculates direct childs from a public key based on a given index
   """
@@ -17,7 +17,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic.ChildFromIndex do
     ...>   key: <<0x252C616D91A2488C1FD1F0F172E98F7D1F6E51F8F389B2F8D632A8B490D5F6DA9::264>>,
     ...>   chain_code: <<0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B::256>>
     ...> }
-    ...> |> BitcoinLib.Key.HD.ExtendedPublic.ChildFromIndex.get(0)
+    ...> |> BitcoinLib.Key.PublicKey.ChildFromIndex.get(0)
     {
       :ok,
       %BitcoinLib.Key.PublicKey{

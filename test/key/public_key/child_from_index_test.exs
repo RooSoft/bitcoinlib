@@ -1,10 +1,10 @@
-defmodule BitcoinLib.Key.HD.ExtendedPublic.ChildFromIndexTest do
+defmodule BitcoinLib.Key.PublicKey.ChildFromIndexTest do
   use ExUnit.Case, async: true
 
-  doctest BitcoinLib.Key.HD.ExtendedPublic.ChildFromIndex
+  doctest BitcoinLib.Key.PublicKey.ChildFromIndex
 
   alias BitcoinLib.Key.PublicKey
-  alias BitcoinLib.Key.HD.ExtendedPublic.ChildFromIndex
+  alias BitcoinLib.Key.PublicKey.ChildFromIndex
 
   test "Get a private key child from a derivation path" do
     public_key =

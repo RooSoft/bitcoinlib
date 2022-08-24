@@ -1,4 +1,4 @@
-defmodule BitcoinLib.Key.HD.ExtendedPublic.Deserialization do
+defmodule BitcoinLib.Key.PublicKey.Deserialization do
   @bip32_mainnet_human_readable "xpub"
   @bip49_mainnet_human_readable "ypub"
   @bip84_mainnet_human_readable "zpub"

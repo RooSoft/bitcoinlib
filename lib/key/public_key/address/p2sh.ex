@@ -1,4 +1,4 @@
-defmodule BitcoinLib.Key.HD.ExtendedPublic.Address.P2SH do
+defmodule BitcoinLib.Key.PublicKey.Address.P2SH do
   @moduledoc """
   Implementation of P2SH-P2WPKH addresses
 
@@ -20,7 +20,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic.Address.P2SH do
     ...>  key: <<0x02D0DE0AAEAEFAD02B8BDC8A01A1B8B11C696BD3D66A2C5F10780D95B7DF42645C::264>>,
     ...>  chain_code: <<0::256>>
     ...> }
-    ...> |> BitcoinLib.Key.HD.ExtendedPublic.Address.P2SH.from_public_key()
+    ...> |> BitcoinLib.Key.PublicKey.Address.P2SH.from_public_key()
     "3D9iyFHi1Zs9KoyynUfrL82rGhJfYTfSG4"
   """
   def from_public_key(%PublicKey{key: key}, network \\ :mainnet) do

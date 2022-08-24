@@ -1,4 +1,4 @@
-defmodule BitcoinLib.Key.HD.ExtendedPublic.Address.Bech32 do
+defmodule BitcoinLib.Key.PublicKey.Address.Bech32 do
   @moduledoc """
   Implementation of Bech32 addresses
 
@@ -19,7 +19,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic.Address.Bech32 do
     iex> %BitcoinLib.Key.PublicKey{
     ...>  key: <<0x0279BE667EF9DCBBAC55A06295CE870B07029BFCDB2DCE28D959F2815B16F81798::264>>,
     ...>  chain_code: 0
-    ...> } |> BitcoinLib.Key.HD.ExtendedPublic.Address.Bech32.from_public_key()
+    ...> } |> BitcoinLib.Key.PublicKey.Address.Bech32.from_public_key()
     "bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4"
   """
   def from_public_key(%PublicKey{key: key}, network \\ :mainnet) do

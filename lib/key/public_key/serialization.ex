@@ -1,4 +1,4 @@
-defmodule BitcoinLib.Key.HD.ExtendedPublic.Serialization do
+defmodule BitcoinLib.Key.PublicKey.Serialization do
   @moduledoc """
   Extended public key serialization module
 
@@ -26,7 +26,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic.Serialization do
     ...>   index: 0,
     ...>   parent_fingerprint: 0
     ...> }
-    ...> |> BitcoinLib.Key.HD.ExtendedPublic.Serialization.serialize()
+    ...> |> BitcoinLib.Key.PublicKey.Serialization.serialize()
     {
       :ok,
       "xpub661MyMwAqRbcFtXgS5sYJABqqG9YLmC4Q1Rdap9gSE8NqtwybGhePY2gZ29ESFjqJoCu1Rupje8YtGqsefD265TMg7usUDFdp6W1EGMcet8"

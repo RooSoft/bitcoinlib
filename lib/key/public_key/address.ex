@@ -1,6 +1,6 @@
-defmodule BitcoinLib.Key.HD.ExtendedPublic.Address do
+defmodule BitcoinLib.Key.PublicKey.Address do
   alias BitcoinLib.Key.PublicKey
-  alias BitcoinLib.Key.HD.ExtendedPublic.Address.{P2PKH, P2SH, Bech32}
+  alias BitcoinLib.Key.PublicKey.Address.{P2PKH, P2SH, Bech32}
 
   @spec from_public_key(%PublicKey{}, :p2pkh | :p2sh | :bech32, :mainnet | :testnet) ::
           binary()
