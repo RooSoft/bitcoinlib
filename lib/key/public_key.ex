@@ -326,3 +326,20 @@ defmodule BitcoinLib.Key.PublicKey do
     end
   end
 end
+
+defimpl Inspect, for: BitcoinLib.Key.PublicKey do
+  alias BitcoinLib.Key.PublicKey
+  alias BitcoinLib.Formatting.HexBinary
+
+  def inspect(%BitcoinLib.Key.PublicKey{} = public_key, opts) do
+    %{
+      public_key
+      | key: %HexBinary{data: public_key.key},
+        uncompressed_key: %HexBinary{data: public_key.uncompressed_key},
+        chain_code: %HexBinary{data: public_key.chain_code},
+        fingerprint: %HexBinary{data: public_key.fingerprint},
+        parent_fingerprint: %HexBinary{data: public_key.parent_fingerprint}
+    }
+    |> Inspect.Map.inspect(Code.Identifier.inspect_as_atom(PublicKey), opts)
+  end
+end
