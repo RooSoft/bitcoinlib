@@ -8,6 +8,28 @@ alias BitcoinLib.Key.HD.{DerivationPath, Entropy, MnemonicSeed}
 #  inspect: [base: :hex]
 #)
 
+IEx.configure(
+  colors: [
+    eval_result: [:green, :bright] ,
+    eval_error: [[:red,:bright,"Bug Bug ..!!"]],
+    eval_info: [:yellow, :bright ],
+ ],
+ default_prompt: [
+   "\e[G",    # ANSI CHA, move cursor to column 1
+    :red,
+    "BitcoinLib",
+    :white,
+    " ",
+    :blue,
+    "%counter",
+    :white,
+    " ▶",
+    :reset
+  ]
+  |> IO.ANSI.format
+  |> IO.chardata_to_string
+)
+
 private_key =
   "12345612345612345612345612345612345612345612345612"
   |> Entropy.from_dice_rolls!()
