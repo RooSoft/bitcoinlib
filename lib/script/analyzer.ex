@@ -63,7 +63,7 @@ defmodule BitcoinLib.Script.Analyzer do
   def identify([
         %BitcoinLib.Script.Opcodes.Constants.Zero{},
         %BitcoinLib.Script.Opcodes.Data{
-          value: <<0xD2D94B64AE08587EEFC8EEB187C601E939F9037C::160>>
+          value: <<_::160>>
         }
       ]),
       do: :p2wpkh
