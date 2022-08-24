@@ -28,7 +28,13 @@ defmodule BitcoinLib.Signing.PsbtTest do
     [%Input{} = input] = psbt.inputs
 
     assert %BitcoinLib.Signing.Psbt.Input.WitnessUtxo{
-             script_pub_key: <<0xA9146345200F68D189E1ADC0DF1C4D16EA8F14C0DBEB87::184>>,
+             script_pub_key: [
+               %BitcoinLib.Script.Opcodes.Crypto.Hash160{},
+               %BitcoinLib.Script.Opcodes.Data{
+                 value: <<0x6345200F68D189E1ADC0DF1C4D16EA8F14C0DBEB::160>>
+               },
+               %BitcoinLib.Script.Opcodes.BitwiseLogic.Equal{}
+             ],
              amount: 199_909_013
            } = input.utxo
   end
