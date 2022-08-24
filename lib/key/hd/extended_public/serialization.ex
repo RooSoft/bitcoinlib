@@ -11,7 +11,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic.Serialization do
   @zpub_version_bytes 0x04B24746
 
   alias BitcoinLib.Crypto
-  alias BitcoinLib.Key.HD.ExtendedPublic
+  alias BitcoinLib.Key.PublicKey
 
   @doc """
   Serialization of a master public key into an exportable version
@@ -19,7 +19,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic.Serialization do
   ## Examples
     values from https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki#test-vector-1
 
-    iex> %BitcoinLib.Key.HD.ExtendedPublic{
+    iex> %BitcoinLib.Key.PublicKey{
     ...>   key: 0x339A36013301597DAEF41FBE593A02CC513D0B55527EC2DF1050E2E8FF49C85C2,
     ...>   chain_code: 0x873DFF81C02F525623FD1FE5167EAC3A55A049DE3D314BB42EE227FFED37D508,
     ...>   depth: 0,
@@ -32,29 +32,29 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic.Serialization do
       "xpub661MyMwAqRbcFtXgS5sYJABqqG9YLmC4Q1Rdap9gSE8NqtwybGhePY2gZ29ESFjqJoCu1Rupje8YtGqsefD265TMg7usUDFdp6W1EGMcet8"
     }
   """
-  @spec serialize(%ExtendedPublic{}, atom()) :: {:ok, binary()}
-  def serialize(%ExtendedPublic{} = pub_key, :xpub) do
+  @spec serialize(%PublicKey{}, atom()) :: {:ok, binary()}
+  def serialize(%PublicKey{} = pub_key, :xpub) do
     {:ok, execute(pub_key, @xpub_version_bytes)}
   end
 
-  @spec serialize(%ExtendedPublic{}, atom()) :: {:ok, binary()}
-  def serialize(%ExtendedPublic{} = pub_key, :ypub) do
+  @spec serialize(%PublicKey{}, atom()) :: {:ok, binary()}
+  def serialize(%PublicKey{} = pub_key, :ypub) do
     {:ok, execute(pub_key, @ypub_version_bytes)}
   end
 
-  @spec serialize(%ExtendedPublic{}, atom()) :: {:ok, binary()}
-  def serialize(%ExtendedPublic{} = pub_key, :zpub) do
+  @spec serialize(%PublicKey{}, atom()) :: {:ok, binary()}
+  def serialize(%PublicKey{} = pub_key, :zpub) do
     {:ok, execute(pub_key, @zpub_version_bytes)}
   end
 
-  @spec serialize(%ExtendedPublic{}, atom()) :: {:error, binary()}
-  def serialize(%ExtendedPublic{}, _) do
+  @spec serialize(%PublicKey{}, atom()) :: {:error, binary()}
+  def serialize(%PublicKey{}, _) do
     {:error, "unknown serialization format"}
   end
 
-  @spec execute(%ExtendedPublic{}, binary()) :: binary()
+  @spec execute(%PublicKey{}, binary()) :: binary()
   defp execute(
-         %ExtendedPublic{
+         %PublicKey{
            key: key,
            depth: depth,
            index: index,

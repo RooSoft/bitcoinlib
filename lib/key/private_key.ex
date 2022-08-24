@@ -3,7 +3,7 @@ defmodule BitcoinLib.Key.PrivateKey do
   Bitcoin extended private key management module
   """
 
-  @enforce_keys [:key, :chain_code]
+  @enforce_keys [:key]
   defstruct [
     :key,
     :chain_code,

@@ -10,19 +10,19 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic.Address.Bech32 do
   """
 
   alias BitcoinLib.Crypto
-  alias BitcoinLib.Key.HD.ExtendedPublic
+  alias BitcoinLib.Key.PublicKey
 
   @doc """
   Creates a Bech32 address, which is starting by bc1, out of an Extended Public Key
 
   ## Examples
-    iex> %BitcoinLib.Key.HD.ExtendedPublic{
+    iex> %BitcoinLib.Key.PublicKey{
     ...>  key: <<0x0279BE667EF9DCBBAC55A06295CE870B07029BFCDB2DCE28D959F2815B16F81798::264>>,
     ...>  chain_code: 0
-    ...> } |> BitcoinLib.Key.HD.ExtendedPublic.Address.Bech32.from_extended_public_key()
+    ...> } |> BitcoinLib.Key.HD.ExtendedPublic.Address.Bech32.from_public_key()
     "bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4"
   """
-  def from_extended_public_key(%ExtendedPublic{key: key}, network \\ :mainnet) do
+  def from_public_key(%PublicKey{key: key}, network \\ :mainnet) do
     key
     |> hash160
     |> to_base5_array

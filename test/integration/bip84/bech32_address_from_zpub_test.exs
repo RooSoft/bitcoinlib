@@ -1,8 +1,8 @@
 defmodule BitcoinLib.Test.Integration.Bip84.Bech32AddressFromZpub do
   use ExUnit.Case, async: true
 
-  alias BitcoinLib.Key.{PrivateKey}
-  alias BitcoinLib.Key.HD.{MnemonicSeed, ExtendedPublic}
+  alias BitcoinLib.Key.{PrivateKey, PublicKey}
+  alias BitcoinLib.Key.HD.{MnemonicSeed}
 
   @doc """
   based on https://github.com/bitcoin/bips/blob/master/bip-0084.mediawiki#test-vectors
@@ -16,8 +16,8 @@ defmodule BitcoinLib.Test.Integration.Bip84.Bech32AddressFromZpub do
     address =
       private_key
       |> PrivateKey.from_derivation_path!("m/84'/0'/0'/0/0")
-      |> ExtendedPublic.from_private_key()
-      |> ExtendedPublic.to_address(:bech32)
+      |> PublicKey.from_private_key()
+      |> PublicKey.to_address(:bech32)
 
     assert address == "bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu"
   end
@@ -34,8 +34,8 @@ defmodule BitcoinLib.Test.Integration.Bip84.Bech32AddressFromZpub do
     address =
       private_key
       |> PrivateKey.from_derivation_path!("m/84'/0'/0'/0/1")
-      |> ExtendedPublic.from_private_key()
-      |> ExtendedPublic.to_address(:bech32)
+      |> PublicKey.from_private_key()
+      |> PublicKey.to_address(:bech32)
 
     assert address == "bc1qnjg0jd8228aq7egyzacy8cys3knf9xvrerkf9g"
   end
@@ -52,8 +52,8 @@ defmodule BitcoinLib.Test.Integration.Bip84.Bech32AddressFromZpub do
     address =
       private_key
       |> PrivateKey.from_derivation_path!("m/84'/0'/0'/1/0")
-      |> ExtendedPublic.from_private_key()
-      |> ExtendedPublic.to_address(:bech32)
+      |> PublicKey.from_private_key()
+      |> PublicKey.to_address(:bech32)
 
     assert address == "bc1q8c6fshw2dlwun7ekn9qwf37cu2rn755upcp6el"
   end
@@ -67,8 +67,8 @@ defmodule BitcoinLib.Test.Integration.Bip84.Bech32AddressFromZpub do
     address =
       private_key
       |> PrivateKey.from_derivation_path!("m/84'/0'/0'/0/0")
-      |> ExtendedPublic.from_private_key()
-      |> ExtendedPublic.to_address(:bech32)
+      |> PublicKey.from_private_key()
+      |> PublicKey.to_address(:bech32)
 
     assert address == "bc1qcmxt22gjgvy74cjtf73r3hzwfg249tql6ps767"
   end

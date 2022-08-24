@@ -3,7 +3,8 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic.ChildFromDerivationPath do
   Computes a public key from a derivation path
   """
 
-  alias BitcoinLib.Key.HD.{DerivationPath, ExtendedPublic}
+  alias BitcoinLib.Key.PublicKey
+  alias BitcoinLib.Key.HD.{DerivationPath}
   alias BitcoinLib.Key.HD.DerivationPath.{Level}
   alias BitcoinLib.Key.HD.ExtendedPublic.{ChildFromIndex}
 
@@ -12,14 +13,14 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic.ChildFromDerivationPath do
 
   ## Examples
     iex> { :ok, derivation_path } = BitcoinLib.Key.HD.DerivationPath.parse("M/84'/0'/0'/0/0")
-    ...> %BitcoinLib.Key.HD.ExtendedPublic{
+    ...> %BitcoinLib.Key.PublicKey{
     ...>  key: <<0x252C616D91A2488C1FD1F0F172E98F7D1F6E51F8F389B2F8D632A8B490D5F6DA9::264>>,
     ...>  chain_code: <<0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B::256>>
     ...> }
     ...> |> BitcoinLib.Key.HD.ExtendedPublic.ChildFromDerivationPath.get(derivation_path)
     {
       :ok,
-      %BitcoinLib.Key.HD.ExtendedPublic{
+      %BitcoinLib.Key.PublicKey{
         key: <<0x3D8E202D3D91B13E955D79BA88EADD709B98640D9633868C6274B9ACEED0F70EF::264>>,
         chain_code: <<0x3159D0A560A856F5894C15EB0D657A74218B4979D8C6D76F8E78A42C83D22DA8::256>>,
         depth: 5,
@@ -29,15 +30,15 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic.ChildFromDerivationPath do
       }
     }
   """
-  @spec get(%ExtendedPublic{}, %DerivationPath{}) :: {:ok, %ExtendedPublic{}}
-  def get(%ExtendedPublic{} = public_key, %DerivationPath{} = derivation_path) do
+  @spec get(%PublicKey{}, %DerivationPath{}) :: {:ok, %PublicKey{}}
+  def get(%PublicKey{} = public_key, %DerivationPath{} = derivation_path) do
     case derivation_path.type == :public do
       true -> derive(public_key, derivation_path)
       false -> {:error, "wrong derivation path type"}
     end
   end
 
-  defp derive(%ExtendedPublic{} = public_key, %DerivationPath{} = derivation_path) do
+  defp derive(%PublicKey{} = public_key, %DerivationPath{} = derivation_path) do
     {child_public_key, _} =
       {public_key, derivation_path}
       |> maybe_derive_purpose
@@ -49,12 +50,12 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic.ChildFromDerivationPath do
     {:ok, child_public_key}
   end
 
-  defp maybe_derive_purpose({%ExtendedPublic{}, %DerivationPath{purpose: nil}} = hash) do
+  defp maybe_derive_purpose({%PublicKey{}, %DerivationPath{purpose: nil}} = hash) do
     hash
   end
 
   defp maybe_derive_purpose(
-         {%ExtendedPublic{} = public_key, %DerivationPath{purpose: purpose} = derivation_path}
+         {%PublicKey{} = public_key, %DerivationPath{purpose: purpose} = derivation_path}
        ) do
     {:ok, child_public_key} =
       case purpose do
@@ -67,12 +68,12 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic.ChildFromDerivationPath do
     {child_public_key, derivation_path}
   end
 
-  defp maybe_derive_coin_type({%ExtendedPublic{}, %DerivationPath{coin_type: nil}} = hash) do
+  defp maybe_derive_coin_type({%PublicKey{}, %DerivationPath{coin_type: nil}} = hash) do
     hash
   end
 
   defp maybe_derive_coin_type(
-         {%ExtendedPublic{} = public_key, %DerivationPath{coin_type: coin_type} = derivation_path}
+         {%PublicKey{} = public_key, %DerivationPath{coin_type: coin_type} = derivation_path}
        ) do
     {:ok, child_public_key} =
       case coin_type do
@@ -84,7 +85,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic.ChildFromDerivationPath do
     {child_public_key, derivation_path}
   end
 
-  defp maybe_derive_account({%ExtendedPublic{}, %DerivationPath{account: nil}} = hash) do
+  defp maybe_derive_account({%PublicKey{}, %DerivationPath{account: nil}} = hash) do
     hash
   end
 
@@ -96,12 +97,12 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic.ChildFromDerivationPath do
     {child_public_key, derivation_path}
   end
 
-  defp maybe_derive_change({%ExtendedPublic{}, %DerivationPath{change: nil}} = hash) do
+  defp maybe_derive_change({%PublicKey{}, %DerivationPath{change: nil}} = hash) do
     hash
   end
 
   defp maybe_derive_change(
-         {%ExtendedPublic{} = public_key, %DerivationPath{change: change} = derivation_path}
+         {%PublicKey{} = public_key, %DerivationPath{change: change} = derivation_path}
        ) do
     {:ok, child_public_key} =
       case change do
@@ -113,12 +114,12 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic.ChildFromDerivationPath do
     {child_public_key, derivation_path}
   end
 
-  defp maybe_derive_address_index({%ExtendedPublic{}, %DerivationPath{address_index: nil}} = hash) do
+  defp maybe_derive_address_index({%PublicKey{}, %DerivationPath{address_index: nil}} = hash) do
     hash
   end
 
   defp maybe_derive_address_index(
-         {%ExtendedPublic{} = public_key,
+         {%PublicKey{} = public_key,
           %DerivationPath{address_index: %Level{value: index}} = derivation_path}
        ) do
     {:ok, child_public_key} = ChildFromIndex.get(public_key, index)

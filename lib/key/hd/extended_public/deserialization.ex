@@ -3,7 +3,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic.Deserialization do
   @bip49_mainnet_human_readable "ypub"
   @bip84_mainnet_human_readable "zpub"
 
-  alias BitcoinLib.Key.HD.ExtendedPublic
+  alias BitcoinLib.Key.PublicKey
 
   @doc """
   Deserialization of a public key from its xpub version
@@ -12,8 +12,8 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic.Deserialization do
     values from https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki#test-vector-1
 
     iex> "xpub661MyMwAqRbcFtXgS5sYJABqqG9YLmC4Q1Rdap9gSE8NqtwybGhePY2gZ29ESFjqJoCu1Rupje8YtGqsefD265TMg7usUDFdp6W1EGMcet8"
-    ...> |> BitcoinLib.Key.HD.ExtendedPublic.deserialize()
-    %BitcoinLib.Key.HD.ExtendedPublic{
+    ...> |> BitcoinLib.Key.PublicKey.deserialize()
+    %BitcoinLib.Key.PublicKey{
       key: 0x339A36013301597DAEF41FBE593A02CC513D0B55527EC2DF1050E2E8FF49C85C2,
       chain_code: 0x873DFF81C02F525623FD1FE5167EAC3A55A049DE3D314BB42EE227FFED37D508,
       depth: 0,
@@ -21,17 +21,17 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic.Deserialization do
       parent_fingerprint: 0
     }
   """
-  @spec deserialize(binary()) :: {:ok, %ExtendedPublic{}}
+  @spec deserialize(binary()) :: {:ok, %PublicKey{}}
   def deserialize(@bip32_mainnet_human_readable <> _data = serialized) do
     {:ok, execute(serialized)}
   end
 
-  @spec deserialize(binary()) :: {:ok, %ExtendedPublic{}}
+  @spec deserialize(binary()) :: {:ok, %PublicKey{}}
   def deserialize(@bip49_mainnet_human_readable <> _data = serialized) do
     {:ok, execute(serialized)}
   end
 
-  @spec deserialize(binary()) :: {:ok, %ExtendedPublic{}}
+  @spec deserialize(binary()) :: {:ok, %PublicKey{}}
   def deserialize(@bip84_mainnet_human_readable <> _data = serialized) do
     {:ok, execute(serialized)}
   end
@@ -54,7 +54,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic.Deserialization do
       serialized_public_key
       |> Base58.decode()
 
-    %ExtendedPublic{
+    %PublicKey{
       key: key,
       chain_code: chain_code,
       depth: depth,

@@ -3,25 +3,24 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic.ChildFromIndex do
   Calculates direct childs from a public key based on a given index
   """
 
-  alias BitcoinLib.Key.HD.ExtendedPublic
+  alias BitcoinLib.Key.{PrivateKey, PublicKey}
+  alias BitcoinLib.Key.HD.{Fingerprint, Hmac}
+  alias BitcoinLib.Crypto.Secp256k1
 
   @max_index 0x7FFFFFFF
-
-  alias BitcoinLib.Key.HD.{Fingerprint, Hmac, ExtendedPublic}
-  alias BitcoinLib.Crypto.Secp256k1
 
   @doc """
   Calculates a direct child from a public key based on a given index
 
   ## Examples
-    iex> %BitcoinLib.Key.HD.ExtendedPublic{
+    iex> %BitcoinLib.Key.PublicKey{
     ...>   key: <<0x252C616D91A2488C1FD1F0F172E98F7D1F6E51F8F389B2F8D632A8B490D5F6DA9::264>>,
     ...>   chain_code: <<0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B::256>>
     ...> }
     ...> |> BitcoinLib.Key.HD.ExtendedPublic.ChildFromIndex.get(0)
     {
       :ok,
-      %BitcoinLib.Key.HD.ExtendedPublic{
+      %BitcoinLib.Key.PublicKey{
         fingerprint: <<0x9680603F::32>>,
         key: <<0x30204D3503024160E8303C0042930EA92A9D671DE9AA139C1867353F6B6664E59::264>>,
         chain_code: <<0x05AAE71D7C080474EFAAB01FA79E96F4C6CFE243237780B0DF4BC36106228E31::256>>,
@@ -31,13 +30,13 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic.ChildFromIndex do
       }
     }
   """
-  @spec get(%ExtendedPublic{}, integer()) ::
-          {:ok, %ExtendedPublic{}} | {:error, binary()}
+  @spec get(%PublicKey{}, integer()) ::
+          {:ok, %PublicKey{}} | {:error, binary()}
   def get(_parent_public_key, index) when is_integer(index) and index > @max_index do
     {:error, "#{index} is too large of an index"}
   end
 
-  def get(%ExtendedPublic{} = parent_public_key, index) when is_integer(index) do
+  def get(%PublicKey{} = parent_public_key, index) when is_integer(index) do
     %{child_public_key: child_public_key} =
       %{parent_public_key: parent_public_key, index: index}
       |> compute_hmac
@@ -52,7 +51,7 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic.ChildFromIndex do
   defp compute_hmac(
          %{
            index: index,
-           parent_public_key: %ExtendedPublic{} = parent_public_key
+           parent_public_key: %PublicKey{} = parent_public_key
          } = hash
        ) do
     {derived_key, child_chain} = Hmac.compute(parent_public_key, index)
@@ -76,13 +75,13 @@ defmodule BitcoinLib.Key.HD.ExtendedPublic.ChildFromIndex do
            parent_fingerprint: parent_fingerprint
          } = hash
        ) do
-    {_, key} =
-      hmac_derived_key
-      |> BitcoinLib.Key.Public.from_private_key()
+    public_key =
+      %PrivateKey{key: hmac_derived_key}
+      |> BitcoinLib.Key.PublicKey.from_private_key()
 
     child_public_key =
-      %ExtendedPublic{
-        key: Secp256k1.add_keys(key, parent_public_key.key),
+      %PublicKey{
+        key: Secp256k1.add_keys(public_key.key, parent_public_key.key),
         chain_code: child_chain_code,
         depth: parent_public_key.depth + 1,
         index: index,

@@ -4,7 +4,7 @@ defmodule BitcoinLib.Test.Integration.Bip44.P2pkhScriptExecutionTest do
   """
   use ExUnit.Case, async: true
 
-  alias BitcoinLib.Key.{PrivateKey, PublicHash}
+  alias BitcoinLib.Key.{PrivateKey, PublicHash, PublicKey}
   alias BitcoinLib.Key.HD.{MnemonicSeed}
 
   alias BitcoinLib.Script
@@ -18,18 +18,15 @@ defmodule BitcoinLib.Test.Integration.Bip44.P2pkhScriptExecutionTest do
   @check_sig Crypto.CheckSig.v()
 
   test "execute a P2PKH script" do
-    extended_private_key =
+    private_key =
       "rally celery split order almost twenty ignore record legend learn chaos decade"
       |> MnemonicSeed.to_seed()
       |> PrivateKey.from_seed()
       |> PrivateKey.from_derivation_path!("m/44'/0'/0'/0/0")
 
     public_key =
-      extended_private_key
-      |> BitcoinLib.Key.HD.ExtendedPublic.from_private_key()
-      |> Map.get(:key)
-
-    private_key = extended_private_key |> Map.get(:key)
+      private_key
+      |> PublicKey.from_private_key()
 
     public_key_hash = public_key |> PublicHash.from_public_key()
 
@@ -41,9 +38,9 @@ defmodule BitcoinLib.Test.Integration.Bip44.P2pkhScriptExecutionTest do
 
     hex_script = script |> Binary.to_hex()
 
-    script_sig = BitcoinLib.Crypto.Secp256k1.sign(hex_script, private_key)
+    script_sig = BitcoinLib.Crypto.Secp256k1.sign(hex_script, private_key.key)
 
-    result = Script.execute(script, [public_key, script_sig])
+    result = Script.execute(script, [public_key.key, script_sig])
 
     assert {:ok, true} = result
   end

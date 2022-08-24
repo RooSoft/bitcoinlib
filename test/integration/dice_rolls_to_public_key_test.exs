@@ -1,8 +1,8 @@
 defmodule BitcoinLib.Test.Integration.DiceRollsToPublicKeyTest do
   use ExUnit.Case, async: true
 
-  alias BitcoinLib.Key.{PrivateKey}
-  alias BitcoinLib.Key.HD.{Entropy, MnemonicSeed, ExtendedPublic}
+  alias BitcoinLib.Key.{PrivateKey, PublicKey}
+  alias BitcoinLib.Key.HD.{Entropy, MnemonicSeed}
 
   test "create a public key out of dice rolls" do
     dice_rolls = "12345612345612345612345612345612345612345612345612"
@@ -18,6 +18,6 @@ defmodule BitcoinLib.Test.Integration.DiceRollsToPublicKeyTest do
     |> MnemonicSeed.wordlist_from_entropy()
     |> MnemonicSeed.to_seed()
     |> PrivateKey.from_seed()
-    |> ExtendedPublic.from_private_key()
+    |> PublicKey.from_private_key()
   end
 end

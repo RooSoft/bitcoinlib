@@ -1,8 +1,8 @@
 defmodule BitcoinLib.Test.Integration.Bip32.PublicAndPrivateChildsTest do
   use ExUnit.Case, async: true
 
-  alias BitcoinLib.Key.{PrivateKey}
-  alias BitcoinLib.Key.HD.{MnemonicSeed, ExtendedPublic}
+  alias BitcoinLib.Key.{PrivateKey, PublicKey}
+  alias BitcoinLib.Key.HD.{MnemonicSeed}
 
   test "compare public key childs obtained in two different ways" do
     private_key =
@@ -13,14 +13,14 @@ defmodule BitcoinLib.Test.Integration.Bip32.PublicAndPrivateChildsTest do
     xpub_from_private =
       private_key
       |> PrivateKey.derive_child!(0)
-      |> ExtendedPublic.from_private_key()
-      |> ExtendedPublic.serialize()
+      |> PublicKey.from_private_key()
+      |> PublicKey.serialize()
 
     xpub_from_public =
       private_key
-      |> ExtendedPublic.from_private_key()
-      |> ExtendedPublic.derive_child!(0)
-      |> ExtendedPublic.serialize()
+      |> PublicKey.from_private_key()
+      |> PublicKey.derive_child!(0)
+      |> PublicKey.serialize()
 
     assert xpub_from_private == xpub_from_public
   end

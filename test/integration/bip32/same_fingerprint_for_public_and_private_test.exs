@@ -1,8 +1,8 @@
 defmodule BitcoinLib.Test.Integration.Bip32.SameFingerprintForPublicAndPrivateTest do
   use ExUnit.Case, async: true
 
-  alias BitcoinLib.Key.{PrivateKey}
-  alias BitcoinLib.Key.HD.{ExtendedPublic, Fingerprint}
+  alias BitcoinLib.Key.{PrivateKey, PublicKey}
+  alias BitcoinLib.Key.HD.{Fingerprint}
 
   test "make sure the fingerprint is the same for a private key and it's public key" do
     private_key = %PrivateKey{
@@ -10,7 +10,7 @@ defmodule BitcoinLib.Test.Integration.Bip32.SameFingerprintForPublicAndPrivateTe
       chain_code: <<0xE08FCC54429E47AC55FEBD4DC9EDCCC88D292EB40AA3765AF3DA7178A14AA114::256>>
     }
 
-    public_key = private_key |> ExtendedPublic.from_private_key()
+    public_key = private_key |> PublicKey.from_private_key()
 
     private_fingerprint = Fingerprint.compute(private_key)
     public_fingerprint = Fingerprint.compute(public_key)

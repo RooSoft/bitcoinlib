@@ -2,8 +2,8 @@ defmodule BitcoinLib.Test.Integration.Secp256k1.SignAndVerivy do
   use ExUnit.Case, async: true
 
   alias BitcoinLib.Crypto.{Secp256k1}
-  alias BitcoinLib.Key.{PrivateKey, Public}
-  alias BitcoinLib.Key.HD.{ExtendedPublic, MnemonicSeed}
+  alias BitcoinLib.Key.{PrivateKey, PublicKey}
+  alias BitcoinLib.Key.HD.{MnemonicSeed}
 
   test "sign a message and make sure it verifies to true" do
     {pub, prv} =
@@ -21,24 +21,19 @@ defmodule BitcoinLib.Test.Integration.Secp256k1.SignAndVerivy do
   end
 
   test "verify a signature with a compressed public key" do
-    {pub, prv} =
-      :crypto.generate_key(
-        :ecdh,
-        :secp256k1,
-        <<0xD6EAD233E06C068585976B5C8373861D77E7F030EC452E65EE81C85FA6906970::256>>
-      )
+    private_key = %PrivateKey{
+      key: <<0xD6EAD233E06C068585976B5C8373861D77E7F030EC452E65EE81C85FA6906970::256>>
+    }
 
-    {uncompressed_pub, compressed_pub} =
-      <<0xD6EAD233E06C068585976B5C8373861D77E7F030EC452E65EE81C85FA6906970::256>>
-      |> Public.from_private_key()
-
-    assert uncompressed_pub == pub
+    public_key =
+      private_key
+      |> PublicKey.from_private_key()
 
     message = "76a914725ebac06343111227573d0b5287954ef9b88aae88ac"
 
-    signature = Secp256k1.sign(message, prv)
+    signature = Secp256k1.sign(message, private_key.key)
 
-    assert Secp256k1.validate(signature, message, compressed_pub)
+    assert Secp256k1.validate(signature, message, public_key.key)
   end
 
   test "compare public keys from :crypto and BitcoinLib" do
@@ -51,9 +46,11 @@ defmodule BitcoinLib.Test.Integration.Secp256k1.SignAndVerivy do
         private_key_in
       )
 
-    {long_bitcoinlib_pub_key, _short_version} = Public.from_private_key(private_key_out)
+    %PublicKey{uncompressed_key: uncompressed_key} =
+      %PrivateKey{key: private_key_out}
+      |> PublicKey.from_private_key()
 
-    assert public_key_out == long_bitcoinlib_pub_key
+    assert public_key_out == uncompressed_key
     assert private_key_in == private_key_out
   end
 
@@ -72,20 +69,20 @@ defmodule BitcoinLib.Test.Integration.Secp256k1.SignAndVerivy do
   end
 
   test "sign a message with private key from a mnemonic phrase and make sure it verifies to true" do
-    extended_private_key =
+    private_key =
       "rally celery split order almost twenty ignore record legend learn chaos decade"
       |> MnemonicSeed.to_seed()
       |> PrivateKey.from_seed()
       |> PrivateKey.from_derivation_path!("m/44'/0'/0'/0/0")
 
-    extended_public_key =
-      extended_private_key
-      |> ExtendedPublic.from_private_key()
+    public_key =
+      private_key
+      |> PublicKey.from_private_key()
 
     message = "76a914725ebac06343111227573d0b5287954ef9b88aae88ac"
 
-    signature = Secp256k1.sign(message, extended_private_key.key)
+    signature = Secp256k1.sign(message, private_key.key)
 
-    assert Secp256k1.validate(signature, message, extended_public_key.key)
+    assert Secp256k1.validate(signature, message, public_key.key)
   end
 end

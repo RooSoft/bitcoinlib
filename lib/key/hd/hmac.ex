@@ -5,8 +5,7 @@ defmodule BitcoinLib.Key.HD.Hmac do
   """
 
   alias BitcoinLib.Crypto
-  alias BitcoinLib.Key.HD.{ExtendedPublic}
-  alias BitcoinLib.Key.{PrivateKey}
+  alias BitcoinLib.Key.{PrivateKey, PublicKey}
 
   @doc """
   Computes HMAC on either a public or a private key in the aim of computing
@@ -27,7 +26,7 @@ defmodule BitcoinLib.Key.HD.Hmac do
 
   def compute(%PrivateKey{} = private_key, index, hardened? = false) do
     private_key
-    |> ExtendedPublic.from_private_key()
+    |> PublicKey.from_private_key()
     |> compute(index, hardened?)
   end
 
@@ -36,7 +35,7 @@ defmodule BitcoinLib.Key.HD.Hmac do
     |> execute(private_key.chain_code)
   end
 
-  def compute(%ExtendedPublic{} = public_key, index, hardened?) do
+  def compute(%PublicKey{} = public_key, index, hardened?) do
     get_input(public_key, index, hardened?)
     |> execute(public_key.chain_code)
   end
@@ -46,7 +45,7 @@ defmodule BitcoinLib.Key.HD.Hmac do
     <<(<<0>>), private_key.key::bitstring, index::size(32)>>
   end
 
-  defp get_input(%ExtendedPublic{} = public_key, index, _hardened? = false)
+  defp get_input(%PublicKey{} = public_key, index, _hardened? = false)
        when is_integer(index) do
     key = public_key.key
 

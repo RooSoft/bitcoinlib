@@ -3,8 +3,7 @@ defmodule BitcoinLib.Key.HD.Fingerprint do
   A fingerprint is a small hash of a public key
   """
   alias BitcoinLib.Crypto
-  alias BitcoinLib.Key.{PrivateKey}
-  alias BitcoinLib.Key.HD.{ExtendedPublic}
+  alias BitcoinLib.Key.{PrivateKey, PublicKey}
 
   @doc """
   Compute a private key's fingerprint
@@ -17,7 +16,7 @@ defmodule BitcoinLib.Key.HD.Fingerprint do
     ...> |> BitcoinLib.Key.HD.Fingerprint.compute()
     <<0x3442193E::32>>
 
-    iex> %BitcoinLib.Key.HD.ExtendedPublic{
+    iex> %BitcoinLib.Key.PublicKey{
     ...>   key: <<0x252C616D91A2488C1FD1F0F172E98F7D1F6E51F8F389B2F8D632A8B490D5F6DA9::264>>,
     ...>   chain_code: <<0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B::256>>
     ...> }
@@ -31,8 +30,8 @@ defmodule BitcoinLib.Key.HD.Fingerprint do
     |> compute
   end
 
-  @spec compute(%ExtendedPublic{}) :: binary()
-  def compute(%ExtendedPublic{} = public_key) do
+  @spec compute(%PublicKey{}) :: binary()
+  def compute(%PublicKey{} = public_key) do
     <<raw_fingerprint::binary-4, _rest::binary>> =
       public_key.key
       |> Crypto.hash160_bitstring()
@@ -55,12 +54,12 @@ defmodule BitcoinLib.Key.HD.Fingerprint do
       chain_code: <<0x873DFF81C02F525623FD1FE5167EAC3A55A049DE3D314BB42EE227FFED37D508::256>>
     }
 
-    iex> %BitcoinLib.Key.HD.ExtendedPublic{
+    iex> %BitcoinLib.Key.PublicKey{
     ...>   key: <<0x252C616D91A2488C1FD1F0F172E98F7D1F6E51F8F389B2F8D632A8B490D5F6DA9::264>>,
     ...>   chain_code: <<0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B::256>>
     ...> }
     ...> |> BitcoinLib.Key.HD.Fingerprint.append()
-    %BitcoinLib.Key.HD.ExtendedPublic{
+    %BitcoinLib.Key.PublicKey{
       fingerprint: <<0x18C1259::32>>,
       key: <<0x252C616D91A2488C1FD1F0F172E98F7D1F6E51F8F389B2F8D632A8B490D5F6DA9::264>>,
       chain_code: <<0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B::256>>
@@ -76,8 +75,8 @@ defmodule BitcoinLib.Key.HD.Fingerprint do
     |> Map.put(:fingerprint, fingerprint)
   end
 
-  @spec append(%ExtendedPublic{}) :: %ExtendedPublic{}
-  def append(%ExtendedPublic{} = public_key) do
+  @spec append(%PublicKey{}) :: %PublicKey{}
+  def append(%PublicKey{} = public_key) do
     fingerprint =
       public_key
       |> compute()
@@ -88,6 +87,6 @@ defmodule BitcoinLib.Key.HD.Fingerprint do
 
   defp to_public_key(%PrivateKey{} = private_key) do
     private_key
-    |> ExtendedPublic.from_private_key()
+    |> PublicKey.from_private_key()
   end
 end
