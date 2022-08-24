@@ -6,7 +6,7 @@ defmodule BitcoinLib.Crypto.Secp256k1 do
   """
 
   alias Curvy.{Point, Key}
-  alias BitcoinLib.Key.PrivateKey
+  alias BitcoinLib.Key.{PrivateKey, PublicKey}
 
   @doc """
   Add two keys on the elliptic curve using Jacobian Point mathematics
@@ -47,13 +47,13 @@ defmodule BitcoinLib.Crypto.Secp256k1 do
   ## Examples
     iex> signature = <<0x304402202a849a7fc3ba88a8c8958ae525b2fcd4f24dc58f22bbc5c461c24c1c54b985c60220711e2bb8a18eefd5c58e9191fb66b42846a1b8233846a41908059be65ffa1dcc::560>>
     ...> message = "76a914725ebac06343111227573d0b5287954ef9b88aae88ac"
-    ...> public_key = <<0x02702ded1cca9816fa1a94787ffc6f3ace62cd3b63164f76d227d0935a33ee48c3::264>>
+    ...> public_key = %BitcoinLib.Key.PublicKey{key: <<0x02702ded1cca9816fa1a94787ffc6f3ace62cd3b63164f76d227d0935a33ee48c3::264>>}
     ...> BitcoinLib.Crypto.Secp256k1.validate(signature, message, public_key)
     true
   """
-  @spec validate(bitstring(), binary(), bitstring()) :: boolean
-  def validate(signature, message, public_key) do
-    :crypto.verify(:ecdsa, :sha256, message, signature, [public_key, :secp256k1])
+  @spec validate(bitstring(), bitstring(), %PublicKey{}) :: boolean()
+  def validate(signature, message, %PublicKey{key: key}) do
+    :crypto.verify(:ecdsa, :sha256, message, signature, [key, :secp256k1])
   end
 
   defp get_point(key) do

@@ -5,6 +5,7 @@ defmodule BitcoinLib.Script.Opcodes.Crypto.CheckSig do
 
   alias BitcoinLib.Crypto.Secp256k1
   alias BitcoinLib.Script.Opcodes.Crypto.CheckSig
+  alias BitcoinLib.Key.PublicKey
 
   @value 0xAC
 
@@ -12,10 +13,11 @@ defmodule BitcoinLib.Script.Opcodes.Crypto.CheckSig do
     @value
   end
 
+  @spec execute(%CheckSig{}, list()) :: {:ok, list()}
   def execute(%CheckSig{script: script}, [sig_pub_key | [sig | remaining]]) do
     script_hex = script |> Binary.to_hex()
 
-    case Secp256k1.validate(sig, script_hex, sig_pub_key) do
+    case Secp256k1.validate(sig, script_hex, %PublicKey{key: sig_pub_key}) do
       true -> {:ok, [1 | remaining]}
       false -> {:ok, [0 | remaining]}
     end

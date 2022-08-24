@@ -14,10 +14,11 @@ defmodule BitcoinLib.Test.Integration.Secp256k1.SignAndVerivy do
       )
 
     message = "76a914725ebac06343111227573d0b5287954ef9b88aae88ac"
+    public_key = %PublicKey{key: pub}
 
     signature = Secp256k1.sign(message, %PrivateKey{key: prv})
 
-    assert Secp256k1.validate(signature, message, pub)
+    assert Secp256k1.validate(signature, message, public_key)
   end
 
   test "verify a signature with a compressed public key" do
@@ -33,7 +34,7 @@ defmodule BitcoinLib.Test.Integration.Secp256k1.SignAndVerivy do
 
     signature = Secp256k1.sign(message, private_key)
 
-    assert Secp256k1.validate(signature, message, public_key.key)
+    assert Secp256k1.validate(signature, message, public_key)
   end
 
   test "compare public keys from :crypto and BitcoinLib" do
@@ -83,6 +84,6 @@ defmodule BitcoinLib.Test.Integration.Secp256k1.SignAndVerivy do
 
     signature = Secp256k1.sign(message, private_key)
 
-    assert Secp256k1.validate(signature, message, public_key.key)
+    assert Secp256k1.validate(signature, message, public_key)
   end
 end
