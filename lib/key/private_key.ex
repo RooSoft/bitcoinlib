@@ -361,7 +361,7 @@ defimpl Inspect, for: BitcoinLib.Key.PrivateKey do
   alias BitcoinLib.Key.PrivateKey
   alias BitcoinLib.Formatting.HexBinary
 
-  def inspect(%PrivateKey{key: key} = private_key, opts) when is_binary(key) do
+  def inspect(%PrivateKey{} = private_key, opts) do
     %{
       private_key
       | key: %HexBinary{data: private_key.key},
