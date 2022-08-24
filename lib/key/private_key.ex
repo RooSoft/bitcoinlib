@@ -356,3 +356,19 @@ defmodule BitcoinLib.Key.PrivateKey do
     |> Map.put(:fingerprint, Fingerprint.compute(private_key))
   end
 end
+
+defimpl Inspect, for: BitcoinLib.Key.PrivateKey do
+  alias BitcoinLib.Key.PrivateKey
+  alias BitcoinLib.Formatting.HexBinary
+
+  def inspect(%PrivateKey{key: key} = private_key, opts) when is_binary(key) do
+    %{
+      private_key
+      | key: %HexBinary{data: private_key.key},
+        chain_code: %HexBinary{data: private_key.chain_code},
+        fingerprint: %HexBinary{data: private_key.fingerprint},
+        parent_fingerprint: %HexBinary{data: private_key.parent_fingerprint}
+    }
+    |> Inspect.Map.inspect(Code.Identifier.inspect_as_atom(PrivateKey), opts)
+  end
+end
