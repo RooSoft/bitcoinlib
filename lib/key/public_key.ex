@@ -335,10 +335,26 @@ defimpl Inspect, for: BitcoinLib.Key.PublicKey do
     %{
       public_key
       | key: %HexBinary{data: public_key.key},
-        uncompressed_key: %HexBinary{data: public_key.uncompressed_key},
-        chain_code: %HexBinary{data: public_key.chain_code},
-        fingerprint: %HexBinary{data: public_key.fingerprint},
-        parent_fingerprint: %HexBinary{data: public_key.parent_fingerprint}
+        uncompressed_key:
+          case public_key.uncompressed_key do
+            nil -> nil
+            _ -> %HexBinary{data: public_key.uncompressed_key}
+          end,
+        chain_code:
+          case public_key.chain_code do
+            nil -> nil
+            _ -> %HexBinary{data: public_key.chain_code}
+          end,
+        fingerprint:
+          case public_key.fingerprint do
+            nil -> nil
+            _ -> %HexBinary{data: public_key.fingerprint}
+          end,
+        parent_fingerprint:
+          case public_key.parent_fingerprint do
+            nil -> nil
+            _ -> %HexBinary{data: public_key.parent_fingerprint}
+          end
     }
     |> Inspect.Map.inspect(Code.Identifier.inspect_as_atom(PublicKey), opts)
   end
