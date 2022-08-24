@@ -60,10 +60,26 @@ defmodule BitcoinLib.Script.Analyzer do
   # 00 14 <<_witness_script_hash::256>>
   def identify(<<@zero::8, @key_hash_size::8, _key_hash::160>>), do: :p2wpkh
 
+  def identify([
+        %BitcoinLib.Script.Opcodes.Constants.Zero{},
+        %BitcoinLib.Script.Opcodes.Data{
+          value: <<0xD2D94B64AE08587EEFC8EEB187C601E939F9037C::160>>
+        }
+      ]),
+      do: :p2wpkh
+
   # see https://bitcoincore.org/en/segwit_wallet_dev/#native-pay-to-witness-script-hash-p2wsh
   # address example: bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq
   # 00 20 <<_witness_script_hash::256>>
   def identify(<<@zero::8, @script_hash_size::8, _script_hash::256>>), do: :p2wsh
+
+  def identify([
+        %BitcoinLib.Script.Opcodes.Constants.Zero{},
+        %BitcoinLib.Script.Opcodes.Data{
+          value: <<_::256>>
+        }
+      ]),
+      do: :p2wsh
 
   def identify(script) when is_bitstring(script), do: :unknown
 end
