@@ -55,10 +55,12 @@ defmodule BitcoinLib.Signing.Psbt.Input.WitnessUtxo do
     <<script_pub_key::bitstring-size(script_pub_key_length_in_bits), remaining::bitstring>> =
       remaining
 
+    script = Script.parse(script_pub_key)
+
     %{
       map
       | remaining: remaining,
-        witness_utxo: Map.put(witness_utxo, :script_pub_key, script_pub_key)
+        witness_utxo: Map.put(witness_utxo, :script_pub_key, script)
     }
   end
 
