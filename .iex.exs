@@ -3,27 +3,21 @@ alias BitcoinLib.Crypto
 alias BitcoinLib.Key.{Address, PrivateKey, PublicKey}
 alias BitcoinLib.Key.HD.{DerivationPath, Entropy, MnemonicSeed}
 
-# options here https://hexdocs.pm/elixir/1.12/Inspect.Opts.html
-#IEx.configure(
-#  inspect: [base: :hex]
-#)
+orange = IO.ANSI.color(5, 3, 1)
+
+IO.puts orange <> "\nWelcome to the BitcoinLib REPL\n" <> IO.ANSI.reset
 
 IEx.configure(
-  colors: [
-    eval_result: [:green, :bright] ,
-    eval_error: [[:red,:bright,"Bug Bug ..!!"]],
-    eval_info: [:yellow, :bright ],
- ],
  default_prompt: [
    "\e[G",    # ANSI CHA, move cursor to column 1
-    :red,
-    "BitcoinLib",
+    orange,
+    "₿",
     :white,
     " ",
-    :blue,
+    :green,
     "%counter",
     :white,
-    " ▶",
+    " >",
     :reset
   ]
   |> IO.ANSI.format
