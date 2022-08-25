@@ -55,7 +55,7 @@ defmodule BitcoinLib.Key.HD.Hmac do
   defp execute(hmac_input, chain_code) do
     <<derived_key::bitstring-256, child_chain::bitstring-256>> =
       hmac_input
-      |> Crypto.hmac_bitstring(chain_code)
+      |> Crypto.hmac(chain_code)
 
     {derived_key, child_chain}
   end

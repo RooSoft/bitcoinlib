@@ -45,7 +45,7 @@ defmodule BitcoinLib.Key.PrivateKey do
   def from_seed(seed) do
     seed
     |> Base.decode16!(case: :lower)
-    |> Crypto.hmac_bitstring(@bitcoin_seed_hmac_key)
+    |> Crypto.hmac(@bitcoin_seed_hmac_key)
     |> split
     |> to_struct
   end
