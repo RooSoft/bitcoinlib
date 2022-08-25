@@ -24,6 +24,6 @@ defmodule BitcoinLib.Signing.Psbt.Input.Hash160Preimage do
   defp validate(hash, preimage) do
     hash ==
       preimage
-      |> Crypto.hash160()
+      |> Crypto.hash160_bitstring()
   end
 end
