@@ -10,6 +10,7 @@ defmodule BitcoinLib.Script.Runner do
   defp execute_next_opcode({:error, message}), do: {:error, message}
 
   defp execute_next_opcode({:ok, [1], []}), do: {:ok, true}
+  defp execute_next_opcode({:ok, [0], []}), do: {:ok, false}
   defp execute_next_opcode({:ok, _, []}), do: {:ok, false}
 
   defp execute_next_opcode({:ok, stack, opcodes}) do
