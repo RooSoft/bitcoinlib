@@ -51,16 +51,11 @@ defmodule BitcoinLib.Key.PublicKey.Address.P2SH do
   end
 
   defp append_checksum(public_key_hash) do
-    hex_public_key_hash =
-      public_key_hash
-      |> Binary.to_hex()
-
     checksum =
-      hex_public_key_hash
-      |> Crypto.checksum()
+      public_key_hash
+      |> Crypto.checksum_bitstring()
 
-    (hex_public_key_hash <> checksum)
-    |> Binary.from_hex()
+    <<public_key_hash::bitstring, checksum::bitstring>>
   end
 
   defp base58_encode(value) do

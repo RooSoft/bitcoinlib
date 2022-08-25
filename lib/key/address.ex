@@ -22,8 +22,8 @@ defmodule BitcoinLib.Key.Address do
     public_key_hash
     |> Binary.to_hex()
     |> prepend_prefix(address_type, network)
-    |> append_checksum
     |> Binary.from_hex()
+    |> append_checksum
     |> Base58.encode()
   end
 
@@ -34,7 +34,7 @@ defmodule BitcoinLib.Key.Address do
   defp append_checksum(public_key_hash) do
     checksum =
       public_key_hash
-      |> Crypto.checksum()
+      |> Crypto.checksum_bitstring()
 
     public_key_hash <> checksum
   end

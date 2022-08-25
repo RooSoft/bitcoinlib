@@ -4,25 +4,6 @@ defmodule BitcoinLib.Crypto do
   """
 
   @doc """
-  Takes any hexadecimal value as a string and creates a double-sha256,
-  keeping only the first 4 bytes
-
-  ## Examples
-
-    iex> "806c7ab2f961a1bc3f13cdc08dc41c3f439adebd549a8ef1c089e81a590737610701"
-    ...> |> BitcoinLib.Crypto.checksum()
-    "b56c36b1"
-  """
-  @spec checksum(String.t()) :: String.t()
-  def checksum(str) when is_binary(str) do
-    str
-    |> String.upcase()
-    |> Base.decode16!()
-    |> checksum_bitstring
-    |> Base.encode16(case: :lower)
-  end
-
-  @doc """
   Takes any binary and creates a double-sha256, keeping only the first 4 bytes
 
   ## Examples

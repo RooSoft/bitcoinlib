@@ -21,13 +21,13 @@ defmodule BitcoinLib.CryptoTest do
   end
 
   test "creates a checksum" do
-    value = "806c7ab2f961a1bc3f13cdc08dc41c3f439adebd549a8ef1c089e81a590737610701"
+    value = <<0x806C7AB2F961A1BC3F13CDC08DC41C3F439ADEBD549A8EF1C089E81A590737610701::272>>
 
     checksum =
       value
-      |> Crypto.checksum()
+      |> Crypto.checksum_bitstring()
 
-    assert checksum == "b56c36b1"
+    assert checksum == <<0xB56C36B1::32>>
   end
 
   test "makes a hash160 of a bitstring" do
