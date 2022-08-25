@@ -292,7 +292,7 @@ defmodule BitcoinLib.Key.PublicKey do
   end
 
   defp extract_from_private_key(private_key) when is_bitstring(private_key) do
-    public_uncompressed = Crypto.secp256k1_bitstring(private_key)
+    public_uncompressed = Crypto.secp256k1(private_key)
 
     compressed = get_compressed(public_uncompressed)
 
