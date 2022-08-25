@@ -23,54 +23,6 @@ defmodule BitcoinLib.Crypto do
   end
 
   @doc """
-  Computes [RIPEMD160](https://en.wikipedia.org/wiki/RIPEMD) on an arbitrary string
-
-  ## Examples
-
-    iex> "6c7ab2f961a1bc3f13cdc08dc41c3f439adebd549a8ef1c089e81a5907376107"
-    ...> |> BitcoinLib.Crypto.ripemd160()
-    "f23d97252131c60666708e4ae2c59fed1349f439"
-  """
-  @spec ripemd160(String.t()) :: String.t()
-  def ripemd160(str) when is_binary(str) do
-    str
-    |> ripemd160_bitstring()
-    |> Base.encode16(case: :lower)
-  end
-
-  @doc """
-  Computes [SHA1](https://en.wikipedia.org/wiki/SHA-1) on an arbitrary string
-
-  ## Examples
-
-    iex> "806c7ab2f961a1bc3f13cdc08dc41c3f439adebd549a8ef1c089e81a590737610701"
-    ...> |> BitcoinLib.Crypto.sha1()
-    "1c90d51061e90f9483d89cb23525a5f1de323cd8"
-  """
-  @spec sha1(String.t()) :: String.t()
-  def sha1(str) when is_binary(str) do
-    str
-    |> sha1_bitstring()
-    |> Base.encode16(case: :lower)
-  end
-
-  @doc """
-  Computes [SHA256](https://en.wikipedia.org/wiki/SHA-2) on an arbitrary string
-
-  ## Examples
-
-    iex> "6c7ab2f961a1bc3f13cdc08dc41c3f439adebd549a8ef1c089e81a5907376107"
-    ...> |> BitcoinLib.Crypto.sha256()
-    "ab6a8f1d9e2b0333dff8e370ed6fdfe20b2e8008e045efb3fb3298c22f7569da"
-  """
-  @spec sha256(String.t()) :: String.t()
-  def sha256(str) when is_binary(str) do
-    str
-    |> sha256_bitstring()
-    |> Base.encode16(case: :lower)
-  end
-
-  @doc """
   Computes [SHA256](https://en.wikipedia.org/wiki/SHA-2) twice in a row on an arbitrary string
 
   ## Examples
