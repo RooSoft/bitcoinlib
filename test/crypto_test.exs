@@ -31,14 +31,12 @@ defmodule BitcoinLib.CryptoTest do
   end
 
   test "makes a hash160 of a bitstring" do
-    value = <<128, 0, 0, 44>>
+    value = <<0x8000002C::32>>
 
     hash =
       value
       |> Crypto.hash160()
 
-    assert <<251, 126, 153, 20, 166, 224, 56, 154, 55, 180, 46, 3, 58, 245, 19, 162, 196, 12, 64,
-             2>> ==
-             hash
+    assert <<0xFB7E9914A6E0389A37B42E033AF513A2C40C4002::160>> == hash
   end
 end
