@@ -45,11 +45,11 @@ defmodule BitcoinLib.Crypto do
   ## Examples
 
     iex> "6c7ab2f961a1bc3f13cdc08dc41c3f439adebd549a8ef1c089e81a5907376107"
-    ...> |> BitcoinLib.Crypto.ripemd160_bitstring()
+    ...> |> BitcoinLib.Crypto.ripemd160()
     <<242, 61, 151, 37, 33, 49, 198, 6, 102, 112, 142, 74, 226, 197, 159, 237, 19, 73, 244, 57>>
   """
-  @spec ripemd160_bitstring(String.t()) :: bitstring()
-  def ripemd160_bitstring(bin) when is_bitstring(bin), do: :crypto.hash(:ripemd160, bin)
+  @spec ripemd160(String.t()) :: bitstring()
+  def ripemd160(bin) when is_bitstring(bin), do: :crypto.hash(:ripemd160, bin)
 
   @doc """
   Computes [SHA1](https://en.wikipedia.org/wiki/SHA-1) on a binary and returns it as a binary
@@ -123,7 +123,7 @@ defmodule BitcoinLib.Crypto do
   def hash160(data) do
     data
     |> sha256()
-    |> ripemd160_bitstring()
+    |> ripemd160()
   end
 
   @doc """
