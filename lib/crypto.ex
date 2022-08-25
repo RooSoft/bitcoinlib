@@ -23,47 +23,6 @@ defmodule BitcoinLib.Crypto do
   end
 
   @doc """
-  Computes [SHA256](https://en.wikipedia.org/wiki/SHA-2) twice in a row on an arbitrary string
-
-  ## Examples
-
-    iex> "6c7ab2f961a1bc3f13cdc08dc41c3f439adebd549a8ef1c089e81a5907376107"
-    ...> |> BitcoinLib.Crypto.double_sha256()
-    "de43342f6e8bcc34d95f36e4e1b8eab957a0ce2ff3b0e183142d91a871170f2b"
-  """
-  @spec double_sha256(String.t()) :: String.t()
-  def double_sha256(str) when is_binary(str) do
-    str
-    |> double_sha256_bitstring()
-    |> Base.encode16(case: :lower)
-  end
-
-  @doc """
-  Computes [HASH160](https://learnmeabitcoin.com/technical/public-key-hash) on an arbitrary string
-
-  ## Examples
-
-    iex> "6c7ab2f961a1bc3f13cdc08dc41c3f439adebd549a8ef1c089e81a5907376107"
-    ...> |> BitcoinLib.Crypto.hash160()
-    "273f29c643d908664fcc61aa2ec76e4f21196fcb"
-  """
-  @spec hash160(String.t()) :: String.t()
-  def hash160(str) when is_binary(str) do
-    str
-    |> Binary.from_hex()
-    |> hash160_bitstring()
-    |> Base.encode16(case: :lower)
-  end
-
-  @spec hash160(Integer.t()) :: String.t()
-  def hash160(value) when is_integer(value) do
-    value
-    |> Binary.from_integer()
-    |> hash160_bitstring()
-    |> Base.encode16(case: :lower)
-  end
-
-  @doc """
   Computes [HMAC](https://en.wikipedia.org/wiki/HMAC) on an arbitrary string
 
   ## Examples

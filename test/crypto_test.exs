@@ -5,17 +5,6 @@ defmodule BitcoinLib.CryptoTest do
 
   alias BitcoinLib.Crypto
 
-  test "creates a double SHA256 hash from a string" do
-    # based on https://www.webdevtutor.net/tools/online-hash-generator-sha256d
-    value = "6c7ab2f961a1bc3f13cdc08dc41c3f439adebd549a8ef1c089e81a5907376107"
-
-    hash =
-      value
-      |> Crypto.double_sha256()
-
-    assert hash == "de43342f6e8bcc34d95f36e4e1b8eab957a0ce2ff3b0e183142d91a871170f2b"
-  end
-
   test "creates a HMAC hash from a string" do
     # based on https://beautifytools.com/hmac-generator.php
     key = "Bitcoin seed"
@@ -40,16 +29,6 @@ defmodule BitcoinLib.CryptoTest do
       |> Crypto.checksum()
 
     assert checksum == "b56c36b1"
-  end
-
-  test "makes a hash160 of a binary" do
-    value = "6c7ab2f961a1bc3f13cdc08dc41c3f439adebd549a8ef1c089e81a5907376107"
-
-    hash =
-      value
-      |> Crypto.hash160()
-
-    assert "273f29c643d908664fcc61aa2ec76e4f21196fcb" == hash
   end
 
   test "makes a hash160 of a bitstring" do
