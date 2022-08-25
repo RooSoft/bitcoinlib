@@ -3,6 +3,7 @@ defmodule BitcoinLib.Signing.Psbt.Input.FinalScriptSig do
 
   alias BitcoinLib.Signing.Psbt.Input.FinalScriptSig
   alias BitcoinLib.Signing.Psbt.Keypair.{Key}
+  alias BitcoinLib.Script
 
   def parse(keypair) do
     %{keypair: keypair, final_script_sig: %FinalScriptSig{}}
@@ -28,6 +29,8 @@ defmodule BitcoinLib.Signing.Psbt.Input.FinalScriptSig do
     do: final_script_sig
 
   defp extract_final_script_sig(%{keypair: keypair}) do
-    %FinalScriptSig{script_sig: keypair.value.data}
+    script = Script.parse(keypair.value.data)
+    
+    %FinalScriptSig{script_sig: script}
   end
 end
