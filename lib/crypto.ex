@@ -10,11 +10,11 @@ defmodule BitcoinLib.Crypto do
 
     iex> value = <<128, 108, 122, 178, 249, 97, 161, 188, 63, 19, 205, 192, 141, 196, 28, 63, 67>>
     ...> value = value <> <<154, 222, 189, 84, 154, 142, 241, 192, 137, 232, 26, 89, 7, 55, 97, 7, 1>>
-    ...> value |> BitcoinLib.Crypto.checksum_bitstring()
+    ...> value |> BitcoinLib.Crypto.checksum()
     <<181, 108, 54, 177>>
   """
-  @spec checksum_bitstring(bitstring()) :: bitstring()
-  def checksum_bitstring(bin) when is_bitstring(bin) do
+  @spec checksum(bitstring()) :: bitstring()
+  def checksum(bin) when is_bitstring(bin) do
     bin
     |> double_sha256()
     |> Binary.take(4)

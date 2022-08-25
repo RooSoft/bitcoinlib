@@ -34,10 +34,6 @@ defmodule BitcoinLib.Crypto.Wif do
   end
 
   defp add_checksum(key) do
-    checksum =
-      key
-      |> Crypto.checksum_bitstring()
-
-    key <> checksum
+    key <> Crypto.checksum(key)
   end
 end

@@ -105,7 +105,7 @@ defmodule BitcoinLib.Key.PrivateKey do
 
     <<
       data::bitstring,
-      Crypto.checksum_bitstring(data)::bitstring
+      Crypto.checksum(data)::bitstring
     >>
     |> Base58.encode()
   end

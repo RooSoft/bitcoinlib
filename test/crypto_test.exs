@@ -25,7 +25,7 @@ defmodule BitcoinLib.CryptoTest do
 
     checksum =
       value
-      |> Crypto.checksum_bitstring()
+      |> Crypto.checksum()
 
     assert checksum == <<0xB56C36B1::32>>
   end

@@ -34,7 +34,7 @@ defmodule BitcoinLib.Key.Address do
   defp append_checksum(public_key_hash) do
     checksum =
       public_key_hash
-      |> Crypto.checksum_bitstring()
+      |> Crypto.checksum()
 
     public_key_hash <> checksum
   end

@@ -53,7 +53,7 @@ defmodule BitcoinLib.Key.PublicKey.Address.P2SH do
   defp append_checksum(public_key_hash) do
     checksum =
       public_key_hash
-      |> Crypto.checksum_bitstring()
+      |> Crypto.checksum()
 
     <<public_key_hash::bitstring, checksum::bitstring>>
   end
