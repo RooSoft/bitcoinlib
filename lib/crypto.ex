@@ -69,11 +69,11 @@ defmodule BitcoinLib.Crypto do
   ## Examples
 
     iex> "6c7ab2f961a1bc3f13cdc08dc41c3f439adebd549a8ef1c089e81a5907376107"
-    ...> |> BitcoinLib.Crypto.sha256_bitstring()
+    ...> |> BitcoinLib.Crypto.sha256()
     <<171, 106, 143, 29, 158, 43, 3, 51, 223, 248, 227, 112, 237, 111, 223, 226, 11, 46, 128, 8, 224, 69, 239, 179, 251, 50, 152, 194, 47, 117, 105, 218>>
   """
-  @spec sha256_bitstring(String.t()) :: bitstring()
-  def sha256_bitstring(bin) when is_bitstring(bin) do
+  @spec sha256(String.t()) :: bitstring()
+  def sha256(bin) when is_bitstring(bin) do
     :crypto.hash(:sha256, bin)
   end
 
@@ -89,8 +89,8 @@ defmodule BitcoinLib.Crypto do
   @spec double_sha256(String.t()) :: bitstring()
   def double_sha256(bin) when is_bitstring(bin) do
     bin
-    |> sha256_bitstring
-    |> sha256_bitstring
+    |> sha256
+    |> sha256
   end
 
   @doc """
@@ -122,7 +122,7 @@ defmodule BitcoinLib.Crypto do
   @spec hash160(bitstring()) :: bitstring()
   def hash160(data) do
     data
-    |> sha256_bitstring()
+    |> sha256()
     |> ripemd160_bitstring()
   end
 

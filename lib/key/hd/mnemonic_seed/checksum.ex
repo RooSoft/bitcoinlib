@@ -56,7 +56,7 @@ defmodule BitcoinLib.Key.HD.MnemonicSeed.Checksum do
   end
 
   defp compute_sha256(binary_seed) do
-    Crypto.sha256_bitstring(binary_seed)
+    Crypto.sha256(binary_seed)
   end
 
   defp keep_first_bits(full_checksum, nb_bits_to_keep) do
