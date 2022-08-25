@@ -1,5 +1,11 @@
 defmodule BitcoinLib.Formatting.HexBinary do
   defstruct [:data]
+
+  alias BitcoinLib.Formatting.HexBinary
+
+  def from_binary(data) when is_binary(data) do
+    %HexBinary{data: data}
+  end
 end
 
 defimpl Inspect, for: BitcoinLib.Formatting.HexBinary do
