@@ -35,7 +35,7 @@ defmodule BitcoinLib.Crypto do
   @spec checksum_bitstring(bitstring()) :: bitstring()
   def checksum_bitstring(bin) when is_bitstring(bin) do
     bin
-    |> double_sha256_bitstring()
+    |> double_sha256()
     |> Binary.take(4)
   end
 
@@ -83,11 +83,11 @@ defmodule BitcoinLib.Crypto do
   ## Examples
 
     iex> "6c7ab2f961a1bc3f13cdc08dc41c3f439adebd549a8ef1c089e81a5907376107"
-    ...> |> BitcoinLib.Crypto.double_sha256_bitstring()
+    ...> |> BitcoinLib.Crypto.double_sha256()
     <<222, 67, 52, 47, 110, 139, 204, 52, 217, 95, 54, 228, 225, 184, 234, 185, 87, 160, 206, 47, 243, 176, 225, 131, 20, 45, 145, 168, 113, 23, 15, 43>>
   """
-  @spec double_sha256_bitstring(String.t()) :: bitstring()
-  def double_sha256_bitstring(bin) when is_bitstring(bin) do
+  @spec double_sha256(String.t()) :: bitstring()
+  def double_sha256(bin) when is_bitstring(bin) do
     bin
     |> sha256_bitstring
     |> sha256_bitstring
