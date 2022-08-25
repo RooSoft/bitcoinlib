@@ -132,11 +132,11 @@ defmodule BitcoinLib.Crypto do
 
   ## Examples
     iex> <<128, 0, 0, 44>>
-    ...> |> BitcoinLib.Crypto.hash160_bitstring()
+    ...> |> BitcoinLib.Crypto.hash160()
     <<251, 126, 153, 20, 166, 224, 56, 154, 55, 180, 46, 3, 58, 245, 19, 162, 196, 12, 64, 2>>
   """
-  @spec hash160_bitstring(bitstring()) :: bitstring()
-  def hash160_bitstring(data) do
+  @spec hash160(bitstring()) :: bitstring()
+  def hash160(data) do
     data
     |> sha256_bitstring()
     |> ripemd160_bitstring()

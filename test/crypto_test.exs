@@ -36,7 +36,7 @@ defmodule BitcoinLib.CryptoTest do
 
     hash =
       value
-      |> Crypto.hash160_bitstring()
+      |> Crypto.hash160()
 
     assert <<251, 126, 153, 20, 166, 224, 56, 154, 55, 180, 46, 3, 58, 245, 19, 162, 196, 12, 64,
              2>> ==

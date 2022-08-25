@@ -21,6 +21,6 @@ defmodule BitcoinLib.Key.PublicKeyHash do
   @spec from_public_key(%PublicKey{}) :: bitstring()
   def from_public_key(%PublicKey{key: key}) do
     key
-    |> Crypto.hash160_bitstring()
+    |> Crypto.hash160()
   end
 end

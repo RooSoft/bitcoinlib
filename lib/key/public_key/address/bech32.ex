@@ -32,7 +32,7 @@ defmodule BitcoinLib.Key.PublicKey.Address.Bech32 do
 
   defp hash160(value) do
     value
-    |> Crypto.hash160_bitstring()
+    |> Crypto.hash160()
   end
 
   defp to_base5_array(value) do

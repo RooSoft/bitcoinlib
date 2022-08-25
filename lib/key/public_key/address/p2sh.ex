@@ -35,7 +35,7 @@ defmodule BitcoinLib.Key.PublicKey.Address.P2SH do
 
   defp hash160(value) do
     value
-    |> Crypto.hash160_bitstring()
+    |> Crypto.hash160()
   end
 
   defp create_redeem_script(public_key_hash) do

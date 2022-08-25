@@ -34,7 +34,7 @@ defmodule BitcoinLib.Key.HD.Fingerprint do
   def compute(%PublicKey{} = public_key) do
     <<raw_fingerprint::binary-4, _rest::binary>> =
       public_key.key
-      |> Crypto.hash160_bitstring()
+      |> Crypto.hash160()
 
     raw_fingerprint
   end
