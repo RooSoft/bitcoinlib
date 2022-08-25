@@ -57,11 +57,11 @@ defmodule BitcoinLib.Crypto do
   ## Examples
 
     iex> "806c7ab2f961a1bc3f13cdc08dc41c3f439adebd549a8ef1c089e81a590737610701"
-    ...> |> BitcoinLib.Crypto.sha1_bitstring()
+    ...> |> BitcoinLib.Crypto.sha1()
     <<28, 144, 213, 16, 97, 233, 15, 148, 131, 216, 156, 178, 53, 37, 165, 241, 222, 50, 60, 216>>
   """
-  @spec sha1_bitstring(String.t()) :: bitstring()
-  def sha1_bitstring(bin) when is_bitstring(bin), do: :crypto.hash(:sha, bin)
+  @spec sha1(String.t()) :: bitstring()
+  def sha1(bin) when is_bitstring(bin), do: :crypto.hash(:sha, bin)
 
   @doc """
   Computes [SHA256](https://en.wikipedia.org/wiki/SHA-2) on a binary and returns it as a binary
