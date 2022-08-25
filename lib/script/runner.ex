@@ -1,4 +1,8 @@
 defmodule BitcoinLib.Script.Runner do
+  @moduledoc """
+  Script execution outcomes are based on this
+  https://learnmeabitcoin.com/technical/script#what-makes-a-script-valid
+  """
   alias BitcoinLib.Script.{Opcode}
 
   @spec execute(list(), list()) :: {:ok, boolean()} | {:error, binary()}
