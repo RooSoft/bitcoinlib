@@ -1,5 +1,6 @@
 alias BitcoinLib.Console
 alias BitcoinLib.Crypto
+alias BitcoinLib.Script
 alias BitcoinLib.Key.{Address, PrivateKey, PublicKey}
 alias BitcoinLib.Key.HD.{DerivationPath, Entropy, MnemonicSeed}
 
