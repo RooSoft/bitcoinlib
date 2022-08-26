@@ -35,9 +35,9 @@ defmodule BitcoinLib.Script.Analyzer do
   def identify([
         %BitcoinLib.Script.Opcodes.Stack.Dup{},
         %BitcoinLib.Script.Opcodes.Crypto.Hash160{},
-        %BitcoinLib.Script.Opcodes.Data{},
+        %BitcoinLib.Script.Opcodes.Data{value: <<_::160>>},
         %BitcoinLib.Script.Opcodes.BitwiseLogic.EqualVerify{},
-        %BitcoinLib.Script.Opcodes.Crypto.CheckSig{}
+        %BitcoinLib.Script.Opcodes.Crypto.CheckSig{script: <<_::200>>}
       ]),
       do: :p2pkh
 
