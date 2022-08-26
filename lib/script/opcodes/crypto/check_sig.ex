@@ -33,6 +33,6 @@ defimpl Inspect, for: BitcoinLib.Script.Opcodes.Crypto.CheckSig do
 
     hex_binary = %HexBinary{data: script}
 
-    "%BitcoinLib.Script.Opcodes.Data{value: #{inspect(hex_binary)}"
+    "%BitcoinLib.Script.Opcodes.CheckSig{script: #{inspect(hex_binary)}"
   end
 end
