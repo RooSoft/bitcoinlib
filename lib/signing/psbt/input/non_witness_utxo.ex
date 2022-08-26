@@ -13,7 +13,8 @@ defmodule BitcoinLib.Signing.Psbt.Input.NonWitnessUtxo do
     %{keypair: keypair, non_witness_utxo: %NonWitnessUtxo{}}
     |> validate_keypair()
     |> extract_transaction()
-    |> validate_script_pub_keys()
+    ## TODO: these conditions fail on a valid P2PKH PSBT, please review before reinstating them
+    #   |> validate_script_pub_keys()
     |> Map.get(:non_witness_utxo)
   end
 
