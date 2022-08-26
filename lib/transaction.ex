@@ -86,7 +86,7 @@ defmodule BitcoinLib.Transaction do
       end)
 
     %{map | remaining: remaining}
-    |> Map.put(:outputs, outputs |> Enum.reverse())
+    |> Map.put(:outputs, Enum.reverse(outputs))
   end
 
   defp extract_locktime(%{remaining: remaining} = map) do
