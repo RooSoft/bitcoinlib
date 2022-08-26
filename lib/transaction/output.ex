@@ -33,6 +33,7 @@ defmodule BitcoinLib.Transaction.Output do
         <<script_pub_key::bitstring-size(script_pub_key_bit_size), remaining::bitstring>> =
           remaining
 
+        ##### TODO: Script.parse() should be able to return a parsing error
         script_pub_key =
           script_pub_key
           |> Script.parse()
