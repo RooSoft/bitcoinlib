@@ -7,6 +7,9 @@ defmodule BitcoinLib.Crypto.Wif do
 
   alias BitcoinLib.Crypto
 
+  @mainnet 0x80
+  @testnet 0xEF
+
   @doc """
   Converts a raw private key to the WIF format
 
@@ -25,6 +28,12 @@ defmodule BitcoinLib.Crypto.Wif do
     |> Base58.encode()
   end
 
+  def to_private_key(wif) do
+    wif
+    |> Base58.decode()
+    |> decode_private_key
+  end
+
   defp add_prefix(key) do
     <<0x80>> <> key
   end
@@ -35,5 +44,13 @@ defmodule BitcoinLib.Crypto.Wif do
 
   defp add_checksum(key) do
     key <> Crypto.checksum(key)
+  end
+
+  defp decode_private_key(<<@mainnet::8, key::bitstring-256, _compressed?::8, _checksum::32>>) do
+    key
+  end
+
+  defp decode_private_key(<<@testnet::8, key::bitstring-256, _compressed?::8, _checksum::32>>) do
+    key
   end
 end
