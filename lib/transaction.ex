@@ -6,7 +6,7 @@ defmodule BitcoinLib.Transaction do
 
   alias BitcoinLib.Signing.Psbt.CompactInteger
   alias BitcoinLib.Transaction
-  alias BitcoinLib.Transaction.{Input, Output}
+  alias BitcoinLib.Transaction.{Input, Output, Encoder}
 
   def decode(encoded_transaction) do
     result =
@@ -27,6 +27,45 @@ defmodule BitcoinLib.Transaction do
         {:ok,
          %Transaction{version: version, inputs: inputs, outputs: outputs, locktime: locktime}}
     end
+  end
+
+  @doc """
+  Encodes a transaction into binary format
+
+  based on https://medium.com/@bitaps.com/exploring-bitcoin-signing-the-p2pkh-input-b8b4d5c4809c#50a6
+
+  ## Examples
+    iex> transaction = %BitcoinLib.Transaction{
+    ...>   inputs: [
+    ...>     %BitcoinLib.Transaction.Input{
+    ...>       script_sig: nil,
+    ...>       sequence: 0xFFFFFFFF,
+    ...>       txid: "5e2383defe7efcbdc9fdd6dba55da148b206617bbb49e6bb93fce7bfbb459d44",
+    ...>       vout: 1
+    ...>     }
+    ...>   ],
+    ...>   outputs: [
+    ...>     %BitcoinLib.Transaction.Output{
+    ...>       script_pub_key: [
+    ...>         %BitcoinLib.Script.Opcodes.Stack.Dup{},
+    ...>         %BitcoinLib.Script.Opcodes.Crypto.Hash160{},
+    ...>         %BitcoinLib.Script.Opcodes.Data{value: <<0xf86f0bc0a2232970ccdf4569815db500f1268361::160>>},
+    ...>         %BitcoinLib.Script.Opcodes.BitwiseLogic.EqualVerify{},
+    ...>         %BitcoinLib.Script.Opcodes.Crypto.CheckSig{}
+    ...>       ],
+    ...>       value: 129000000
+    ...>     }
+    ...>   ],
+    ...>   locktime: 0,
+    ...>   version: 1
+    ...> }
+    ...> BitcoinLib.Transaction.encode(transaction)
+    <<0x0100000001449d45bbbfe7fc93bbe649bb7b6106b248a15da5dbd6fdc9bdfc7efede83235e0100000000ffffffff014062b007000000001976a914f86f0bc0a2232970ccdf4569815db500f126836188ac00000000::680>>
+  """
+  @spec encode(%Transaction{}) :: binary()
+  def encode(%Transaction{} = transaction) do
+    transaction
+    |> Encoder.from_struct()
   end
 
   def check_if_unsigned(%Transaction{inputs: inputs}) do

@@ -8,6 +8,7 @@ defmodule BitcoinLib.Test.Integration.LockingScripts.BitapsExampleTest do
   alias BitcoinLib.Key.PrivateKey
   alias BitcoinLib.Transaction
   alias BitcoinLib.Transaction.{Input, Output}
+  alias BitcoinLib.Script
 
   @doc """
   We have 1.3 tBTC on mvJe9AfPLrxpfHwjLNjDAiVsFSzwBGaMSP and want transfer it to n4AYuETorj4gYKendz2ndm9QhjUuruZnfk
@@ -27,15 +28,9 @@ defmodule BitcoinLib.Test.Integration.LockingScripts.BitapsExampleTest do
     # https://mempool.space/testnet/tx/5e2383defe7efcbdc9fdd6dba55da148b206617bbb49e6bb93fce7bfbb459d44
 
     # we use the second UTXO, which has this script pub key:
-    # [
-    #   %BitcoinLib.Script.Opcodes.Stack.Dup{},
-    #   %BitcoinLib.Script.Opcodes.Crypto.Hash160{},
-    #   %BitcoinLib.Script.Opcodes.Data{value: <<0xf86f0bc0a2232970ccdf4569815db500f1268361::160>>},
-    #   %BitcoinLib.Script.Opcodes.BitwiseLogic.EqualVerify{},
-    #   %BitcoinLib.Script.Opcodes.CheckSig{}
-    # ]
-    # TODO: create the scriptPubKey by encoding the above script
-    script_pub_key = <<0x76A914F86F0BC0A2232970CCDF4569815DB500F126836188AC::200>>
+    script_pub_key =
+      <<0x76A914F86F0BC0A2232970CCDF4569815DB500F126836188AC::200>>
+      |> Script.parse()
 
     transaction_hex =
       create_unsigned_transaction_hex(%{
@@ -44,18 +39,15 @@ defmodule BitcoinLib.Test.Integration.LockingScripts.BitapsExampleTest do
         value: 129_000_000,
         script_pub_key: script_pub_key
       })
+      |> Transaction.encode()
 
     # sign this transaction
     # signature = PrivateKey.sign_message(hex_transaction, private_key)
 
     # and spend it using https://mempool.space/testnet/tx/4484ec8b4801ada92fc4d9a90bb7d9336d02058e9547d027fa0a5fc9d2c9cc77
 
-    assert %Transaction{
-             version: 1,
-             inputs: [%Input{}],
-             outputs: [%Output{}],
-             locktime: 0
-           } = transaction_hex
+    assert <<0x0100000001449D45BBBFE7FC93BBE649BB7B6106B248A15DA5DBD6FDC9BDFC7EFEDE83235E0100000000FFFFFFFF014062B007000000001976A914F86F0BC0A2232970CCDF4569815DB500F126836188AC00000000::680>> =
+             transaction_hex
 
     assert %PrivateKey{
              key: <<0xB6A42D01917404B740F9EF9D5CEF08E13F998011246874DD65C033C4669E7009::256>>

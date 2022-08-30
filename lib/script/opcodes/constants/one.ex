@@ -11,6 +11,10 @@ defmodule BitcoinLib.Script.Opcodes.Constants.One do
     @value
   end
 
+  def encode() do
+    <<@value::8>>
+  end
+
   def execute(%One{}, remaining) do
     {:ok, remaining}
   end

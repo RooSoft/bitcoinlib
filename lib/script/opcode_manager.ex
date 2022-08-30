@@ -18,6 +18,43 @@ defmodule BitcoinLib.Script.OpcodeManager do
   @check_multi_sig_verify Crypto.CheckMultiSigVerify.v()
 
   alias BitcoinLib.Signing.Psbt.CompactInteger
+  alias BitcoinLib.Script.Opcodes.Data
+
+  @doc """
+  Encode an opcode into a bitstring
+  """
+  @spec encode_opcode(any) :: bitstring()
+  def encode_opcode(%Constants.Zero{}) do
+    Constants.Zero.encode()
+  end
+
+  def encode_opcode(%Constants.One{}) do
+    Constants.One.encode()
+  end
+
+  def encode_opcode(%Constants.Two{}) do
+    Constants.Two.encode()
+  end
+
+  def encode_opcode(%Stack.Dup{}) do
+    Stack.Dup.encode()
+  end
+
+  def encode_opcode(%Crypto.Hash160{}) do
+    Crypto.Hash160.encode()
+  end
+
+  def encode_opcode(%BitwiseLogic.EqualVerify{}) do
+    BitwiseLogic.EqualVerify.encode()
+  end
+
+  def encode_opcode(%Crypto.CheckSig{}) do
+    Crypto.CheckSig.encode()
+  end
+
+  def encode_opcode(%Data{} = data) do
+    Data.encode(data)
+  end
 
   @doc """
   Extract the opcode on the top of the stack given as an argument

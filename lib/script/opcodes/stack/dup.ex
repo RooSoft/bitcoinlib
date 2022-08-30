@@ -9,6 +9,10 @@ defmodule BitcoinLib.Script.Opcodes.Stack.Dup do
     @value
   end
 
+  def encode() do
+    <<@value::8>>
+  end
+
   def execute(_opcode, []), do: {:error, "trying to execute OP_DUP on an empty stack"}
 
   def execute(_opcode, [first_element | _] = stack) do

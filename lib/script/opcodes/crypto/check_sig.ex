@@ -13,6 +13,10 @@ defmodule BitcoinLib.Script.Opcodes.Crypto.CheckSig do
     @value
   end
 
+  def encode() do
+    <<@value::8>>
+  end
+
   @spec execute(%CheckSig{}, list()) :: {:ok, list()}
   def execute(%CheckSig{script: script}, [sig_pub_key | [sig | remaining]]) do
     script_hex = script |> Binary.to_hex()
@@ -33,6 +37,6 @@ defimpl Inspect, for: BitcoinLib.Script.Opcodes.Crypto.CheckSig do
 
     hex_binary = %HexBinary{data: script}
 
-    "%BitcoinLib.Script.Opcodes.CheckSig{script: #{inspect(hex_binary)}"
+    "%BitcoinLib.Script.Opcodes.Crypto.CheckSig{script: #{inspect(hex_binary)}}"
   end
 end

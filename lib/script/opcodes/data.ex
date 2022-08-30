@@ -1,5 +1,13 @@
 defmodule BitcoinLib.Script.Opcodes.Data do
   defstruct [:value]
+
+  alias BitcoinLib.Script.Opcodes.Data
+
+  def encode(%Data{value: value}) do
+    size_of_value = byte_size(value)
+
+    <<size_of_value::8, value::bitstring>>
+  end
 end
 
 defimpl Inspect, for: BitcoinLib.Script.Opcodes.Data do

@@ -22,6 +22,33 @@ defmodule BitcoinLib.Transaction.Output do
     end
   end
 
+  @doc """
+  Encodes an output into a bitstring
+
+  ## Examples
+
+    iex> %BitcoinLib.Transaction.Output{
+    ...>   script_pub_key: [
+    ...>     %BitcoinLib.Script.Opcodes.Stack.Dup{},
+    ...>     %BitcoinLib.Script.Opcodes.Crypto.Hash160{},
+    ...>     %BitcoinLib.Script.Opcodes.Data{value: <<0xf86f0bc0a2232970ccdf4569815db500f1268361::160>>},
+    ...>     %BitcoinLib.Script.Opcodes.BitwiseLogic.EqualVerify{},
+    ...>     %BitcoinLib.Script.Opcodes.Crypto.CheckSig{}
+    ...>   ],
+    ...>   value: 129000000
+    ...> } |> BitcoinLib.Transaction.Output.encode
+    <<0x4062b00700000000::64>> <> # value
+    <<0x19::8>>                       <> # script_pub_key size
+    <<0x76a914f86f0bc0a2232970ccdf4569815db500f126836188ac::200>> # script_pub_key
+  """
+  def encode(%Output{} = output) do
+    {script_pub_key_size, script_pub_key} =
+      output.script_pub_key
+      |> Script.encode()
+
+    <<output.value::little-64, script_pub_key_size::bitstring, script_pub_key::bitstring>>
+  end
+
   defp extract_script_pub_key(remaining) do
     %CompactInteger{value: script_pub_key_size, remaining: remaining} =
       CompactInteger.extract_from(remaining)

@@ -12,6 +12,10 @@ defmodule BitcoinLib.Script.Opcodes.BitwiseLogic.EqualVerify do
     @value
   end
 
+  def encode() do
+    <<@value::8>>
+  end
+
   def execute(_opcode, []), do: {:error, "trying to execute OP_EQUAL_VERIFY on an empty stack"}
 
   def execute(_opcode, [element | []]),
