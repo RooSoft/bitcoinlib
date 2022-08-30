@@ -29,6 +29,12 @@ defmodule BitcoinLib.Signing.Psbt.CompactIntegerTest do
     assert <<0xFF87A9CBED0F000000::72>> = encoded
   end
 
+  test "encode a 64 bits integer in the compact and explicit little endian form" do
+    encoded = CompactInteger.encode(0xFEDCBA987, :little_endian)
+
+    assert <<0xFF87A9CBED0F000000::72>> = encoded
+  end
+
   test "encode a 16 bits integer in the compact big endian form" do
     encoded = CompactInteger.encode(0xFED, :big_endian)
 
