@@ -45,7 +45,9 @@ defmodule BitcoinLib.Transaction.Input do
       |> :binary.decode_unsigned(:big)
       |> :binary.encode_unsigned(:little)
 
-    {script_size, script} = format_script_sig(input.script_sig)
+    {script_size, script} =
+      input.script_sig
+      |> format_script_sig()
 
     <<script_size::bitstring, script::bitstring>>
 
@@ -54,14 +56,7 @@ defmodule BitcoinLib.Transaction.Input do
   end
 
   defp format_script_sig(nil), do: {<<0::8>>, <<>>}
-
-  defp format_script_sig(script_sig) do
-    script_size =
-      (byte_size(script_sig) * @byte)
-      |> CompactInteger.encode()
-
-    {script_size, script_sig}
-  end
+  defp format_script_sig(script_sig), do: script_sig |> Script.encode()
 
   defp extract_script_sig(remaining) do
     %CompactInteger{value: script_sig_size, remaining: remaining} =

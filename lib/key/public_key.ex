@@ -286,6 +286,10 @@ defmodule BitcoinLib.Key.PublicKey do
     PublicKeyHash.from_public_key(public_key)
   end
 
+  def validate_signature(signature, message, %PublicKey{} = public_key) do
+    Crypto.Secp256k1.validate(signature, message, public_key)
+  end
+
   defp add_fingerprint(%PublicKey{} = public_key) do
     public_key
     |> Map.put(:fingerprint, Fingerprint.compute(public_key))
