@@ -32,6 +32,10 @@ defimpl Inspect, for: BitcoinLib.Script.Opcodes.Crypto.CheckSig do
   alias BitcoinLib.Script.Opcodes.Crypto.CheckSig
   alias BitcoinLib.Formatting.HexBinary
 
+  def inspect(%CheckSig{script: nil}, _opts) do
+    "%BitcoinLib.Script.Opcodes.Crypto.CheckSig{}"
+  end
+
   def inspect(%CheckSig{} = check_sig, _opts) do
     %CheckSig{script: script} = check_sig
 
