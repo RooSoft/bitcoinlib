@@ -56,7 +56,13 @@ defmodule BitcoinLib.Transaction.Input do
   end
 
   defp format_script_sig(nil), do: {<<0::8>>, <<>>}
-  defp format_script_sig(script_sig), do: script_sig |> Script.encode()
+  defp format_script_sig(script_sig) when is_list(script_sig), do: script_sig |> Script.encode()
+
+  defp format_script_sig(script_sig) when is_binary(script_sig) do
+    script_sig_bit_size = byte_size(script_sig)
+
+    {<<script_sig_bit_size::8>>, script_sig}
+  end
 
   defp extract_script_sig(remaining) do
     %CompactInteger{value: script_sig_size, remaining: remaining} =
