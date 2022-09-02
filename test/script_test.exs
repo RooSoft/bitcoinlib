@@ -3,6 +3,7 @@ defmodule BitcoinLib.ScriptTest do
 
   doctest BitcoinLib.Script
 
+  alias BitcoinLib.Key.{PrivateKey, PublicKey, PublicKeyHash}
   alias BitcoinLib.Script
   alias BitcoinLib.Script.Opcodes.{BitwiseLogic, Constants, Crypto, Data, Stack}
 
@@ -22,21 +23,22 @@ defmodule BitcoinLib.ScriptTest do
   end
 
   test "parse a standard transaction to bitcoin address (pay-to-pubkey-hash)" do
+    private_key = %PrivateKey{key: PrivateKey.generate().raw}
+    public_key = PublicKey.from_private_key(private_key)
+    public_key_hash = PublicKeyHash.from_public_key(public_key)
+
     pub_key_hash_size = 0x14
-    pub_key_hash = <<0x725EBAC06343111227573D0B5287954EF9B88AAE::160>>
 
     # 76 a9 14 725ebac06343111227573d0b5287954ef9b88aae 88 ac
     # OP_DUP OP_HASH160 OP_PUSHBYTES_20 725ebac06343111227573d0b5287954ef9b88aae OP_EQUALVERIFY OP_CHECKSIG
     script =
-      <<@dup::8, @hash_160::8, pub_key_hash_size::8, pub_key_hash::bitstring-160,
+      <<@dup::8, @hash_160::8, pub_key_hash_size::8, public_key_hash::bitstring-160,
         @equal_verify::8, @check_sig::8>>
 
-    pub_key = <<0x03EB181FB7B5CF63D82307188B20828B83008F2D2511E5C6EDCBE171C63DD2CBC1::264>>
-
     sig =
-      <<0x3045022100A9A1CEB7B278D7EC33BEAEC3A8D53A466C5553E0A218DECD7357703E9C25172E022053555BB91729EB9F1488DFB286A949D481A4D7D8735CB92BBBE92A24D4532D30::568>>
+      PrivateKey.sign_message(script |> Binary.to_hex(), private_key)
 
-    {:ok, result} = Script.execute(script, [pub_key, sig])
+    {:ok, result} = Script.execute(script, [public_key.key, sig])
 
     assert true == result
   end
