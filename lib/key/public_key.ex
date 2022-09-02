@@ -48,7 +48,7 @@ defmodule BitcoinLib.Key.PublicKey do
       parent_fingerprint: <<0::32>>
     }
   """
-  @spec from_private_key(%PrivateKey{}) :: {integer(), integer()}
+  @spec from_private_key(%PrivateKey{}) :: %PublicKey{}
   def from_private_key(%PrivateKey{} = private_key) do
     {uncompressed, compressed} =
       private_key.key
