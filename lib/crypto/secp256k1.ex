@@ -38,22 +38,32 @@ defmodule BitcoinLib.Crypto.Secp256k1 do
   """
   @spec sign(binary(), %PrivateKey{}) :: bitstring()
   def sign(message, %PrivateKey{key: key}) do
-    :crypto.sign(:ecdsa, :sha256, message, [key, :secp256k1])
+    key = Key.from_privkey(key)
+
+    Curvy.sign(message, key, hash: :secp256k1)
   end
 
   @doc """
   Validates a signature
 
   ## Examples
-    iex> signature = <<0x304402202a849a7fc3ba88a8c8958ae525b2fcd4f24dc58f22bbc5c461c24c1c54b985c60220711e2bb8a18eefd5c58e9191fb66b42846a1b8233846a41908059be65ffa1dcc::560>>
-    ...> message = "76a914725ebac06343111227573d0b5287954ef9b88aae88ac"
+    iex> signature = <<0x3044022048b3b0eb98ae5f2c997e41a2630a5e3512f24a1f5b6165e2867847a11b2b22350220032211844eec911dab6d91836a45c37ca1d498433d87b6b09e2f401025131a05::560>>
+    ...> message = "76a914c825a1ecf2a6830c4401620c3a16f1995057c2ab88ac"
     ...> public_key = %BitcoinLib.Key.PublicKey{key: <<0x02702ded1cca9816fa1a94787ffc6f3ace62cd3b63164f76d227d0935a33ee48c3::264>>}
     ...> BitcoinLib.Crypto.Secp256k1.validate(signature, message, public_key)
     true
   """
   @spec validate(bitstring(), bitstring(), %PublicKey{}) :: boolean()
   def validate(signature, message, %PublicKey{key: key}) do
-    :crypto.verify(:ecdsa, :sha256, message, signature, [key, :secp256k1])
+    validate(signature, message, key)
+  end
+
+  @spec validate(bitstring(), bitstring(), bitstring()) :: boolean()
+  def validate(signature, message, public_key)
+      when is_binary(public_key) and (byte_size(public_key) == 33 or byte_size(public_key) == 65) do
+    key = Key.from_pubkey(public_key)
+
+    Curvy.verify(signature, message, key, hash: :secp256k1)
   end
 
   defp get_point(key) do
