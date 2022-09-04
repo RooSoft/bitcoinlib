@@ -20,8 +20,9 @@ defmodule BitcoinLib.Key.PublicKeyHashTest do
   test "convert address to public key hash" do
     address = "mwYKDe7uJcgqyVHJAPURddeZvM5zBVQj5L"
 
-    {:ok, public_key_hash} = PublicKeyHash.from_address(address)
+    {:ok, public_key_hash, address_type} = PublicKeyHash.from_address(address)
 
-    assert <<0xafc3e518577316386188af748a816cd14ce333f2::160>> == public_key_hash
+    assert <<0xAFC3E518577316386188AF748A816CD14CE333F2::160>> == public_key_hash
+    assert :p2pkh == address_type
   end
 end

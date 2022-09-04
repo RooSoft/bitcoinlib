@@ -33,15 +33,17 @@ defmodule BitcoinLib.Key.Address do
   ## Examples
     iex> address = "mwYKDe7uJcgqyVHJAPURddeZvM5zBVQj5L"
     ...> BitcoinLib.Key.Address.to_public_key_hash(address)
-    {:ok, <<0xafc3e518577316386188af748a816cd14ce333f2::160>>}
+    {:ok, <<0xafc3e518577316386188af748a816cd14ce333f2::160>>, :p2pkh}
   """
   def to_public_key_hash(address) do
     <<prefix::8, public_key_hash::bitstring-160, checksum::bitstring-32>> =
       address
       |> Base58.decode()
 
+    address_type = get_address_type_from_prefix(prefix)
+
     case test_checksum(prefix, public_key_hash, checksum) do
-      {:ok} -> {:ok, public_key_hash}
+      {:ok} -> {:ok, public_key_hash, address_type}
       {:error, message} -> {:error, message}
     end
   end
@@ -74,4 +76,9 @@ defmodule BitcoinLib.Key.Address do
   defp get_prefix(:p2sh, :mainnet), do: "05"
   defp get_prefix(:p2pkh, :testnet), do: "6F"
   defp get_prefix(:p2sh, :testnet), do: "C4"
+
+  defp get_address_type_from_prefix(0), do: :p2pkh
+  defp get_address_type_from_prefix(5), do: :p2sh
+  defp get_address_type_from_prefix(111), do: :p2pkh
+  defp get_address_type_from_prefix(196), do: :p2sh
 end
