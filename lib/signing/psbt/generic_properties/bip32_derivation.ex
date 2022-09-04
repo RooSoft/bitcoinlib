@@ -91,6 +91,6 @@ defimpl Inspect, for: BitcoinLib.Signing.Psbt.GenericProperties.Bip32Derivation 
       bip32_derivation
       | master_key_fingerprint: %HexBinary{data: bip32_derivation.master_key_fingerprint}
     }
-    |> Inspect.Map.inspect(Code.Identifier.inspect_as_atom(Bip32Derivation), opts)
+    |> Inspect.Any.inspect(opts)
   end
 end

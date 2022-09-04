@@ -332,7 +332,6 @@ defmodule BitcoinLib.Key.PublicKey do
 end
 
 defimpl Inspect, for: BitcoinLib.Key.PublicKey do
-  alias BitcoinLib.Key.PublicKey
   alias BitcoinLib.Formatting.HexBinary
 
   def inspect(%BitcoinLib.Key.PublicKey{} = public_key, opts) do
@@ -360,6 +359,6 @@ defimpl Inspect, for: BitcoinLib.Key.PublicKey do
             _ -> %HexBinary{data: public_key.parent_fingerprint}
           end
     }
-    |> Inspect.Map.inspect(Code.Identifier.inspect_as_atom(PublicKey), opts)
+    |> Inspect.Any.inspect(opts)
   end
 end

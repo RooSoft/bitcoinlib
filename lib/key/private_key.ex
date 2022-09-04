@@ -392,6 +392,6 @@ defimpl Inspect, for: BitcoinLib.Key.PrivateKey do
         fingerprint: %HexBinary{data: private_key.fingerprint},
         parent_fingerprint: %HexBinary{data: private_key.parent_fingerprint}
     }
-    |> Inspect.Map.inspect(Code.Identifier.inspect_as_atom(PrivateKey), opts)
+    |> Inspect.Any.inspect(opts)
   end
 end
