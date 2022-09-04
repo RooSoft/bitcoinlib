@@ -4,7 +4,7 @@ defmodule BitcoinLib.Key.PublicKeyHash do
   """
 
   alias BitcoinLib.Crypto
-  alias BitcoinLib.Key.PublicKey
+  alias BitcoinLib.Key.{PublicKey, Address}
 
   @doc """
   Extract a public key hash from a bitcoin public key
@@ -26,25 +26,7 @@ defmodule BitcoinLib.Key.PublicKeyHash do
 
   @spec from_address(binary()) :: bitstring()
   def from_address(address) do
-    <<prefix::8, public_key_hash::bitstring-160, checksum::bitstring-32>> =
-      address
-      |> Base58.decode()
-
-    case test_checksum(prefix, public_key_hash, checksum) do
-      {:ok} -> {:ok, public_key_hash}
-      {:error, message} -> {:error, message}
-    end
-  end
-
-  @spec test_checksum(integer(), bitstring(), integer()) :: {:ok} | {:error, binary()}
-  defp test_checksum(prefix, public_key_hash, original_checksum) do
-    calculated_checksum =
-      <<prefix::8, public_key_hash::bitstring-160>>
-      |> Crypto.checksum()
-
-    case calculated_checksum do
-      ^original_checksum -> {:ok}
-      _ -> {:error, "checksums don't match"}
-    end
+    address
+    |> Address.to_public_key_hash()
   end
 end

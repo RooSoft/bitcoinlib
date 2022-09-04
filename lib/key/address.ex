@@ -27,6 +27,25 @@ defmodule BitcoinLib.Key.Address do
     |> Base58.encode()
   end
 
+  @doc """
+  Extracts the public key hash from an address, and make sure the checkum is ok
+
+  ## Examples
+    iex> address = "mwYKDe7uJcgqyVHJAPURddeZvM5zBVQj5L"
+    ...> BitcoinLib.Key.Address.to_public_key_hash(address)
+    {:ok, <<0xafc3e518577316386188af748a816cd14ce333f2::160>>}
+  """
+  def to_public_key_hash(address) do
+    <<prefix::8, public_key_hash::bitstring-160, checksum::bitstring-32>> =
+      address
+      |> Base58.decode()
+
+    case test_checksum(prefix, public_key_hash, checksum) do
+      {:ok} -> {:ok, public_key_hash}
+      {:error, message} -> {:error, message}
+    end
+  end
+
   defp prepend_prefix(public_key_hash, address_type, network) do
     get_prefix(address_type, network) <> public_key_hash
   end
@@ -37,6 +56,18 @@ defmodule BitcoinLib.Key.Address do
       |> Crypto.checksum()
 
     public_key_hash <> checksum
+  end
+
+  @spec test_checksum(integer(), bitstring(), integer()) :: {:ok} | {:error, binary()}
+  defp test_checksum(prefix, public_key_hash, original_checksum) do
+    calculated_checksum =
+      <<prefix::8, public_key_hash::bitstring-160>>
+      |> Crypto.checksum()
+
+    case calculated_checksum do
+      ^original_checksum -> {:ok}
+      _ -> {:error, "checksums don't match"}
+    end
   end
 
   defp get_prefix(:p2pkh, :mainnet), do: "00"
