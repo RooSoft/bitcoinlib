@@ -24,7 +24,15 @@ defmodule BitcoinLib.Key.PublicKeyHash do
     |> Crypto.hash160()
   end
 
-  @spec from_address(binary()) :: bitstring()
+  @doc """
+  Extracts the public key hash from an address, and make sure the checkum is ok
+
+  ## Examples
+    iex> address = "mwYKDe7uJcgqyVHJAPURddeZvM5zBVQj5L"
+    ...> BitcoinLib.Key.PublicKeyHash.from_address(address)
+    {:ok, <<0xafc3e518577316386188af748a816cd14ce333f2::160>>, :p2pkh}
+  """
+  @spec from_address(binary()) :: {:ok, bitstring(), atom()} | {:error, binary()}
   def from_address(address) do
     address
     |> Address.to_public_key_hash()
