@@ -3,8 +3,11 @@ defmodule BitcoinLib.TransactionTest do
 
   doctest BitcoinLib.Transaction
 
+  alias BitcoinLib.Key.{PrivateKey, PublicKey, PublicKeyHash}
   alias BitcoinLib.Transaction
   alias BitcoinLib.Transaction.{Input, Output}
+  alias BitcoinLib.Script.Opcodes
+  alias BitcoinLib.Script
 
   test "decode a transaction" do
     raw =
@@ -42,5 +45,85 @@ defmodule BitcoinLib.TransactionTest do
              ],
              value: 0x12A05CAF0
            } = List.first(transaction.outputs)
+  end
+
+  test "sign and encode transaction" do
+    mnemonics = derivation_path = "m/44'/1'/0'/0/0"
+    network = :testnet
+    address_type = :p2pkh
+
+    %{
+      private_key: private_key,
+      public_key_hash: public_key_hash
+    } = create_keys(mnemonics, derivation_path, network, address_type)
+
+    # the transaction can be found in a block explorer such as here:
+    # https://mempool.space/testnet/tx/e4c226432a9319d603b2ed1fa609bffe4cd91f89b3176a9e73b19f7891a92bb6
+    # we use the first UTXO's script pub key from the output in the above transaction:
+    redeem_script =
+      <<0x76A914AFC3E518577316386188AF748A816CD14CE333F288AC::200>>
+      |> Script.parse()
+
+    # found straight in the output of step1 in here:
+    # https://medium.com/@bitaps.com/exploring-bitcoin-signing-the-p2pkh-input-b8b4d5c4809c#50a6
+    locking_script = [
+      %Opcodes.Stack.Dup{},
+      %Opcodes.Crypto.Hash160{},
+      %Opcodes.Data{value: public_key_hash},
+      %Opcodes.BitwiseLogic.EqualVerify{},
+      %Opcodes.Crypto.CheckSig{}
+    ]
+
+    txid = "e4c226432a9319d603b2ed1fa609bffe4cd91f89b3176a9e73b19f7891a92bb6"
+    vout = 0
+    value = 10000
+
+    transaction = create_transaction(txid, vout, locking_script, redeem_script, value)
+
+    Transaction.sign_and_encode(transaction, private_key)
+  end
+
+  @spec create_keys(binary(), binary(), :mainnet | :testnet, :p2pkh) :: map()
+  defp create_keys(mnemonics, derivation_path, network, address_type) do
+    private_key =
+      mnemonics
+      |> PrivateKey.from_mnemonic_phrase()
+      |> PrivateKey.from_derivation_path(derivation_path)
+      |> elem(1)
+
+    public_key =
+      private_key
+      |> PublicKey.from_private_key()
+
+    public_key_hash =
+      public_key
+      |> PublicKeyHash.from_public_key()
+
+    address =
+      public_key_hash
+      |> BitcoinLib.Key.Address.from_public_key_hash(address_type, network)
+
+    %{
+      private_key: private_key,
+      public_key: public_key,
+      public_key_hash: public_key_hash,
+      address: address
+    }
+  end
+
+  defp create_transaction(txid, vout, locking_script, redeem_script, value) do
+    %Transaction{
+      version: 1,
+      inputs: [
+        %Input{
+          txid: txid,
+          vout: vout,
+          sequence: 0xFFFFFFFF,
+          script_sig: redeem_script
+        }
+      ],
+      outputs: [%Output{script_pub_key: locking_script, value: value}],
+      locktime: 0
+    }
   end
 end

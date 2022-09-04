@@ -4,9 +4,10 @@ defmodule BitcoinLib.Transaction do
   """
   defstruct [:version, :inputs, :outputs, :locktime]
 
+  alias BitcoinLib.Key.PrivateKey
   alias BitcoinLib.Signing.Psbt.CompactInteger
   alias BitcoinLib.Transaction
-  alias BitcoinLib.Transaction.{Input, Output, Encoder}
+  alias BitcoinLib.Transaction.{Input, Output, Encoder, Signer}
 
   def decode(encoded_transaction) do
     result =
@@ -73,6 +74,10 @@ defmodule BitcoinLib.Transaction do
     |> Enum.reduce(true, fn input, unsigned? ->
       unsigned? && input.script_sig == []
     end)
+  end
+
+  def sign_and_encode(%Transaction{} = transaction, %PrivateKey{} = private_key) do
+    Signer.sign_and_encode(transaction, private_key)
   end
 
   defp extract_version(%{remaining: <<version::little-32, remaining::bitstring>>} = map) do
