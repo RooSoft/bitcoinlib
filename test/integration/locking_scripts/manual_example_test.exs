@@ -208,9 +208,6 @@ defmodule BitcoinLib.Test.Integration.LockingScripts.ManualExampleTest do
     {:ok, target_public_key_hash, :p2pkh} =
       PublicKeyHash.from_address("mwKte669tM8ascBhvpw31phG2Ecauy8DUp")
 
-#    IO.inspect(change_public_key_hash |> Binary.to_hex(), label: "change_public_key_hash")
-#    IO.inspect(target_public_key_hash |> Binary.to_hex(), label: "target_public_key_hash")
-
     signed_transaction =
       %Transaction.Spec{}
       |> Transaction.Spec.add_input(
