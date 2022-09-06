@@ -6,3 +6,4 @@
 * [Registered HD version bytes](https://github.com/satoshilabs/slips/blob/master/slip-0132.md#registered-hd-version-bytes)
 * [Bitcoin PSBT explorer](https://bip174.org)
 * [Address prefixes](https://en.bitcoin.it/wiki/List_of_address_prefixes)
+* [Script opcodes](https://en.bitcoin.it/wiki/Script)
