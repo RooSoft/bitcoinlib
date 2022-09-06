@@ -47,6 +47,17 @@ defmodule BitcoinLib.TransactionTest do
            } = List.first(transaction.outputs)
   end
 
+  test "decode a testnet transaction" do
+    # txid = e3600a1bc8a564bb29a79a38ec8ff456edf3bed757112ec70541cf2e3500d221
+
+    {:ok, %Transaction{inputs: [%Input{txid: txid}]}} =
+      "010000000197ca410de9ab568ab647984cd2b3f38284a8283ff261e26f96162abfb6358983000000006a473044022016bcad84e20bc6ec1a837c99ab552d8157c60c4ef5e9db3f2fe0c03b2ff8a78002205b404d67f4feb4fda8f86c16a0c8dac6530a54962ed961095ee7205b591dd4cc012103f0e5a53db9f85e5b2eecf677925ffe21dd1409bcfe9a0730404053599b0901e5ffffffff01e8030000000000001976a914fc8ca28ea75e45f538242c257e1f07fe19baa0f388ac00000000"
+      |> Binary.from_hex()
+      |> Transaction.decode()
+
+    assert txid == "838935b6bf2a16966fe261f23f28a88482f3b3d24c9847b68a56abe90d41ca97"
+  end
+
   test "sign and encode transaction" do
     mnemonics = derivation_path = "m/44'/1'/0'/0/0"
     network = :testnet
