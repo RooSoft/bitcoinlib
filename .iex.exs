@@ -2,7 +2,7 @@ alias BitcoinLib.Console
 alias BitcoinLib.Crypto
 alias BitcoinLib.Script
 alias BitcoinLib.Transaction
-alias BitcoinLib.Key.{Address, PrivateKey, PublicKey}
+alias BitcoinLib.Key.{Address, PrivateKey, PublicKey, PublicKeyHash}
 alias BitcoinLib.Key.HD.{DerivationPath, Entropy, MnemonicSeed}
 
 orange = IO.ANSI.color(5, 3, 1)
@@ -72,3 +72,26 @@ p2pkh_testnet_address =
 p2sh_testnet_address =
   <<0x93CE48570B55C42C2AF816AEABA06CFEE1224FAE::160>>
   |> Address.from_public_key_hash(:p2sh, :testnet)
+
+defmodule X do
+  def display_public_key_hash mnemonics, derivation_path do
+    public_key_hash =
+      mnemonics
+      |> PrivateKey.from_mnemonic_phrase()
+      |> PrivateKey.from_derivation_path!(derivation_path)
+      |> PublicKey.from_private_key()
+      |> PublicKeyHash.from_public_key()
+
+    IO.puts "#{derivation_path} -> #{public_key_hash |> Binary.to_hex}"
+
+    mnemonics
+  end
+end
+
+mnemonics = "rally celery split order almost twenty ignore record legend learn chaos decade"
+
+mnemonics
+|> X.display_public_key_hash("m/44'/1'/0'/0/0")
+|> X.display_public_key_hash("m/44'/1'/0'/0/1")
+|> X.display_public_key_hash("m/44'/1'/0'/1/0")
+|> X.display_public_key_hash("m/44'/1'/0'/1/1")

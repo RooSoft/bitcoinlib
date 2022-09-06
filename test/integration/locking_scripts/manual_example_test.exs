@@ -191,24 +191,31 @@ defmodule BitcoinLib.Test.Integration.LockingScripts.ManualExampleTest do
   end
 
   test "simplest testnet transaction yet, including a change address" do
-    {:ok, private_key} =
+    master_private_key =
       "rally celery split order almost twenty ignore record legend learn chaos decade"
       |> PrivateKey.from_mnemonic_phrase()
+
+    {:ok, spending_private_key} =
+      master_private_key
       |> PrivateKey.from_derivation_path("m/44'/1'/0'/0/1")
 
     change_public_key_hash =
-      private_key
+      master_private_key
+      |> PrivateKey.from_derivation_path!("m/44'/1'/0'/1/1")
       |> PublicKey.from_private_key()
       |> PublicKeyHash.from_public_key()
 
-    target_address = "mgsQLBysgJLEwAiv6JJercLn2LLS8UNDXT"
-    {:ok, target_public_key_hash, :p2pkh} = PublicKeyHash.from_address(target_address)
+    {:ok, target_public_key_hash, :p2pkh} =
+      PublicKeyHash.from_address("mwKte669tM8ascBhvpw31phG2Ecauy8DUp")
+
+#    IO.inspect(change_public_key_hash |> Binary.to_hex(), label: "change_public_key_hash")
+#    IO.inspect(target_public_key_hash |> Binary.to_hex(), label: "target_public_key_hash")
 
     signed_transaction =
       %Transaction.Spec{}
       |> Transaction.Spec.add_input(
-        txid: "6925062befcf8aafae78de879fec2535ec016e251c19b1c0792993258a6fda26",
-        vout: 1,
+        txid: "f48648ab6adffe3b569383450a3279372a537c3be995c9e4e25f297d764e18d7",
+        vout: 0,
         redeem_script: "76a914c39658833d83f2299416e697af2fb95a998853d388ac"
       )
       |> Transaction.Spec.add_output(
@@ -217,11 +224,11 @@ defmodule BitcoinLib.Test.Integration.LockingScripts.ManualExampleTest do
       )
       |> Transaction.Spec.add_output(
         script_pub_key: Script.Types.P2pkh.create(change_public_key_hash),
-        value: 2_758_000
+        value: 2_740_000
       )
-      |> Transaction.Spec.sign_and_encode(private_key)
+      |> Transaction.Spec.sign_and_encode(spending_private_key)
 
-    assert "010000000126da6f8a25932979c0b1191c256e01ec3525ec9f87de78aeaf8acfef2b062569010000006a473044022075a805f9fdee44a1bd3ea9b95fd4bf8a2c230b61bebb07814e8ca8a8eca4a5aa0220180a19e46597faf9a2a283a47478c91abf84b72b5fdd46142ec09e0f4e3e78ae012103f30d64f65d8c08aaf81a5f5ced3873d250a53371d83c0e4328bf74cb513778d8ffffffff0270152a00000000001976a914c39658833d83f2299416e697af2fb95a998853d388ace8030000000000001976a9140ed62df1c5094787c4e7384c8dcacb53c22fdf1888ac00000000" ==
+    assert "0100000001d7184e767d295fe2e4c995e93b7c532a3779320a458393563bfedf6aab4886f4000000006a47304402205a66bb7fb5dde9736b2d653f0299129dc6575fc6a8544f1e8707a11555b44cd7022030ce0d69bfdcf459c4d6ac45b121a153ec728f6a9282539a674dc4f094843910012103f30d64f65d8c08aaf81a5f5ced3873d250a53371d83c0e4328bf74cb513778d8ffffffff0220cf2900000000001976a9140272853736f3dd09248055049ff15dff09d7f00f88ace8030000000000001976a914ad6a62e2d23d1c060897cd0cc79c42dad715e4c788ac00000000" ==
              signed_transaction
   end
 
