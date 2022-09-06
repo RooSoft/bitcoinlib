@@ -16,6 +16,7 @@ defmodule BitcoinLib.Script.Types.P2sh do
       %BitcoinLib.Script.Opcodes.BitwiseLogic.Equal{}
     ]
   """
+  @spec create(bitstring()) :: list()
   def create(script_hash) do
     [
       %Opcodes.Crypto.Hash160{},

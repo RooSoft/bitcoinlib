@@ -18,6 +18,7 @@ defmodule BitcoinLib.Script.Types.P2pkh do
       %BitcoinLib.Script.Opcodes.Crypto.CheckSig{}
     ]
   """
+  @spec create(bitstring()) :: list()
   def create(target_public_key_hash) do
     [
       %Opcodes.Stack.Dup{},
