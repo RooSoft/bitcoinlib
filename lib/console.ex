@@ -1,5 +1,5 @@
 defmodule BitcoinLib.Console do
-  alias BitcoinLib.Key.{PrivateKey, PublicKey}
+  alias BitcoinLib.Key.{PrivateKey, PublicKey, PublicKeyHash}
 
   @defaults %{serialization_format: nil}
 
@@ -74,6 +74,19 @@ defmodule BitcoinLib.Console do
     )
 
     public_key
+  end
+
+  def display_public_key_hash(mnemonics, derivation_path) do
+    public_key_hash =
+      mnemonics
+      |> PrivateKey.from_mnemonic_phrase()
+      |> PrivateKey.from_derivation_path!(derivation_path)
+      |> PublicKey.from_private_key()
+      |> PublicKeyHash.from_public_key()
+
+    IO.puts("#{derivation_path} -> #{public_key_hash |> Binary.to_hex()}")
+
+    mnemonics
   end
 
   defp to_fixed_hex_string(value, length) when is_integer(value) do
