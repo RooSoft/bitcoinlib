@@ -190,6 +190,41 @@ defmodule BitcoinLib.Test.Integration.LockingScripts.ManualExampleTest do
              signed_transaction
   end
 
+  test "simplest testnet transaction yet, including a change address" do
+    {:ok, private_key} =
+      "rally celery split order almost twenty ignore record legend learn chaos decade"
+      |> PrivateKey.from_mnemonic_phrase()
+      |> PrivateKey.from_derivation_path("m/44'/1'/0'/0/1")
+
+    change_public_key_hash =
+      private_key
+      |> PublicKey.from_private_key()
+      |> PublicKeyHash.from_public_key()
+
+    target_address = "mgsQLBysgJLEwAiv6JJercLn2LLS8UNDXT"
+    {:ok, target_public_key_hash, :p2pkh} = PublicKeyHash.from_address(target_address)
+
+    signed_transaction =
+      %Transaction.Spec{}
+      |> Transaction.Spec.add_input(
+        txid: "6925062befcf8aafae78de879fec2535ec016e251c19b1c0792993258a6fda26",
+        vout: 1,
+        redeem_script: "76a914c39658833d83f2299416e697af2fb95a998853d388ac"
+      )
+      |> Transaction.Spec.add_output(
+        script_pub_key: Script.Types.P2pkh.create(target_public_key_hash),
+        value: 1_000
+      )
+      |> Transaction.Spec.add_output(
+        script_pub_key: Script.Types.P2pkh.create(change_public_key_hash),
+        value: 2_758_000
+      )
+      |> Transaction.Spec.sign_and_encode(private_key)
+
+    assert "010000000126da6f8a25932979c0b1191c256e01ec3525ec9f87de78aeaf8acfef2b062569010000006a473044022075a805f9fdee44a1bd3ea9b95fd4bf8a2c230b61bebb07814e8ca8a8eca4a5aa0220180a19e46597faf9a2a283a47478c91abf84b72b5fdd46142ec09e0f4e3e78ae012103f30d64f65d8c08aaf81a5f5ced3873d250a53371d83c0e4328bf74cb513778d8ffffffff0270152a00000000001976a914c39658833d83f2299416e697af2fb95a998853d388ace8030000000000001976a9140ed62df1c5094787c4e7384c8dcacb53c22fdf1888ac00000000" ==
+             signed_transaction
+  end
+
   defp append_sighash(transaction, sighash) do
     <<transaction::bitstring, sighash::little-32>>
   end
