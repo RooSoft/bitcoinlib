@@ -54,4 +54,14 @@ defmodule BitcoinLib.Key.AddressTest do
 
     assert "2N6ikSFKwfKr7V2ym4khUcdL9x7EFrsvdWR" = p2pkh_testnet_address
   end
+
+  test "convert an address to a public key hash" do
+    address = "mtzUk1zTJzTdyC8Pz6PPPyCHTEL5RLVyDJ"
+
+    {:ok, public_key_hash, :p2pkh} =
+      address
+      |> Address.to_public_key_hash()
+
+    assert <<_::160>> = public_key_hash
+  end
 end
