@@ -2,7 +2,13 @@ defmodule BitcoinLib.Signing.Psbt.Output do
   defstruct unknowns: []
 
   alias BitcoinLib.Signing.Psbt.{Keypair, KeypairList, Output}
-  alias BitcoinLib.Signing.Psbt.GenericProperties.{Bip32Derivation, Proprietary, RedeemScript, WitnessScript}
+
+  alias BitcoinLib.Signing.Psbt.GenericProperties.{
+    Bip32Derivation,
+    Proprietary,
+    RedeemScript,
+    WitnessScript
+  }
 
   @redeem_script 0x0
   @witness_script 0x1
@@ -95,6 +101,8 @@ defmodule BitcoinLib.Signing.Psbt.Output do
         |> Map.put(:error, message)
     end
   end
+
+  defp add_proprietary(%{error: _message} = output, _keypair), do: output
 
   defp add_proprietary(output, keypair) do
     output
