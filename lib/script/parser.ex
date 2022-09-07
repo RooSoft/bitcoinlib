@@ -17,6 +17,14 @@ defmodule BitcoinLib.Script.Parser do
 
   defp extract_next_opcode(%{script: script, opcodes: opcodes, whole_script: whole_script} = map) do
     case OpcodeManager.extract_from_script(script, whole_script) do
+      {:empty_script} ->
+        map
+
+      {:error, message, remaining} ->
+        map
+        |> Map.put(:error, message)
+        |> Map.put(:script, remaining)
+
       {:opcode, opcode, remaining} ->
         %{map | script: remaining, opcodes: [opcode | opcodes]}
 

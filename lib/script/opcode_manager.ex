@@ -60,7 +60,10 @@ defmodule BitcoinLib.Script.OpcodeManager do
   Extract the opcode on the top of the stack given as an argument
   """
   @spec extract_from_script(bitstring(), bitstring()) ::
-          {:empty_script} | {:ok, %Stack.Dup{}, bitstring()} | {:error, binary()}
+          {:empty_script}
+          | {:opcode, any(), bitstring()}
+          | {:data, bitstring(), bitstring()}
+          | {:error, binary(), bitstring()}
   def extract_from_script(<<>>, _whole_script), do: {:empty_script}
 
   def extract_from_script(<<@zero::8, remaining::bitstring>>, _whole_script) do
