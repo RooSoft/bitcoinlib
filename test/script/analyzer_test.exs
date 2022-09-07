@@ -4,6 +4,7 @@ defmodule BitcoinLib.Script.AnalyzerTest do
   doctest BitcoinLib.Script.Analyzer
 
   alias BitcoinLib.Script.Analyzer
+  alias BitcoinLib.Script.Opcodes
 
   test "identify a P2PK script in binary format" do
     script =
@@ -16,11 +17,11 @@ defmodule BitcoinLib.Script.AnalyzerTest do
 
   test "identify a P2PK script in opcode list format" do
     script = [
-      %BitcoinLib.Script.Opcodes.Data{
+      %Opcodes.Data{
         value:
           <<0x04678AFDB0FE5548271967F1A67130B7105CD6A828E03909A67962E0EA1F61DEB649F6BC3F4CEF38C4F35504E51EC112DE5C384DF7BA0B8D578A4C702B6BF11D5F::520>>
       },
-      %BitcoinLib.Script.Opcodes.Crypto.CheckSig{}
+      %Opcodes.Crypto.CheckSig{}
     ]
 
     script_type = Analyzer.identify(script)
@@ -38,11 +39,11 @@ defmodule BitcoinLib.Script.AnalyzerTest do
 
   test "identify a P2PKH script in opcode list format" do
     script = [
-      %BitcoinLib.Script.Opcodes.Stack.Dup{},
-      %BitcoinLib.Script.Opcodes.Crypto.Hash160{},
-      %BitcoinLib.Script.Opcodes.Data{value: <<0x725EBAC06343111227573D0B5287954EF9B88AAE::160>>},
-      %BitcoinLib.Script.Opcodes.BitwiseLogic.EqualVerify{},
-      %BitcoinLib.Script.Opcodes.Crypto.CheckSig{}
+      %Opcodes.Stack.Dup{},
+      %Opcodes.Crypto.Hash160{},
+      %Opcodes.Data{value: <<0x725EBAC06343111227573D0B5287954EF9B88AAE::160>>},
+      %Opcodes.BitwiseLogic.EqualVerify{},
+      %Opcodes.Crypto.CheckSig{}
     ]
 
     script_type = Analyzer.identify(script)
@@ -60,9 +61,9 @@ defmodule BitcoinLib.Script.AnalyzerTest do
 
   test "identify a P2SH script in opcode list format" do
     script = [
-      %BitcoinLib.Script.Opcodes.Crypto.Hash160{},
-      %BitcoinLib.Script.Opcodes.Data{value: <<0x3545E6E33B832C47050F24D3EEB93C9C03948BC7::160>>},
-      %BitcoinLib.Script.Opcodes.BitwiseLogic.Equal{}
+      %Opcodes.Crypto.Hash160{},
+      %Opcodes.Data{value: <<0x3545E6E33B832C47050F24D3EEB93C9C03948BC7::160>>},
+      %Opcodes.BitwiseLogic.Equal{}
     ]
 
     script_type = Analyzer.identify(script)
