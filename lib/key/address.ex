@@ -61,7 +61,7 @@ defmodule BitcoinLib.Key.Address do
     public_key_hash <> checksum
   end
 
-  @spec test_checksum(integer(), bitstring(), integer()) :: {:ok} | {:error, binary()}
+  @spec test_checksum(integer(), bitstring(), bitstring()) :: {:ok} | {:error, binary()}
   defp test_checksum(prefix, public_key_hash, original_checksum) do
     calculated_checksum =
       <<prefix::8, public_key_hash::bitstring-160>>
