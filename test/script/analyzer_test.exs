@@ -5,9 +5,26 @@ defmodule BitcoinLib.Script.AnalyzerTest do
 
   alias BitcoinLib.Script.Analyzer
 
-  test "identify a P2PK script" do
+  test "identify a P2PK script in binary format" do
     script =
       <<0x4104678AFDB0FE5548271967F1A67130B7105CD6A828E03909A67962E0EA1F61DEB649F6BC3F4CEF38C4F35504E51EC112DE5C384DF7BA0B8D578A4C702B6BF11D5FAC::536>>
+
+    script_type = Analyzer.identify(script)
+
+    assert :p2pk == script_type
+  end
+
+  test "identify a P2PK script in opcode list format" do
+    script = [
+      %BitcoinLib.Script.Opcodes.Data{
+        value:
+          <<0x04678AFDB0FE5548271967F1A67130B7105CD6A828E03909A67962E0EA1F61DEB649F6BC3F4CEF38C4F35504E51EC112DE5C384DF7BA0B8D578A4C702B6BF11D5F::520>>
+      },
+      %BitcoinLib.Script.Opcodes.Crypto.CheckSig{
+        script:
+          <<0x4104678AFDB0FE5548271967F1A67130B7105CD6A828E03909A67962E0EA1F61DEB649F6BC3F4CEF38C4F35504E51EC112DE5C384DF7BA0B8D578A4C702B6BF11D5FAC::536>>
+      }
+    ]
 
     script_type = Analyzer.identify(script)
 
