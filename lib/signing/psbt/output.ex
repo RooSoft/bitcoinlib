@@ -96,13 +96,13 @@ defmodule BitcoinLib.Signing.Psbt.Output do
     end
   end
 
-  defp add_proprietary(input, keypair) do
-    input
+  defp add_proprietary(output, keypair) do
+    output
     |> Map.put(:proprietary, Proprietary.parse(keypair))
   end
 
-  defp add_unknown(input, keypair) do
-    input
-    |> Map.put(:unknowns, [keypair | input.unknowns])
+  defp add_unknown(output, keypair) do
+    output
+    |> Map.put(:unknowns, [keypair | output.unknowns])
   end
 end
