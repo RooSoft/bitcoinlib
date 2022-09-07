@@ -20,6 +20,15 @@ defmodule BitcoinLib.Script.Analyzer do
   @hash160 Crypto.Hash160.v()
   @check_sig Crypto.CheckSig.v()
 
+  @doc """
+  Identify a script in either binary or opcode list forms
+
+  ## Examples
+    iex> <<0x4104678AFDB0FE5548271967F1A67130B7105CD6A828E03909A67962E0EA1F61DEB649F6BC3F4CEF38C4F35504E51EC112DE5C384DF7BA0B8D578A4C702B6BF11D5FAC::536>>
+    ...> |> BitcoinLib.Script.Analyzer.identify()
+    :p2pk
+  """
+
   # 41 <<_pub_key::520>> ac
   def identify(<<@uncompressed_pub_key_size::8, _pub_key::bitstring-520, @check_sig::8>>),
     do: :p2pk

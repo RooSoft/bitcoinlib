@@ -1,6 +1,8 @@
 defmodule BitcoinLib.Script.AnalyzerTest do
   use ExUnit.Case, async: true
 
+  doctest BitcoinLib.Script.Analyzer
+
   alias BitcoinLib.Script.Analyzer
 
   test "identify a P2PK script" do
