@@ -50,8 +50,20 @@ defmodule BitcoinLib.Script.AnalyzerTest do
     assert :p2pkh == script_type
   end
 
-  test "identify a P2SH script" do
+  test "identify a P2SH script in binary format" do
     script = <<0xA9143545E6E33B832C47050F24D3EEB93C9C03948BC787::184>>
+
+    script_type = Analyzer.identify(script)
+
+    assert :p2sh == script_type
+  end
+
+  test "identify a P2SH script in opcode list format" do
+    script = [
+      %BitcoinLib.Script.Opcodes.Crypto.Hash160{},
+      %BitcoinLib.Script.Opcodes.Data{value: <<0x3545E6E33B832C47050F24D3EEB93C9C03948BC7::160>>},
+      %BitcoinLib.Script.Opcodes.BitwiseLogic.Equal{}
+    ]
 
     script_type = Analyzer.identify(script)
 
