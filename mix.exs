@@ -72,11 +72,12 @@ defmodule BitcoinLib.MixProject do
   defp deps do
     [
       {:ex_doc, "~> 0.27", only: :dev, runtime: false},
+      {:dialyxir, "~> 0.5", only: [:dev]},
       {:binary, "0.0.4"},
       {:exbase58, "~> 1.0"},
       {:pbkdf2_elixir, "~> 2.0"},
       {:curvy, "~> 0.3.0"},
-      {:bip0173, "~> 0.1.2"}
+      {:bip0173, "~> 0.1.2"},
     ]
   end
 end
