@@ -84,6 +84,8 @@ defmodule BitcoinLib.Signing.Psbt.Global do
     end
   end
 
+  defp add_proprietary(%{error: _message} = output, _keypair), do: output
+
   defp add_proprietary(input, keypair) do
     input
     |> Map.put(:proprietary, Proprietary.parse(keypair))
