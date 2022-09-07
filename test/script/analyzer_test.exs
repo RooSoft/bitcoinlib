@@ -28,8 +28,22 @@ defmodule BitcoinLib.Script.AnalyzerTest do
     assert :p2pk == script_type
   end
 
-  test "identify a P2PKH script" do
+  test "identify a P2PKH script in binary format" do
     script = <<0x76A914725EBAC06343111227573D0B5287954EF9B88AAE88AC::200>>
+
+    script_type = Analyzer.identify(script)
+
+    assert :p2pkh == script_type
+  end
+
+  test "identify a P2PKH script in opcode list format" do
+    script = [
+      %BitcoinLib.Script.Opcodes.Stack.Dup{},
+      %BitcoinLib.Script.Opcodes.Crypto.Hash160{},
+      %BitcoinLib.Script.Opcodes.Data{value: <<0x725EBAC06343111227573D0B5287954EF9B88AAE::160>>},
+      %BitcoinLib.Script.Opcodes.BitwiseLogic.EqualVerify{},
+      %BitcoinLib.Script.Opcodes.Crypto.CheckSig{}
+    ]
 
     script_type = Analyzer.identify(script)
 

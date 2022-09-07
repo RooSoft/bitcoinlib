@@ -52,7 +52,7 @@ defmodule BitcoinLib.Script.Analyzer do
         %BitcoinLib.Script.Opcodes.Crypto.Hash160{},
         %BitcoinLib.Script.Opcodes.Data{value: <<_::160>>},
         %BitcoinLib.Script.Opcodes.BitwiseLogic.EqualVerify{},
-        %BitcoinLib.Script.Opcodes.Crypto.CheckSig{script: <<_::200>>}
+        %BitcoinLib.Script.Opcodes.Crypto.CheckSig{}
       ]),
       do: :p2pkh
 
