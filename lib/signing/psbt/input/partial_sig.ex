@@ -7,12 +7,12 @@ defmodule BitcoinLib.Signing.Psbt.Input.PartialSig do
   alias BitcoinLib.Signing.Psbt.Input.PartialSig
 
   def parse(pub_key, signature) do
-    {pub_key, signature, %PartialSig{}}
+    %{pub_key: pub_key, signature: signature}
     |> validate_pub_key()
     |> create_partial_sig()
   end
 
-  defp validate_pub_key({pub_key, signature, partial_sig} = map) do
+  defp validate_pub_key(%{pub_key: pub_key} = map) do
     case byte_size(pub_key) do
       @compressed_size ->
         map
@@ -21,19 +21,19 @@ defmodule BitcoinLib.Signing.Psbt.Input.PartialSig do
         map
 
       pub_key_size ->
-        {pub_key, signature,
-         Map.put(partial_sig, :error, "wrong pub key size at #{pub_key_size}")}
+        Map.put(map, :error, "wrong pub key size at #{pub_key_size}")
     end
   end
 
-  defp create_partial_sig({pub_key, signature, %{error: nil}}) do
+  defp create_partial_sig(%{error: _message} = map), do: map
+
+  defp create_partial_sig(%{pub_key: pub_key, signature: signature} = map) do
     partial_sig = %PartialSig{
       pub_key: pub_key,
       signature: signature
     }
 
-    {pub_key, signature, partial_sig}
+    map
+    |> Map.put(partial_sig, partial_sig)
   end
-
-  defp create_partial_sig({_, _, partial_sig}), do: partial_sig
 end
