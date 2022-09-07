@@ -7,11 +7,11 @@ defmodule BitcoinLib.Script.Encoder do
   ## Examples
 
     iex> [
-    ...>   %Stack.Dup{},
-    ...>   %Crypto.Hash160{},
-    ...>   %Data{value: <<0x725EBAC06343111227573D0B5287954EF9B88AAE::160>>},
-    ...>   %BitwiseLogic.EqualVerify{},
-    ...>   %Crypto.CheckSig{}
+    ...>   %BitcoinLib.Script.Opcodes.Stack.Dup{},
+    ...>   %BitcoinLib.Script.Opcodes.Crypto.Hash160{},
+    ...>   %BitcoinLib.Script.Opcodes.Data{value: <<0x725EBAC06343111227573D0B5287954EF9B88AAE::160>>},
+    ...>   %BitcoinLib.Script.Opcodes.BitwiseLogic.EqualVerify{},
+    ...>   %BitcoinLib.Script.Opcodes.Crypto.CheckSig{}
     ...> ] |> BitcoinLib.Script.Encoder.to_bitstring()
     <<0x76A914725EBAC06343111227573D0B5287954EF9B88AAE88AC::200>>
   """
