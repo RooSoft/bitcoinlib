@@ -6,7 +6,7 @@ defmodule BitcoinLib.Signing.Psbt.GenericProperties.Proprietary do
 
   @spec parse(%Keypair{}) :: %Proprietary{}
   def parse(%Keypair{key: key, value: value}) do
-    %{key_identifier: key_identifier, key_data: key_data, data: data} =
+    %{identifier: key_identifier, key_data: key_data, data: data} =
       %{key: key, value: value}
       |> parse_key_identifier
       |> parse_key_data
@@ -27,14 +27,14 @@ defmodule BitcoinLib.Signing.Psbt.GenericProperties.Proprietary do
   end
 
   defp parse_key_data(%{key: key} = map) do
-    %CompactInteger{value: data_size, remaining: remaining} =
+    %CompactInteger{value: key_data_size, remaining: remaining} =
       key
       |> CompactInteger.extract_from()
 
-    <<identifier::size(data_size), remaining::bitstring>> = remaining
+    <<key_data::size(key_data_size), remaining::bitstring>> = remaining
 
     %{map | key: remaining}
-    |> Map.put(:identifier, identifier)
+    |> Map.put(:key_data, key_data)
   end
 
   defp parse_data(%{value: value} = map) do
