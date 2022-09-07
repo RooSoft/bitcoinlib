@@ -12,7 +12,7 @@ defmodule BitcoinLib do
 
     iex> %{raw: _, wif: _} = BitcoinLib.generate_private_key()
   """
-  @spec generate_private_key() :: %{raw: integer(), wif: binary()}
+  @spec generate_private_key() :: %{raw: <<_::256>>, wif: binary()}
   def generate_private_key do
     PrivateKey.generate()
   end
