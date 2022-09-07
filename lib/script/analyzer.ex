@@ -6,7 +6,7 @@ defmodule BitcoinLib.Script.Analyzer do
   - https://learnmeabitcoin.com/technical/scriptPubKey#standard-scripts
   """
 
-  alias BitcoinLib.Script.Opcodes.{BitwiseLogic, Constants, Crypto, Stack}
+  alias BitcoinLib.Script.Opcodes.{BitwiseLogic, Constants, Crypto, Data, Stack}
 
   @pub_key_hash_size 20
   @uncompressed_pub_key_size 65
@@ -33,6 +33,9 @@ defmodule BitcoinLib.Script.Analyzer do
   @spec identify(binary()) :: atom()
   def identify(<<@uncompressed_pub_key_size::8, _pub_key::bitstring-520, @check_sig::8>>),
     do: :p2pk
+
+  @spec identify(list()) :: atom()
+  def identify([%Data{value: <<_::520>>}, %Crypto.CheckSig{}]), do: :p2pk
 
   # address example: 1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2
   # 76 a9 14 <<_pub_key_hash::160>> 88 ac
