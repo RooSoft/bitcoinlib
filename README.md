@@ -84,3 +84,10 @@ of those that are at least partially implemented in this library:
 ### PSBT bips, in the process of being implemented
 
 - [bip370](https://github.com/bitcoin/bips/blob/master/bip-0370.mediawiki) - PSBT Version 2
+
+# Running static analysis
+
+```bash
+$ mix deps.get
+$ mix dialyzer
+```
