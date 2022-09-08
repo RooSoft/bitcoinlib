@@ -30,23 +30,20 @@ defmodule BitcoinLib.Script.Analyzer do
   """
 
   # 41 <<_pub_key::520>> ac
-  @spec identify(binary()) :: atom()
+  @spec identify(binary() | list()) :: atom()
   def identify(<<@uncompressed_pub_key_size::8, _pub_key::bitstring-520, @check_sig::8>>),
     do: :p2pk
 
-  @spec identify(list()) :: atom()
   def identify([%Data{value: <<_::520>>}, %Crypto.CheckSig{}]), do: :p2pk
 
   # address example: 1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2
   # 76 a9 14 <<_pub_key_hash::160>> 88 ac
-  @spec identify(binary()) :: atom()
   def identify(
         <<@dup::8, @hash160::8, @pub_key_hash_size::8, _pub_key_hash::bitstring-160,
           @equal_verify::8, @check_sig::8>>
       ),
       do: :p2pkh
 
-  @spec identify(list()) :: atom()
   def identify([
         %BitcoinLib.Script.Opcodes.Stack.Dup{},
         %BitcoinLib.Script.Opcodes.Crypto.Hash160{},
@@ -58,11 +55,9 @@ defmodule BitcoinLib.Script.Analyzer do
 
   # address example: 3J98t1WpEZ73CNmQviecrnyiWrnqRhWNLy
   # a9 14 <<_script_hash::160>> 87
-  @spec identify(binary()) :: atom()
   def identify(<<@hash160::8, @pub_key_hash_size::8, _script_hash::bitstring-160, @equal>>),
     do: :p2sh
 
-  @spec identify(list()) :: atom()
   def identify([
         %BitcoinLib.Script.Opcodes.Crypto.Hash160{},
         %BitcoinLib.Script.Opcodes.Data{value: <<_::160>>},
@@ -73,10 +68,8 @@ defmodule BitcoinLib.Script.Analyzer do
   # see https://bitcoincore.org/en/segwit_wallet_dev/#native-pay-to-witness-public-key-hash-p2wpkh
   # address example: bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq
   # 00 14 <<_witness_script_hash::256>>
-  @spec identify(binary()) :: atom()
   def identify(<<@zero::8, @key_hash_size::8, _key_hash::160>>), do: :p2wpkh
 
-  @spec identify(list()) :: atom()
   def identify([
         %BitcoinLib.Script.Opcodes.Constants.Zero{},
         %BitcoinLib.Script.Opcodes.Data{value: <<_::160>>}
@@ -86,10 +79,8 @@ defmodule BitcoinLib.Script.Analyzer do
   # see https://bitcoincore.org/en/segwit_wallet_dev/#native-pay-to-witness-script-hash-p2wsh
   # address example: bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq
   # 00 20 <<_witness_script_hash::256>>
-  @spec identify(binary()) :: atom()
   def identify(<<@zero::8, @script_hash_size::8, _script_hash::256>>), do: :p2wsh
 
-  @spec identify(list()) :: atom()
   def identify([
         %BitcoinLib.Script.Opcodes.Constants.Zero{},
         %BitcoinLib.Script.Opcodes.Data{value: <<_::256>>}
