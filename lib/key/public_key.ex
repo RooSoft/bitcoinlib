@@ -105,8 +105,7 @@ defmodule BitcoinLib.Key.PublicKey do
       "xpub661MyMwAqRbcFtXgS5sYJABqqG9YLmC4Q1Rdap9gSE8NqtwybGhePY2gZ29ESFjqJoCu1Rupje8YtGqsefD265TMg7usUDFdp6W1EGMcet8"
     }
   """
-  @spec serialize(%PublicKey{}, :xpub | :ypub | :zpub) ::
-          {:ok, binary()} | {:error, binary()}
+  @spec serialize(%PublicKey{}, :xpub | :ypub | :zpub) :: {:ok, binary()} | {:error, binary()}
   def serialize(public_key, format \\ :xpub) do
     Serialization.serialize(public_key, format)
   end
@@ -127,7 +126,7 @@ defmodule BitcoinLib.Key.PublicKey do
     ...> |> BitcoinLib.Key.PublicKey.serialize!()
     "xpub661MyMwAqRbcFtXgS5sYJABqqG9YLmC4Q1Rdap9gSE8NqtwybGhePY2gZ29ESFjqJoCu1Rupje8YtGqsefD265TMg7usUDFdp6W1EGMcet8"
   """
-  @spec serialize(%PublicKey{}, :xpub | :ypub) :: binary()
+  @spec serialize!(%PublicKey{}, :xpub | :ypub) :: binary()
   def serialize!(public_key, format \\ :xpub) do
     {:ok, serialized} = serialize(public_key, format)
 
@@ -213,7 +212,7 @@ defmodule BitcoinLib.Key.PublicKey do
       }
     }
   """
-  @spec derive_child(%PublicKey{}, binary()) :: {:ok, %PublicKey{}}
+  @spec derive_child(%PublicKey{}, integer()) :: {:ok, %PublicKey{}} | {:error, binary()}
   def derive_child(public_key, index) do
     ChildFromIndex.get(public_key, index)
   end

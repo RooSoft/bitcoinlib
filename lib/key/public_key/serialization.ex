@@ -32,22 +32,19 @@ defmodule BitcoinLib.Key.PublicKey.Serialization do
       "xpub661MyMwAqRbcFtXgS5sYJABqqG9YLmC4Q1Rdap9gSE8NqtwybGhePY2gZ29ESFjqJoCu1Rupje8YtGqsefD265TMg7usUDFdp6W1EGMcet8"
     }
   """
-  @spec serialize(%PublicKey{}, atom()) :: {:ok, binary()}
+  @spec serialize(%PublicKey{}, :xpub | :ypub | :zpub) :: {:ok, binary()} | {:error, binary()}
   def serialize(%PublicKey{} = pub_key, :xpub) do
     {:ok, execute(pub_key, @xpub_version_bytes)}
   end
 
-  @spec serialize(%PublicKey{}, atom()) :: {:ok, binary()}
   def serialize(%PublicKey{} = pub_key, :ypub) do
     {:ok, execute(pub_key, @ypub_version_bytes)}
   end
 
-  @spec serialize(%PublicKey{}, atom()) :: {:ok, binary()}
   def serialize(%PublicKey{} = pub_key, :zpub) do
     {:ok, execute(pub_key, @zpub_version_bytes)}
   end
 
-  @spec serialize(%PublicKey{}, atom()) :: {:error, binary()}
   def serialize(%PublicKey{}, _) do
     {:error, "unknown serialization format"}
   end

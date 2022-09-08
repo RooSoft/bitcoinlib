@@ -21,22 +21,19 @@ defmodule BitcoinLib.Key.PublicKey.Deserialization do
       parent_fingerprint: 0
     }
   """
-  @spec deserialize(binary()) :: {:ok, %PublicKey{}}
+  @spec deserialize(binary()) :: {:ok, %PublicKey{}} | {:error, binary()}
   def deserialize(@bip32_mainnet_human_readable <> _data = serialized) do
     {:ok, execute(serialized)}
   end
 
-  @spec deserialize(binary()) :: {:ok, %PublicKey{}}
   def deserialize(@bip49_mainnet_human_readable <> _data = serialized) do
     {:ok, execute(serialized)}
   end
 
-  @spec deserialize(binary()) :: {:ok, %PublicKey{}}
   def deserialize(@bip84_mainnet_human_readable <> _data = serialized) do
     {:ok, execute(serialized)}
   end
 
-  @spec deserialize(binary()) :: {:error, binary()}
   def deserialize(_) do
     {:error, "unknown pub key serialization format"}
   end
