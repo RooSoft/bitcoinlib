@@ -42,7 +42,7 @@ defmodule BitcoinLib.Script do
     ...> ] |> BitcoinLib.Script.encode
     {<<0x19>>, <<0x76a914fde0a08625e327ba400644ad62d5c571d2eec3de88ac::200>>}
   """
-  @spec encode(list()) :: {integer(), bitstring()}
+  @spec encode(list()) :: {bitstring(), bitstring()}
   def encode(script) when is_list(script) do
     encoded_script =
       script
