@@ -186,7 +186,8 @@ defmodule BitcoinLib.Key.HD.DerivationPathTest do
     change = 0
     address_index = 0
 
-    derivation_path = DerivationPath.from_values(type, purpose, coin_type, account, change, address_index)
+    derivation_path =
+      DerivationPath.from_values(type, purpose, coin_type, account, change, address_index)
 
     assert %DerivationPath{
              type: "M",
@@ -211,6 +212,22 @@ defmodule BitcoinLib.Key.HD.DerivationPathTest do
              purpose: :bip84,
              coin_type: :bitcoin,
              account: 0x80000000,
+             change: nil,
+             address_index: nil
+           } = derivation_path
+  end
+
+  test "derivation path the minimal amount of values" do
+    type = "M"
+    purpose = @hardened + 84
+
+    derivation_path = DerivationPath.from_values(type, purpose)
+
+    assert %DerivationPath{
+             type: "M",
+             purpose: :bip84,
+             coin_type: nil,
+             account: nil,
              change: nil,
              address_index: nil
            } = derivation_path

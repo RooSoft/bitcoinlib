@@ -14,36 +14,10 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
   defstruct [:type, :purpose, :coin_type, :account, :change, :address_index]
 
   alias BitcoinLib.Key.HD.DerivationPath
-  alias BitcoinLib.Key.HD.DerivationPath.{Level, PathValues}
+  alias BitcoinLib.Key.HD.DerivationPath.{Parser, PathValues}
+  alias BitcoinLib.Key.HD.DerivationPath.Parser.{Purpose, CoinType}
 
   @hardened 0x80000000
-
-  # https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki#purpose
-  @bip44_purpose 44
-  @bip44_atom :bip44
-
-  # https://github.com/bitcoin/bips/blob/master/bip-0049.mediawiki#public-key-derivation
-  @bip49_purpose 49
-  @bip49_atom :bip49
-
-  # https://github.com/bitcoin/bips/blob/master/bip-0084.mediawiki#public-key-derivation
-  @bip84_purpose 84
-  @bip84_atom :bip84
-
-  # https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki#registered-coin-types
-  @bitcoin_coin_type_value 0
-  @bitcoin_testnet_coin_type_value 1
-
-  # https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki#change
-  @receiving_chain_value 0
-  @receiving_chain_atom :receiving_chain
-  @change_chain_value 1
-  @change_chain_atom :change_chain
-
-  @bitcoin_atom :bitcoin
-  @bitcoin_testnet_atom :bitcoin_testnet
-
-  @invalid_atom :invalid
 
   @doc """
   Transforms a derivation path string into an elixir structure
@@ -66,7 +40,7 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
   def parse(derivation_path) do
     derivation_path
     |> validate
-    |> maybe_parse_valid_derivation_path()
+    |> Parser.maybe_parse_valid_derivation_path()
   end
 
   @doc """
@@ -84,7 +58,14 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
       address_index: 0
     }
   """
-  @spec from_values(binary(), integer(), integer(), integer(), integer(), integer()) ::
+  @spec from_values(
+          binary(),
+          integer(),
+          integer() | nil,
+          integer() | nil,
+          integer() | nil,
+          integer() | nil
+        ) ::
           %DerivationPath{}
   def from_values(
         type,
@@ -96,8 +77,8 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
       ) do
     %DerivationPath{
       type: type,
-      purpose: parse_purpose(purpose - @hardened),
-      coin_type: parse_coin_type(coin_type - @hardened),
+      purpose: parse_purpose(purpose),
+      coin_type: parse_coin_type(coin_type),
       account: account,
       change: change,
       address_index: address_index
@@ -117,6 +98,16 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
     from_values(type, purpose, coin_type, account, change, address_index)
   end
 
+  defp parse_purpose(purpose) when is_integer(purpose) do
+    Purpose.parse(purpose - @hardened)
+  end
+
+  defp parse_coin_type(nil), do: nil
+
+  defp parse_coin_type(coin_type) do
+    CoinType.parse(coin_type - @hardened)
+  end
+
   defp validate(derivation_path) do
     trimmed_path =
       derivation_path
@@ -127,123 +118,4 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
       false -> {:error, "Invalid derivation path"}
     end
   end
-
-  defp maybe_parse_valid_derivation_path({:error, message}) do
-    {:error, message}
-  end
-
-  defp maybe_parse_valid_derivation_path({:ok, derivation_path}) do
-    derivation_path
-    |> split_path
-    |> extract_string_values
-    |> parse_values
-    |> assign_keys
-    |> create_hash(derivation_path)
-    |> parse_purpose
-    |> parse_coin_type
-    |> parse_change
-    |> add_status_code
-  end
-
-  defp extract_type("m" <> _rest), do: :private
-  defp extract_type("M" <> _rest), do: :public
-
-  defp split_path(derivation_path) do
-    Regex.scan(~r/\/\s*(\d+\'?)/, derivation_path)
-  end
-
-  defp extract_string_values(split_path) do
-    split_path
-    |> Enum.map(fn [_, value] ->
-      Regex.named_captures(~r/(?<value_string>\d+)(?<has_quote>\'?)/, value)
-    end)
-  end
-
-  defp parse_values(string_values) do
-    string_values
-    |> Enum.map(fn %{"has_quote" => has_quote, "value_string" => value_string} ->
-      {value, _} = Integer.parse(value_string)
-
-      %Level{
-        value: value,
-        hardened?: has_quote == "'"
-      }
-    end)
-  end
-
-  defp assign_keys(parsed_values) do
-    parsed_values
-    |> Enum.zip_with(
-      ["purpose", "coin_type", "account", "change", "address_index"],
-      fn value, title -> {String.to_atom(title), value} end
-    )
-  end
-
-  defp create_hash(keys_and_values, derivation_path) do
-    type = extract_type(derivation_path)
-
-    keys_and_values
-    |> Enum.reduce(%DerivationPath{type: type}, fn {key, value}, acc ->
-      acc
-      |> Map.put(key, value)
-    end)
-  end
-
-  defp parse_purpose(purpose) when is_integer(purpose) do
-    case purpose do
-      @bip44_purpose -> @bip44_atom
-      @bip49_purpose -> @bip49_atom
-      @bip84_purpose -> @bip84_atom
-      _ -> @invalid_atom
-    end
-  end
-
-  defp parse_purpose(%{purpose: %{hardened?: true, value: value}} = hash) do
-    hash
-    |> Map.put(
-      :purpose,
-      parse_purpose(value)
-    )
-  end
-
-  defp parse_purpose(hash), do: hash
-
-  defp parse_coin_type(value) when is_integer(value) do
-    case value do
-      @bitcoin_coin_type_value -> @bitcoin_atom
-      @bitcoin_testnet_coin_type_value -> @bitcoin_testnet_atom
-      _ -> @invalid_atom
-    end
-  end
-
-  defp parse_coin_type(%{coin_type: %{hardened?: true, value: value}} = hash) do
-    hash
-    |> Map.put(
-      :coin_type,
-      parse_coin_type(value)
-    )
-  end
-
-  defp parse_coin_type(hash), do: hash
-
-  defp parse_change(%{change: %{hardened?: false, value: value}} = hash) do
-    hash
-    |> Map.put(
-      :change,
-      case value do
-        @receiving_chain_value -> @receiving_chain_atom
-        @change_chain_value -> @change_chain_atom
-        _ -> @invalid_atom
-      end
-    )
-  end
-
-  defp parse_change(hash) do
-    hash
-  end
-
-  defp add_status_code(%{purpose: @invalid_atom}), do: {:error, "Invalid purpose"}
-  defp add_status_code(%{coin_type: @invalid_atom}), do: {:error, "Invalid coin type"}
-  defp add_status_code(%{change: @invalid_atom}), do: {:error, "Invalid change chain"}
-  defp add_status_code(result), do: {:ok, result}
 end
