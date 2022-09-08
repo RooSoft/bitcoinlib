@@ -11,7 +11,7 @@ defmodule BitcoinLib.Script.Opcodes.Crypto.CheckSigVerify do
     @value
   end
 
-  @spec execute(%CheckSigVerify{}, list()) :: :ok | :error
+  @spec execute(%CheckSigVerify{}, list()) :: {:ok, [list()]} | {:error, binary()}
   def execute(%CheckSigVerify{}, []) do
     throw("OP_CHECKSIGVERIFY execution has not ben implemented yet")
   end
