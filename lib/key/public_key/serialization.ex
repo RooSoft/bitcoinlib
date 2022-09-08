@@ -49,7 +49,7 @@ defmodule BitcoinLib.Key.PublicKey.Serialization do
     {:error, "unknown serialization format"}
   end
 
-  @spec execute(%PublicKey{}, binary()) :: binary()
+  @spec execute(%PublicKey{}, integer()) :: binary()
   defp execute(
          %PublicKey{
            key: key,
