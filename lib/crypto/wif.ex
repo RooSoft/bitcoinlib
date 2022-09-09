@@ -29,9 +29,10 @@ defmodule BitcoinLib.Crypto.Wif do
   end
 
   def to_private_key(wif) do
+    IO.inspect wif
     wif
     |> Base58.decode()
-    |> decode_private_key
+    |> decode_private_key |> IO.inspect
   end
 
   defp add_prefix(key) do
