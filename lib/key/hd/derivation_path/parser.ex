@@ -5,6 +5,12 @@ defmodule BitcoinLib.Key.HD.DerivationPath.Parser do
 
   @invalid_atom :invalid
 
+  @doc """
+  Single purpose module that's being called by DerivationPath.parse/1, returning a DerivationPath
+  out of a string if the tuple starts by :ok
+  """
+  @spec maybe_parse_valid_derivation_path({:ok, binary()} | {:error, binary()}) ::
+          {:ok, %DerivationPath{}} | {:error, binary()}
   def maybe_parse_valid_derivation_path({:error, message}) do
     {:error, message}
   end
