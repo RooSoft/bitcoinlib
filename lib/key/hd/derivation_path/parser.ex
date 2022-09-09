@@ -1,4 +1,9 @@
 defmodule BitcoinLib.Key.HD.DerivationPath.Parser do
+  @moduledoc """
+  Single purpose module that aims to simplify DerivationPath by isolating string parsing business
+  logic
+  """
+
   alias BitcoinLib.Key.HD.DerivationPath
   alias BitcoinLib.Key.HD.DerivationPath.{Level}
   alias BitcoinLib.Key.HD.DerivationPath.Parser.{Purpose, CoinType, Change}
@@ -6,7 +11,7 @@ defmodule BitcoinLib.Key.HD.DerivationPath.Parser do
   @invalid_atom :invalid
 
   @doc """
-  Single purpose module that's being called by DerivationPath.parse/1, returning a DerivationPath
+  Single purpose function that's being called by DerivationPath.parse/1, returning a DerivationPath
   out of a string if the tuple starts by :ok
   """
   @spec maybe_parse_valid_derivation_path({:ok, binary()} | {:error, binary()}) ::
