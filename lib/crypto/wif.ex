@@ -28,11 +28,18 @@ defmodule BitcoinLib.Crypto.Wif do
     |> Base58.encode()
   end
 
+  @doc """
+  Converts a WIF encoded private key into its binary format
+
+  ## Examples
+    iex> "cThjSL4HkRECuDxUTnfAmkXFBEg78cufVBy3ZfEhKoxZo6Q38R5L"
+    ...> |> BitcoinLib.Crypto.Wif.to_private_key()
+    <<0xb6a42d01917404b740f9ef9d5cef08e13f998011246874dd65c033c4669e7009::256>>
+  """
   def to_private_key(wif) do
-    IO.inspect wif
     wif
     |> Base58.decode()
-    |> decode_private_key |> IO.inspect
+    |> decode_private_key
   end
 
   defp add_prefix(key) do
