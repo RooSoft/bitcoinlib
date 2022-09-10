@@ -285,7 +285,23 @@ defmodule BitcoinLib.Key.PublicKey do
     PublicKeyHash.from_public_key(public_key)
   end
 
+  @doc """
+  Checks a signature against a public key
+
+  ## Examples
+    iex> message = <<0xf05750d5bd2c2b4bbbd57cb07082ba5aabb41863e33bf2cd187a9adb1443dbc3::256>>
+    ...> public_key = %BitcoinLib.Key.PublicKey{
+    ...>   key: <<0x03f0e5a53db9f85e5b2eecf677925ffe21dd1409bcfe9a0730404053599b0901e5::264>>
+    ...> }
+    ...> <<0x30440220032a1544f599bf29981851e826e8a6f7c036958ba3543cf9778a0756dfc425f6022067eec131c0d73825633c0fddce1abfb14bb26bc9e0d6e9d644a77361f74cb55c::560>>
+    ...> |> BitcoinLib.Key.PublicKey.validate_signature(message, public_key)
+    true
+  """
+  @spec validate_signature(bitstring(), bitstring(), %PublicKey{}) :: boolean()
   def validate_signature(signature, message, %PublicKey{} = public_key) do
+    IO.inspect(signature, limit: :infinity)
+    IO.inspect(message, limit: :infinity)
+    IO.inspect(public_key, limit: :infinity)
     Crypto.Secp256k1.validate(signature, message, public_key)
   end
 
