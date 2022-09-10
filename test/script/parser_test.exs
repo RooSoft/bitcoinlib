@@ -1,6 +1,8 @@
 defmodule BitcoinLib.Script.ParserTest do
   use ExUnit.Case, async: true
 
+  doctest BitcoinLib.Script.Parser
+
   alias BitcoinLib.Script.Parser
   alias BitcoinLib.Script.Opcodes.{BitwiseLogic, Constants, Crypto, Data, Stack}
 
