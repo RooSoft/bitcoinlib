@@ -36,6 +36,7 @@ defmodule BitcoinLib.Crypto.Wif do
     ...> |> BitcoinLib.Crypto.Wif.to_private_key()
     <<0xb6a42d01917404b740f9ef9d5cef08e13f998011246874dd65c033c4669e7009::256>>
   """
+  @spec to_private_key(binary()) :: bitstring()
   def to_private_key(wif) do
     wif
     |> Base58.decode()
