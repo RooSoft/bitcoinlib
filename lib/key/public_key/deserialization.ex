@@ -1,4 +1,11 @@
 defmodule BitcoinLib.Key.PublicKey.Deserialization do
+  @moduledoc """
+  Extended public key deserialization module
+
+  To test the results, use https://www.npmjs.com/package/@swan-bitcoin/xpub-cli
+  Serialization types: https://github.com/satoshilabs/slips/blob/master/slip-0132.md
+  """
+
   @bip32_mainnet_human_readable "xpub"
   @bip49_mainnet_human_readable "ypub"
   @bip84_mainnet_human_readable "zpub"
