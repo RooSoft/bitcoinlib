@@ -299,9 +299,6 @@ defmodule BitcoinLib.Key.PublicKey do
   """
   @spec validate_signature(bitstring(), bitstring(), %PublicKey{}) :: boolean()
   def validate_signature(signature, message, %PublicKey{} = public_key) do
-    IO.inspect(signature, limit: :infinity)
-    IO.inspect(message, limit: :infinity)
-    IO.inspect(public_key, limit: :infinity)
     Crypto.Secp256k1.validate(signature, message, public_key)
   end
 
