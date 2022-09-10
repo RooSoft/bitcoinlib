@@ -53,12 +53,11 @@ defmodule BitcoinLib.Crypto.Secp256k1 do
     ...> BitcoinLib.Crypto.Secp256k1.validate(signature, message, public_key)
     true
   """
-  @spec validate(bitstring(), bitstring(), %PublicKey{}) :: boolean()
+  @spec validate(bitstring(), bitstring(), %PublicKey{} | bitstring()) :: boolean()
   def validate(signature, message, %PublicKey{key: key}) do
     validate(signature, message, key)
   end
 
-  @spec validate(bitstring(), bitstring(), bitstring()) :: boolean()
   def validate(signature, message, public_key)
       when is_binary(public_key) and (byte_size(public_key) == 33 or byte_size(public_key) == 65) do
     key = Key.from_pubkey(public_key)
