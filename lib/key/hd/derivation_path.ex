@@ -85,6 +85,20 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
     }
   end
 
+  @doc """
+  Turns a list of path values into a %DerivationPath{}
+
+  ## Examples
+    iex> ["m", 0x80000054, 0x80000000, 0x80000005]
+    ...> |> BitcoinLib.Key.HD.DerivationPath.from_list
+    %BitcoinLib.Key.HD.DerivationPath{
+      type: "m",
+      purpose: :bip84,
+      coin_type: :bitcoin,
+      account: 0x80000005
+    }
+  """
+  @spec from_list(list()) :: %DerivationPath{}
   def from_list(values_list) do
     %PathValues{
       type: type,
