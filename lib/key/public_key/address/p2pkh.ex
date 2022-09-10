@@ -19,6 +19,7 @@ defmodule BitcoinLib.Key.PublicKey.Address.P2PKH do
     ...> } |> BitcoinLib.Key.PublicKey.Address.P2PKH.from_public_key()
     "1LoVGDgRs9hTfTNJNuXKSpywcbdvwRXpmK"
   """
+  @spec from_public_key(%PublicKey{}, :mainnet | :testnet) :: binary()
   def from_public_key(%PublicKey{} = public_key, network \\ :mainnet) do
     public_key
     |> PublicKeyHash.from_public_key()
