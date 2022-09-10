@@ -1,4 +1,8 @@
 defmodule BitcoinLib.Script.OpcodeManager do
+  @moduledoc """
+  Converts back and forts from script to opcode list
+  """
+
   alias BitcoinLib.Script.Opcodes.{BitwiseLogic, Constants, Crypto, FlowControl, Stack}
 
   @byte 8
