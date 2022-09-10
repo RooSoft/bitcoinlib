@@ -1,6 +1,8 @@
 defmodule BitcoinLib.Script.RunnerTest do
   use ExUnit.Case, async: true
 
+  doctest BitcoinLib.Script.Runner
+
   alias BitcoinLib.Key.{PrivateKey, PublicKey, PublicKeyHash}
   alias BitcoinLib.Script.Runner
   alias BitcoinLib.Script.Opcodes.{Data, BitwiseLogic, Crypto, Stack}
