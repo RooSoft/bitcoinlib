@@ -216,12 +216,12 @@ defmodule BitcoinLib.Test.Integration.LockingScripts.ManualExampleTest do
         redeem_script: "76a914c39658833d83f2299416e697af2fb95a998853d388ac"
       )
       |> Transaction.Spec.add_output(
-        script_pub_key: Script.Types.P2pkh.create(target_public_key_hash),
-        value: 1_000
+        Script.Types.P2pkh.create(target_public_key_hash),
+        1_000
       )
       |> Transaction.Spec.add_output(
-        script_pub_key: Script.Types.P2pkh.create(change_public_key_hash),
-        value: 2_740_000
+        Script.Types.P2pkh.create(change_public_key_hash),
+        2_740_000
       )
       |> Transaction.Spec.sign_and_encode(spending_private_key)
 

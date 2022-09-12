@@ -72,19 +72,18 @@ defmodule BitcoinLib.Transaction.Spec do
   Adds a human readable output into a transaction spec
 
   ## Examples
-    iex> transaction_spec = %BitcoinLib.Transaction.Spec{}
+    iex> p2pkh_script = BitcoinLib.Script.Types.P2pkh.create(<<0xad6a62e2d23d1c060897cd0cc79c42dad715e4c7::160>>)
+    ...> amount = 1000
+    ...> transaction_spec = %BitcoinLib.Transaction.Spec{}
     ...> transaction_spec
-    ...> |> BitcoinLib.Transaction.Spec.add_output(
-    ...>   script_pub_key: BitcoinLib.Script.Types.P2pkh.create(<<0xfc8ca28ea75e45f538242c257e1f07fe19baa0f3::160>>),
-    ...>   value: 1000
-    ...> )
+    ...> |> BitcoinLib.Transaction.Spec.add_output(p2pkh_script, amount)
     %BitcoinLib.Transaction.Spec{
       inputs: [],
       outputs: [%BitcoinLib.Transaction.Spec.Output{
         script_pub_key: [
           %BitcoinLib.Script.Opcodes.Stack.Dup{},
           %BitcoinLib.Script.Opcodes.Crypto.Hash160{},
-          %BitcoinLib.Script.Opcodes.Data{value: <<0xfc8ca28ea75e45f538242c257e1f07fe19baa0f3::160>>},
+          %BitcoinLib.Script.Opcodes.Data{value: <<0xad6a62e2d23d1c060897cd0cc79c42dad715e4c7::160>>},
           %BitcoinLib.Script.Opcodes.BitwiseLogic.EqualVerify{},
           %BitcoinLib.Script.Opcodes.Crypto.CheckSig{}
         ],
@@ -93,16 +92,14 @@ defmodule BitcoinLib.Transaction.Spec do
       ]
     }
   """
-  @spec add_output(%Spec{}, list()) :: %Spec{}
-  def add_output(%Spec{} = spec, script_pub_key: script_pub_key, value: value)
+  @spec add_output(%Spec{}, binary() | list(), integer()) :: %Spec{}
+  def add_output(%Spec{} = spec, script_pub_key, value)
       when is_binary(script_pub_key) do
-    Spec.add_output(spec,
-      script_pub_key: script_pub_key |> Binary.from_hex() |> Script.parse(),
-      value: value
-    )
+    parsed_script = script_pub_key |> Binary.from_hex() |> Script.parse()
+    Spec.add_output(spec, parsed_script, value)
   end
 
-  def add_output(%Spec{outputs: outputs} = spec, script_pub_key: script_pub_key, value: value)
+  def add_output(%Spec{outputs: outputs} = spec, script_pub_key, value)
       when is_list(script_pub_key) do
     output_spec = %Spec.Output{script_pub_key: script_pub_key, value: value}
 
