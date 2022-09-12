@@ -42,6 +42,7 @@ defmodule BitcoinLib.Script.Opcodes.Crypto.CheckSig do
     iex> BitcoinLib.Script.Opcodes.Crypto.CheckSig.encode()
     <<0xac>>
   """
+  @spec encode() :: <<_::8>>
   def encode() do
     <<@value::8>>
   end
