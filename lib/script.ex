@@ -1,4 +1,8 @@
 defmodule BitcoinLib.Script do
+  @moduledoc """
+  Script manipulation module
+  """
+
   alias BitcoinLib.Script.{Analyzer, Encoder, Parser, Runner}
   alias BitcoinLib.Signing.Psbt.CompactInteger
 
