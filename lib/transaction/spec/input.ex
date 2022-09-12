@@ -26,6 +26,7 @@ defmodule BitcoinLib.Transaction.Spec.Input do
       script_sig: "76a914c39658833d83f2299416e697af2fb95a998853d388ac"
     }
   """
+  @spec to_transaction_input(%Spec.Input{}) :: %Transaction.Input{}
   def to_transaction_input(%Spec.Input{txid: txid, vout: vout, redeem_script: redeem_script}) do
     %Transaction.Input{
       txid: txid,
