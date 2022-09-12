@@ -1,4 +1,13 @@
 defmodule BitcoinLib.Script.Opcodes.BitwiseLogic.EqualVerify do
+  @moduledoc """
+  Word OP_EQUALVERIFY
+  Opcode 136
+  Hex 0x88
+  Input x1 x2
+  Output Nothing / fail
+  DescriptionSame as OP_EQUAL, but runs OP_VERIFY afterward.
+  """
+
   @behaviour BitcoinLib.Script.Opcode
 
   defstruct []
