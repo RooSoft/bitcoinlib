@@ -1,4 +1,15 @@
 defmodule BitcoinLib.Script.Opcodes.Crypto.CheckSigVerify do
+  @moduledoc """
+  Based on https://en.bitcoin.it/wiki/Script
+
+  Word OP_CHECKSIGVERIFY
+  Opcode 173
+  Hex 0xad
+  Input sig pubkey
+  Output Nothing / fail
+  Description Same as OP_CHECKSIG, but OP_VERIFY is executed afterward.
+  """
+
   @behaviour BitcoinLib.Script.Opcode
 
   defstruct []
