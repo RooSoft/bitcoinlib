@@ -27,10 +27,21 @@ defmodule BitcoinLib.Script.Opcodes.Crypto.CheckMultiSig do
 
   @value 0xAE
 
+  @doc """
+  Returns 0xaf
+
+  ## Examples
+    iex> BitcoinLib.Script.Opcodes.Crypto.CheckMultiSig.v()
+    0xae
+  """
+  @spec v() :: 0xAE
   def v do
     @value
   end
 
+  @doc """
+  NOT IMPLEMENTED YET
+  """
   def execute(%CheckMultiSig{}, []) do
     throw("OP_CHECKMULTISIG execution has not ben implemented yet")
   end
