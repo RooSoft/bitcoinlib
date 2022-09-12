@@ -15,13 +15,32 @@ defmodule BitcoinLib.Script.Opcodes.FlowControl.Verify do
   defstruct []
 
   alias BitcoinLib.Script.Value
+  alias BitcoinLib.Script.Opcodes.FlowControl.Verify
 
   @value 0x69
 
+  @doc """
+  Returns 0x69
+
+  ## Examples
+    iex> BitcoinLib.Script.Opcodes.FlowControl.Verify.v()
+    0x69
+  """
+  @spec v() :: 0x69
   def v do
     @value
   end
 
+  @doc """
+  Marks transaction as invalid if top stack value is not true. The top stack value is removed.
+
+  ## Examples
+    iex> stack = [1, 3]
+    ...> %BitcoinLib.Script.Opcodes.FlowControl.Verify{}
+    ...> |> BitcoinLib.Script.Opcodes.FlowControl.Verify.execute(stack)
+    {:ok, [3]}
+  """
+  @spec execute(%Verify{}, list()) :: {:ok, list()} | {:error, binary()}
   def execute(_opcode, []), do: {:error, "trying to execute OP_VERIFY on an empty stack"}
 
   def execute(_opcode, [first_element | remaining]) do
