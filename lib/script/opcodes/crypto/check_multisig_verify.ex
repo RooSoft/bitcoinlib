@@ -25,7 +25,7 @@ defmodule BitcoinLib.Script.Opcodes.Crypto.CheckMultiSigVerify do
     iex> BitcoinLib.Script.Opcodes.Crypto.CheckMultiSigVerify.v()
     0xaf
   """
-  @spec v() :: 0
+  @spec v() :: 0xAF
   def v do
     @value
   end
