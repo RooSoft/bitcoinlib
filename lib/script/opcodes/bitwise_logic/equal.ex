@@ -12,14 +12,35 @@ defmodule BitcoinLib.Script.Opcodes.BitwiseLogic.Equal do
 
   @behaviour BitcoinLib.Script.Opcode
 
+  alias BitcoinLib.Script.Opcodes.BitwiseLogic.Equal
+
   defstruct []
 
   @value 0x87
 
+  @doc """
+  Returns 0x87
+
+  ## Examples
+    iex> BitcoinLib.Script.Opcodes.BitwiseLogic.Equal.v()
+    0x87
+  """
   def v do
     @value
   end
 
+  @doc """
+  Returns 1 if the inputs are exactly equal, 0 otherwise.
+
+  ## Examples
+    iex> BitcoinLib.Script.Opcodes.BitwiseLogic.Equal.execute(
+    ...>   %BitcoinLib.Script.Opcodes.BitwiseLogic.Equal{},
+    ...>   [3, 3, 4]
+    ...> )
+    {:ok, [1, 4]}
+  """
+  @spec execute(%Equal{}, list()) ::
+          {:ok, [1 | list()]} | {:ok, [0 | list()]} | {:error, binary()}
   def execute(_opcode, []), do: {:error, "trying to execute OP_EQUAL on an empty stack"}
 
   def execute(_opcode, [element | []]),
