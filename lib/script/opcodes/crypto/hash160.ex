@@ -1,4 +1,15 @@
 defmodule BitcoinLib.Script.Opcodes.Crypto.Hash160 do
+  @moduledoc """
+  Based on https://en.bitcoin.it/wiki/Script
+
+  Word OP_HASH160
+  Opcode 169
+  Hex 0xa9
+  Input in
+  Output hash
+  Description The input is hashed twice: first with SHA-256 and then with RIPEMD-160.
+  """
+
   @behaviour BitcoinLib.Script.Opcode
 
   defstruct []
