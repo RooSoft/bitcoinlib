@@ -11,6 +11,27 @@ defmodule BitcoinLib.Transaction.Output do
 
   @byte 8
 
+  @doc """
+  Extracts a transaction output from a bitstring
+
+  ## Examples
+    iex> <<0xf0ca052a010000001976a914cbc20a7664f2f69e5355aa427045bc15e7c6c77288ac00000000::304>>
+    ...> |> BitcoinLib.Transaction.Output.extract_from
+    {
+      %BitcoinLib.Transaction.Output{
+        value: 4999990000,
+        script_pub_key: [
+          %BitcoinLib.Script.Opcodes.Stack.Dup{},
+          %BitcoinLib.Script.Opcodes.Crypto.Hash160{},
+          %BitcoinLib.Script.Opcodes.Data{value: <<0xcbc20a7664f2f69e5355aa427045bc15e7c6c772::160>>},
+          %BitcoinLib.Script.Opcodes.BitwiseLogic.EqualVerify{},
+          %BitcoinLib.Script.Opcodes.Crypto.CheckSig{script: <<0x76a914cbc20a7664f2f69e5355aa427045bc15e7c6c77288ac::200>>}
+        ]
+      },
+      <<0, 0, 0, 0>>
+    }
+  """
+  @spec extract_from(binary()) :: {%Output{}, bitstring()} | {:error, binary()}
   def extract_from(<<value::little-64, remaining::bitstring>>) do
     case extract_script_pub_key(remaining) do
       {:ok, script_pub_key, remaining} ->
@@ -41,6 +62,7 @@ defmodule BitcoinLib.Transaction.Output do
     <<0x19::8>>                       <> # script_pub_key size
     <<0x76a914f86f0bc0a2232970ccdf4569815db500f126836188ac::200>> # script_pub_key
   """
+  @spec encode(%Output{}) :: bitstring()
   def encode(%Output{} = output) do
     {script_pub_key_size, script_pub_key} =
       output.script_pub_key
