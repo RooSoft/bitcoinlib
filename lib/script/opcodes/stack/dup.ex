@@ -1,4 +1,15 @@
 defmodule BitcoinLib.Script.Opcodes.Stack.Dup do
+  @moduledoc """
+  Based on https://en.bitcoin.it/wiki/Script
+
+  Word OP_DUP
+  Opcode 118
+  Hex 0x76
+  Input x
+  Output x x
+  Description Duplicates the top stack item.
+  """
+
   @behaviour BitcoinLib.Script.Opcode
 
   defstruct []
