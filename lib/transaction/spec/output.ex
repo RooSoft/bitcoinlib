@@ -1,4 +1,8 @@
 defmodule BitcoinLib.Transaction.Spec.Output do
+  @moduledoc """
+  A simplified version of a %BitcoinLib.Transaction.Output that can be filled with human readable formats
+  """
+
   defstruct [:script_pub_key, :value]
 
   alias BitcoinLib.Transaction.Spec

@@ -1,9 +1,9 @@
 defmodule BitcoinLib.Transaction.Input do
-  defstruct [:txid, :vout, :script_sig, :sequence]
-
   @moduledoc """
   Based on https://learnmeabitcoin.com/technical/input
   """
+
+  defstruct [:txid, :vout, :script_sig, :sequence]
 
   @byte 8
 

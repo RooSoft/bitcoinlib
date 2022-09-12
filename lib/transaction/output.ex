@@ -1,9 +1,9 @@
 defmodule BitcoinLib.Transaction.Output do
-  defstruct [:value, :script_pub_key]
-
   @moduledoc """
   Based on https://learnmeabitcoin.com/technical/output
   """
+
+  defstruct [:value, :script_pub_key]
 
   alias BitcoinLib.Signing.Psbt.CompactInteger
   alias BitcoinLib.Transaction.Output

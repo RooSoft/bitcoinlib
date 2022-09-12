@@ -1,4 +1,8 @@
 defmodule BitcoinLib.Transaction.Encoder do
+  @moduledoc """
+  Can convert a Transaction into binary formats
+  """
+
   alias BitcoinLib.Transaction
   alias BitcoinLib.Transaction.{Input, Output}
   alias BitcoinLib.Signing.Psbt.CompactInteger
