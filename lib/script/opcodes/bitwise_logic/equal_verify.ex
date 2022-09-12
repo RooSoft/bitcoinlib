@@ -12,6 +12,8 @@ defmodule BitcoinLib.Script.Opcodes.BitwiseLogic.EqualVerify do
 
   @behaviour BitcoinLib.Script.Opcode
 
+  alias BitcoinLib.Script.Opcodes.BitwiseLogic.EqualVerify
+
   defstruct []
 
   alias BitcoinLib.Script.Opcodes.BitwiseLogic.Equal
@@ -26,6 +28,7 @@ defmodule BitcoinLib.Script.Opcodes.BitwiseLogic.EqualVerify do
     iex> BitcoinLib.Script.Opcodes.BitwiseLogic.EqualVerify.v()
     0x88
   """
+  @spec v() :: 0x88
   def v do
     @value
   end
@@ -37,6 +40,7 @@ defmodule BitcoinLib.Script.Opcodes.BitwiseLogic.EqualVerify do
     iex> BitcoinLib.Script.Opcodes.BitwiseLogic.EqualVerify.encode()
     <<0x88>>
   """
+  @spec encode() :: <<_::8>>
   def encode() do
     <<@value::8>>
   end
@@ -48,6 +52,7 @@ defmodule BitcoinLib.Script.Opcodes.BitwiseLogic.EqualVerify do
     iex> BitcoinLib.Script.Opcodes.BitwiseLogic.EqualVerify.execute(0x88, [3, 3, 4])
     {:ok, [4]}
   """
+  @spec execute(%EqualVerify{}, list()) :: {:ok, list()} | {:error, binary()}
   def execute(_opcode, []), do: {:error, "trying to execute OP_EQUAL_VERIFY on an empty stack"}
 
   def execute(_opcode, [element | []]),
