@@ -1,4 +1,18 @@
 defmodule BitcoinLib.Script.Opcodes.Crypto.CheckSig do
+  @moduledoc """
+  Based on https://en.bitcoin.it/wiki/Script
+
+  Word OP_CHECKSIG
+  Opcode 172
+  Hex 0xac
+  Input sig pubkey
+  Output True / false
+  Description
+    The entire transaction's outputs, inputs, and script (from the most recently-executed
+    OP_CODESEPARATOR to the end) are hashed. The signature used by OP_CHECKSIG must be a
+    valid signature for this hash and public key. If it is, 1 is returned, 0 otherwise.
+  """
+
   @behaviour BitcoinLib.Script.Opcode
 
   defstruct [:script]
