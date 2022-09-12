@@ -1,4 +1,15 @@
 defmodule BitcoinLib.Script.Opcodes.BitwiseLogic.Equal do
+  @moduledoc """
+  Based on https://en.bitcoin.it/wiki/Script#Bitwise_logic
+
+  Word OP_EQUAL
+  Opcode 135
+  Hex 0x87
+  Input x1 x2
+  Output True / false
+  Description Returns 1 if the inputs are exactly equal, 0 otherwise
+  """
+
   @behaviour BitcoinLib.Script.Opcode
 
   defstruct []
