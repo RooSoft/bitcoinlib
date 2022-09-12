@@ -19,14 +19,35 @@ defmodule BitcoinLib.Script.Opcodes.BitwiseLogic.EqualVerify do
 
   @value 0x88
 
+  @doc """
+  Returns 0x88
+
+  ## Examples
+    iex> BitcoinLib.Script.Opcodes.BitwiseLogic.EqualVerify.v()
+    0x88
+  """
   def v do
     @value
   end
 
+  @doc """
+  Returns <<0x88>>
+
+  ## Examples
+    iex> BitcoinLib.Script.Opcodes.BitwiseLogic.EqualVerify.encode()
+    <<0x88>>
+  """
   def encode() do
     <<@value::8>>
   end
 
+  @doc """
+  Returns 1 if the inputs are exactly equal, 0 otherwise, and runs OP_VERIFY afterward.
+
+  ## Examples
+    iex> BitcoinLib.Script.Opcodes.BitwiseLogic.EqualVerify.execute(0x88, [3, 3, 4])
+    {:ok, [4]}
+  """
   def execute(_opcode, []), do: {:error, "trying to execute OP_EQUAL_VERIFY on an empty stack"}
 
   def execute(_opcode, [element | []]),
