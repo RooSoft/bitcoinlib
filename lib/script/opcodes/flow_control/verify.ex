@@ -1,4 +1,15 @@
 defmodule BitcoinLib.Script.Opcodes.FlowControl.Verify do
+  @moduledoc """
+  Based on https://en.bitcoin.it/wiki/Script
+
+  Word OP_VERIFY
+  Opcode 105
+  Hex 0x69
+  Input True / false
+  Output Nothing / fail
+  Description Marks transaction as invalid if top stack value is not true. The top stack value is removed.
+  """
+
   @behaviour BitcoinLib.Script.Opcode
 
   defstruct []
