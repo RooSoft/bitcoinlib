@@ -25,6 +25,7 @@ defmodule BitcoinLib.Script.Opcodes.BitwiseLogic.Equal do
     iex> BitcoinLib.Script.Opcodes.BitwiseLogic.Equal.v()
     0x87
   """
+  @spec v() :: 0x87
   def v do
     @value
   end
