@@ -18,10 +18,21 @@ defmodule BitcoinLib.Script.Opcodes.Crypto.CheckSigVerify do
 
   @value 0xAD
 
+  @doc """
+  Returns 0xaf
+
+  ## Examples
+    iex> BitcoinLib.Script.Opcodes.Crypto.CheckSigVerify.v()
+    0xad
+  """
+  @spec v() :: 0xAD
   def v do
     @value
   end
 
+  @doc """
+  NOT IMPLEMENTED YET
+  """
   @spec execute(%CheckSigVerify{}, list()) :: {:ok, [list()]} | {:error, binary()}
   def execute(%CheckSigVerify{}, []) do
     throw("OP_CHECKSIGVERIFY execution has not ben implemented yet")
