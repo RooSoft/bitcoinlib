@@ -39,6 +39,7 @@ defmodule BitcoinLib.Transaction.Encoder do
     <<0x4062b007000000001976a914f86f0bc0a2232970ccdf4569815db500f126836188ac::272>> <> # outputs
     <<0, 0, 0, 0>>    # locktime
   """
+  @spec from_struct(%Transaction{}) :: bitstring()
   def from_struct(%Transaction{} = transaction) do
     %{transaction: transaction, encoded: <<>>}
     |> append_version
