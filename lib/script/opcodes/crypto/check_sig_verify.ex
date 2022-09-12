@@ -19,7 +19,7 @@ defmodule BitcoinLib.Script.Opcodes.Crypto.CheckSigVerify do
   @value 0xAD
 
   @doc """
-  Returns 0xaf
+  Returns 0xad
 
   ## Examples
     iex> BitcoinLib.Script.Opcodes.Crypto.CheckSigVerify.v()
