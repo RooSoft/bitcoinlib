@@ -45,7 +45,7 @@ defmodule BitcoinLib.Key.HD.Entropy do
 
       number_of_rolls ->
         {:error,
-         "Please provide 50 Dice rolls for 12 words or 99 dice rolls for 24 words, got #{number_of_rolls}"}
+         "Please provide 50 dice rolls for 12 words or 99 dice rolls for 24 words, got #{number_of_rolls}"}
     end
   end
 
