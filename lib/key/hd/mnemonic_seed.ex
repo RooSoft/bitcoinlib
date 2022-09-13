@@ -8,6 +8,7 @@ defmodule BitcoinLib.Key.HD.MnemonicSeed do
   alias BitcoinLib.Crypto.BitUtils
 
   alias BitcoinLib.Key.HD.MnemonicSeed.{Checksum, Wordlist}
+  alias BitcoinLib.Key.HD.Entropy
 
   @doc """
   Convert a random entropy number into a mnemonic seed
@@ -26,6 +27,22 @@ defmodule BitcoinLib.Key.HD.MnemonicSeed do
     |> get_word_indices
     |> Wordlist.get_words()
     |> Enum.join(" ")
+  end
+
+  @doc """
+  Convert a set of 50 or 99 dice rolls into a 12 or 24 word list
+
+  ## Examples
+    iex> "12345612345612345612345612345612345612345612345612"
+    ...> |> BitcoinLib.Key.HD.MnemonicSeed.wordlist_from_dice_rolls()
+    {:ok, "blue involve cook print twist crystal razor february caution private slim medal"}
+  """
+  @spec wordlist_from_dice_rolls(list(integer())) :: {:ok, binary()} | {:error, binary()}
+  def wordlist_from_dice_rolls(dice_rolls) do
+    case Entropy.from_dice_rolls(dice_rolls) do
+      {:ok, entropy} -> {:ok, wordlist_from_entropy(entropy)}
+      {:error, message} -> {:error, message}
+    end
   end
 
   @doc """
