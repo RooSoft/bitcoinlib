@@ -70,13 +70,23 @@ Here is an example of 10000 testnet sats, or 0.0001 tBTC, being ready to spend w
 
 ### 🔎 View the transaction's details
 
-Click on the transaction ID and then on the details button.
+Click on the transaction ID.
+
+There is a `Inputs & Outputs` section, with inputs on the left and outputs in the right... here, our address is the first output. In computer science, `0` represents the first value, and we associate it to `vout`. This will be useful later to point to the right output inside the transaction, which happens to have two here.
+
+Clicking on the `Details` button reveals this:
 
 ![transaction details](images/transaction_details.png)
 
-This will reveal the `script pub key`, also known as the `locking script`. This is what prevents funds from being spent, unless it is being used with the right parameters.
+Here lies the `script pub key`, also known as the `locking script`. This is what prevents funds from being spent, unless it is being used with the right parameters. That is exactly what's going to happen later.
 
-<!-- livebook:{"break_markdown":true} -->
+The following code is defining variables containing what we just talked about.
+
+```elixir
+transaction_id = "420c552d7821da5da61be91dffe984537f460dc668f0766f6c2e1c7a10287610"
+vout = 0
+script_pub_key = Binary.from_hex("76a914b3ceddcbe5fa8aea1f672a4e543e57a49da179e388ac")
+```
 
 ### How transactions work
 
