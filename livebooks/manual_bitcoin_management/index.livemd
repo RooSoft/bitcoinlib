@@ -150,3 +150,12 @@ Now we've got everything we need to create a new transaction and sign it. Let's 
 Now that we've got an encoded transaction, it is time to include it in the blockchain. To do so, we can use `mempool.space` again by inserting it in this form: [https://mempool.space/testnet/tx/push](https://mempool.space/testnet/tx/push).
 
 In the present context, it returned `05517750a78fb8c38346b1bf5908d71abe728811b643105be6595e11a9392373`. This is the transaction that spends the fund and can be seen on the [transaction explorer](https://mempool.space/testnet/tx/05517750a78fb8c38346b1bf5908d71abe728811b643105be6595e11a9392373)
+
+## Conclusion
+
+From now on, the previous 10000 sats transaction is considered as spent and can no longer be called a UTXO. Two new ones have been created:
+
+* The destination containing 5000 sats
+* The change containing 4000 sats
+
+The remaining 1000 sats have been donated to the miner. It can be seen on `mempool.space` in the header of the transaction screen.
