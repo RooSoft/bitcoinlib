@@ -8,9 +8,10 @@ Mix.install([
 alias BitcoinLib.Key.{PrivateKey, PublicKey, PublicKeyHash, Address}
 alias BitcoinLib.Key.HD.MnemonicSeed
 alias BitcoinLib.Transaction
+alias BitcoinLib.Script
 ```
 
-## Keys and addresses creation
+## Keys creation
 
 🎲 Create a mnemonic seed from dice rolls
 
@@ -28,9 +29,12 @@ master_private_key = PrivateKey.from_mnemonic_phrase(mnemonic_phrase)
 Derive private key and extract a create P2PKH public key hash that will be useful later
 
 ```elixir
-receive_public_key_hash =
+receive_private_key =
   master_private_key
   |> PrivateKey.from_derivation_path!("m/44'/1'/0'/0/0")
+
+receive_public_key_hash =
+  receive_private_key
   |> PublicKey.from_private_key()
   |> PublicKeyHash.from_public_key()
 ```
@@ -41,7 +45,7 @@ Convert the public key hash to an address, which will be needed by faucets to re
 receive_address = Address.from_public_key_hash(receive_public_key_hash, :p2pkh, :testnet)
 ```
 
-## Get some tBTC
+## Request some funds
 
 ### 👁️ Monitor the address
 
@@ -66,9 +70,7 @@ Here is an example of 10000 testnet sats, or 0.0001 tBTC, being ready to spend w
 
 ![confirmed transaction](images/confirmed_transaction.png)
 
-<!-- livebook:{"break_markdown":true} -->
-
-### 🔎 View the transaction's details
+## Examine transactions
 
 Click on the transaction ID.
 
@@ -85,10 +87,10 @@ The following code is defining variables containing what we just talked about.
 ```elixir
 transaction_id = "420c552d7821da5da61be91dffe984537f460dc668f0766f6c2e1c7a10287610"
 vout = 0
-script_pub_key = Binary.from_hex("76a914b3ceddcbe5fa8aea1f672a4e543e57a49da179e388ac")
+script_pub_key = "76a914b3ceddcbe5fa8aea1f672a4e543e57a49da179e388ac"
 ```
 
-### How transactions work
+## Extract parameters
 
 The above `script pub key` is locking what we call a UTXO which stands for Unspent Transaction Output. The sum of all UTXOs in a wallet is what can be considered as the balance.
 
@@ -96,31 +98,55 @@ Spending from a UTXO invalidates it, creating new ones in the process.
 
 The current UTXO contains `10000` sats. We intend to send `5000` sats to a new address. This leaves `5000` sats remaining. They must end up in two other destinations: `the change` and `the transaction fee`. The change is another UTXO and we'll keep `4000` sats. The fee is what's leftover and the miner who will include the transaction in a new block will keep it. It is thus implied from the three previous amounts:
 
-<!-- livebook:{"force_markdown":true} -->
-
 ```elixir
 original_amount = 10000
 destination_amount = 5000
-change = 4000
-fee = 1000
+change_amount = 4000
+fee = original_amount - destination_amount - change_amount
 ```
 
-Let's create two addresses: a `destination address` and a `change address`.
+Let's create two public key hashes: a `destination` and a `change`.
 
 ```elixir
-destination_address =
+destination_public_key_hash =
   master_private_key
   |> PrivateKey.from_derivation_path!("m/44'/1'/0'/0/1")
   |> PublicKey.from_private_key()
   |> PublicKeyHash.from_public_key()
-  |> Address.from_public_key_hash(:p2pkh, :testnet)
 ```
 
 ```elixir
-change_address =
+change_public_key_hash =
   master_private_key
   |> PrivateKey.from_derivation_path!("m/44'/1'/0'/1/1")
   |> PublicKey.from_private_key()
   |> PublicKeyHash.from_public_key()
-  |> Address.from_public_key_hash(:p2pkh, :testnet)
 ```
+
+## Create a transaction
+
+Now we've got everything we need to create a new transaction and sign it. Let's kill two birds in one shot. The following code will create a transaction specification and sign it with the help of the private key.
+
+```elixir
+%Transaction.Spec{}
+|> Transaction.Spec.add_input(
+  txid: transaction_id,
+  vout: vout,
+  redeem_script: script_pub_key
+)
+|> Transaction.Spec.add_output(
+  Script.Types.P2pkh.create(destination_public_key_hash),
+  destination_amount
+)
+|> Transaction.Spec.add_output(
+  Script.Types.P2pkh.create(change_public_key_hash),
+  change_amount
+)
+|> Transaction.Spec.sign_and_encode(receive_private_key)
+```
+
+## Move funds
+
+Now that we've got an encoded transaction, it is time to include it in the blockchain. To do so, we can use `mempool.space` again by inserting it in this form: [https://mempool.space/testnet/tx/push](https://mempool.space/testnet/tx/push).
+
+In the present context, it returned `05517750a78fb8c38346b1bf5908d71abe728811b643105be6595e11a9392373`. This is the transaction that spends the fund and can be seen on the [transaction explorer](https://mempool.space/testnet/tx/05517750a78fb8c38346b1bf5908d71abe728811b643105be6595e11a9392373)
