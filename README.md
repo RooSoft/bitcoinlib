@@ -8,7 +8,7 @@ is about doing it with [Elixir](https://elixir-lang.org) in a very abstract way.
 keeps the cryptography jargon to a minimum, while sticking to the 
 [Bitcoin glossary](https://developer.bitcoin.org/glossary.html).
 
-# How to use
+## How to use
 
 First, make sure you've got [elixir set up](https://elixir-lang.org/install.html) and that you
 [know the language's basics](https://elixircasts.io/series/learn-elixir).
@@ -26,7 +26,7 @@ end
 Finally, head to the [private key creation](https://hexdocs.pm/bitcoinlib/tutorial-private-key.html) 
 documentation to get started.
 
-# Useful links
+## Useful links
 
 Here are the most useful links 
 
@@ -37,9 +37,9 @@ Here are the most useful links
 - [Examples](https://hexdocs.pm/bitcoinlib/examples.html)
 
 
-# Technicalities
+## Technicalities
 
-## This lib can
+### This lib can
 
 - Generate entropy with dice rolls
 - Create private keys
@@ -50,13 +50,14 @@ Here are the most useful links
 - Serialize/Deserialize Private Keys (`xprv`, `yprv`, `zprv`)
 - Serialize/Deserialize Public Keys  (`xpub`, `ypub`, `zpub`)
 - Generate Addresses
+- Sign P2PKH transactions
 
-### Mid term goals
+#### Mid term goals
 
 - Sign Transactions (PSBT)
 - Taproot support
 
-## Supported address types
+### Supported address types
 
 | Address Type          | Description             | Starts With  | Supported     |
 |-----------------------|-------------------------|--------------|---------------|
@@ -65,7 +66,7 @@ Here are the most useful links
 | P2WPKH                | Native Segwit           | `bc1q`       | ✅            |
 | P2TR                  | Taproot                 | `bc1p`       | Eventually... |
 
-## Referenced bips
+### Referenced bips
 
 A bip is a [Bitcoin Improvement Proposal](https://github.com/bitcoin/bips#readme). Here is a list 
 of those that are at least partially implemented in this library:
@@ -81,13 +82,14 @@ of those that are at least partially implemented in this library:
 - [bip173](https://github.com/bitcoin/bips/blob/master/bip-0173.mediawiki) - Base32 address format for native v0-16 witness outputs
 - [bip174](https://github.com/bitcoin/bips/blob/master/bip-0174.mediawiki) - Partially Signed Bitcoin Transaction Format
 
-### PSBT bips, in the process of being implemented
+#### PSBT bips, in the process of being implemented
 
 - [bip370](https://github.com/bitcoin/bips/blob/master/bip-0370.mediawiki) - PSBT Version 2
 
-# Running static analysis
+## Running static analysis
 
 ```bash
 $ mix deps.get
+$ mix test
 $ mix dialyzer
 ```
