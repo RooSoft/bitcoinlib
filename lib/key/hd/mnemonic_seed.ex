@@ -46,6 +46,22 @@ defmodule BitcoinLib.Key.HD.MnemonicSeed do
   end
 
   @doc """
+  Convert a set of 50 or 99 dice rolls into a 12 or 24 word list
+
+  ## Examples
+    iex> "12345612345612345612345612345612345612345612345612"
+    ...> |> BitcoinLib.Key.HD.MnemonicSeed.wordlist_from_dice_rolls!()
+    "blue involve cook print twist crystal razor february caution private slim medal"
+  """
+  @spec wordlist_from_dice_rolls!(list(integer())) :: binary()
+  def wordlist_from_dice_rolls!(dice_rolls) do
+    case wordlist_from_dice_rolls(dice_rolls) do
+      {:ok, wordlist} -> wordlist
+      {:error, message} -> throw(message)
+    end
+  end
+
+  @doc """
   Convert a mnemonic phrase into a seed, with a optional passphrase
 
   ## Examples
