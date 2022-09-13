@@ -1,0 +1,63 @@
+# Manual Bitcoin Management Example
+
+```elixir
+Mix.install([
+  {:bitcoinlib, "~> 0.2.0-pre2"}
+])
+
+alias BitcoinLib.Key.{PrivateKey, PublicKey, PublicKeyHash, Address}
+alias BitcoinLib.Key.HD.MnemonicSeed
+alias BitcoinLib.Transaction
+```
+
+## Keys and addresses creation
+
+🎲 Create a mnemonic seed from dice rolls
+
+```elixir
+{:ok, mnemonic_phrase} =
+  MnemonicSeed.wordlist_from_dice_rolls("12345612345612345612345612345612345612345612345612")
+```
+
+🔑 Derive the master private key from the mnemonic seed
+
+```elixir
+master_private_key = PrivateKey.from_mnemonic_phrase(mnemonic_phrase)
+```
+
+Derive private key and extract a create P2PKH public key hash that will be useful later
+
+```elixir
+receive_public_key_hash =
+  master_private_key
+  |> PrivateKey.from_derivation_path!("m/44'/1'/0'/0/0")
+  |> PublicKey.from_private_key()
+  |> PublicKeyHash.from_public_key()
+```
+
+Convert the public key hash to an address, which will be needed by faucets to receive funds
+
+```elixir
+receive_address = Address.from_public_key_hash(receive_public_key_hash, :p2pkh, :testnet)
+```
+
+## Funds management
+
+### 👁️ Monitor the address
+
+Go to `mempool.space` by directly forging the URL with the address and wait transactions being confirmed.
+
+Ex: `https://mempool.space/testnet/address/mwuh4ikLxAqQfSBEYVDiwdrfEVBKw8h98x`
+
+Now leave that browser tab lying around. Mempool is supposed to issue a cashier bell sound 🔔 when it detects new incoming transactions to that address. When funds become spendable, you'll also hear somewhat of a magic wand sound. 🪄
+
+<!-- livebook:{"break_markdown":true} -->
+
+### 🚰 Request some testnet Bitcoin from faucets
+
+Go to a Bitcoin Testnet faucet and use the above address to request funds... any amount would do, even tiny fractions.
+
+* [https://coinfaucet.eu/en/btc-testnet/](coinfaucet)
+* [https://bitcoinfaucet.uo1.net/](uo1.net)
+* [https://testnet.qc.to/](qc.to)
+* [https://onchain.io/bitcoin-testnet-faucet](onchain.io)
