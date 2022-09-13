@@ -13,20 +13,24 @@ alias BitcoinLib.Script
 
 ## Keys creation
 
-🎲 Create a mnemonic seed from dice rolls
+🎲 Create a mnemonic seed from dice rolls.
+
+To do so, just throw 50 dice, and make a string of 50 chars containing the results, so it can be converted into a 12 words `mnemonic phrase`.
 
 ```elixir
 {:ok, mnemonic_phrase} =
   MnemonicSeed.wordlist_from_dice_rolls("12345612345612345612345612345612345612345612345612")
 ```
 
-🔑 Derive the master private key from the mnemonic seed
+🔑 Derive the `master private key` from the mnemonic phrase.
 
 ```elixir
 master_private_key = PrivateKey.from_mnemonic_phrase(mnemonic_phrase)
 ```
 
-Derive private key and extract a create P2PKH public key hash that will be useful later
+Derive the receive `private key` and extract a P2PKH `public key hash` that will be useful later.
+
+To keep things simple, just know that it's the `44'` in the derivation path that makes it a `P2PKH` transaction. This is a bit outside of the exercise's scope, so let's continue.
 
 ```elixir
 receive_private_key =
@@ -39,7 +43,7 @@ receive_public_key_hash =
   |> PublicKeyHash.from_public_key()
 ```
 
-Convert the public key hash to an address, which will be needed by faucets to receive funds
+Convert the `public key hash` to an `address`, which will be needed by faucets to receive funds
 
 ```elixir
 receive_address = Address.from_public_key_hash(receive_public_key_hash, :p2pkh, :testnet)
