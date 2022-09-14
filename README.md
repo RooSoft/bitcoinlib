@@ -8,6 +8,8 @@ is about doing it with [Elixir](https://elixir-lang.org) in a very abstract way.
 keeps the cryptography jargon to a minimum, while sticking to the 
 [Bitcoin glossary](https://developer.bitcoin.org/glossary.html).
 
+The easiest way to start is to try the [wallet operations livebook](https://github.com/RooSoft/bitcoinlib/blob/main/livebooks/wallet_operations/index.livemd).
+
 ## How to use
 
 First, make sure you've got [elixir set up](https://elixir-lang.org/install.html) and that you
