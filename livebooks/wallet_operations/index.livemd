@@ -2,7 +2,7 @@
 
 ```elixir
 Mix.install([
-  {:bitcoinlib, "~> 0.2.0-pre4"}
+  {:bitcoinlib, "~> 0.2.0"}
 ])
 
 alias BitcoinLib.Key.{PrivateKey, PublicKey, PublicKeyHash, Address}
