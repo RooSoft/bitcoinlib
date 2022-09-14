@@ -1,5 +1,11 @@
 # Examples
 
+## LiveBook examples
+
+Interact with Bitcoin straight from your browser with these [Livebook](https://livebook.dev) documents.
+
+[Wallet operations](https://github.com/RooSoft/bitcoinlib/blob/main/livebooks/wallet_operations/index.livemd)
+
 ## Private key generation
 
 ```elixir
