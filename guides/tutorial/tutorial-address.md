@@ -19,7 +19,7 @@ One public key corresponds to a single address... Here is how it's being convert
 
 ```elixir
 public_key
-|> PublicKey.to_address
+|> PublicKey.to_address()
 ```
 
 which results in
