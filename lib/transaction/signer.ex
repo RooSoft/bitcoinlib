@@ -12,7 +12,7 @@ defmodule BitcoinLib.Transaction.Signer do
   Takes a transaction and signs it with the private key that's in the second parameter
 
   ## Examples
-    iex>  private_key = BitcoinLib.Key.PrivateKey.from_mnemonic_phrase(
+    iex>  private_key = BitcoinLib.Key.PrivateKey.from_seed_phrase(
     ...>    "rally celery split order almost twenty ignore record legend learn chaos decade"
     ...>  )
     ...>  %BitcoinLib.Transaction{

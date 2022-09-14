@@ -6,26 +6,26 @@ Mix.install([
 ])
 
 alias BitcoinLib.Key.{PrivateKey, PublicKey, PublicKeyHash, Address}
-alias BitcoinLib.Key.HD.MnemonicSeed
+alias BitcoinLib.Key.HD.SeedPhrase
 alias BitcoinLib.Transaction
 alias BitcoinLib.Script
 ```
 
 ## Keys creation
 
-🎲 Create a mnemonic seed from dice rolls.
+🎲 Create a seed phrase from dice rolls.
 
-To do so, just throw 50 dice, and make a string of 50 chars containing the results, so it can be converted into a 12 words `mnemonic phrase`.
+To do so, just throw 50 dice, and make a string of 50 chars containing the results, so it can be converted into a 12 words `seed phrase`.
 
 ```elixir
-{:ok, mnemonic_phrase} =
-  MnemonicSeed.wordlist_from_dice_rolls("12345612345612345612345612345612345612345612345612")
+{:ok, seed_phrase} =
+  SeedPhrase.from_dice_rolls("12345612345612345612345612345612345612345612345612")
 ```
 
-🔑 Derive the `master private key` from the mnemonic phrase.
+🔑 Derive the `master private key` from the seed phrase.
 
 ```elixir
-master_private_key = PrivateKey.from_mnemonic_phrase(mnemonic_phrase)
+master_private_key = PrivateKey.from_seed_phrase(seed_phrase)
 ```
 
 Derive the receive `private key` and extract a P2PKH `public key hash` that will be useful later.

@@ -1,17 +1,15 @@
-defmodule BitcoinLib.Test.Integration.Bip84.ZpubFromMnemonicTest do
+defmodule BitcoinLib.Test.Integration.Bip84.ZpubFromSeedPhraseTest do
   use ExUnit.Case, async: true
 
   alias BitcoinLib.Key.{PrivateKey, PublicKey}
-  alias BitcoinLib.Key.HD.{MnemonicSeed}
 
   @doc """
   based on https://github.com/bitcoin/bips/blob/master/bip-0084.mediawiki#test-vectors
   """
-  test "generate zpub from a mnemonic phrase" do
+  test "generate zpub from a seed phrase" do
     private_key =
       "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about"
-      |> MnemonicSeed.to_seed()
-      |> PrivateKey.from_seed()
+      |> PrivateKey.from_seed_phrase()
 
     {:ok, zpub} =
       private_key
@@ -23,11 +21,10 @@ defmodule BitcoinLib.Test.Integration.Bip84.ZpubFromMnemonicTest do
              "zpub6rFR7y4Q2AijBEqTUquhVz398htDFrtymD9xYYfG1m4wAcvPhXNfE3EfH1r1ADqtfSdVCToUG868RvUUkgDKf31mGDtKsAYz2oz2AGutZYs"
   end
 
-  test "alternative version of zpub from mnemonic phrase" do
+  test "alternative version of zpub from seed phrase" do
     private_key =
       "rally celery split order almost twenty ignore record legend learn chaos decade"
-      |> MnemonicSeed.to_seed()
-      |> PrivateKey.from_seed()
+      |> PrivateKey.from_seed_phrase()
 
     {:ok, zpub} =
       private_key

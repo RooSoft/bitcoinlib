@@ -12,7 +12,7 @@ alias BitcoinLib.Key.PrivateKey
 
 private_key = 
   "blue involve cook print twist crystal razor february caution private slim medal"
-  |> PrivateKey.from_mnemonic_phrase()
+  |> PrivateKey.from_seed_phrase()
 ```
 
 ... it can then be converted into a public key

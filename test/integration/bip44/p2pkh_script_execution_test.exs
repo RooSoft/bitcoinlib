@@ -5,7 +5,6 @@ defmodule BitcoinLib.Test.Integration.Bip44.P2pkhScriptExecutionTest do
   use ExUnit.Case, async: true
 
   alias BitcoinLib.Key.{PrivateKey, PublicKeyHash, PublicKey}
-  alias BitcoinLib.Key.HD.{MnemonicSeed}
 
   alias BitcoinLib.Script
   alias BitcoinLib.Script.Opcodes.{Stack, Crypto, BitwiseLogic}
@@ -20,8 +19,7 @@ defmodule BitcoinLib.Test.Integration.Bip44.P2pkhScriptExecutionTest do
   test "execute a P2PKH script" do
     private_key =
       "rally celery split order almost twenty ignore record legend learn chaos decade"
-      |> MnemonicSeed.to_seed()
-      |> PrivateKey.from_seed()
+      |> PrivateKey.from_seed_phrase()
       |> PrivateKey.from_derivation_path!("m/44'/0'/0'/0/0")
 
     public_key =

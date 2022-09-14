@@ -76,17 +76,17 @@ defmodule BitcoinLib.Console do
     public_key
   end
 
-  def display_public_key_hash(mnemonics, derivation_path) do
+  def display_public_key_hash(seed_phrase, derivation_path) do
     public_key_hash =
-      mnemonics
-      |> PrivateKey.from_mnemonic_phrase()
+      seed_phrase
+      |> PrivateKey.from_seed_phrase()
       |> PrivateKey.from_derivation_path!(derivation_path)
       |> PublicKey.from_private_key()
       |> PublicKeyHash.from_public_key()
 
     IO.puts("#{derivation_path} -> #{public_key_hash |> Binary.to_hex()}")
 
-    mnemonics
+    seed_phrase
   end
 
   defp to_fixed_hex_string(value, length) when is_integer(value) do

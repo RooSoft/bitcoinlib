@@ -59,14 +59,15 @@ defmodule BitcoinLib.TransactionTest do
   end
 
   test "sign and encode transaction" do
-    mnemonics = derivation_path = "m/44'/1'/0'/0/0"
+    seed_phrase = "erode gloom apart system broom lemon dismiss post artist slot humor occur"
+    derivation_path = "m/44'/1'/0'/0/0"
     network = :testnet
     address_type = :p2pkh
 
     %{
       private_key: private_key,
       public_key_hash: public_key_hash
-    } = create_keys(mnemonics, derivation_path, network, address_type)
+    } = create_keys(seed_phrase, derivation_path, network, address_type)
 
     # the transaction can be found in a block explorer such as here:
     # https://mempool.space/testnet/tx/e4c226432a9319d603b2ed1fa609bffe4cd91f89b3176a9e73b19f7891a92bb6
@@ -95,10 +96,10 @@ defmodule BitcoinLib.TransactionTest do
   end
 
   @spec create_keys(binary(), binary(), :mainnet | :testnet, :p2pkh) :: map()
-  defp create_keys(mnemonics, derivation_path, network, address_type) do
+  defp create_keys(seed_phrase, derivation_path, network, address_type) do
     private_key =
-      mnemonics
-      |> PrivateKey.from_mnemonic_phrase()
+      seed_phrase
+      |> PrivateKey.from_seed_phrase()
       |> PrivateKey.from_derivation_path(derivation_path)
       |> elem(1)
 

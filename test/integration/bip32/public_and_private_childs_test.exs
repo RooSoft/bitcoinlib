@@ -2,13 +2,11 @@ defmodule BitcoinLib.Test.Integration.Bip32.PublicAndPrivateChildsTest do
   use ExUnit.Case, async: true
 
   alias BitcoinLib.Key.{PrivateKey, PublicKey}
-  alias BitcoinLib.Key.HD.{MnemonicSeed}
 
   test "compare public key childs obtained in two different ways" do
     private_key =
       "rally celery split order almost twenty ignore record legend learn chaos decade"
-      |> MnemonicSeed.to_seed()
-      |> PrivateKey.from_seed()
+      |> PrivateKey.from_seed_phrase()
 
     xpub_from_private =
       private_key

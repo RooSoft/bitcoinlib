@@ -3,7 +3,6 @@ defmodule BitcoinLib.Test.Integration.Secp256k1.SignAndVerivy do
 
   alias BitcoinLib.Crypto.{Secp256k1}
   alias BitcoinLib.Key.{PrivateKey, PublicKey}
-  alias BitcoinLib.Key.HD.{MnemonicSeed}
 
   test "sign a message and make sure it verifies to true" do
     {pub, prv} =
@@ -69,11 +68,10 @@ defmodule BitcoinLib.Test.Integration.Secp256k1.SignAndVerivy do
     assert sig3 != sig4
   end
 
-  test "sign a message with private key from a mnemonic phrase and make sure it verifies to true" do
+  test "sign a message with private key from a seed phrase and make sure it verifies to true" do
     private_key =
       "rally celery split order almost twenty ignore record legend learn chaos decade"
-      |> MnemonicSeed.to_seed()
-      |> PrivateKey.from_seed()
+      |> PrivateKey.from_seed_phrase()
       |> PrivateKey.from_derivation_path!("m/44'/0'/0'/0/0")
 
     public_key =

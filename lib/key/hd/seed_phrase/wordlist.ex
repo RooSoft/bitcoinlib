@@ -1,6 +1,6 @@
-defmodule BitcoinLib.Key.HD.MnemonicSeed.Wordlist do
+defmodule BitcoinLib.Key.HD.SeedPhrase.Wordlist do
   @moduledoc """
-  A list of all the words that can be contained in a private key seed
+  A list of all the words that can be contained in a private key seed phrase
 
   Source: https://raw.githubusercontent.com/bitcoin/bips/master/bip-0039/english.txt
   """
@@ -9,7 +9,7 @@ defmodule BitcoinLib.Key.HD.MnemonicSeed.Wordlist do
   Get a single word from the wordlist by index
 
   ## Examples
-    iex> BitcoinLib.Key.HD.MnemonicSeed.Wordlist.get_word(8)
+    iex> BitcoinLib.Key.HD.SeedPhrase.Wordlist.get_word(8)
     "absurd"
   """
   @spec get_word(integer()) :: binary()
@@ -22,7 +22,7 @@ defmodule BitcoinLib.Key.HD.MnemonicSeed.Wordlist do
   Convert a list of indices into words from the wordlist
 
   ## Examples
-    iex> BitcoinLib.Key.HD.MnemonicSeed.Wordlist.get_words([8, 2, 5])
+    iex> BitcoinLib.Key.HD.SeedPhrase.Wordlist.get_words([8, 2, 5])
     ["absurd", "able", "absent"]
   """
   @spec get_words(list(integer())) :: list(binary())
@@ -35,7 +35,7 @@ defmodule BitcoinLib.Key.HD.MnemonicSeed.Wordlist do
   Convert a word into an indice from the wordlist
 
   ## Examples
-      iex> BitcoinLib.Key.HD.MnemonicSeed.Wordlist.get_indice("absurd")
+      iex> BitcoinLib.Key.HD.SeedPhrase.Wordlist.get_indice("absurd")
       {:found, 8, "absurd"}
   """
   @spec get_indice(binary()) :: {:found, integer(), binary()} | {:not_found, integer()}
@@ -55,7 +55,7 @@ defmodule BitcoinLib.Key.HD.MnemonicSeed.Wordlist do
 
   ## Examples
     iex> ["absurd", "able", "absent"]
-    ...> |> BitcoinLib.Key.HD.MnemonicSeed.Wordlist.get_indices()
+    ...> |> BitcoinLib.Key.HD.SeedPhrase.Wordlist.get_indices()
     [8, 2, 5]
   """
   @spec get_indices(list(binary())) :: list(integer())
@@ -72,7 +72,7 @@ defmodule BitcoinLib.Key.HD.MnemonicSeed.Wordlist do
   Get a list of all words in the wordlist
 
   ## Examples
-    iex> BitcoinLib.Key.HD.MnemonicSeed.Wordlist.all
+    iex> BitcoinLib.Key.HD.SeedPhrase.Wordlist.all
     ...> |> Enum.count()
     2048
   """

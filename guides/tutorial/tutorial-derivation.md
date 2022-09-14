@@ -11,11 +11,11 @@ generated down the line.
 
 ## Create the bip84 Bitcoin account #0
 
-Starting from a mnemonic phrase, down to the private key
+Starting from a seed phrase, down to the private key
 
 ```elixir
 "blue involve cook print twist crystal razor february caution private slim medal"
-|> PrivateKey.from_mnemonic_phrase()
+|> PrivateKey.from_seed_phrase()
 |> PrivateKey.from_derivation_path!("m/84'/0'/0'")
 ```
 

@@ -43,7 +43,7 @@ defmodule BitcoinLib.Transaction do
       }
     }
   """
-  @spec parse(binary()) :: %Transaction{}
+  @spec parse(binary()) :: {:ok, %Transaction{}} | {:error, binary()}
   def parse(hex_transaction) do
     hex_transaction
     |> Binary.from_hex()
@@ -174,7 +174,7 @@ defmodule BitcoinLib.Transaction do
   Signs a transaction and transforms it into a binary that can be sent to the network
 
   ## Examples
-    iex>  private_key = BitcoinLib.Key.PrivateKey.from_mnemonic_phrase(
+    iex>  private_key = BitcoinLib.Key.PrivateKey.from_seed_phrase(
     ...>    "rally celery split order almost twenty ignore record legend learn chaos decade"
     ...>  )
     ...>  %BitcoinLib.Transaction{

@@ -111,7 +111,7 @@ defmodule BitcoinLib.Transaction.Spec do
   on the network so funds can be spent
 
   ## Examples
-    iex>  private_key = BitcoinLib.Key.PrivateKey.from_mnemonic_phrase(
+    iex>  private_key = BitcoinLib.Key.PrivateKey.from_seed_phrase(
     ...>    "rally celery split order almost twenty ignore record legend learn chaos decade"
     ...>  )
     ...>%BitcoinLib.Transaction.Spec{

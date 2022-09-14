@@ -3,7 +3,7 @@ alias BitcoinLib.Crypto
 alias BitcoinLib.Script
 alias BitcoinLib.Transaction
 alias BitcoinLib.Key.{Address, PrivateKey, PublicKey, PublicKeyHash}
-alias BitcoinLib.Key.HD.{DerivationPath, Entropy, MnemonicSeed}
+alias BitcoinLib.Key.HD.{DerivationPath, Entropy, SeedPhrase}
 
 orange = IO.ANSI.color(5, 3, 1)
 
@@ -29,16 +29,15 @@ IEx.configure(
 private_key =
   "12345612345612345612345612345612345612345612345612"
   |> Entropy.from_dice_rolls!()
-  |> MnemonicSeed.wordlist_from_entropy()
-  |> MnemonicSeed.to_seed()
-  |> PrivateKey.from_seed()
+  |> SeedPhrase.wordlist_from_entropy()
+  |> PrivateKey.from_seed_phrase()
 
 public_key =
   private_key
   |> PublicKey.from_private_key()
 
 ss_private_key =
-  PrivateKey.from_mnemonic_phrase("rally celery split order almost twenty ignore record legend learn chaos decade")
+  PrivateKey.from_seed_phrase("rally celery split order almost twenty ignore record legend learn chaos decade")
 
 ss_xpriv =
   ss_private_key

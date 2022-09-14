@@ -25,7 +25,7 @@ defmodule BitcoinLib.Key.PrivateKey do
   alias BitcoinLib.Crypto
   alias BitcoinLib.Crypto.{Wif, Secp256k1}
   alias BitcoinLib.Key.{PrivateKey}
-  alias BitcoinLib.Key.HD.{DerivationPath, Fingerprint, MnemonicSeed}
+  alias BitcoinLib.Key.HD.{DerivationPath, Fingerprint, SeedPhrase}
   alias BitcoinLib.Key.PrivateKey.{ChildFromIndex, ChildFromDerivationPath}
 
   @doc """
@@ -51,11 +51,11 @@ defmodule BitcoinLib.Key.PrivateKey do
   end
 
   @doc """
-  Converts a mnemonic phrase into an extended private key
+  Converts a seed phrase into an extended private key
 
   ## Examples
     iex> "rally celery split order almost twenty ignore record legend learn chaos decade"
-    ...> |> BitcoinLib.Key.PrivateKey.from_mnemonic_phrase()
+    ...> |> BitcoinLib.Key.PrivateKey.from_seed_phrase()
     %BitcoinLib.Key.PrivateKey{
       fingerprint: <<0x2E92A74C::32>>,
       key: <<0xD6EAD233E06C068585976B5C8373861D77E7F030EC452E65EE81C85FA6906970::256>>,
@@ -64,10 +64,10 @@ defmodule BitcoinLib.Key.PrivateKey do
       index: 0x0
     }
   """
-  @spec from_mnemonic_phrase(binary()) :: %PrivateKey{}
-  def from_mnemonic_phrase(mnemonic_phrase, passphrase \\ "") do
-    mnemonic_phrase
-    |> MnemonicSeed.to_seed(passphrase)
+  @spec from_seed_phrase(binary()) :: %PrivateKey{}
+  def from_seed_phrase(seed_phrase, passphrase \\ "") do
+    seed_phrase
+    |> SeedPhrase.to_seed(passphrase)
     |> from_seed
   end
 

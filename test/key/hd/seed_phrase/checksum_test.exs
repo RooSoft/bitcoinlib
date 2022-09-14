@@ -1,9 +1,9 @@
-defmodule BitcoinLib.Key.HD.MnemonicSeed.ChecksumTest do
+defmodule BitcoinLib.Key.HD.SeedPhrase.ChecksumTest do
   use ExUnit.Case, async: true
 
-  doctest BitcoinLib.Key.HD.MnemonicSeed.Checksum
+  doctest BitcoinLib.Key.HD.SeedPhrase.Checksum
 
-  alias BitcoinLib.Key.HD.MnemonicSeed.Checksum
+  alias BitcoinLib.Key.HD.SeedPhrase.Checksum
 
   test "compute a checksum" do
     checksum =

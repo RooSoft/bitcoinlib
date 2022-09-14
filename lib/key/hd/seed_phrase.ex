@@ -1,21 +1,22 @@
-defmodule BitcoinLib.Key.HD.MnemonicSeed do
+defmodule BitcoinLib.Key.HD.SeedPhrase do
   @moduledoc """
-  Compute a mnemonic seed from a private key
+  A seed phrase can generate a private key. It is a human friendly way to store
+  private keys for disaster recovery.
   """
 
   @pbkdf2_opts rounds: 2048, digest: :sha512, length: 64, format: :hex
 
   alias BitcoinLib.Crypto.BitUtils
 
-  alias BitcoinLib.Key.HD.MnemonicSeed.{Checksum, Wordlist}
+  alias BitcoinLib.Key.HD.SeedPhrase.{Checksum, Wordlist}
   alias BitcoinLib.Key.HD.Entropy
 
   @doc """
-  Convert a random entropy number into a mnemonic seed
+  Create a seed phrase out of entropy
 
   ## Examples
     iex> 101_750_443_022_601_924_635_824_320_539_097_414_732
-    ...> |> BitcoinLib.Key.HD.MnemonicSeed.wordlist_from_entropy()
+    ...> |> BitcoinLib.Key.HD.SeedPhrase.wordlist_from_entropy()
     "erode gloom apart system broom lemon dismiss post artist slot humor occur"
   """
   @spec wordlist_from_entropy(integer()) :: binary()
@@ -34,11 +35,11 @@ defmodule BitcoinLib.Key.HD.MnemonicSeed do
 
   ## Examples
     iex> "12345612345612345612345612345612345612345612345612"
-    ...> |> BitcoinLib.Key.HD.MnemonicSeed.wordlist_from_dice_rolls()
+    ...> |> BitcoinLib.Key.HD.SeedPhrase.from_dice_rolls()
     {:ok, "blue involve cook print twist crystal razor february caution private slim medal"}
   """
-  @spec wordlist_from_dice_rolls(list(integer())) :: {:ok, binary()} | {:error, binary()}
-  def wordlist_from_dice_rolls(dice_rolls) do
+  @spec from_dice_rolls(binary()) :: {:ok, binary()} | {:error, binary()}
+  def from_dice_rolls(dice_rolls) do
     case Entropy.from_dice_rolls(dice_rolls) do
       {:ok, entropy} -> {:ok, wordlist_from_entropy(entropy)}
       {:error, message} -> {:error, message}
@@ -50,28 +51,30 @@ defmodule BitcoinLib.Key.HD.MnemonicSeed do
 
   ## Examples
     iex> "12345612345612345612345612345612345612345612345612"
-    ...> |> BitcoinLib.Key.HD.MnemonicSeed.wordlist_from_dice_rolls!()
+    ...> |> BitcoinLib.Key.HD.SeedPhrase.from_dice_rolls!()
     "blue involve cook print twist crystal razor february caution private slim medal"
   """
-  @spec wordlist_from_dice_rolls!(list(integer())) :: binary()
-  def wordlist_from_dice_rolls!(dice_rolls) do
-    case wordlist_from_dice_rolls(dice_rolls) do
+  @spec from_dice_rolls!(binary()) :: binary()
+  def from_dice_rolls!(dice_rolls) do
+    case from_dice_rolls(dice_rolls) do
       {:ok, wordlist} -> wordlist
       {:error, message} -> throw(message)
     end
   end
 
   @doc """
-  Convert a mnemonic phrase into a seed, with a optional passphrase
+  Convert a seed phrase into a seed, with a optional passphrase
+
+  See https://learnmeabitcoin.com/technical/mnemonic#mnemonic-to-seed
 
   ## Examples
     iex> "brick giggle panic mammal document foam gym canvas wheel among room analyst"
-    ...> |> BitcoinLib.Key.HD.MnemonicSeed.to_seed()
+    ...> |> BitcoinLib.Key.HD.SeedPhrase.to_seed()
     "7e4803bd0278e223532f5833d81605bedc5e16f39c49bdfff322ca83d444892ddb091969761ea406bee99d6ab613fad6a99a6d4beba66897b252f00c9dd7b364"
   """
   @spec to_seed(binary(), binary()) :: binary()
-  def to_seed(mnemonic_phrase, passphrase \\ "") do
-    Pbkdf2.Base.hash_password(mnemonic_phrase, "mnemonic#{passphrase}", @pbkdf2_opts)
+  def to_seed(seed_phrase, passphrase \\ "") do
+    Pbkdf2.Base.hash_password(seed_phrase, "mnemonic#{passphrase}", @pbkdf2_opts)
   end
 
   defp append_checksum(binary_seed) do

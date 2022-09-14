@@ -1,6 +1,6 @@
-defmodule BitcoinLib.Key.HD.MnemonicSeed.Checksum do
+defmodule BitcoinLib.Key.HD.SeedPhrase.Checksum do
   @moduledoc """
-  Checksum needed to generate a mnemonic seed
+  Checksum needed to generate a seed phrase
 
   Source: https://raw.githubusercontent.com/bitcoin/bips/master/bip-0039/english.txt
   """
@@ -27,7 +27,7 @@ defmodule BitcoinLib.Key.HD.MnemonicSeed.Checksum do
 
   ## Examples
     iex> <<27, 172, 62, 126, 195, 84, 6, 180, 26, 1, 13, 250, 0, 254, 239, 132>>
-    ...> |> BitcoinLib.Key.HD.MnemonicSeed.Checksum.compute(4)
+    ...> |> BitcoinLib.Key.HD.SeedPhrase.Checksum.compute(4)
     2
   """
   @spec compute(binary(), integer()) :: integer()
@@ -42,7 +42,7 @@ defmodule BitcoinLib.Key.HD.MnemonicSeed.Checksum do
 
   ## Examples
     iex> <<5, 235, 104, 86, 249, 249, 27, 246, 234, 99, 13, 18, 209, 116, 50, 248, 35>>
-    ...> |> BitcoinLib.Key.HD.MnemonicSeed.Checksum.validate_seed()
+    ...> |> BitcoinLib.Key.HD.SeedPhrase.Checksum.validate_seed()
     true
   """
   @spec validate_seed(binary()) :: boolean()

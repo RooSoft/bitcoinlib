@@ -33,16 +33,16 @@ defmodule BitcoinLib.Key.PrivateKeyTest do
            } = extended_private_key
   end
 
-  test "extract the master extended private key from a mnemonic" do
+  test "extract the master extended private key from a seed phrase" do
     # inspired by https://github.com/zyield/block_keys/blob/f5c28c885872e24e99d07fd6f1c1c967cd63ae3f/test/block_keys/ckd_test.exs#L84
 
-    mnemonic =
+    seed_phrase =
       "safe result wire cattle sauce luggage couple legend pause rather employ pear " <>
         "trigger live daring unlock music lyrics smoke mistake endorse kite obey siren"
 
     private_key =
-      mnemonic
-      |> PrivateKey.from_mnemonic_phrase()
+      seed_phrase
+      |> PrivateKey.from_seed_phrase()
 
     assert %PrivateKey{
       key: <<0x30A6B59CCCC924FC9FFD4AB08C5C01F0D6A4046797BB255D8919EB3E95C08871::256>>,

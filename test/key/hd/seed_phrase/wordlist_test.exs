@@ -1,9 +1,9 @@
-defmodule BitcoinLib.Key.HD.MnemonicSeed.WordlistTest do
+defmodule BitcoinLib.Key.HD.SeedPhrase.WordlistTest do
   use ExUnit.Case, async: true
 
-  doctest BitcoinLib.Key.HD.MnemonicSeed.Wordlist
+  doctest BitcoinLib.Key.HD.SeedPhrase.Wordlist
 
-  alias BitcoinLib.Key.HD.MnemonicSeed.Wordlist
+  alias BitcoinLib.Key.HD.SeedPhrase.Wordlist
 
   test "get allwords" do
     wordlist = Wordlist.all()

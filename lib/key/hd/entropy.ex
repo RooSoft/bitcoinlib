@@ -1,11 +1,11 @@
 defmodule BitcoinLib.Key.HD.Entropy do
   @moduledoc """
-  Computing entropy from different sources, mostly for mnemonic seed creation
+  Computing entropy from different sources, mostly for seed phrase creation
   """
 
   @doc """
   Takes a list of dice rolls as a string argument, having values ranging from 0 to 5,
-  transforming them into a single integer that could serve as entropy for mnemonic seed
+  transforming them into a single integer that could serve as entropy for seed phrase
   creation
 
   ## Examples
@@ -24,7 +24,7 @@ defmodule BitcoinLib.Key.HD.Entropy do
 
   @doc """
   Takes a list of dice rolls as a string argument, having values ranging from 0 to 5,
-  transforming them into a single integer that could serve as entropy for mnemonic seed
+  transforming them into a single integer that could serve as entropy for seed phrase
   creation
 
   ## Examples

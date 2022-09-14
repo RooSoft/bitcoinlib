@@ -15,7 +15,7 @@ defmodule BitcoinLib.Test.Integration.LockingScripts.ManualExampleTest do
   test "bitcoin testnet signing own P2PKH" do
     private_key =
       "rally celery split order almost twenty ignore record legend learn chaos decade"
-      |> PrivateKey.from_mnemonic_phrase()
+      |> PrivateKey.from_seed_phrase()
       |> PrivateKey.from_derivation_path("m/44'/1'/0'/0/0")
       |> elem(1)
 
@@ -102,7 +102,7 @@ defmodule BitcoinLib.Test.Integration.LockingScripts.ManualExampleTest do
   test "same bitcoin testnet signing own P2PKH, but using Transaction.sign_and_encode" do
     private_key =
       "rally celery split order almost twenty ignore record legend learn chaos decade"
-      |> PrivateKey.from_mnemonic_phrase()
+      |> PrivateKey.from_seed_phrase()
       |> PrivateKey.from_derivation_path("m/44'/1'/0'/0/0")
       |> elem(1)
 
@@ -151,7 +151,7 @@ defmodule BitcoinLib.Test.Integration.LockingScripts.ManualExampleTest do
   test "create a signed transaction with a change address" do
     private_key =
       "rally celery split order almost twenty ignore record legend learn chaos decade"
-      |> PrivateKey.from_mnemonic_phrase()
+      |> PrivateKey.from_seed_phrase()
       |> PrivateKey.from_derivation_path("m/44'/1'/0'/0/0")
       |> elem(1)
 
@@ -193,7 +193,7 @@ defmodule BitcoinLib.Test.Integration.LockingScripts.ManualExampleTest do
   test "simplest testnet transaction yet, including a change address" do
     master_private_key =
       "rally celery split order almost twenty ignore record legend learn chaos decade"
-      |> PrivateKey.from_mnemonic_phrase()
+      |> PrivateKey.from_seed_phrase()
 
     {:ok, spending_private_key} =
       master_private_key

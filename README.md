@@ -45,7 +45,7 @@ Here are the most useful links
 - Create private keys
 - Derive public keys from private keys
 - Handle Hierarchical Deterministic (HD) Wallets, including
-  - Mnemonic Phrases
+  - Seed Phrases
   - Derivation Paths
 - Serialize/Deserialize Private Keys (`xprv`, `yprv`, `zprv`)
 - Serialize/Deserialize Public Keys  (`xpub`, `ypub`, `zpub`)

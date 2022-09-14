@@ -4,9 +4,13 @@
 
 Interact with Bitcoin straight from your browser with these [Livebook](https://livebook.dev) documents.
 
-[Wallet operations](https://github.com/RooSoft/bitcoinlib/blob/main/livebooks/wallet_operations/index.livemd)
+- [Wallet operations](https://github.com/RooSoft/bitcoinlib/blob/main/livebooks/wallet_operations/index.livemd)
 
-## Private key generation
+## Private key generation from dice rolls
+
+Randomness is of utmost importance when creating Bitcoin keys. That's why we use multiple dice rolls to
+make sure private keys are unique. There's a choice of 50 or 99 dice rolls to generate a 12 or 24 word
+seed phrase.
 
 ```elixir
 %{

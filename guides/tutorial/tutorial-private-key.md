@@ -7,9 +7,9 @@ that you can issue by yourself. The more random the number, the more secure
 are your funds.
 
 The way BitcoinLib deals with this is by creating `entropy` from dice rolls
-and then convert it into either a 12 or 24 words `mnemonic phrase`.
+and then convert it into either a 12 or 24 words `seed phrase`.
 
-## Mnemonic phrase from dice rolls
+## Seed phrase from dice rolls
 
 ![99 dices](https://raw.githubusercontent.com/RooSoft/bitcoinlib/main/guides/assets/images/99dice.jpg)
 
@@ -17,16 +17,15 @@ BitcoinLib offers a way to generate very random entropy by rolling 50 or 99 dice
 depending on the level of security you're after. These will introduce either 2¹³²
 or 2²⁶⁴ possibilities, depending on the number of rolls.
 
-To get to a private key creation, we first need a mnemonic phrase. Dice rolls will
+To get to a private key creation, we first need a seed phrase. Dice rolls will
 thus be converted into words. These two notations are equivalent. Note here that 
 every dice roll value has been reduced by 1 so that values range from 0 to 5.
 
 ```elixir
-alias BitcoinLib.Key.HD.{Entropy, MnemonicSeed}
+alias BitcoinLib.Key.HD.SeedPhrase
 
 "12345612345612345612345612345612345612345612345612"
-|> Entropy.from_dice_rolls!()
-|> MnemonicSeed.wordlist_from_entropy()
+|> SeedPhrase.from_dice_rolls()
 ```
 
 This is the result
@@ -35,16 +34,16 @@ This is the result
 "blue involve cook print twist crystal razor february caution private slim medal"
 ```
 
-## Private key from mnemonics
+## Private key from seed phrase
 
-This mnemonic phrase can then be converted into a `private key`
+This seed phrase can then be converted into a `private key`
 
 ```elixir
 alias BitcoinLib.Key.PrivateKey
 
 private_key = 
   "blue involve cook print twist crystal razor february caution private slim medal"
-  |> PrivateKey.from_mnemonic_phrase()
+  |> PrivateKey.from_seed_phrase()
 ```
 
 To keep things simple, we won't bother about what's returned as a private key... just know that
