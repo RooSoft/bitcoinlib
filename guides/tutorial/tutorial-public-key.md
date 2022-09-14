@@ -20,7 +20,7 @@ private_key =
 ```elixir
 public_key =
   private_key
-  |> PrivateKey.from_private_key
+  |> PublicKey.from_private_key
 ```
 
 ## Serialization
@@ -29,7 +29,7 @@ A public key can be serialized into an `xpub`
 
 ```elixir
 public_key
-|> PrivateKey.serialize!
+|> PublicKey.serialize!
 ```
 
 which results in

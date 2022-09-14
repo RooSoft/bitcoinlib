@@ -15,7 +15,7 @@ and then convert it into either a 12 or 24 words `seed phrase`.
 
 BitcoinLib offers a way to generate very random entropy by rolling 50 or 99 dices,
 depending on the level of security you're after. These will introduce either 2¹³²
-or 2²⁶⁴ possibilities, depending on the number of rolls.
+or 2²⁶⁴ possibilities, based on the number of rolls.
 
 To get to a private key creation, we first need a seed phrase. Dice rolls will
 thus be converted into words. These two notations are equivalent. Note here that 

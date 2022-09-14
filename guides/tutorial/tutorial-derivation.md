@@ -1,13 +1,9 @@
 # Key derivation
 
 For reference, is a very 
-[nice doc describing key derivation](https://learnmeabitcoin.com/technical/derivation-paths).
+[nice doc describing derivatoin paths](https://learnmeabitcoin.com/technical/derivation-paths).
 At the moment, `bip44`, `bip49` and `bip84` `purposes` are supported, with `taproot` being the next
 in line.
-
-Any `extended private key` can be derived using any of these purposes. Choosing the right one is 
-important, as it will impact [address types](https://hexdocs.pm/bitcoinlib/readme.html#address-types) 
-generated down the line.
 
 ## Create the bip84 Bitcoin account #0
 
@@ -20,3 +16,16 @@ Starting from a seed phrase, down to the private key
 ```
 
 This will result in a bitcoin bech32 private key that can further be derivated twice
+
+```elixir
+%BitcoinLib.Key.PrivateKey{
+  key: <<0x812aa97c4beb9399f95bb762984a50002b8362da505d014dc476534a524c97be::256>>,
+  chain_code: <<0xd98673927874380df0d69a0ff632cffa1aad20805fb6169cf429820496e2c585::256>>,
+  depth: 3,
+  index: 2147483648,
+  parent_fingerprint: <<0x78a5dfb2::32>>,
+  fingerprint: <<0x00000000::32>>
+}
+```
+
+Notice the depth of 3, which matches the derivation path.

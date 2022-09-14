@@ -12,7 +12,7 @@ alias BitcoinLib.Key.{PrivateKey, PublicKey}
 public_key = 
   "blue involve cook print twist crystal razor february caution private slim medal"
   |> PrivateKey.from_seed_phrase()
-  |> PublicKey.from_private_key
+  |> PublicKey.from_private_key()
 ```
 
 One public key corresponds to a single address... Here is how it's being converted
