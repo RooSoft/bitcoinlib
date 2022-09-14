@@ -8,19 +8,19 @@ can't be used to spend funds. It still is able to view balances and create addre
 First, a private key is needed...
 
 ```elixir
-alias BitcoinLib.Key.PrivateKey
+alias BitcoinLib.Key.{PrivateKey, PublicKey}
 
 private_key = 
   "blue involve cook print twist crystal razor february caution private slim medal"
   |> PrivateKey.from_seed_phrase()
 ```
 
-... it can then be converted into a public key
+... so that the public key can be derived from it
 
 ```elixir
 public_key =
   private_key
-  |> PublicKey.from_private_key
+  |> PublicKey.from_private_key()
 ```
 
 ## Serialization
@@ -29,7 +29,7 @@ A public key can be serialized into an `xpub`
 
 ```elixir
 public_key
-|> PublicKey.serialize!
+|> PublicKey.serialize!()
 ```
 
 which results in
