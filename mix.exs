@@ -57,6 +57,7 @@ defmodule BitcoinLib.MixProject do
       "guides/tutorial/tutorial-derivation.md",
       "guides/tutorial/tutorial-public-key.md",
       "guides/tutorial/tutorial-address.md",
+      "guides/tutorial/tutorial-transaction.md",
       "guides/examples.md",
       "guides/links.md"
     ]
