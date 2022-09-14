@@ -1,7 +1,7 @@
 defmodule BitcoinLib.MixProject do
   use Mix.Project
 
-  @version "0.2.0-pre3"
+  @version "0.2.0-pre4"
 
   def project do
     [
