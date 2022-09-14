@@ -1,7 +1,7 @@
 # Key derivation
 
 For reference, is a very 
-[nice doc describing derivatoin paths](https://learnmeabitcoin.com/technical/derivation-paths).
+[nice doc describing derivation paths](https://learnmeabitcoin.com/technical/derivation-paths).
 At the moment, `bip44`, `bip49` and `bip84` `purposes` are supported, with `taproot` being the next
 in line.
 
