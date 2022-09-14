@@ -19,7 +19,7 @@ or 2²⁶⁴ possibilities, based on the number of rolls.
 
 To get to a private key creation, we first need a seed phrase. Dice rolls will
 thus be converted into words. These two notations are equivalent. Note here that 
-every dice roll value has been reduced by 1 so that values range from 0 to 5.
+every dice roll value has been reduced by 1 so that values range from 1 to 6.
 
 ```elixir
 alias BitcoinLib.Key.HD.SeedPhrase
