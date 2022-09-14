@@ -10,6 +10,47 @@ defmodule BitcoinLib.Transaction do
   alias BitcoinLib.Transaction.{Input, Output, Encoder, Signer}
 
   @doc """
+  Converts a hex binary into a %Transaction{}
+
+  ## Examples
+    iex> "01000000017b1eabe0209b1fe794124575ef807057c77ada2138ae4fa8d6c4de0398a14f3f0000000000ffffffff01f0ca052a010000001976a914cbc20a7664f2f69e5355aa427045bc15e7c6c77288ac00000000"
+    ...> |> BitcoinLib.Transaction.parse()
+    {
+      :ok,
+      %BitcoinLib.Transaction{
+        version: 1,
+        inputs: [
+          %BitcoinLib.Transaction.Input{
+            txid: "3f4fa19803dec4d6a84fae3821da7ac7577080ef75451294e71f9b20e0ab1e7b",
+            vout: 0,
+            script_sig: [],
+            sequence: 4294967295
+          }
+        ],
+        outputs: [
+          %BitcoinLib.Transaction.Output{
+            value: 4999990000,
+            script_pub_key: [
+              %BitcoinLib.Script.Opcodes.Stack.Dup{},
+              %BitcoinLib.Script.Opcodes.Crypto.Hash160{},
+              %BitcoinLib.Script.Opcodes.Data{value: <<0xcbc20a7664f2f69e5355aa427045bc15e7c6c772::160>>},
+              %BitcoinLib.Script.Opcodes.BitwiseLogic.EqualVerify{},
+              %BitcoinLib.Script.Opcodes.Crypto.CheckSig{script: <<0x76a914cbc20a7664f2f69e5355aa427045bc15e7c6c77288ac::200>>}
+            ]
+          }
+        ],
+        locktime: 0
+      }
+    }
+  """
+  @spec parse(binary()) :: %Transaction{}
+  def parse(hex_transaction) do
+    hex_transaction
+    |> Binary.from_hex()
+    |> decode()
+  end
+
+  @doc """
   Converts a bitstring into a %Transaction{}
 
   ## Examples
