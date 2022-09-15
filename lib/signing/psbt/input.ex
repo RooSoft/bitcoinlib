@@ -159,11 +159,9 @@ defmodule BitcoinLib.Signing.Psbt.Input do
   end
 
   defp add_redeem_script(input, keypair) do
-    redeem_script = RedeemScript.parse(keypair)
-
-    case Map.get(redeem_script, :error) do
-      nil -> input |> Map.put(:redeem_script, redeem_script.script)
-      message -> input |> Map.put(:error, message)
+    case RedeemScript.parse(keypair) do
+      {:ok, redeem_script} -> input |> Map.put(:redeem_script, redeem_script.script)
+      {:error, message} -> input |> Map.put(:error, message)
     end
   end
 
