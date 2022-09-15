@@ -31,7 +31,6 @@ defmodule BitcoinLib.Signing.Psbt.GenericProperties.RedeemScript do
     do: map
 
   defp extract_redeem_script(%{keypair: keypair} = map) do
-    ## TODO: Properly manage script errors
     case Script.parse(keypair.value.data) do
       {:ok, script} ->
         Map.put(map, :redeem_script, %RedeemScript{script: script})
