@@ -210,7 +210,7 @@ defmodule BitcoinLib.Test.Integration.LockingScripts.ManualExampleTest do
 
     signed_transaction =
       %Transaction.Spec{}
-      |> Transaction.Spec.add_input(
+      |> Transaction.Spec.add_input!(
         txid: "f48648ab6adffe3b569383450a3279372a537c3be995c9e4e25f297d764e18d7",
         vout: 0,
         redeem_script: "76a914c39658833d83f2299416e697af2fb95a998853d388ac"

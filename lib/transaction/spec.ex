@@ -15,7 +15,7 @@ defmodule BitcoinLib.Transaction.Spec do
 
   ## Examples
     iex> %BitcoinLib.Transaction.Spec{}
-    ...> |> BitcoinLib.Transaction.Spec.add_input(
+    ...> |> BitcoinLib.Transaction.Spec.add_input!(
     ...>   txid: "6925062befcf8aafae78de879fec2535ec016e251c19b1c0792993258a6fda26",
     ...>   vout: 1,
     ...>   redeem_script: "76a914c39658833d83f2299416e697af2fb95a998853d388ac"
@@ -37,23 +37,27 @@ defmodule BitcoinLib.Transaction.Spec do
       outputs: []
     }
   """
-  @spec add_input(%Spec{}, list()) :: %Spec{}
-  def add_input(
+  @spec add_input!(%Spec{}, binary() | list()) :: %Spec{}
+  def add_input!(
         %Spec{} = spec,
         txid: txid,
         vout: vout,
         redeem_script: redeem_script
       )
       when is_binary(redeem_script) do
-    ## TODO: Properly manage script errors
-    Spec.add_input(spec,
+    {:ok, parsed_redeem_script} =
+      redeem_script
+      |> Binary.from_hex()
+      |> Script.parse()
+
+    Spec.add_input!(spec,
       txid: txid,
       vout: vout,
-      redeem_script: redeem_script |> Binary.from_hex() |> Script.parse!()
+      redeem_script: parsed_redeem_script
     )
   end
 
-  def add_input(%Spec{inputs: inputs} = spec,
+  def add_input!(%Spec{inputs: inputs} = spec,
         txid: txid,
         vout: vout,
         redeem_script: redeem_script
