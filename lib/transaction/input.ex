@@ -30,7 +30,8 @@ defmodule BitcoinLib.Transaction.Input do
   """
   @spec extract_from(binary()) :: {%Input{}, bitstring()}
   def extract_from(<<txid::little-256, vout::little-32, remaining::bitstring>>) do
-    {script_sig, remaining} = extract_script_sig(remaining)
+    ## TODO properly manage script sig errors
+    {:ok, script_sig, remaining} = extract_script_sig(remaining)
     {sequence, remaining} = extract_sequence(remaining)
 
     {
@@ -90,12 +91,10 @@ defmodule BitcoinLib.Transaction.Input do
 
     <<script_sig::bitstring-size(script_sig_bit_size), remaining::bitstring>> = remaining
 
-    ## TODO: Properly manage script errors
-    script_sig =
-      script_sig
-      |> Script.parse!()
-
-    {script_sig, remaining}
+    case Script.parse(script_sig) do
+      {:ok, script_sig} -> {:ok, script_sig, remaining}
+      {:error, message} -> {:error, message}
+    end
   end
 
   defp extract_sequence(remaining) do
