@@ -39,7 +39,7 @@ defmodule BitcoinLib.Signing.Psbt.GenericProperties.WitnessScript do
         Map.put(map, :witness_script, %WitnessScript{script: script})
 
       {:error, message} ->
-        Map.put(map, error: message)
+        Map.put(map, :error, message)
     end
   end
 end
