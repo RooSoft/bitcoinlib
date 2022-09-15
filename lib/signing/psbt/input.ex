@@ -168,11 +168,9 @@ defmodule BitcoinLib.Signing.Psbt.Input do
   end
 
   defp add_witness_script(input, keypair) do
-    witness_script = WitnessScript.parse(keypair)
-
-    case Map.get(witness_script, :error) do
-      nil -> input |> Map.put(:witness_script, witness_script.script)
-      message -> input |> Map.put(:error, message)
+    case WitnessScript.parse(keypair) do
+      {:ok, witness_script} -> input |> Map.put(:witness_script, witness_script.script)
+      {:error, message} -> input |> Map.put(:error, message)
     end
   end
 
