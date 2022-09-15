@@ -82,12 +82,10 @@ defmodule BitcoinLib.Transaction.Output do
         <<script_pub_key::bitstring-size(script_pub_key_bit_size), remaining::bitstring>> =
           remaining
 
-        ## TODO: Properly manage script errors
-        {:ok, script_pub_key} =
-          script_pub_key
-          |> Script.parse()
-
-        {:ok, script_pub_key, remaining}
+        case Script.parse(script_pub_key) do
+          {:ok, script_pub_key} -> {:ok, script_pub_key, remaining}
+          {:error, message} -> {:error, message}
+        end
 
       false ->
         {:error, "badly formatted script pub key"}
