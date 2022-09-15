@@ -182,14 +182,12 @@ defmodule BitcoinLib.Signing.Psbt.Input do
   end
 
   defp add_final_script_sig(input, keypair) do
-    final_script_sig = FinalScriptSig.parse(keypair)
-
-    case Map.get(final_script_sig, :error) do
-      nil ->
+    case FinalScriptSig.parse(keypair) do
+      {:ok, final_script_sig} ->
         input
         |> Map.put(:final_script_sig, final_script_sig.script_sig)
 
-      message ->
+      {:error, message} ->
         input
         |> Map.put(:error, message)
     end

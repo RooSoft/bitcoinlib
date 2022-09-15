@@ -6,32 +6,34 @@ defmodule BitcoinLib.Signing.Psbt.Input.FinalScriptSig do
   alias BitcoinLib.Script
 
   def parse(keypair) do
-    %{keypair: keypair, final_script_sig: %FinalScriptSig{}}
+    %{keypair: keypair}
     |> validate_keypair()
     |> extract_final_script_sig()
+    |> create_output()
   end
 
-  defp validate_keypair(%{keypair: keypair, final_script_sig: final_script_sig} = map) do
+  defp create_output(%{error: message}), do: {:error, message}
+  defp create_output(%{final_script_sig: final_script_sig}), do: {:ok, final_script_sig}
+
+  defp validate_keypair(%{keypair: keypair} = map) do
     case keypair.key do
       %Key{data: <<>>} ->
         map
 
       _ ->
-        %{
-          map
-          | final_script_sig:
-              Map.put(final_script_sig, :error, "invalid final script sig typed key")
-        }
+        Map.put(map, :error, "invalid final script sig typed key")
     end
   end
 
-  defp extract_final_script_sig(%{final_script_sig: %{error: _message} = final_script_sig}),
-    do: final_script_sig
+  defp extract_final_script_sig(%{error: _message} = map), do: map
 
-  defp extract_final_script_sig(%{keypair: keypair}) do
-    ## TODO: Properly manage script errors
-    script = Script.parse!(keypair.value.data)
+  defp extract_final_script_sig(%{keypair: keypair} = map) do
+    case Script.parse(keypair.value.data) do
+      {:ok, script} ->
+        Map.put(map, :final_script_sig, %FinalScriptSig{script_sig: script})
 
-    %FinalScriptSig{script_sig: script}
+      {:error, message} ->
+        Map.put(map, :error, message)
+    end
   end
 end
