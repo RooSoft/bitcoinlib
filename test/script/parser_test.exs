@@ -9,7 +9,7 @@ defmodule BitcoinLib.Script.ParserTest do
   test "parse a script only containing zero" do
     script = <<0>>
 
-    opcodes = Parser.parse(script)
+    {:ok, opcodes} = Parser.parse(script)
 
     assert [%Constants.Zero{}] = opcodes
   end
@@ -17,7 +17,7 @@ defmodule BitcoinLib.Script.ParserTest do
   test "parse a P2PKH script" do
     script = <<0x76A914725EBAC06343111227573D0B5287954EF9B88AAE88AC::200>>
 
-    opcodes = Parser.parse(script)
+    {:ok, opcodes} = Parser.parse(script)
 
     assert [
              %Stack.Dup{},

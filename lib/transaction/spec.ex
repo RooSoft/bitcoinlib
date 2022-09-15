@@ -14,8 +14,7 @@ defmodule BitcoinLib.Transaction.Spec do
   Adds a human readable input into a transaction spec
 
   ## Examples
-    iex> transaction_spec = %BitcoinLib.Transaction.Spec{}
-    ...> transaction_spec
+    iex> %BitcoinLib.Transaction.Spec{}
     ...> |> BitcoinLib.Transaction.Spec.add_input(
     ...>   txid: "6925062befcf8aafae78de879fec2535ec016e251c19b1c0792993258a6fda26",
     ...>   vout: 1,
@@ -46,10 +45,11 @@ defmodule BitcoinLib.Transaction.Spec do
         redeem_script: redeem_script
       )
       when is_binary(redeem_script) do
+    ## TODO: Properly manage script errors
     Spec.add_input(spec,
       txid: txid,
       vout: vout,
-      redeem_script: redeem_script |> Binary.from_hex() |> Script.parse()
+      redeem_script: redeem_script |> Binary.from_hex() |> Script.parse!()
     )
   end
 

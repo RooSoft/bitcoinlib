@@ -35,8 +35,7 @@ defmodule BitcoinLib.ScriptTest do
       <<@dup::8, @hash_160::8, pub_key_hash_size::8, public_key_hash::bitstring-160,
         @equal_verify::8, @check_sig::8>>
 
-    sig =
-      PrivateKey.sign_message(script |> Binary.to_hex(), private_key)
+    sig = PrivateKey.sign_message(script |> Binary.to_hex(), private_key)
 
     {:ok, result} = Script.execute(script, [public_key.key, sig])
 
@@ -54,7 +53,7 @@ defmodule BitcoinLib.ScriptTest do
   test "parse the simplest of scripts" do
     script = <<0>>
 
-    opcodes = Script.parse(script)
+    {:ok, opcodes} = Script.parse(script)
 
     assert 1 = Enum.count(opcodes)
   end
@@ -63,7 +62,7 @@ defmodule BitcoinLib.ScriptTest do
     redeem_script =
       <<0x5221029583BF39AE0A609747AD199ADDD634FA6108559D6C5CD39B4C2183F1AB96E07F2102DAB61FF49A14DB6A7D02B0CD1FBB78FC4B18312B5B4E54DAE4DBA2FBFEF536D752AF::568>>
 
-    opcodes = Script.parse(redeem_script)
+    opcodes = Script.parse!(redeem_script)
 
     assert [
              %Constants.Two{},
@@ -83,7 +82,7 @@ defmodule BitcoinLib.ScriptTest do
   test "parse a script pub key" do
     script_pub_key = <<0xA91429CA74F8A08F81999428185C97B5D852E4063F6187::184>>
 
-    opcodes = Script.parse(script_pub_key)
+    opcodes = Script.parse!(script_pub_key)
 
     assert [
              %Crypto.Hash160{},

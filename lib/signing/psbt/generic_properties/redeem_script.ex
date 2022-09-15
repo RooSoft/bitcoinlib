@@ -25,9 +25,10 @@ defmodule BitcoinLib.Signing.Psbt.GenericProperties.RedeemScript do
     do: redeem_script
 
   defp extract_redeem_script(%{keypair: keypair}) do
+    ## TODO: Properly manage script errors
     script =
       keypair.value.data
-      |> Script.parse()
+      |> Script.parse!()
 
     %RedeemScript{script: script}
   end

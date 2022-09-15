@@ -12,20 +12,25 @@ defmodule BitcoinLib.Script.Parser do
   ## Examples
     iex> <<0x76a914cbc20a7664f2f69e5355aa427045bc15e7c6c77288ac::200>>
     ...> |> BitcoinLib.Script.Parser.parse
-    [
-      %BitcoinLib.Script.Opcodes.Stack.Dup{},
-      %BitcoinLib.Script.Opcodes.Crypto.Hash160{},
-      %BitcoinLib.Script.Opcodes.Data{value: <<0xcbc20a7664f2f69e5355aa427045bc15e7c6c772::160>>},
-      %BitcoinLib.Script.Opcodes.BitwiseLogic.EqualVerify{},
-      %BitcoinLib.Script.Opcodes.Crypto.CheckSig{script: <<0x76a914cbc20a7664f2f69e5355aa427045bc15e7c6c77288ac::200>>}
-    ]
+    {
+      :ok,
+      [
+        %BitcoinLib.Script.Opcodes.Stack.Dup{},
+        %BitcoinLib.Script.Opcodes.Crypto.Hash160{},
+        %BitcoinLib.Script.Opcodes.Data{value: <<0xcbc20a7664f2f69e5355aa427045bc15e7c6c772::160>>},
+        %BitcoinLib.Script.Opcodes.BitwiseLogic.EqualVerify{},
+        %BitcoinLib.Script.Opcodes.Crypto.CheckSig{script: <<0x76a914cbc20a7664f2f69e5355aa427045bc15e7c6c77288ac::200>>}
+      ]
+    }
   """
-  @spec parse(bitstring()) :: list()
+  @spec parse(bitstring()) :: {:ok, list()} | {:error, binary()}
   def parse(script) do
     iterate(%{script: script, opcodes: [], whole_script: script})
   end
 
-  defp iterate(%{script: <<>>, opcodes: opcodes}), do: Enum.reverse(opcodes)
+  defp iterate(%{error: message}), do: {:error, message}
+
+  defp iterate(%{script: <<>>, opcodes: opcodes}), do: {:ok, Enum.reverse(opcodes)}
 
   defp iterate(%{script: script, opcodes: opcodes, whole_script: whole_script}) do
     %{script: script, opcodes: opcodes, whole_script: whole_script}

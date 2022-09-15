@@ -28,9 +28,10 @@ defmodule BitcoinLib.Signing.Psbt.GenericProperties.WitnessScript do
     do: witness_script
 
   defp extract_witness_script(%{keypair: keypair}) do
+    ## TODO: Properly manage script errors
     script =
       keypair.value.data
-      |> Script.parse()
+      |> Script.parse!()
 
     %WitnessScript{script: script}
   end

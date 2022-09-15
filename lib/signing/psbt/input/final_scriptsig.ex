@@ -29,8 +29,9 @@ defmodule BitcoinLib.Signing.Psbt.Input.FinalScriptSig do
     do: final_script_sig
 
   defp extract_final_script_sig(%{keypair: keypair}) do
-    script = Script.parse(keypair.value.data)
-    
+    ## TODO: Properly manage script errors
+    script = Script.parse!(keypair.value.data)
+
     %FinalScriptSig{script_sig: script}
   end
 end

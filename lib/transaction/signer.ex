@@ -22,11 +22,11 @@ defmodule BitcoinLib.Transaction.Signer do
     ...>        txid: "e4c226432a9319d603b2ed1fa609bffe4cd91f89b3176a9e73b19f7891a92bb6",
     ...>        vout: 0,
     ...>        sequence: 0xFFFFFFFF,
-    ...>        script_sig: <<0x76A914AFC3E518577316386188AF748A816CD14CE333F288AC::200>> |> BitcoinLib.Script.parse()
+    ...>        script_sig: <<0x76A914AFC3E518577316386188AF748A816CD14CE333F288AC::200>> |> BitcoinLib.Script.parse!()
     ...>      }
     ...>    ],
     ...>    outputs: [%BitcoinLib.Transaction.Output{
-    ...>       script_pub_key: <<0x76a9283265393261373463333431393661303236653839653061643561633431386366393430613361663288ac::360>> |> BitcoinLib.Script.parse(),
+    ...>       script_pub_key: <<0x76a9283265393261373463333431393661303236653839653061643561633431386366393430613361663288ac::360>> |> BitcoinLib.Script.parse!(),
     ...>       value: 10_000}
     ...>    ],
     ...>    locktime: 0

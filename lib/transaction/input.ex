@@ -90,9 +90,10 @@ defmodule BitcoinLib.Transaction.Input do
 
     <<script_sig::bitstring-size(script_sig_bit_size), remaining::bitstring>> = remaining
 
+    ## TODO: Properly manage script errors
     script_sig =
       script_sig
-      |> Script.parse()
+      |> Script.parse!()
 
     {script_sig, remaining}
   end
