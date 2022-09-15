@@ -51,7 +51,7 @@ defmodule BitcoinLib.Script do
       }
     ]
   """
-  @spec parse(bitstring()) :: list()
+  @spec parse!(bitstring()) :: list()
   def parse!(script) when is_bitstring(script) do
     parse(script)
     |> elem(1)

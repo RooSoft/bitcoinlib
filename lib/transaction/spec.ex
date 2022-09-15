@@ -95,7 +95,7 @@ defmodule BitcoinLib.Transaction.Spec do
   @spec add_output(%Spec{}, binary() | list(), integer()) :: %Spec{}
   def add_output(%Spec{} = spec, script_pub_key, value)
       when is_binary(script_pub_key) do
-    parsed_script = script_pub_key |> Binary.from_hex() |> Script.parse()
+    parsed_script = script_pub_key |> Binary.from_hex() |> Script.parse!()
     Spec.add_output(spec, parsed_script, value)
   end
 
