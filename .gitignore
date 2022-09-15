@@ -26,3 +26,5 @@ bitcoinlib-*.tar
 /tmp/
 
 /priv/wordlists/wordlist.ex
+
+.DS_Store
