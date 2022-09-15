@@ -109,14 +109,12 @@ defmodule BitcoinLib.Signing.Psbt.Input do
   end
 
   defp add_non_witness_utxo(input, keypair) do
-    utxo = NonWitnessUtxo.parse(keypair)
-
-    case Map.get(utxo, :error) do
-      nil ->
+    case NonWitnessUtxo.parse(keypair) do
+      {:ok, utxo} ->
         input
         |> Map.put(:utxo, utxo)
 
-      message ->
+      {:error, message} ->
         input
         |> Map.put(:error, message)
     end
