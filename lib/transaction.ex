@@ -7,7 +7,7 @@ defmodule BitcoinLib.Transaction do
   alias BitcoinLib.Key.PrivateKey
   alias BitcoinLib.Signing.Psbt.CompactInteger
   alias BitcoinLib.Transaction
-  alias BitcoinLib.Transaction.{Input, Output, Encoder, Signer}
+  alias BitcoinLib.Transaction.{Input, Output, OutputList, Encoder, Signer}
 
   @doc """
   Converts a hex binary into a %Transaction{}
@@ -223,6 +223,7 @@ defmodule BitcoinLib.Transaction do
         _ ->
           1..input_count
           |> Enum.reduce({[], remaining}, fn _nb, {inputs, remaining} ->
+            ## TODO: manage errors from the call below, similar to outputs
             {input, remaining} = Input.extract_from(remaining)
 
             {[input | inputs], remaining}
@@ -242,17 +243,18 @@ defmodule BitcoinLib.Transaction do
   end
 
   defp extract_outputs(%{output_count: output_count, remaining: remaining} = map) do
-    {outputs, remaining} =
-      1..output_count
-      |> Enum.reduce({[], remaining}, fn _nb, {outputs, remaining} ->
-        {output, remaining} = Output.extract_from(remaining)
+    case OutputList.extract(remaining, output_count) do
+      {:ok, outputs, remaining} ->
+        %{map | remaining: remaining}
+        |> Map.put(:outputs, Enum.reverse(outputs))
 
-        {[output | outputs], remaining}
-      end)
-
-    %{map | remaining: remaining}
-    |> Map.put(:outputs, Enum.reverse(outputs))
+      {:error, message} ->
+        %{map | remaining: remaining}
+        |> Map.put(:error, message)
+    end
   end
+
+  defp extract_locktime(%{error: _message} = map), do: map
 
   defp extract_locktime(%{remaining: remaining} = map) do
     <<locktime::little-32, remaining::bitstring>> = remaining
@@ -260,6 +262,8 @@ defmodule BitcoinLib.Transaction do
     %{map | remaining: remaining}
     |> Map.put(:locktime, locktime)
   end
+
+  defp validate_outputs(%{error: _message} = map), do: map
 
   defp validate_outputs(%{outputs: outputs} = map) do
     error =
