@@ -95,6 +95,26 @@ defmodule BitcoinLib.TransactionTest do
     Transaction.sign_and_encode(transaction, private_key)
   end
 
+  test "decode a P2SH-P2WPKH transaction" do
+    encoded =
+      "01000000000101db6b1b20aa0fd7b23880be2ecbd4a98130974cf4748fb66092ac4d3ceb1a5477010000001716001479091972186c449eb1ded22b78e40d009bdf0089feffffff02b8b4eb0b000000001976a914a457b684d7f0d539a46a45bbc043f35b59d0d96388ac0008af2f000000001976a914fd270b1ee6abcaea97fea7ad0402e8bd8ad6d77c88ac02473044022047ac8e878352d3ebbde1c94ce3a10d057c24175747116f8288e5d794d12d482f0220217f36a485cae903c713331d877c1f64677e3622ad4010726870540656fe9dcb012103ad1d8e89212f0b92c74d23bb710c00662ad1470198ac48c43f7d6f93a2a2687392040000"
+
+    {:ok, transaction} = Transaction.parse(encoded)
+
+    assert [
+             %BitcoinLib.Transaction.Input{
+               txid: "77541aeb3c4dac9260b68f74f44c973081a9d4cb2ebe8038b2d70faa201b6bdb",
+               vout: 1,
+               script_sig: [
+                 %BitcoinLib.Script.Opcodes.Data{
+                   value: <<0x001479091972186C449EB1DED22B78E40D009BDF0089::176>>
+                 }
+               ],
+               sequence: 4_294_967_294
+             }
+           ] = transaction.inputs
+  end
+
   @spec create_keys(binary(), binary(), :mainnet | :testnet, :p2pkh) :: map()
   defp create_keys(seed_phrase, derivation_path, network, address_type) do
     private_key =

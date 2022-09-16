@@ -2,7 +2,7 @@ defmodule BitcoinLib.Transaction do
   @moduledoc """
   Based on https://learnmeabitcoin.com/technical/transaction-data#fields
   """
-  defstruct [:version, :inputs, :outputs, :locktime]
+  defstruct [:version, :inputs, :outputs, :witnesses, :locktime]
 
   alias BitcoinLib.Key.PrivateKey
   alias BitcoinLib.Transaction

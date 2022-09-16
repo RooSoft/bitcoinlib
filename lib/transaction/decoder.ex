@@ -7,6 +7,11 @@ defmodule BitcoinLib.Transaction.Decoder do
   alias BitcoinLib.Signing.Psbt.CompactInteger
   alias BitcoinLib.Transaction.{InputList, OutputList}
 
+  @version 1
+  @marker 0
+  @flag 1
+  @byte 8
+
   @doc """
   Converts a bitstring into a %Transaction{}
 
@@ -43,8 +48,44 @@ defmodule BitcoinLib.Transaction.Decoder do
   """
   @spec to_struct(bitstring()) :: {:ok, %Transaction{}} | {:error, binary()}
   def to_struct(encoded_transaction) do
+    # see https://github.com/bitcoin/bips/blob/master/bip-0144.mediawiki#hashes
+    version_specific_extract(encoded_transaction)
+  end
+
+  # Extracts a witness transaction
+  defp version_specific_extract(
+         <<@version::little-32, @marker::8, @flag::8, remaining::bitstring>>
+       ) do
     result =
-      %{remaining: encoded_transaction}
+      %{remaining: remaining}
+      |> extract_input_count
+      |> extract_inputs
+      |> extract_output_count
+      |> extract_outputs
+      |> extract_witnesses
+      |> extract_locktime
+      |> validate_outputs
+
+    case result do
+      %{error: message} ->
+        {:error, message}
+
+      %{inputs: inputs, outputs: outputs, witnesses: witnesses, locktime: locktime} ->
+        {:ok,
+         %Transaction{
+           version: @version,
+           inputs: inputs,
+           outputs: outputs,
+           witnesses: witnesses,
+           locktime: locktime
+         }}
+    end
+  end
+
+  # Extracts a non-witness transaction
+  defp version_specific_extract(remaining) do
+    result =
+      %{remaining: remaining}
       |> extract_version
       |> extract_input_count
       |> extract_inputs
@@ -57,9 +98,9 @@ defmodule BitcoinLib.Transaction.Decoder do
       %{error: message} ->
         {:error, message}
 
-      %{version: version, inputs: inputs, outputs: outputs, locktime: locktime} ->
+      %{inputs: inputs, outputs: outputs, locktime: locktime} ->
         {:ok,
-         %Transaction{version: version, inputs: inputs, outputs: outputs, locktime: locktime}}
+         %Transaction{version: @version, inputs: inputs, outputs: outputs, locktime: locktime}}
     end
   end
 
@@ -95,6 +136,31 @@ defmodule BitcoinLib.Transaction.Decoder do
 
     %{map | remaining: remaining}
     |> Map.put(:output_count, output_count)
+  end
+
+  defp extract_witnesses(%{error: message}), do: %{error: message}
+
+  defp extract_witnesses(%{remaining: remaining} = map) do
+    %CompactInteger{value: witness_count, remaining: remaining} =
+      CompactInteger.extract_from(remaining, :big_endian)
+
+    witnesses = extract_witness_list([], remaining, witness_count)
+
+    %{map | remaining: remaining}
+    |> Map.put(:witnesses, witnesses)
+  end
+
+  defp extract_witness_list(witnesses, _, 0), do: witnesses
+
+  defp extract_witness_list(witnesses, remaining, count) do
+    %CompactInteger{value: witness_length, remaining: remaining} =
+      CompactInteger.extract_from(remaining, :big_endian)
+
+    bits_witness_length = witness_length * @byte
+
+    <<witness::bitstring-size(bits_witness_length), remaining::bitstring>> = remaining
+
+    extract_witness_list([witness | witnesses], remaining, count - 1)
   end
 
   defp extract_outputs(%{error: message}), do: %{error: message}
