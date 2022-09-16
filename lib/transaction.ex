@@ -7,7 +7,7 @@ defmodule BitcoinLib.Transaction do
   alias BitcoinLib.Key.PrivateKey
   alias BitcoinLib.Signing.Psbt.CompactInteger
   alias BitcoinLib.Transaction
-  alias BitcoinLib.Transaction.{Input, Output, OutputList, Encoder, Signer}
+  alias BitcoinLib.Transaction.{InputList, OutputList, Encoder, Signer}
 
   @doc """
   Converts a hex binary into a %Transaction{}
@@ -215,23 +215,14 @@ defmodule BitcoinLib.Transaction do
   end
 
   defp extract_inputs(%{input_count: input_count, remaining: remaining} = map) do
-    {inputs, remaining} =
-      case input_count do
-        0 ->
-          {[], remaining}
+    case InputList.extract(remaining, input_count) do
+      {:ok, inputs, remaining} ->
+        %{map | remaining: remaining}
+        |> Map.put(:inputs, Enum.reverse(inputs))
 
-        _ ->
-          1..input_count
-          |> Enum.reduce({[], remaining}, fn _nb, {inputs, remaining} ->
-            ## TODO: manage errors from the call below, similar to outputs
-            {input, remaining} = Input.extract_from(remaining)
-
-            {[input | inputs], remaining}
-          end)
-      end
-
-    %{map | remaining: remaining}
-    |> Map.put(:inputs, Enum.reverse(inputs))
+      {:error, message} ->
+        Map.put(map, :error, message)
+    end
   end
 
   defp extract_output_count(%{remaining: remaining} = map) do
@@ -249,8 +240,7 @@ defmodule BitcoinLib.Transaction do
         |> Map.put(:outputs, Enum.reverse(outputs))
 
       {:error, message} ->
-        %{map | remaining: remaining}
-        |> Map.put(:error, message)
+        Map.put(map, :error, message)
     end
   end
 
