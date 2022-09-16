@@ -221,7 +221,7 @@ defmodule BitcoinLib.Transaction do
         |> Map.put(:inputs, Enum.reverse(inputs))
 
       {:error, message} ->
-        Map.put(map, :error, message)
+        Map.put(map, :error, "in transaction inputs, " <> message)
     end
   end
 
@@ -244,7 +244,7 @@ defmodule BitcoinLib.Transaction do
         |> Map.put(:outputs, Enum.reverse(outputs))
 
       {:error, message} ->
-        Map.put(map, :error, message)
+        Map.put(map, :error, "in transaction outputs, " <> message)
     end
   end
 
