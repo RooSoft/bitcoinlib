@@ -33,7 +33,7 @@ defmodule BitcoinLib.Script do
     |> Parser.parse()
   end
 
-    @doc """
+  @doc """
   Transforms a script in the bitstring form into a list of opcodes
 
   ## Examples

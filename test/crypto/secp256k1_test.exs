@@ -24,8 +24,7 @@ defmodule BitcoinLib.Crypto.Secp256k1Test do
 
     public_key = PublicKey.from_private_key(private_key)
 
-    signature =
-      Secp256k1.sign(message, private_key)
+    signature = Secp256k1.sign(message, private_key)
 
     is_valid = Secp256k1.validate(signature, message, public_key)
 
