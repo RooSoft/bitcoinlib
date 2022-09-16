@@ -225,6 +225,8 @@ defmodule BitcoinLib.Transaction do
     end
   end
 
+  defp extract_output_count(%{error: message}), do: %{error: message}
+
   defp extract_output_count(%{remaining: remaining} = map) do
     %CompactInteger{value: output_count, remaining: remaining} =
       CompactInteger.extract_from(remaining, :big_endian)
@@ -232,6 +234,8 @@ defmodule BitcoinLib.Transaction do
     %{map | remaining: remaining}
     |> Map.put(:output_count, output_count)
   end
+
+  defp extract_outputs(%{error: message}), do: %{error: message}
 
   defp extract_outputs(%{output_count: output_count, remaining: remaining} = map) do
     case OutputList.extract(remaining, output_count) do
