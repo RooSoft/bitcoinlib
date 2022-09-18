@@ -115,6 +115,64 @@ defmodule BitcoinLib.TransactionTest do
            ] = transaction.inputs
   end
 
+  test "encode a P2SH-P2WPKH transaction" do
+    transaction = %BitcoinLib.Transaction{
+      version: 1,
+      inputs: [
+        %BitcoinLib.Transaction.Input{
+          txid: "77541aeb3c4dac9260b68f74f44c973081a9d4cb2ebe8038b2d70faa201b6bdb",
+          vout: 1,
+          script_sig: [
+            %BitcoinLib.Script.Opcodes.Data{
+              value: <<0x001479091972186C449EB1DED22B78E40D009BDF0089::176>>
+            }
+          ],
+          sequence: 4_294_967_294
+        }
+      ],
+      outputs: [
+        %BitcoinLib.Transaction.Output{
+          value: 199_996_600,
+          script_pub_key: [
+            %BitcoinLib.Script.Opcodes.Stack.Dup{},
+            %BitcoinLib.Script.Opcodes.Crypto.Hash160{},
+            %BitcoinLib.Script.Opcodes.Data{
+              value: <<0xA457B684D7F0D539A46A45BBC043F35B59D0D963::160>>
+            },
+            %BitcoinLib.Script.Opcodes.BitwiseLogic.EqualVerify{},
+            %BitcoinLib.Script.Opcodes.Crypto.CheckSig{
+              script: <<0x76A914A457B684D7F0D539A46A45BBC043F35B59D0D96388AC::200>>
+            }
+          ]
+        },
+        %BitcoinLib.Transaction.Output{
+          value: 800_000_000,
+          script_pub_key: [
+            %BitcoinLib.Script.Opcodes.Stack.Dup{},
+            %BitcoinLib.Script.Opcodes.Crypto.Hash160{},
+            %BitcoinLib.Script.Opcodes.Data{
+              value: <<0xFD270B1EE6ABCAEA97FEA7AD0402E8BD8AD6D77C::160>>
+            },
+            %BitcoinLib.Script.Opcodes.BitwiseLogic.EqualVerify{},
+            %BitcoinLib.Script.Opcodes.Crypto.CheckSig{
+              script: <<0x76A914FD270B1EE6ABCAEA97FEA7AD0402E8BD8AD6D77C88AC::200>>
+            }
+          ]
+        }
+      ],
+      witness: [
+        <<0x03AD1D8E89212F0B92C74D23BB710C00662AD1470198AC48C43F7D6F93A2A26873::264>>,
+        <<0x3044022047AC8E878352D3EBBDE1C94CE3A10D057C24175747116F8288E5D794D12D482F0220217F36A485CAE903C713331D877C1F64677E3622AD4010726870540656FE9DCB01::568>>
+      ],
+      locktime: 0x492
+    }
+
+    encoded = Transaction.encode(transaction) |> Binary.to_hex()
+
+    assert encoded ==
+             "01000000000101db6b1b20aa0fd7b23880be2ecbd4a98130974cf4748fb66092ac4d3ceb1a5477010000001716001479091972186c449eb1ded22b78e40d009bdf0089feffffff02b8b4eb0b000000001976a914a457b684d7f0d539a46a45bbc043f35b59d0d96388ac0008af2f000000001976a914fd270b1ee6abcaea97fea7ad0402e8bd8ad6d77c88ac02473044022047ac8e878352d3ebbde1c94ce3a10d057c24175747116f8288e5d794d12d482f0220217f36a485cae903c713331d877c1f64677e3622ad4010726870540656fe9dcb012103ad1d8e89212f0b92c74d23bb710c00662ad1470198ac48c43f7d6f93a2a2687392040000"
+  end
+
   @spec create_keys(binary(), binary(), :mainnet | :testnet, :p2pkh) :: map()
   defp create_keys(seed_phrase, derivation_path, network, address_type) do
     private_key =

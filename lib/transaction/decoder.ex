@@ -16,7 +16,7 @@ defmodule BitcoinLib.Transaction.Decoder do
   Converts a bitstring into a %Transaction{}
 
   ## Examples
-    iex> <<0x01000000017b1eabe0209b1fe794124575ef807057c77ada2138ae4fa8d6c4de0398a14f3f0000000000ffffffff01f0ca052a010000001976a914cbc20a7664f2f69e5355aa427045bc15e7c6c77288ac00000000::680>>
+    iex> <<0x01000000017b1eabe0209b1fe794124575ef807057c77ada2138ae4fa8d6c4de0398a14f3f0000000000ffffffff01f0ca052a010000001976a914cbc20a7664f2f69e5355aa427045bc15e7c6c77288ac92040000::680>>
     ...> |> BitcoinLib.Transaction.Decoder.to_struct()
     {
       :ok,
@@ -42,7 +42,7 @@ defmodule BitcoinLib.Transaction.Decoder do
             ]
           }
         ],
-        locktime: 0
+        locktime: 1170
       }
     }
   """
@@ -62,7 +62,7 @@ defmodule BitcoinLib.Transaction.Decoder do
       |> extract_inputs
       |> extract_output_count
       |> extract_outputs
-      |> extract_witnesses
+      |> extract_witness
       |> extract_locktime
       |> validate_outputs
 
@@ -70,13 +70,13 @@ defmodule BitcoinLib.Transaction.Decoder do
       %{error: message} ->
         {:error, message}
 
-      %{inputs: inputs, outputs: outputs, witnesses: witnesses, locktime: locktime} ->
+      %{inputs: inputs, outputs: outputs, witness: witness, locktime: locktime} ->
         {:ok,
          %Transaction{
            version: @version,
            inputs: inputs,
            outputs: outputs,
-           witnesses: witnesses,
+           witness: witness,
            locktime: locktime
          }}
     end
@@ -138,19 +138,19 @@ defmodule BitcoinLib.Transaction.Decoder do
     |> Map.put(:output_count, output_count)
   end
 
-  defp extract_witnesses(%{error: message}), do: %{error: message}
+  defp extract_witness(%{error: message}), do: %{error: message}
 
-  defp extract_witnesses(%{remaining: remaining} = map) do
+  defp extract_witness(%{remaining: remaining} = map) do
     %CompactInteger{value: witness_count, remaining: remaining} =
       CompactInteger.extract_from(remaining, :big_endian)
 
-    witnesses = extract_witness_list([], remaining, witness_count)
+    {witness, remaining} = extract_witness_list([], remaining, witness_count)
 
     %{map | remaining: remaining}
-    |> Map.put(:witnesses, witnesses)
+    |> Map.put(:witness, witness)
   end
 
-  defp extract_witness_list(witnesses, _, 0), do: witnesses
+  defp extract_witness_list(witnesses, remaining, 0), do: {witnesses, remaining}
 
   defp extract_witness_list(witnesses, remaining, count) do
     %CompactInteger{value: witness_length, remaining: remaining} =
