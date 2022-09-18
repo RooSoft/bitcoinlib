@@ -7,7 +7,6 @@ defmodule BitcoinLib.Transaction.Input do
 
   @byte 8
 
-  alias BitcoinLib.Signing.Psbt.CompactInteger
   alias BitcoinLib.Transaction.Input
   alias BitcoinLib.Script
   alias BitcoinLib.Signing.Psbt.CompactInteger
