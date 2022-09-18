@@ -8,7 +8,7 @@ defmodule BitcoinLib.Transaction.Encoder do
   alias BitcoinLib.Transaction.Witnesses.{P2wpkhWitness}
   alias BitcoinLib.Signing.Psbt.CompactInteger
 
-  @version 1
+  @flag 1
   @marker 0
   @byte 8
 
@@ -73,7 +73,7 @@ defmodule BitcoinLib.Transaction.Encoder do
   defp maybe_append_marker(
          %{transaction: %Transaction{witness: _witness}, encoded: encoded} = map
        ) do
-    %{map | encoded: <<encoded::binary, @marker::@byte, @version::@byte>>}
+    %{map | encoded: <<encoded::binary, @marker::@byte, @flag::@byte>>}
   end
 
   defp append_input_count(%{transaction: %Transaction{inputs: inputs}, encoded: encoded} = map) do
