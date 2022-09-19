@@ -30,35 +30,35 @@ defmodule BitcoinLib.Key.PublicKey.Serialization do
     ...>   index: 0,
     ...>   parent_fingerprint: <<0::32>>
     ...> }
-    ...> |> BitcoinLib.Key.PublicKey.Serialization.serialize(:xpub)
+    ...> |> BitcoinLib.Key.PublicKey.Serialization.serialize(:mainnet, :bip32)
     {
       :ok,
       "xpub661MyMwAqRbcFtXgS5sYJABqqG9YLmC4Q1Rdap9gSE8NqtwybGhePY2gZ29ESFjqJoCu1Rupje8YtGqsefD265TMg7usUDFdp6W1EGMcet8"
     }
   """
-  @spec serialize(%PublicKey{}, :tpub | :upub | :vpub | :xpub | :ypub | :zpub) ::
+  @spec serialize(%PublicKey{}, :mainnet | :testnet, :bip32 | :bip49 | :bip84) ::
           {:ok, binary()} | {:error, binary()}
-  def serialize(%PublicKey{} = pub_key, :xpub) do
+  def serialize(%PublicKey{} = pub_key, :mainnet, :bip32) do
     {:ok, execute(pub_key, @xpub_version_bytes)}
   end
 
-  def serialize(%PublicKey{} = pub_key, :ypub) do
+  def serialize(%PublicKey{} = pub_key, :mainnet, :bip49) do
     {:ok, execute(pub_key, @ypub_version_bytes)}
   end
 
-  def serialize(%PublicKey{} = pub_key, :zpub) do
+  def serialize(%PublicKey{} = pub_key, :mainnet, :bip84) do
     {:ok, execute(pub_key, @zpub_version_bytes)}
   end
 
-  def serialize(%PublicKey{} = pub_key, :tpub) do
+  def serialize(%PublicKey{} = pub_key, :testnet, :bip32) do
     {:ok, execute(pub_key, @tpub_version_bytes)}
   end
 
-  def serialize(%PublicKey{} = pub_key, :upub) do
+  def serialize(%PublicKey{} = pub_key, :testnet, :bip49) do
     {:ok, execute(pub_key, @upub_version_bytes)}
   end
 
-  def serialize(%PublicKey{} = pub_key, :vpub) do
+  def serialize(%PublicKey{} = pub_key, :testnet, :bip84) do
     {:ok, execute(pub_key, @vpub_version_bytes)}
   end
 

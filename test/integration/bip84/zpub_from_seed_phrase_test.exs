@@ -15,7 +15,7 @@ defmodule BitcoinLib.Test.Integration.Bip84.ZpubFromSeedPhraseTest do
       private_key
       |> PrivateKey.from_derivation_path!("m/84'/0'/0'")
       |> PublicKey.from_private_key()
-      |> PublicKey.serialize(:zpub)
+      |> PublicKey.serialize(:mainnet, :bip84)
 
     assert zpub ==
              "zpub6rFR7y4Q2AijBEqTUquhVz398htDFrtymD9xYYfG1m4wAcvPhXNfE3EfH1r1ADqtfSdVCToUG868RvUUkgDKf31mGDtKsAYz2oz2AGutZYs"
@@ -30,7 +30,7 @@ defmodule BitcoinLib.Test.Integration.Bip84.ZpubFromSeedPhraseTest do
       private_key
       |> PrivateKey.from_derivation_path!("m/84'/0'/0'")
       |> PublicKey.from_private_key()
-      |> PublicKey.serialize(:zpub)
+      |> PublicKey.serialize(:mainnet, :bip84)
 
     assert zpub ==
              "zpub6qYAt4j2n3Vp2smwHWGYUctcxqiG6uX5fDqiWcWT98NKhwwEJGwsqaU6rFSbCQL5q7s1FBqgHALYRVQdYKQWgM6cgbA5p81vPp7ST6Aqx9Q"

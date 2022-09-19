@@ -15,7 +15,7 @@ defmodule BitcoinLib.Test.Integration.Bip32.YpubFromSeedPhraseTest do
 
     {:ok, ypub} =
       public_key
-      |> PublicKey.serialize(:ypub)
+      |> PublicKey.serialize(:mainnet, :bip49)
 
     assert "ypub6WwZCtcXYyyL6GHQrB8pnaHRNCaAWhuQkQraCKUk7qpF4JmVgwMAvaCu9m6o9nAeyFRqw6xyZxG7CDf16GMHFYbtw8KCtNsgkRoRs7YFJf9" =
              ypub

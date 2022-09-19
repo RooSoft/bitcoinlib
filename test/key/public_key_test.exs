@@ -41,7 +41,7 @@ defmodule BitcoinLib.Key.PublicKeyTest do
       chain_code: <<0x873DFF81C02F525623FD1FE5167EAC3A55A049DE3D314BB42EE227FFED37D508::256>>
     }
 
-    {:ok, serialized} = PublicKey.serialize(public_key, :ypub)
+    {:ok, serialized} = PublicKey.serialize(public_key, :mainnet, :bip49)
 
     assert "ypub6QqdH2c5z7967BioGSfAWFHM1EHzHPBZK7wrND3ZpEWFtzmCqvsD1bgpaE6pSAPkiSKhkuWPCJV6mZTSNMd2tK8xYTcJ48585pZecmSUzWp" ==
              serialized
@@ -53,7 +53,7 @@ defmodule BitcoinLib.Key.PublicKeyTest do
       chain_code: <<0x873DFF81C02F525623FD1FE5167EAC3A55A049DE3D314BB42EE227FFED37D508::256>>
     }
 
-    {:ok, serialized} = PublicKey.serialize(public_key, :zpub)
+    {:ok, serialized} = PublicKey.serialize(public_key, :mainnet, :bip84)
 
     assert "zpub6jftahH18ngZxUuv6oSniLNrBCSSE1B4EEU59bwTCEt8x6aS6b2mdfLxbS4QS53g85SWWP6wexqeer516433gYpZQoJie2tcMYdJ1SYYYAL" ==
              serialized
@@ -120,7 +120,7 @@ defmodule BitcoinLib.Key.PublicKeyTest do
       fingerprint: <<0x3442193E::32>>
     }
 
-    {:ok, serialized} = PublicKey.serialize(original_public_key, :xpub)
+    {:ok, serialized} = PublicKey.serialize(original_public_key, :mainnet, :bip32)
 
     {:ok, deserialized_public_key, :mainnet, :bip32} = PublicKey.deserialize(serialized)
 
@@ -134,7 +134,7 @@ defmodule BitcoinLib.Key.PublicKeyTest do
       chain_code: <<0x873DFF81C02F525623FD1FE5167EAC3A55A049DE3D314BB42EE227FFED37D508::256>>
     }
 
-    {:ok, serialized} = PublicKey.serialize(original_public_key, :ypub)
+    {:ok, serialized} = PublicKey.serialize(original_public_key, :mainnet, :bip49)
 
     {:ok, deserialized_public_key, :mainnet, :bip49} = PublicKey.deserialize(serialized)
 
