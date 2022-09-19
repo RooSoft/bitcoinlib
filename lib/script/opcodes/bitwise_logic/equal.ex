@@ -31,6 +31,18 @@ defmodule BitcoinLib.Script.Opcodes.BitwiseLogic.Equal do
   end
 
   @doc """
+  Returns <<0x87>>
+
+  ## Examples
+    iex> BitcoinLib.Script.Opcodes.BitwiseLogic.Equal.encode()
+    <<0x87>>
+  """
+  @spec encode() :: <<_::8>>
+  def encode() do
+    <<@value::8>>
+  end
+
+  @doc """
   Returns 1 if the inputs are exactly equal, 0 otherwise.
 
   ## Examples
