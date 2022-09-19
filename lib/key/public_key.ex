@@ -150,10 +150,13 @@ defmodule BitcoinLib.Key.PublicKey do
         depth: 0,
         index: 0,
         parent_fingerprint: <<0::32>>
-      }
+      },
+      :mainnet,
+      :bip32
     }
   """
-  @spec deserialize(binary()) :: {:ok, %PublicKey{}} | {:error, binary()}
+  @spec deserialize(binary()) ::
+          {:ok, %PublicKey{}, :tpub | :upub | :vpub | :xpub | :ypub | :zpub} | {:error, binary()}
   def deserialize(serialized_public_key) do
     case Deserialization.deserialize(serialized_public_key) do
       {:ok, public_key, network, format} ->
@@ -183,7 +186,7 @@ defmodule BitcoinLib.Key.PublicKey do
   """
   @spec deserialize!(binary()) :: %PublicKey{}
   def deserialize!(serialized_public_key) do
-    {:ok, public_key} = deserialize(serialized_public_key)
+    {:ok, public_key, _network, _format} = deserialize(serialized_public_key)
 
     public_key
   end
