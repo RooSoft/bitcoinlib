@@ -10,6 +10,10 @@ defmodule BitcoinLib.Key.PublicKey.Deserialization do
   @bip49_mainnet_human_readable "ypub"
   @bip84_mainnet_human_readable "zpub"
 
+  @bip32_testnet_human_readable "tpub"
+  @bip49_testnet_human_readable "upub"
+  @bip84_testnet_human_readable "vpub"
+
   alias BitcoinLib.Key.PublicKey
 
   @doc """
@@ -20,25 +24,43 @@ defmodule BitcoinLib.Key.PublicKey.Deserialization do
 
     iex> "xpub661MyMwAqRbcFtXgS5sYJABqqG9YLmC4Q1Rdap9gSE8NqtwybGhePY2gZ29ESFjqJoCu1Rupje8YtGqsefD265TMg7usUDFdp6W1EGMcet8"
     ...> |> BitcoinLib.Key.PublicKey.deserialize()
-    %BitcoinLib.Key.PublicKey{
-      key: 0x339A36013301597DAEF41FBE593A02CC513D0B55527EC2DF1050E2E8FF49C85C2,
-      chain_code: 0x873DFF81C02F525623FD1FE5167EAC3A55A049DE3D314BB42EE227FFED37D508,
-      depth: 0,
-      index: 0,
-      parent_fingerprint: 0
+    {
+      :ok,
+      %BitcoinLib.Key.PublicKey{
+        key: <<0x339A36013301597DAEF41FBE593A02CC513D0B55527EC2DF1050E2E8FF49C85C2::264>>,
+        chain_code: <<0x873DFF81C02F525623FD1FE5167EAC3A55A049DE3D314BB42EE227FFED37D508::256>>,
+        depth: 0,
+        index: 0,
+        parent_fingerprint: <<0,0,0,0>>,
+        fingerprint: <<0x3442193e::32>>
+      },
+      :mainnet,
+      :bip32
     }
   """
   @spec deserialize(binary()) :: {:ok, %PublicKey{}} | {:error, binary()}
   def deserialize(@bip32_mainnet_human_readable <> _data = serialized) do
-    {:ok, execute(serialized)}
+    {:ok, execute(serialized), :mainnet, :bip32}
   end
 
   def deserialize(@bip49_mainnet_human_readable <> _data = serialized) do
-    {:ok, execute(serialized)}
+    {:ok, execute(serialized), :mainnet, :bip49}
   end
 
   def deserialize(@bip84_mainnet_human_readable <> _data = serialized) do
-    {:ok, execute(serialized)}
+    {:ok, execute(serialized), :mainnet, :bip84}
+  end
+
+  def deserialize(@bip32_testnet_human_readable <> _data = serialized) do
+    {:ok, execute(serialized), :tesnet, :bip32}
+  end
+
+  def deserialize(@bip49_testnet_human_readable <> _data = serialized) do
+    {:ok, execute(serialized), :tesnet, :bip49}
+  end
+
+  def deserialize(@bip84_testnet_human_readable <> _data = serialized) do
+    {:ok, execute(serialized), :tesnet, :bip84}
   end
 
   def deserialize(_) do

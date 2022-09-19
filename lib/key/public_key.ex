@@ -156,8 +156,11 @@ defmodule BitcoinLib.Key.PublicKey do
   @spec deserialize(binary()) :: {:ok, %PublicKey{}} | {:error, binary()}
   def deserialize(serialized_public_key) do
     case Deserialization.deserialize(serialized_public_key) do
-      {:ok, public_key} -> {:ok, public_key |> add_fingerprint()}
-      {:error, _} = result -> result
+      {:ok, public_key, network, format} ->
+        {:ok, public_key |> add_fingerprint(), network, format}
+
+      {:error, _} = result ->
+        result
     end
   end
 
