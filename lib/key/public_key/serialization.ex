@@ -10,6 +10,10 @@ defmodule BitcoinLib.Key.PublicKey.Serialization do
   @ypub_version_bytes 0x049D7CB2
   @zpub_version_bytes 0x04B24746
 
+  @tpub_version_bytes 0x043587CF
+  @upub_version_bytes 0x044A5262
+  @vpub_version_bytes 0x045F1CF6
+
   alias BitcoinLib.Crypto
   alias BitcoinLib.Key.PublicKey
 
@@ -20,29 +24,42 @@ defmodule BitcoinLib.Key.PublicKey.Serialization do
     values from https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki#test-vector-1
 
     iex> %BitcoinLib.Key.PublicKey{
-    ...>   key: 0x339A36013301597DAEF41FBE593A02CC513D0B55527EC2DF1050E2E8FF49C85C2,
-    ...>   chain_code: 0x873DFF81C02F525623FD1FE5167EAC3A55A049DE3D314BB42EE227FFED37D508,
+    ...>   key: <<0x339A36013301597DAEF41FBE593A02CC513D0B55527EC2DF1050E2E8FF49C85C2::264>>,
+    ...>   chain_code: <<0x873DFF81C02F525623FD1FE5167EAC3A55A049DE3D314BB42EE227FFED37D508::256>>,
     ...>   depth: 0,
     ...>   index: 0,
-    ...>   parent_fingerprint: 0
+    ...>   parent_fingerprint: <<0::32>>
     ...> }
-    ...> |> BitcoinLib.Key.PublicKey.Serialization.serialize()
+    ...> |> BitcoinLib.Key.PublicKey.Serialization.serialize(:mainnet, :xpub)
     {
       :ok,
       "xpub661MyMwAqRbcFtXgS5sYJABqqG9YLmC4Q1Rdap9gSE8NqtwybGhePY2gZ29ESFjqJoCu1Rupje8YtGqsefD265TMg7usUDFdp6W1EGMcet8"
     }
   """
-  @spec serialize(%PublicKey{}, :xpub | :ypub | :zpub) :: {:ok, binary()} | {:error, binary()}
-  def serialize(%PublicKey{} = pub_key, :xpub) do
+  @spec serialize(%PublicKey{}, :mainnet | :testnet, :xpub | :ypub | :zpub) ::
+          {:ok, binary()} | {:error, binary()}
+  def serialize(%PublicKey{} = pub_key, :mainnet, :xpub) do
     {:ok, execute(pub_key, @xpub_version_bytes)}
   end
 
-  def serialize(%PublicKey{} = pub_key, :ypub) do
+  def serialize(%PublicKey{} = pub_key, :mainnet, :ypub) do
     {:ok, execute(pub_key, @ypub_version_bytes)}
   end
 
-  def serialize(%PublicKey{} = pub_key, :zpub) do
+  def serialize(%PublicKey{} = pub_key, :mainnet, :zpub) do
     {:ok, execute(pub_key, @zpub_version_bytes)}
+  end
+
+  def serialize(%PublicKey{} = pub_key, :testnet, :xpub) do
+    {:ok, execute(pub_key, @tpub_version_bytes)}
+  end
+
+  def serialize(%PublicKey{} = pub_key, :testnet, :ypub) do
+    {:ok, execute(pub_key, @upub_version_bytes)}
+  end
+
+  def serialize(%PublicKey{} = pub_key, :testnet, :zpub) do
+    {:ok, execute(pub_key, @vpub_version_bytes)}
   end
 
   def serialize(%PublicKey{}, _) do
