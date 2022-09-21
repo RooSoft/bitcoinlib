@@ -7,7 +7,6 @@ defmodule BitcoinLib.Transaction.Decoder do
   alias BitcoinLib.Signing.Psbt.CompactInteger
   alias BitcoinLib.Transaction.{InputList, OutputList}
 
-  @version 1
   @marker 0
   @flag 1
   @byte 8
@@ -54,7 +53,7 @@ defmodule BitcoinLib.Transaction.Decoder do
 
   # Extracts a witness transaction
   defp version_specific_extract(
-         <<@version::little-32, @marker::8, @flag::8, remaining::bitstring>>
+         <<version::little-32, @marker::8, @flag::8, remaining::bitstring>>
        ) do
     result =
       %{remaining: remaining}
@@ -73,7 +72,7 @@ defmodule BitcoinLib.Transaction.Decoder do
       %{inputs: inputs, outputs: outputs, witness: witness, locktime: locktime} ->
         {:ok,
          %Transaction{
-           version: @version,
+           version: version,
            inputs: inputs,
            outputs: outputs,
            witness: witness,
@@ -93,14 +92,15 @@ defmodule BitcoinLib.Transaction.Decoder do
       |> extract_outputs
       |> extract_locktime
       |> validate_outputs
+      |> dbg
 
     case result do
       %{error: message} ->
         {:error, message}
 
-      %{inputs: inputs, outputs: outputs, locktime: locktime} ->
+      %{version: version, inputs: inputs, outputs: outputs, locktime: locktime} ->
         {:ok,
-         %Transaction{version: @version, inputs: inputs, outputs: outputs, locktime: locktime}}
+         %Transaction{version: version, inputs: inputs, outputs: outputs, locktime: locktime}}
     end
   end
 
