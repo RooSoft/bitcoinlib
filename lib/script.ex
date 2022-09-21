@@ -58,7 +58,7 @@ defmodule BitcoinLib.Script do
   end
 
   @doc """
-  Transforms a list of opcodes into a compact integer reprensenting the size of the sript,
+  Transforms a list of opcodes into a compact integer reprensenting the size of the script,
   and the script itself
 
   ## Examples
