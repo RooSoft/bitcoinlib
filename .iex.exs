@@ -53,7 +53,7 @@ blue_wallet_pub_key =
 
 blue_wallet_zpub =
   blue_wallet_pub_key
-  |> PublicKey.serialize(:zpub)
+  |> PublicKey.serialize(:mainnet, :bip84)
 
 blue_wallet_address_0_pub_key =
   blue_wallet_pub_key
