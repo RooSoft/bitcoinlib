@@ -184,3 +184,25 @@ defmodule BitcoinLib.Transaction do
     Signer.sign_and_encode(transaction, private_key)
   end
 end
+
+defimpl Inspect, for: BitcoinLib.Transaction do
+  alias BitcoinLib.Transaction
+  alias BitcoinLib.Formatting.HexBinary
+
+  def inspect(%Transaction{} = transaction, opts) do
+    %{
+      transaction
+      | witness: format_witness(transaction.witness)
+    }
+    |> Inspect.Any.inspect(opts)
+  end
+
+  defp format_witness(witness) do
+    witness
+    |> Enum.map(&format_witness_item/1)
+  end
+
+  defp format_witness_item(witness_item) do
+    %HexBinary{data: witness_item}
+  end
+end
