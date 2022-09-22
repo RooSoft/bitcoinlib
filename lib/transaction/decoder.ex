@@ -56,7 +56,7 @@ defmodule BitcoinLib.Transaction.Decoder do
          <<version::little-32, @marker::8, @flag::8, remaining::bitstring>>
        ) do
     result =
-      %{remaining: remaining}
+      %{remaining: remaining, witness_signature?: true}
       |> extract_input_count
       |> extract_inputs
       |> extract_output_count
@@ -84,7 +84,7 @@ defmodule BitcoinLib.Transaction.Decoder do
   # Extracts a non-witness transaction
   defp version_specific_extract(remaining) do
     result =
-      %{remaining: remaining}
+      %{remaining: remaining, witness_signature?: false}
       |> extract_version
       |> extract_input_count
       |> extract_inputs
@@ -92,7 +92,6 @@ defmodule BitcoinLib.Transaction.Decoder do
       |> extract_outputs
       |> extract_locktime
       |> validate_outputs
-      |> dbg
 
     case result do
       %{error: message} ->
@@ -140,14 +139,20 @@ defmodule BitcoinLib.Transaction.Decoder do
 
   defp extract_witness(%{error: message}), do: %{error: message}
 
-  defp extract_witness(%{remaining: remaining} = map) do
+  defp extract_witness(%{remaining: remaining, witness_signature?: witness_signature?} = map) do
     %CompactInteger{value: witness_count, remaining: remaining} =
       CompactInteger.extract_from(remaining, :big_endian)
 
-    {witness, remaining} = extract_witness_list([], remaining, witness_count)
+    case witness_count == 0 && witness_signature? do
+      true ->
+        %{error: "unsigned tx serialized with witness serialization format"}
 
-    %{map | remaining: remaining}
-    |> Map.put(:witness, witness)
+      false ->
+        {witness, remaining} = extract_witness_list([], remaining, witness_count)
+
+        %{map | remaining: remaining}
+        |> Map.put(:witness, witness)
+    end
   end
 
   defp extract_witness_list(witnesses, remaining, 0), do: {witnesses, remaining}

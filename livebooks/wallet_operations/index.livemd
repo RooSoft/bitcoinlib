@@ -20,6 +20,8 @@ To do so, just throw 50 dice, and make a string of 50 chars containing the resul
 ```elixir
 {:ok, seed_phrase} =
   SeedPhrase.from_dice_rolls("12345612345612345612345612345612345612345612345612")
+
+seed_phrase = "rally celery split order almost twenty ignore record legend learn chaos decade"
 ```
 
 🔑 Derive the `master private key` from the seed phrase.
@@ -35,7 +37,7 @@ To keep things simple, just know that it's the `44'` in the derivation path that
 ```elixir
 receive_private_key =
   master_private_key
-  |> PrivateKey.from_derivation_path!("m/44'/1'/0'/0/0")
+  |> PrivateKey.from_derivation_path!("m/44'/1'/0'/1/3")
 
 receive_public_key_hash =
   receive_private_key
@@ -89,9 +91,9 @@ Here lies the `script pub key`, also known as the `locking script`. This is what
 The following code is defining variables containing what we just talked about.
 
 ```elixir
-transaction_id = "420c552d7821da5da61be91dffe984537f460dc668f0766f6c2e1c7a10287610"
+transaction_id = "ba9e74b6359c5ff49bb5a1dc0979ce85db8ee45aa90fbf170ff72dec0aad542f"
 vout = 0
-script_pub_key = "76a914b3ceddcbe5fa8aea1f672a4e543e57a49da179e388ac"
+script_pub_key = "76a9140afcad5c79123211ad61bd4723e1b23e9480f1c788ac"
 ```
 
 ## Extract parameters
@@ -103,9 +105,9 @@ Spending from a UTXO invalidates it, creating new ones in the process.
 The current UTXO contains `10000` sats. We intend to send `5000` sats to a new address. This leaves `5000` sats remaining. They must end up in two other destinations: `the change` and `the transaction fee`. The change is another UTXO and we'll keep `4000` sats. The fee is what's leftover and the miner who will include the transaction in a new block will keep it. It is thus implied from the three previous amounts:
 
 ```elixir
-original_amount = 10000
-destination_amount = 5000
-change_amount = 4000
+original_amount = 3_670_000
+destination_amount = 10000
+change_amount = 3_657_000
 fee = original_amount - destination_amount - change_amount
 ```
 
@@ -114,7 +116,7 @@ Let's create two public key hashes: a `destination` and a `change`.
 ```elixir
 destination_public_key_hash =
   master_private_key
-  |> PrivateKey.from_derivation_path!("m/44'/1'/0'/0/1")
+  |> PrivateKey.from_derivation_path!("m/44'/1'/0'/0/6")
   |> PublicKey.from_private_key()
   |> PublicKeyHash.from_public_key()
 ```
@@ -122,7 +124,7 @@ destination_public_key_hash =
 ```elixir
 change_public_key_hash =
   master_private_key
-  |> PrivateKey.from_derivation_path!("m/44'/1'/0'/1/1")
+  |> PrivateKey.from_derivation_path!("m/44'/1'/0'/1/4")
   |> PublicKey.from_private_key()
   |> PublicKeyHash.from_public_key()
 ```

@@ -175,6 +175,6 @@ defmodule BitcoinLib.Test.Integration.Bip174.InvalidPsbtsTest do
 
     {:error, message} = base_64 |> Psbt.parse()
 
-    assert message =~ "badly formatted script pub key"
+    assert message =~ "unsigned tx serialized with witness serialization format"
   end
 end
