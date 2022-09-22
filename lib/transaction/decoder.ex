@@ -3,6 +3,7 @@ defmodule BitcoinLib.Transaction.Decoder do
   Transform binaries into Transactions
   """
 
+  alias BitcoinLib.Crypto
   alias BitcoinLib.Transaction
   alias BitcoinLib.Signing.Psbt.CompactInteger
   alias BitcoinLib.Transaction.{InputList, OutputList}
@@ -21,6 +22,7 @@ defmodule BitcoinLib.Transaction.Decoder do
       :ok,
       %BitcoinLib.Transaction{
         version: 1,
+        id: "b1caa607a324ed9132c3d894d2cf7a22d59cdb4022bd8827c49e2f0d8ca018c6",
         inputs: [
           %BitcoinLib.Transaction.Input{
             txid: "3f4fa19803dec4d6a84fae3821da7ac7577080ef75451294e71f9b20e0ab1e7b",
@@ -48,11 +50,13 @@ defmodule BitcoinLib.Transaction.Decoder do
   @spec to_struct(bitstring()) :: {:ok, %Transaction{}} | {:error, binary()}
   def to_struct(encoded_transaction) do
     # see https://github.com/bitcoin/bips/blob/master/bip-0144.mediawiki#hashes
-    version_specific_extract(encoded_transaction)
+    get_id(encoded_transaction)
+    |> version_specific_extract(encoded_transaction)
   end
 
   # Extracts a witness transaction
   defp version_specific_extract(
+         id,
          <<version::little-32, @marker::8, @flag::8, remaining::bitstring>>
        ) do
     result =
@@ -72,6 +76,7 @@ defmodule BitcoinLib.Transaction.Decoder do
       %{inputs: inputs, outputs: outputs, witness: witness, locktime: locktime} ->
         {:ok,
          %Transaction{
+           id: id,
            version: version,
            inputs: inputs,
            outputs: outputs,
@@ -82,7 +87,7 @@ defmodule BitcoinLib.Transaction.Decoder do
   end
 
   # Extracts a non-witness transaction
-  defp version_specific_extract(remaining) do
+  defp version_specific_extract(id, remaining) do
     result =
       %{remaining: remaining, witness_signature?: false}
       |> extract_version
@@ -99,7 +104,13 @@ defmodule BitcoinLib.Transaction.Decoder do
 
       %{version: version, inputs: inputs, outputs: outputs, locktime: locktime} ->
         {:ok,
-         %Transaction{version: version, inputs: inputs, outputs: outputs, locktime: locktime}}
+         %Transaction{
+           id: id,
+           version: version,
+           inputs: inputs,
+           outputs: outputs,
+           locktime: locktime
+         }}
     end
   end
 
@@ -207,5 +218,19 @@ defmodule BitcoinLib.Transaction.Decoder do
         map
         |> Map.put(:error, message)
     end
+  end
+
+  defp get_id(encoded_transaction) do
+    encoded_transaction
+    |> Crypto.double_sha256()
+    |> reverse_bitstring
+    |> Binary.to_hex()
+  end
+
+  defp reverse_bitstring(bitstring) do
+    bitstring
+    |> :binary.bin_to_list()
+    |> Enum.reverse()
+    |> :binary.list_to_bin()
   end
 end

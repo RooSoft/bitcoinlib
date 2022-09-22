@@ -2,7 +2,7 @@ defmodule BitcoinLib.Transaction do
   @moduledoc """
   Based on https://learnmeabitcoin.com/technical/transaction-data#fields
   """
-  defstruct [:version, :inputs, :outputs, :locktime, witness: []]
+  defstruct [:version, :id, :inputs, :outputs, :locktime, witness: []]
 
   alias BitcoinLib.Key.PrivateKey
   alias BitcoinLib.Transaction
@@ -18,6 +18,7 @@ defmodule BitcoinLib.Transaction do
       :ok,
       %BitcoinLib.Transaction{
         version: 1,
+        id: "c80b343d2ce2b5d829c2de9854c7c8d423c0e33bda264c40138d834aab4c0638", 
         inputs: [
           %BitcoinLib.Transaction.Input{
             txid: "3f4fa19803dec4d6a84fae3821da7ac7577080ef75451294e71f9b20e0ab1e7b",
@@ -59,6 +60,7 @@ defmodule BitcoinLib.Transaction do
       :ok,
       %BitcoinLib.Transaction{
         version: 1,
+        id: "c80b343d2ce2b5d829c2de9854c7c8d423c0e33bda264c40138d834aab4c0638",
         inputs: [
           %BitcoinLib.Transaction.Input{
             txid: "3f4fa19803dec4d6a84fae3821da7ac7577080ef75451294e71f9b20e0ab1e7b",
