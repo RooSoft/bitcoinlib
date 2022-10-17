@@ -1,0 +1,167 @@
+# Seed phrase checksums
+
+```elixir
+Mix.install([
+  {:bitcoinlib, path: "~/work/github/roosoft/bitcoinlib"}
+])
+
+alias BitcoinLib.Key.HD.{Entropy}
+alias BitcoinLib.Key.HD.SeedPhrase
+alias BitcoinLib.Key.PrivateKey
+alias BitcoinLib.Key.HD.SeedPhrase.Wordlist
+```
+
+## Section
+
+```elixir
+valid_seed_phrase =
+  "12345612345612345612345612345612345612345612345612"
+  |> Entropy.from_dice_rolls!()
+  |> SeedPhrase.wordlist_from_entropy()
+```
+
+```elixir
+first_11_words = "blue involve cook print twist crystal razor february caution private slim"
+
+valid_final_words =
+  Wordlist.all()
+  |> Enum.map(fn final_word ->
+    valid? =
+      "#{first_11_words} #{final_word}"
+      |> SeedPhrase.validate()
+
+    {final_word, valid?}
+  end)
+  |> Enum.filter(fn {_, valid?} ->
+    valid?
+  end)
+  |> Enum.map(fn {valid_word, true} ->
+    valid_word
+  end)
+
+IO.inspect(valid_final_words)
+IO.inspect(Enum.count(valid_final_words))
+```
+
+```elixir
+first_23_words =
+  "involve cook print twist crystal razor february caution private slim blue involve cook print twist crystal razor february caution private slim private slim"
+
+valid_final_words =
+  Wordlist.all()
+  |> Enum.map(fn final_word ->
+    valid? =
+      "#{first_23_words} #{final_word}"
+      |> SeedPhrase.validate()
+
+    {final_word, valid?}
+  end)
+  |> Enum.filter(fn {_, valid?} ->
+    valid?
+  end)
+  |> Enum.map(fn {valid_word, true} ->
+    valid_word
+  end)
+
+IO.inspect(valid_final_words)
+
+Enum.count(valid_final_words)
+```
+
+```elixir
+first_words = "involve cook print twist crystal razor february caution private slim blue slim"
+last_words = "involve cook print twist crystal razor february caution private slim private"
+
+valid_final_words =
+  Wordlist.all()
+  |> Enum.map(fn missing_word ->
+    valid? =
+      "#{first_words} #{missing_word} #{last_words}"
+      |> SeedPhrase.validate()
+
+    {missing_word, valid?}
+  end)
+  |> Enum.filter(fn {_, valid?} ->
+    valid?
+  end)
+  |> Enum.map(fn {valid_word, true} ->
+    valid_word
+  end)
+
+IO.inspect(valid_final_words)
+
+Enum.count(valid_final_words)
+```
+
+```elixir
+valid_seed_phrase =
+  "work tenant tourist globe spice cattle " <>
+    "suggest fever begin boil undo slogan " <>
+    "concert mystery midnight affair frequent helmet " <>
+    "federal token fit speak health vendor"
+
+valid? = valid_seed_phrase |> SeedPhrase.validate()
+
+IO.inspect(valid?)
+
+# remove the 5th word
+first_words =
+  valid_seed_phrase |> String.split() |> Enum.take(4) |> Enum.join(" ") |> IO.inspect()
+
+missing_word = valid_seed_phrase |> String.split() |> Enum.at(4) |> IO.inspect()
+
+last_words =
+  valid_seed_phrase |> String.split() |> Enum.take(-19) |> Enum.join(" ") |> IO.inspect()
+
+valid_final_words =
+  Wordlist.all()
+  |> Enum.map(fn missing_word ->
+    valid? =
+      "#{first_words} #{missing_word} #{last_words}"
+      |> SeedPhrase.validate()
+
+    {missing_word, valid?}
+  end)
+  |> Enum.filter(fn {_, valid?} ->
+    valid?
+  end)
+  |> Enum.map(fn {valid_word, true} ->
+    valid_word
+  end)
+
+IO.inspect(valid_final_words)
+
+Enum.count(valid_final_words)
+```
+
+```elixir
+valid_seed_phrase =
+  "work tenant tourist globe among cattle suggest fever begin boil undo hurt " <>
+    "work tenant tourist globe among cattle suggest fever begin boil undo slogan"
+
+valid? = valid_seed_phrase |> SeedPhrase.validate()
+
+IO.inspect(valid?)
+
+# remove the 12th word
+first_words =
+  valid_seed_phrase |> String.split() |> Enum.take(11) |> Enum.join(" ") |> IO.inspect()
+
+missing_word = valid_seed_phrase |> String.split() |> Enum.at(11) |> IO.inspect()
+
+last_words =
+  valid_seed_phrase |> String.split() |> Enum.take(-12) |> Enum.join(" ") |> IO.inspect()
+
+valid_final_words = SeedPhrase.find_possible_missing_words(first_words, last_words)
+
+IO.inspect(valid_final_words)
+
+Enum.count(valid_final_words)
+```
+
+```elixir
+first_words = "work tenant tourist globe among cattle suggest fever begin boil undo "
+last_words = "work tenant tourist globe among cattle suggest fever begin boil undo slogan"
+
+valid_final_words = SeedPhrase.find_possible_missing_words(first_words, last_words)
+```
