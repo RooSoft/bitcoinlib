@@ -29,7 +29,7 @@ defmodule BitcoinLib.Test do
 
     assert %BitcoinLib.Key.PublicKey{
              key: <<0x020F69EF8F2FEB09B29393EEF514761F22636B90D8E4D3F2138B2373BD37523053::264>>,
-             fingerprint: <<0x6AE20179::32>>,
+             fingerprint: <<0x6AE20179::32>>
            } = public_key
   end
 

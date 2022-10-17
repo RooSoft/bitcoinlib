@@ -8,7 +8,7 @@ defmodule BitcoinLib.Key.PrivateKeyTest do
 
   test "creates a WIF from a private key" do
     private_key = %PrivateKey{
-      key: <<0x6c7ab2f961a1bc3f13cdc08dc41c3f439adebd549a8ef1c089e81a5907376107::256>>
+      key: <<0x6C7AB2F961A1BC3F13CDC08DC41C3F439ADEBD549A8EF1C089E81A5907376107::256>>
     }
 
     wif =
@@ -45,13 +45,14 @@ defmodule BitcoinLib.Key.PrivateKeyTest do
       |> PrivateKey.from_seed_phrase()
 
     assert %PrivateKey{
-      key: <<0x30A6B59CCCC924FC9FFD4AB08C5C01F0D6A4046797BB255D8919EB3E95C08871::256>>,
-      chain_code: <<0xE08FCC54429E47AC55FEBD4DC9EDCCC88D292EB40AA3765AF3DA7178A14AA114::256>>,
-      depth: 0,
-      index: 0,
-      fingerprint: <<0x1CF14AB4::32>>,
-      parent_fingerprint: <<0::32>>
-    } = private_key
+             key: <<0x30A6B59CCCC924FC9FFD4AB08C5C01F0D6A4046797BB255D8919EB3E95C08871::256>>,
+             chain_code:
+               <<0xE08FCC54429E47AC55FEBD4DC9EDCCC88D292EB40AA3765AF3DA7178A14AA114::256>>,
+             depth: 0,
+             index: 0,
+             fingerprint: <<0x1CF14AB4::32>>,
+             parent_fingerprint: <<0::32>>
+           } = private_key
   end
 
   test "derive the first child of a private key" do
@@ -65,12 +66,13 @@ defmodule BitcoinLib.Key.PrivateKeyTest do
     {:ok, child_private_key} = PrivateKey.derive_child(private_key, index)
 
     assert %PrivateKey{
-      key: <<0x39F329FEDBA2A68E2A804FCD9AEEA4104ACE9080212A52CE8B52C1FB89850C72::256>>,
-      chain_code: <<0x05AAE71D7C080474EFAAB01FA79E96F4C6CFE243237780B0DF4BC36106228E31::256>>,
-      depth: 1,
-      index: 0,
-      parent_fingerprint: <<0x18C1259::32>>
-    } = child_private_key
+             key: <<0x39F329FEDBA2A68E2A804FCD9AEEA4104ACE9080212A52CE8B52C1FB89850C72::256>>,
+             chain_code:
+               <<0x05AAE71D7C080474EFAAB01FA79E96F4C6CFE243237780B0DF4BC36106228E31::256>>,
+             depth: 1,
+             index: 0,
+             parent_fingerprint: <<0x18C1259::32>>
+           } = child_private_key
   end
 
   test "serialize a master private key" do

@@ -1,4 +1,4 @@
-# Manual Bitcoin Management Example
+# Segwit Wallet
 
 ```elixir
 Mix.install([
@@ -11,6 +11,43 @@ alias BitcoinLib.Transaction
 alias BitcoinLib.Script
 ```
 
+## Notes
+
+Based on [Bip141](https://github.com/bitcoin/bips/blob/master/bip-0141.mediawiki#witness-program)
+
+### Trigger
+
+Triggered when a scriptPubKey is a P2SH script, and the BIP16 redeemScript pushed in the scriptSig is exactly a push of a version byte plus a push of a witness program. The scriptSig must be exactly a push of the BIP16 redeemScript or validation fails. ("P2SH witness program")
+
+### Witness program
+
+The `version byte is 0`, and the witness program is `20 bytes`:
+
+* It is interpreted as a pay-to-witness-public-key-hash (`P2WPKH`) program.
+* The witness must consist of exactly `2 items` (≤ 520 bytes each). The first one a `signature`, and the second one a `public key`.
+* The `HASH160 of the public` key must match the `20-byte witness program`.
+  After normal script evaluation, the signature is verified against the public key with CHECKSIG operation. The verification must result in a single TRUE on the stack.
+
+### About the version byte
+
+If the `version byte is 0`, but the `witness program is neither 20 nor 32 bytes`, the script must fail.
+
+If the `version byte is 1 to 16`, `no further interpretation` of the witness program or witness stack happens, and there is `no size restriction for the witness stack`. These versions are reserved for future extensions.
+
+### Example
+
+[Source](https://github.com/bitcoin/bips/blob/master/bip-0141.mediawiki#p2wpkh-nested-in-bip16-p2sh)
+
+The following example is the same P2WPKH, but nested in a BIP16 P2SH output.
+
+```
+witness:      <signature> <pubkey>
+scriptSig:    <0 <20-byte-key-hash>>
+              (0x160014{20-byte-key-hash})
+scriptPubKey: HASH160 <20-byte-script-hash> EQUAL
+              (0xA914{20-byte-script-hash}87)
+```
+
 ## Keys creation
 
 🎲 Create a seed phrase from dice rolls.
@@ -20,8 +57,6 @@ To do so, just throw 50 dice, and make a string of 50 chars containing the resul
 ```elixir
 {:ok, seed_phrase} =
   SeedPhrase.from_dice_rolls("12345612345612345612345612345612345612345612345612")
-
-seed_phrase = "rally celery split order almost twenty ignore record legend learn chaos decade"
 ```
 
 🔑 Derive the `master private key` from the seed phrase.
@@ -30,14 +65,14 @@ seed_phrase = "rally celery split order almost twenty ignore record legend learn
 master_private_key = PrivateKey.from_seed_phrase(seed_phrase)
 ```
 
-Derive the receive `private key` and extract a P2PKH `public key hash` that will be useful later.
+Derive the receive `private key` and extract a P2SH `public key hash` that will be useful later.
 
 To keep things simple, just know that it's the `44'` in the derivation path that makes it a `P2PKH` transaction. This is a bit outside of the exercise's scope, so let's continue.
 
 ```elixir
 receive_private_key =
   master_private_key
-  |> PrivateKey.from_derivation_path!("m/44'/1'/0'/1/3")
+  |> PrivateKey.from_derivation_path!("m/49'/1'/0'/0/0")
 
 receive_public_key_hash =
   receive_private_key
@@ -48,7 +83,7 @@ receive_public_key_hash =
 Convert the `public key hash` to an `address`, which will be needed by faucets to receive funds
 
 ```elixir
-receive_address = Address.from_public_key_hash(receive_public_key_hash, :p2pkh, :testnet)
+receive_address = Address.from_public_key_hash(receive_public_key_hash, :p2sh, :testnet)
 ```
 
 ## Request some funds
@@ -57,7 +92,7 @@ receive_address = Address.from_public_key_hash(receive_public_key_hash, :p2pkh, 
 
 Go to `mempool.space` by directly forging the URL with the address and wait transactions being confirmed.
 
-Ex: `https://mempool.space/testnet/address/mwuh4ikLxAqQfSBEYVDiwdrfEVBKw8h98x`
+Ex: `https://mempool.space/testnet/address/2MzhhVCh8GvuXyzbc7wJae9WbYyCH9CUytY`
 
 Now leave that browser tab lying around. Mempool is supposed to issue a cashier bell sound 🔔 when it detects new incoming transactions to that address. When funds become spendable, you'll also hear somewhat of a magic wand sound. 🪄
 
@@ -91,9 +126,9 @@ Here lies the `script pub key`, also known as the `locking script`. This is what
 The following code is defining variables containing what we just talked about.
 
 ```elixir
-transaction_id = "ba9e74b6359c5ff49bb5a1dc0979ce85db8ee45aa90fbf170ff72dec0aad542f"
+transaction_id = "420c552d7821da5da61be91dffe984537f460dc668f0766f6c2e1c7a10287610"
 vout = 0
-script_pub_key = "76a9140afcad5c79123211ad61bd4723e1b23e9480f1c788ac"
+script_pub_key = "76a914b3ceddcbe5fa8aea1f672a4e543e57a49da179e388ac"
 ```
 
 ## Extract parameters
@@ -105,9 +140,9 @@ Spending from a UTXO invalidates it, creating new ones in the process.
 The current UTXO contains `10000` sats. We intend to send `5000` sats to a new address. This leaves `5000` sats remaining. They must end up in two other destinations: `the change` and `the transaction fee`. The change is another UTXO and we'll keep `4000` sats. The fee is what's leftover and the miner who will include the transaction in a new block will keep it. It is thus implied from the three previous amounts:
 
 ```elixir
-original_amount = 3_670_000
-destination_amount = 10000
-change_amount = 3_657_000
+original_amount = 10000
+destination_amount = 5000
+change_amount = 4000
 fee = original_amount - destination_amount - change_amount
 ```
 
@@ -116,7 +151,7 @@ Let's create two public key hashes: a `destination` and a `change`.
 ```elixir
 destination_public_key_hash =
   master_private_key
-  |> PrivateKey.from_derivation_path!("m/44'/1'/0'/0/6")
+  |> PrivateKey.from_derivation_path!("m/44'/1'/0'/0/1")
   |> PublicKey.from_private_key()
   |> PublicKeyHash.from_public_key()
 ```
@@ -124,7 +159,7 @@ destination_public_key_hash =
 ```elixir
 change_public_key_hash =
   master_private_key
-  |> PrivateKey.from_derivation_path!("m/44'/1'/0'/1/4")
+  |> PrivateKey.from_derivation_path!("m/44'/1'/0'/1/1")
   |> PublicKey.from_private_key()
   |> PublicKeyHash.from_public_key()
 ```

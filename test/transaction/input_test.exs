@@ -24,12 +24,15 @@ defmodule BitcoinLib.Transaction.InputTest do
     original_input =
       <<0xB62BA991789FB1739E6A17B3891FD94CFEBF09A61FEDB203D619932A4326C2E4000000006C493046022100DB04F98ECC28E029A1A53EE7E397CF6057EAC632431FA7EC144FBC13551B4F2B022100C24349E03EB24C7FE6603B9D578294D7A135864D6A1ACFE613EC7E206675E899012102702DED1CCA9816FA1A94787FFC6F3ACE62CD3B63164F76D227D0935A33EE48C3FFFFFFFF::1192>>
 
-    decoded_encoded_input =
+    {:ok, input, remaining} =
       original_input
       |> Input.extract_from()
-      |> elem(0)
+
+    decoded_encoded_input =
+      input
       |> Input.encode()
 
+    assert <<>> == remaining
     assert original_input == decoded_encoded_input
   end
 end

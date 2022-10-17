@@ -35,13 +35,13 @@ defmodule BitcoinLib.Test.Integration.LockingScripts.BitapsExampleTest do
     # we use the second UTXO's script pub key from the output in the above transaction:
     redeem_script =
       <<0x76A914A235BDDE3BB2C326F291D9C281FDC3FE1E956FE088AC::200>>
-      |> Script.parse()
+      |> Script.parse!()
 
     # found straight in the output of step1 in here:
     # https://medium.com/@bitaps.com/exploring-bitcoin-signing-the-p2pkh-input-b8b4d5c4809c#50a6
     locking_script =
       <<0x76A914F86F0BC0A2232970CCDF4569815DB500F126836188AC::200>>
-      |> Script.parse()
+      |> Script.parse!()
 
     transaction_hex =
       %Transaction{

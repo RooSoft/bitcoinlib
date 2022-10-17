@@ -61,28 +61,24 @@ defmodule BitcoinLib.Signing.Psbt.Output do
   end
 
   defp add_redeem_script(output, keypair) do
-    redeem_script = RedeemScript.parse(keypair)
-
-    case Map.get(redeem_script, :error) do
-      nil ->
+    case RedeemScript.parse(keypair) do
+      {:ok, redeem_script} ->
         output
         |> Map.put(:redeem_script, redeem_script)
 
-      message ->
+      {:error, message} ->
         output
         |> Map.put(:error, message)
     end
   end
 
   defp add_witness_script(output, keypair) do
-    witness_script = WitnessScript.parse(keypair)
-
-    case Map.get(witness_script, :error) do
-      nil ->
+    case WitnessScript.parse(keypair) do
+      {:ok, witness_script} ->
         output
         |> Map.put(:witness_script, witness_script.script)
 
-      message ->
+      {:error, message} ->
         output
         |> Map.put(:error, message)
     end

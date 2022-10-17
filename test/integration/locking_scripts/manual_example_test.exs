@@ -32,7 +32,7 @@ defmodule BitcoinLib.Test.Integration.LockingScripts.ManualExampleTest do
     # we use the first UTXO's script pub key from the output in the above transaction:
     redeem_script =
       <<0x76A914AFC3E518577316386188AF748A816CD14CE333F288AC::200>>
-      |> Script.parse()
+      |> Script.parse!()
 
     # found straight in the output of step1 in here:
     # https://medium.com/@bitaps.com/exploring-bitcoin-signing-the-p2pkh-input-b8b4d5c4809c#50a6
@@ -116,7 +116,7 @@ defmodule BitcoinLib.Test.Integration.LockingScripts.ManualExampleTest do
     # we use the first UTXO's script pub key from the output in the above transaction:
     redeem_script =
       <<0x76A914AFC3E518577316386188AF748A816CD14CE333F288AC::200>>
-      |> Script.parse()
+      |> Script.parse!()
 
     # found straight in the output of step1 in here:
     # https://medium.com/@bitaps.com/exploring-bitcoin-signing-the-p2pkh-input-b8b4d5c4809c#50a6
@@ -164,7 +164,7 @@ defmodule BitcoinLib.Test.Integration.LockingScripts.ManualExampleTest do
     # we use the first UTXO's script pub key from the output in the above transaction:
     redeem_script =
       <<0x76A914AFC3E518577316386188AF748A816CD14CE333F288AC::200>>
-      |> Script.parse()
+      |> Script.parse!()
 
     # found straight in the output of step1 in here:
     # https://medium.com/@bitaps.com/exploring-bitcoin-signing-the-p2pkh-input-b8b4d5c4809c#50a6
@@ -210,7 +210,7 @@ defmodule BitcoinLib.Test.Integration.LockingScripts.ManualExampleTest do
 
     signed_transaction =
       %Transaction.Spec{}
-      |> Transaction.Spec.add_input(
+      |> Transaction.Spec.add_input!(
         txid: "f48648ab6adffe3b569383450a3279372a537c3be995c9e4e25f297d764e18d7",
         vout: 0,
         redeem_script: "76a914c39658833d83f2299416e697af2fb95a998853d388ac"

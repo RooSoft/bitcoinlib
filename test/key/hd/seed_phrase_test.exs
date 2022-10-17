@@ -62,4 +62,22 @@ defmodule BitcoinLib.Key.HD.SeedPhraseTest do
     assert "d525a6edf12d3919d132788ae3ce0f597430f4c58c4ff6cbac99609121565de24fab6ba7fb247fa2ea3028f8fc80cde71e7155f6928480644db2027b8b9a3627" ==
              seed
   end
+
+  test "a valid seed phrase" do
+    valid_seed_phrase =
+      "blue involve cook print twist crystal razor february caution private slim medal"
+
+    result = SeedPhrase.validate(valid_seed_phrase)
+
+    assert true == result
+  end
+
+  test "an invalid seed phrase" do
+    valid_seed_phrase =
+      "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon able"
+
+    result = SeedPhrase.validate(valid_seed_phrase)
+
+    assert false == result
+  end
 end

@@ -109,28 +109,24 @@ defmodule BitcoinLib.Signing.Psbt.Input do
   end
 
   defp add_non_witness_utxo(input, keypair) do
-    utxo = NonWitnessUtxo.parse(keypair)
-
-    case Map.get(utxo, :error) do
-      nil ->
+    case NonWitnessUtxo.parse(keypair) do
+      {:ok, utxo} ->
         input
         |> Map.put(:utxo, utxo)
 
-      message ->
+      {:error, message} ->
         input
         |> Map.put(:error, message)
     end
   end
 
   defp add_witness_utxo(input, keypair) do
-    utxo = WitnessUtxo.parse(keypair)
-
-    case Map.get(utxo, :error) do
-      nil ->
+    case WitnessUtxo.parse(keypair) do
+      {:ok, utxo} ->
         input
         |> Map.put(:utxo, utxo)
 
-      message ->
+      {:error, message} ->
         input
         |> Map.put(:error, message)
     end
@@ -159,20 +155,16 @@ defmodule BitcoinLib.Signing.Psbt.Input do
   end
 
   defp add_redeem_script(input, keypair) do
-    redeem_script = RedeemScript.parse(keypair)
-
-    case Map.get(redeem_script, :error) do
-      nil -> input |> Map.put(:redeem_script, redeem_script.script)
-      message -> input |> Map.put(:error, message)
+    case RedeemScript.parse(keypair) do
+      {:ok, redeem_script} -> input |> Map.put(:redeem_script, redeem_script.script)
+      {:error, message} -> input |> Map.put(:error, message)
     end
   end
 
   defp add_witness_script(input, keypair) do
-    witness_script = WitnessScript.parse(keypair)
-
-    case Map.get(witness_script, :error) do
-      nil -> input |> Map.put(:witness_script, witness_script.script)
-      message -> input |> Map.put(:error, message)
+    case WitnessScript.parse(keypair) do
+      {:ok, witness_script} -> input |> Map.put(:witness_script, witness_script.script)
+      {:error, message} -> input |> Map.put(:error, message)
     end
   end
 
@@ -190,14 +182,12 @@ defmodule BitcoinLib.Signing.Psbt.Input do
   end
 
   defp add_final_script_sig(input, keypair) do
-    final_script_sig = FinalScriptSig.parse(keypair)
-
-    case Map.get(final_script_sig, :error) do
-      nil ->
+    case FinalScriptSig.parse(keypair) do
+      {:ok, final_script_sig} ->
         input
         |> Map.put(:final_script_sig, final_script_sig.script_sig)
 
-      message ->
+      {:error, message} ->
         input
         |> Map.put(:error, message)
     end

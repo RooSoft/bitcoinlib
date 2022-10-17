@@ -4,19 +4,24 @@ defmodule BitcoinLib.Signing.Psbt.Input.NonWitnessUtxo do
   alias BitcoinLib.Signing.Psbt.Input.NonWitnessUtxo
   alias BitcoinLib.Signing.Psbt.Keypair
   alias BitcoinLib.Signing.Psbt.Keypair.{Key, Value}
- # alias BitcoinLib.Script
+  # alias BitcoinLib.Script
 
   alias BitcoinLib.Transaction
- # alias BitcoinLib.Transaction.Output
+  # alias BitcoinLib.Transaction.Output
 
   def parse(keypair) do
-    %{keypair: keypair, non_witness_utxo: %NonWitnessUtxo{}}
+    %{keypair: keypair}
     |> validate_keypair()
     |> extract_transaction()
     ## TODO: these conditions fail on a valid P2PKH PSBT, please review before reinstating them
     #   |> validate_script_pub_keys()
-    |> Map.get(:non_witness_utxo)
+    |> create_output()
   end
+
+  defp create_output(%{error: message}), do: {:error, message}
+
+  defp create_output(%{transaction: transaction}),
+    do: {:ok, %NonWitnessUtxo{transaction: transaction}}
 
   defp validate_keypair(%{keypair: keypair} = map) do
     case keypair.key do
@@ -28,8 +33,7 @@ defmodule BitcoinLib.Signing.Psbt.Input.NonWitnessUtxo do
     end
   end
 
-  defp extract_transaction(%{non_witness_utxo: %{error: _message}} = map),
-    do: map
+  defp extract_transaction(%{error: _} = map), do: map
 
   defp extract_transaction(%{keypair: %Keypair{value: %Value{data: data}}} = map) do
     case Transaction.decode(data) do
@@ -78,14 +82,11 @@ defmodule BitcoinLib.Signing.Psbt.Input.NonWitnessUtxo do
   #   end
   # end
 
-  defp set_transaction(%{non_witness_utxo: non_witness_utxo} = map, transaction) do
-    %{map | non_witness_utxo: Map.put(non_witness_utxo, :transaction, transaction)}
+  defp set_transaction(map, transaction) do
+    Map.put(map, :transaction, transaction)
   end
 
-  defp set_error(%{non_witness_utxo: non_witness_utxo} = map, message) do
-    %{
-      map
-      | non_witness_utxo: Map.put(non_witness_utxo, :error, message)
-    }
+  defp set_error(map, message) do
+    Map.put(map, :error, message)
   end
 end

@@ -18,6 +18,7 @@ defmodule BitcoinLib.Transaction.Output do
     iex> <<0xf0ca052a010000001976a914cbc20a7664f2f69e5355aa427045bc15e7c6c77288ac00000000::304>>
     ...> |> BitcoinLib.Transaction.Output.extract_from
     {
+      :ok,
       %BitcoinLib.Transaction.Output{
         value: 4999990000,
         script_pub_key: [
@@ -31,15 +32,15 @@ defmodule BitcoinLib.Transaction.Output do
       <<0, 0, 0, 0>>
     }
   """
-  @spec extract_from(binary()) :: {%Output{}, bitstring()} | {:error, binary()}
+  @spec extract_from(binary()) :: {:ok, %Output{}, bitstring()} | {:error, binary()}
   def extract_from(<<value::little-64, remaining::bitstring>>) do
     case extract_script_pub_key(remaining) do
       {:ok, script_pub_key, remaining} ->
         output = %Output{value: value, script_pub_key: script_pub_key}
-        {output, remaining}
+        {:ok, output, remaining}
 
       {:error, message} ->
-        {%{error: message}, remaining}
+        {:error, message}
     end
   end
 
@@ -82,12 +83,10 @@ defmodule BitcoinLib.Transaction.Output do
         <<script_pub_key::bitstring-size(script_pub_key_bit_size), remaining::bitstring>> =
           remaining
 
-        ##### TODO: Script.parse() should be able to return a parsing error
-        script_pub_key =
-          script_pub_key
-          |> Script.parse()
-
-        {:ok, script_pub_key, remaining}
+        case Script.parse(script_pub_key) do
+          {:ok, script_pub_key} -> {:ok, script_pub_key, remaining}
+          {:error, message} -> {:error, message}
+        end
 
       false ->
         {:error, "badly formatted script pub key"}

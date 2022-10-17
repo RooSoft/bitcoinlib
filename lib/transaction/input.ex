@@ -7,7 +7,6 @@ defmodule BitcoinLib.Transaction.Input do
 
   @byte 8
 
-  alias BitcoinLib.Signing.Psbt.CompactInteger
   alias BitcoinLib.Transaction.Input
   alias BitcoinLib.Script
   alias BitcoinLib.Signing.Psbt.CompactInteger
@@ -19,6 +18,7 @@ defmodule BitcoinLib.Transaction.Input do
     iex> <<0x7b1eabe0209b1fe794124575ef807057c77ada2138ae4fa8d6c4de0398a14f3f0000000000ffffffff01f0ca052a010000001976a914cbc20a7664f2f69e5355aa427045bc15e7c6c77288ac00000000::640>>
     ...> |> BitcoinLib.Transaction.Input.extract_from()
     {
+      :ok,
       %BitcoinLib.Transaction.Input{
         txid: "3f4fa19803dec4d6a84fae3821da7ac7577080ef75451294e71f9b20e0ab1e7b",
         vout: 0,
@@ -28,20 +28,26 @@ defmodule BitcoinLib.Transaction.Input do
       <<0x01f0ca052a010000001976a914cbc20a7664f2f69e5355aa427045bc15e7c6c77288ac00000000::312>>
     }
   """
-  @spec extract_from(binary()) :: {%Input{}, bitstring()}
+  @spec extract_from(binary()) :: {:ok, %Input{}, bitstring()} | {:error, binary()}
   def extract_from(<<txid::little-256, vout::little-32, remaining::bitstring>>) do
-    {script_sig, remaining} = extract_script_sig(remaining)
-    {sequence, remaining} = extract_sequence(remaining)
+    case extract_script_sig(remaining) do
+      {:error, message} ->
+        {:error, message}
 
-    {
-      %Input{
-        txid: Integer.to_string(txid, 16) |> String.downcase(),
-        vout: vout,
-        script_sig: script_sig,
-        sequence: sequence
-      },
-      remaining
-    }
+      {:ok, script_sig, remaining} ->
+        {sequence, remaining} = extract_sequence(remaining)
+
+        {
+          :ok,
+          %Input{
+            txid: Integer.to_string(txid, 16) |> String.downcase(),
+            vout: vout,
+            script_sig: script_sig,
+            sequence: sequence
+          },
+          remaining
+        }
+    end
   end
 
   @doc """
@@ -90,11 +96,10 @@ defmodule BitcoinLib.Transaction.Input do
 
     <<script_sig::bitstring-size(script_sig_bit_size), remaining::bitstring>> = remaining
 
-    script_sig =
-      script_sig
-      |> Script.parse()
-
-    {script_sig, remaining}
+    case Script.parse(script_sig) do
+      {:ok, script_sig} -> {:ok, script_sig, remaining}
+      {:error, message} -> {:error, message}
+    end
   end
 
   defp extract_sequence(remaining) do

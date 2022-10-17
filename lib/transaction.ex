@@ -2,12 +2,11 @@ defmodule BitcoinLib.Transaction do
   @moduledoc """
   Based on https://learnmeabitcoin.com/technical/transaction-data#fields
   """
-  defstruct [:version, :inputs, :outputs, :locktime]
+  defstruct [:version, :id, :inputs, :outputs, :locktime, witness: []]
 
   alias BitcoinLib.Key.PrivateKey
-  alias BitcoinLib.Signing.Psbt.CompactInteger
   alias BitcoinLib.Transaction
-  alias BitcoinLib.Transaction.{Input, Output, Encoder, Signer}
+  alias BitcoinLib.Transaction.{Encoder, Decoder, Signer}
 
   @doc """
   Converts a hex binary into a %Transaction{}
@@ -19,6 +18,7 @@ defmodule BitcoinLib.Transaction do
       :ok,
       %BitcoinLib.Transaction{
         version: 1,
+        id: "c80b343d2ce2b5d829c2de9854c7c8d423c0e33bda264c40138d834aab4c0638", 
         inputs: [
           %BitcoinLib.Transaction.Input{
             txid: "3f4fa19803dec4d6a84fae3821da7ac7577080ef75451294e71f9b20e0ab1e7b",
@@ -60,6 +60,7 @@ defmodule BitcoinLib.Transaction do
       :ok,
       %BitcoinLib.Transaction{
         version: 1,
+        id: "c80b343d2ce2b5d829c2de9854c7c8d423c0e33bda264c40138d834aab4c0638",
         inputs: [
           %BitcoinLib.Transaction.Input{
             txid: "3f4fa19803dec4d6a84fae3821da7ac7577080ef75451294e71f9b20e0ab1e7b",
@@ -86,24 +87,8 @@ defmodule BitcoinLib.Transaction do
   """
   @spec decode(bitstring()) :: {:ok, %Transaction{}} | {:error, binary()}
   def decode(encoded_transaction) do
-    result =
-      %{remaining: encoded_transaction}
-      |> extract_version
-      |> extract_input_count
-      |> extract_inputs
-      |> extract_output_count
-      |> extract_outputs
-      |> extract_locktime
-      |> validate_outputs
-
-    case result do
-      %{error: message} ->
-        {:error, message}
-
-      %{version: version, inputs: inputs, outputs: outputs, locktime: locktime} ->
-        {:ok,
-         %Transaction{version: version, inputs: inputs, outputs: outputs, locktime: locktime}}
-    end
+    encoded_transaction
+    |> Decoder.to_struct()
   end
 
   @doc """
@@ -184,11 +169,11 @@ defmodule BitcoinLib.Transaction do
     ...>        txid: "e4c226432a9319d603b2ed1fa609bffe4cd91f89b3176a9e73b19f7891a92bb6",
     ...>        vout: 0,
     ...>        sequence: 0xFFFFFFFF,
-    ...>        script_sig: <<0x76A914AFC3E518577316386188AF748A816CD14CE333F288AC::200>> |> BitcoinLib.Script.parse()
+    ...>        script_sig: <<0x76A914AFC3E518577316386188AF748A816CD14CE333F288AC::200>> |> BitcoinLib.Script.parse!()
     ...>      }
     ...>    ],
     ...>    outputs: [%BitcoinLib.Transaction.Output{
-    ...>       script_pub_key: <<0x76a9283265393261373463333431393661303236653839653061643561633431386366393430613361663288ac::360>> |> BitcoinLib.Script.parse(),
+    ...>       script_pub_key: <<0x76a9283265393261373463333431393661303236653839653061643561633431386366393430613361663288ac::360>> |> BitcoinLib.Script.parse!(),
     ...>       value: 10_000}
     ...>    ],
     ...>    locktime: 0
@@ -200,81 +185,26 @@ defmodule BitcoinLib.Transaction do
   def sign_and_encode(%Transaction{} = transaction, %PrivateKey{} = private_key) do
     Signer.sign_and_encode(transaction, private_key)
   end
+end
 
-  defp extract_version(%{remaining: <<version::little-32, remaining::bitstring>>} = map) do
-    %{map | remaining: remaining}
-    |> Map.put(:version, version)
+defimpl Inspect, for: BitcoinLib.Transaction do
+  alias BitcoinLib.Transaction
+  alias BitcoinLib.Formatting.HexBinary
+
+  def inspect(%Transaction{} = transaction, opts) do
+    %{
+      transaction
+      | witness: format_witness(transaction.witness)
+    }
+    |> Inspect.Any.inspect(opts)
   end
 
-  defp extract_input_count(%{remaining: remaining} = map) do
-    %CompactInteger{value: input_count, remaining: remaining} =
-      CompactInteger.extract_from(remaining, :big_endian)
-
-    %{map | remaining: remaining}
-    |> Map.put(:input_count, input_count)
+  defp format_witness(witness) do
+    witness
+    |> Enum.map(&format_witness_item/1)
   end
 
-  defp extract_inputs(%{input_count: input_count, remaining: remaining} = map) do
-    {inputs, remaining} =
-      case input_count do
-        0 ->
-          {[], remaining}
-
-        _ ->
-          1..input_count
-          |> Enum.reduce({[], remaining}, fn _nb, {inputs, remaining} ->
-            {input, remaining} = Input.extract_from(remaining)
-
-            {[input | inputs], remaining}
-          end)
-      end
-
-    %{map | remaining: remaining}
-    |> Map.put(:inputs, Enum.reverse(inputs))
-  end
-
-  defp extract_output_count(%{remaining: remaining} = map) do
-    %CompactInteger{value: output_count, remaining: remaining} =
-      CompactInteger.extract_from(remaining, :big_endian)
-
-    %{map | remaining: remaining}
-    |> Map.put(:output_count, output_count)
-  end
-
-  defp extract_outputs(%{output_count: output_count, remaining: remaining} = map) do
-    {outputs, remaining} =
-      1..output_count
-      |> Enum.reduce({[], remaining}, fn _nb, {outputs, remaining} ->
-        {output, remaining} = Output.extract_from(remaining)
-
-        {[output | outputs], remaining}
-      end)
-
-    %{map | remaining: remaining}
-    |> Map.put(:outputs, Enum.reverse(outputs))
-  end
-
-  defp extract_locktime(%{remaining: remaining} = map) do
-    <<locktime::little-32, remaining::bitstring>> = remaining
-
-    %{map | remaining: remaining}
-    |> Map.put(:locktime, locktime)
-  end
-
-  defp validate_outputs(%{outputs: outputs} = map) do
-    error =
-      outputs
-      |> Enum.find_value(fn output ->
-        Map.get(output, :error)
-      end)
-
-    case error do
-      nil ->
-        map
-
-      message ->
-        map
-        |> Map.put(:error, message)
-    end
+  defp format_witness_item(witness_item) do
+    %HexBinary{data: witness_item}
   end
 end

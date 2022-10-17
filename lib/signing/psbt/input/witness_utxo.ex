@@ -9,44 +9,54 @@ defmodule BitcoinLib.Signing.Psbt.Input.WitnessUtxo do
 
   @bits 8
 
+  @spec parse(%Keypair{}) :: {:ok, %WitnessUtxo{}} | {:error, binary()}
   def parse(keypair) do
-    %{witness_utxo: witness_utxo} =
-      %{keypair: keypair, witness_utxo: %WitnessUtxo{}}
-      |> validate_keypair()
-      |> extract_amount()
-      |> extract_script_pub_key()
-      |> validate_script_pub_key()
-
-    witness_utxo
+    %{keypair: keypair}
+    |> validate_keypair()
+    |> extract_amount()
+    |> extract_script_pub_key()
+    |> validate_script_pub_key()
+    |> create_output()
   end
 
-  defp validate_keypair(%{keypair: keypair, witness_utxo: witness_utxo} = map) do
+  defp create_output(%{error: message}), do: {:error, message}
+
+  defp create_output(%{amount: amount, script_pub_key: script_pub_key}) do
+    witness_utxo = %WitnessUtxo{
+      amount: amount,
+      script_pub_key: script_pub_key
+    }
+
+    {:ok, witness_utxo}
+  end
+
+  defp validate_keypair(%{keypair: keypair} = map) do
     case keypair.key do
       %Key{data: <<>>} ->
         map
 
       _ ->
-        %{map | witness_utxo: Map.put(witness_utxo, :error, "invalid witness utxo key")}
+        Map.put(map, :error, "invalid witness utxo key")
     end
   end
 
-  defp extract_amount(%{witness_utxo: %{error: _message}} = map), do: map
+  defp extract_amount(%{error: _message} = map), do: map
 
   defp extract_amount(
          %{
            keypair: %Keypair{
              value: %Value{data: <<amount::little-64, remaining::bitstring>>}
-           },
-           witness_utxo: witness_utxo
+           }
          } = map
        ) do
-    %{map | witness_utxo: Map.put(witness_utxo, :amount, amount)}
+    map
+    |> Map.put(:amount, amount)
     |> Map.put(:remaining, remaining)
   end
 
-  defp extract_script_pub_key(%{witness_utxo: %{error: _message}} = map), do: map
+  defp extract_script_pub_key(%{error: _message} = map), do: map
 
-  defp extract_script_pub_key(%{remaining: remaining, witness_utxo: witness_utxo} = map) do
+  defp extract_script_pub_key(%{remaining: remaining} = map) do
     %CompactInteger{value: script_pub_key_length, remaining: remaining} =
       CompactInteger.extract_from(remaining)
 
@@ -55,20 +65,19 @@ defmodule BitcoinLib.Signing.Psbt.Input.WitnessUtxo do
     <<script_pub_key::bitstring-size(script_pub_key_length_in_bits), remaining::bitstring>> =
       remaining
 
-    script = Script.parse(script_pub_key)
+    case Script.parse(script_pub_key) do
+      {:ok, script} ->
+        %{map | remaining: remaining}
+        |> Map.put(:script_pub_key, script)
 
-    %{
-      map
-      | remaining: remaining,
-        witness_utxo: Map.put(witness_utxo, :script_pub_key, script)
-    }
+      {:error, message} ->
+        Map.put(map, :error, message)
+    end
   end
 
-  defp validate_script_pub_key(%{witness_utxo: %{error: _message}} = map), do: map
+  defp validate_script_pub_key(%{error: _message} = map), do: map
 
-  defp validate_script_pub_key(
-         %{witness_utxo: %WitnessUtxo{script_pub_key: script_pub_key} = witness_utxo} = map
-       ) do
+  defp validate_script_pub_key(%{script_pub_key: script_pub_key} = map) do
     id =
       script_pub_key
       |> Script.Analyzer.identify()
@@ -87,7 +96,7 @@ defmodule BitcoinLib.Signing.Psbt.Input.WitnessUtxo do
         formatted_script_type = Atom.to_string(script_type) |> String.upcase()
         message = "a witness UTXO contains a #{formatted_script_type} script"
 
-        %{map | witness_utxo: Map.put(witness_utxo, :error, message)}
+        Map.put(map, :error, message)
     end
   end
 end

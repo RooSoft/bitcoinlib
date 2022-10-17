@@ -81,6 +81,7 @@ of those that are at least partially implemented in this library:
 - [bip49](https://github.com/bitcoin/bips/blob/master/bip-0049.mediawiki) - Derivation scheme for P2WPKH-nested-in-P2SH based accounts
 - [bip84](https://github.com/bitcoin/bips/blob/master/bip-0084.mediawiki) - Derivation scheme for P2WPKH based accounts
 - [bip141](https://github.com/bitcoin/bips/blob/master/bip-0141.mediawiki) - Segregated Witness (Consensus layer)
+- [bip144](https://github.com/bitcoin/bips/blob/master/bip-0144.mediawiki) - Segregated Witness (Peer Services)
 - [bip173](https://github.com/bitcoin/bips/blob/master/bip-0173.mediawiki) - Base32 address format for native v0-16 witness outputs
 - [bip174](https://github.com/bitcoin/bips/blob/master/bip-0174.mediawiki) - Partially Signed Bitcoin Transaction Format
 

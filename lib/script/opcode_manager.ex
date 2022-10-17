@@ -52,6 +52,10 @@ defmodule BitcoinLib.Script.OpcodeManager do
     BitwiseLogic.EqualVerify.encode()
   end
 
+  def encode_opcode(%BitwiseLogic.Equal{}) do
+    BitwiseLogic.Equal.encode()
+  end
+
   def encode_opcode(%Crypto.CheckSig{}) do
     Crypto.CheckSig.encode()
   end

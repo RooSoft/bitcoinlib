@@ -14,9 +14,8 @@ defmodule BitcoinLib.Transaction.Spec do
   Adds a human readable input into a transaction spec
 
   ## Examples
-    iex> transaction_spec = %BitcoinLib.Transaction.Spec{}
-    ...> transaction_spec
-    ...> |> BitcoinLib.Transaction.Spec.add_input(
+    iex> %BitcoinLib.Transaction.Spec{}
+    ...> |> BitcoinLib.Transaction.Spec.add_input!(
     ...>   txid: "6925062befcf8aafae78de879fec2535ec016e251c19b1c0792993258a6fda26",
     ...>   vout: 1,
     ...>   redeem_script: "76a914c39658833d83f2299416e697af2fb95a998853d388ac"
@@ -38,22 +37,27 @@ defmodule BitcoinLib.Transaction.Spec do
       outputs: []
     }
   """
-  @spec add_input(%Spec{}, list()) :: %Spec{}
-  def add_input(
+  @spec add_input!(%Spec{}, binary() | list()) :: %Spec{}
+  def add_input!(
         %Spec{} = spec,
         txid: txid,
         vout: vout,
         redeem_script: redeem_script
       )
       when is_binary(redeem_script) do
-    Spec.add_input(spec,
+    {:ok, parsed_redeem_script} =
+      redeem_script
+      |> Binary.from_hex()
+      |> Script.parse()
+
+    Spec.add_input!(spec,
       txid: txid,
       vout: vout,
-      redeem_script: redeem_script |> Binary.from_hex() |> Script.parse()
+      redeem_script: parsed_redeem_script
     )
   end
 
-  def add_input(%Spec{inputs: inputs} = spec,
+  def add_input!(%Spec{inputs: inputs} = spec,
         txid: txid,
         vout: vout,
         redeem_script: redeem_script
@@ -95,7 +99,7 @@ defmodule BitcoinLib.Transaction.Spec do
   @spec add_output(%Spec{}, binary() | list(), integer()) :: %Spec{}
   def add_output(%Spec{} = spec, script_pub_key, value)
       when is_binary(script_pub_key) do
-    parsed_script = script_pub_key |> Binary.from_hex() |> Script.parse()
+    parsed_script = script_pub_key |> Binary.from_hex() |> Script.parse!()
     Spec.add_output(spec, parsed_script, value)
   end
 

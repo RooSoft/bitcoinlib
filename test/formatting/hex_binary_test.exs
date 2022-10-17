@@ -16,7 +16,7 @@ defmodule BitcoinLib.Formatting.HexBinaryTest do
   test "display a hex binary" do
     hex_binary = HexBinary.from_binary(<<0x12345678::32>>)
 
-    formatted = "#{inspect hex_binary}"
+    formatted = "#{inspect(hex_binary)}"
 
     assert "<<0x12345678::32>>" == formatted
   end

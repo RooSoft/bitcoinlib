@@ -5,7 +5,12 @@ defmodule BitcoinLib.Transaction.Encoder do
 
   alias BitcoinLib.Transaction
   alias BitcoinLib.Transaction.{Input, Output}
+  alias BitcoinLib.Transaction.Witnesses.{P2wpkhWitness}
   alias BitcoinLib.Signing.Psbt.CompactInteger
+
+  @flag 1
+  @marker 0
+  @byte 8
 
   @doc """
   Encodes a transaction in binary format from a structure
@@ -47,16 +52,28 @@ defmodule BitcoinLib.Transaction.Encoder do
   def from_struct(%Transaction{} = transaction) do
     %{transaction: transaction, encoded: <<>>}
     |> append_version
+    |> maybe_append_marker
     |> append_input_count
     |> append_inputs
     |> append_output_count
     |> append_outputs
+    |> maybe_append_witnesses
     |> append_locktime
     |> Map.get(:encoded)
   end
 
   defp append_version(%{transaction: %Transaction{version: version}, encoded: encoded} = map) do
     %{map | encoded: <<encoded::binary, version::little-32>>}
+  end
+
+  # No witness, and thus the marker shouldn't be added
+  defp maybe_append_marker(%{transaction: %Transaction{witness: []}} = map), do: map
+
+  # Add a marker since witnesses are present
+  defp maybe_append_marker(
+         %{transaction: %Transaction{witness: _witness}, encoded: encoded} = map
+       ) do
+    %{map | encoded: <<encoded::binary, @marker::@byte, @flag::@byte>>}
   end
 
   defp append_input_count(%{transaction: %Transaction{inputs: inputs}, encoded: encoded} = map) do
@@ -97,6 +114,16 @@ defmodule BitcoinLib.Transaction.Encoder do
       end)
 
     %{map | encoded: encoded_with_outputs}
+  end
+
+  defp maybe_append_witnesses(%{transaction: %Transaction{witness: []}} = map), do: map
+
+  defp maybe_append_witnesses(
+         %{transaction: %Transaction{witness: [public_key, signature]}, encoded: encoded} = map
+       ) do
+    encoded_witness = P2wpkhWitness.encode(signature, public_key)
+
+    %{map | encoded: <<encoded::bitstring, encoded_witness::bitstring>>}
   end
 
   defp append_locktime(%{transaction: %Transaction{locktime: locktime}, encoded: encoded} = map) do
