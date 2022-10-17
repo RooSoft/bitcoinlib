@@ -2,7 +2,7 @@
 
 ```elixir
 Mix.install([
-  {:bitcoinlib, path: "~/work/github/roosoft/bitcoinlib"}
+  {:bitcoinlib, "~> 0.2.2"}
 ])
 
 alias BitcoinLib.Key.HD.{Entropy}
