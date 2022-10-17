@@ -1,0 +1,21 @@
+# Seed phrase checksums
+
+```elixir
+Mix.install([
+  {:bitcoinlib, "~> 0.2.2"}
+])
+
+alias BitcoinLib.Key.HD.{Entropy}
+alias BitcoinLib.Key.HD.SeedPhrase
+alias BitcoinLib.Key.PrivateKey
+alias BitcoinLib.Key.HD.SeedPhrase.Wordlist
+```
+
+## Find possible missing words
+
+```elixir
+first_words = "work tenant tourist globe among cattle suggest fever begin boil undo "
+last_words = "work tenant tourist globe among cattle suggest fever begin boil undo slogan"
+
+valid_final_words = SeedPhrase.find_possible_missing_words(first_words, last_words)
+```

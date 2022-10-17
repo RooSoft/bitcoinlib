@@ -38,7 +38,14 @@ defmodule BitcoinLib.Key.PublicKey.Deserialization do
       :bip32
     }
   """
-  @spec deserialize(binary()) :: {:ok, %PublicKey{}} | {:error, binary()}
+  @spec deserialize(binary()) ::
+          {
+            :ok,
+            %PublicKey{},
+            :mainnet | :testnet,
+            :bip32 | :bip49 | :bip84
+          }
+          | {:error, binary()}
   def deserialize(@bip32_mainnet_human_readable <> _data = serialized) do
     {:ok, execute(serialized), :mainnet, :bip32}
   end
