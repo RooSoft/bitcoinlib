@@ -105,6 +105,35 @@ defmodule BitcoinLib.Key.HD.SeedPhrase do
     append_checksum(data) == decoded
   end
 
+  @doc """
+  Takes two parts of a seed phrase, with a missing word anywhere in between.
+  Returns a list of words that would complete it with a valid checksum
+
+  ## Examples
+      iex> first_words = "work tenant tourist globe among cattle suggest fever begin boil undo"
+      ...> last_words = "work tenant tourist globe among cattle suggest fever begin boil undo slogan"
+      ...> BitcoinLib.Key.HD.SeedPhrase.find_possible_missing_words(first_words, last_words)
+      ["arrange", "broom", "genius", "hurt", "melody", "repeat", "save", "setup", "strategy"]
+  """
+  @spec find_possible_missing_words(binary(), binary()) :: list()
+  def find_possible_missing_words(first_words, last_words) do
+    Wordlist.all()
+    |> Enum.map(fn missing_word ->
+      valid? =
+        "#{first_words |> String.trim()} #{missing_word} #{last_words |> String.trim()}"
+        |> String.trim()
+        |> validate()
+
+      {missing_word, valid?}
+    end)
+    |> Enum.filter(fn {_, valid?} ->
+      valid?
+    end)
+    |> Enum.map(fn {valid_word, true} ->
+      valid_word
+    end)
+  end
+
   defp append_checksum(binary_seed) do
     binary_seed
     |> Checksum.compute_and_append_to_seed()
