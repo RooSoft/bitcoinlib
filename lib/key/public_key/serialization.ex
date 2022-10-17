@@ -62,7 +62,7 @@ defmodule BitcoinLib.Key.PublicKey.Serialization do
     {:ok, execute(pub_key, @vpub_version_bytes)}
   end
 
-  def serialize(%PublicKey{}, _) do
+  def serialize(%PublicKey{}, _, _) do
     {:error, "unknown serialization format"}
   end
 

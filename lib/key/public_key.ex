@@ -129,9 +129,10 @@ defmodule BitcoinLib.Key.PublicKey do
   """
   @spec serialize!(%PublicKey{}, :mainnet | :testnet, :bip32 | :bip49 | :bip84) :: binary()
   def serialize!(public_key, network \\ :mainnet, format \\ :bip32) do
-    {:ok, serialized} = serialize(public_key, network, format)
-
-    serialized
+    case serialize(public_key, network, format) do
+      {:ok, serialized} -> serialized
+      {:error, message} -> raise message
+    end
   end
 
   @doc """
@@ -157,14 +158,15 @@ defmodule BitcoinLib.Key.PublicKey do
     }
   """
   @spec deserialize(binary()) ::
-          {:ok, %PublicKey{}, :tpub | :upub | :vpub | :xpub | :ypub | :zpub} | {:error, binary()}
+          {:ok, %PublicKey{}, :mainnet | :testnet, :bip32 | :bip49 | :bip84}
+          | {:error, String.t()}
   def deserialize(serialized_public_key) do
     case Deserialization.deserialize(serialized_public_key) do
       {:ok, public_key, network, format} ->
         {:ok, public_key |> add_fingerprint(), network, format}
 
-      {:error, _} = result ->
-        result
+      {:error, message} ->
+        {:error, message}
     end
   end
 
@@ -187,9 +189,11 @@ defmodule BitcoinLib.Key.PublicKey do
   """
   @spec deserialize!(binary()) :: %PublicKey{}
   def deserialize!(serialized_public_key) do
-    {:ok, public_key, _network, _format} = deserialize(serialized_public_key)
-
-    public_key
+    with {:ok, public_key, _network, _format} <- deserialize(serialized_public_key) do
+      public_key
+    else
+      {:error, message} -> raise message
+    end
   end
 
   @doc """
