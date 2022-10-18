@@ -100,7 +100,7 @@ defmodule BitcoinLib.Script do
     |> Runner.execute(stack)
   end
 
-  @spec identify(bitstring() | list()) :: :unknown | :p2pk | :p2pkh | :p2sh
+  @spec identify(bitstring() | list()) :: {:unknown | :p2pk | :p2pkh | :p2sh, bitstring()}
   def identify(script) do
     script
     |> Analyzer.identify()
