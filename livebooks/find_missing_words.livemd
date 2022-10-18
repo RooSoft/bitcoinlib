@@ -2,7 +2,7 @@
 
 ```elixir
 Mix.install([
-  {:bitcoinlib, "~> 0.2.2"}
+  {:bitcoinlib, "~> 0.2.3"}
 ])
 
 alias BitcoinLib.Key.HD.{Entropy}
