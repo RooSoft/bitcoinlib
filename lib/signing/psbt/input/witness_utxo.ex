@@ -83,16 +83,16 @@ defmodule BitcoinLib.Signing.Psbt.Input.WitnessUtxo do
       |> Script.Analyzer.identify()
 
     case id do
-      :p2sh ->
+      {:p2sh, _script_hash} ->
         map
 
-      :p2wsh ->
+      {:p2wsh, _script_hash} ->
         map
 
-      :p2wpkh ->
+      {:p2wpkh, _key_hash} ->
         map
 
-      script_type ->
+      {script_type, _value} ->
         formatted_script_type = Atom.to_string(script_type) |> String.upcase()
         message = "a witness UTXO contains a #{formatted_script_type} script"
 

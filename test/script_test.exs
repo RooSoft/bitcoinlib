@@ -45,9 +45,10 @@ defmodule BitcoinLib.ScriptTest do
   test "identify a script as a P2SH" do
     script = <<0xA9143545E6E33B832C47050F24D3EEB93C9C03948BC787::184>>
 
-    script_type = Script.identify(script)
+    {script_type, script_hash} = Script.identify(script)
 
     assert :p2sh == script_type
+    assert <<0x3545E6E33B832C47050F24D3EEB93C9C03948BC7::160>> == script_hash
   end
 
   test "parse the simplest of scripts" do
