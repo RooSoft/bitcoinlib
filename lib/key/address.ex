@@ -33,7 +33,7 @@ defmodule BitcoinLib.Key.Address do
   ## Examples
     iex> address = "mwYKDe7uJcgqyVHJAPURddeZvM5zBVQj5L"
     ...> BitcoinLib.Key.Address.destructure(address)
-    {:ok, <<0xafc3e518577316386188af748a816cd14ce333f2::160>>, :p2pkh}
+    {:ok, <<0xafc3e518577316386188af748a816cd14ce333f2::160>>, :p2pkh, :testnet}
   """
   @spec destructure(binary()) :: {:ok, <<_::160>>, atom()} | {:error, binary()}
   def destructure(address) do
@@ -41,10 +41,10 @@ defmodule BitcoinLib.Key.Address do
       address
       |> Base58.decode()
 
-    address_type = get_address_type_from_prefix(prefix)
+    {address_type, network} = get_address_type_from_prefix(prefix)
 
     case test_checksum(prefix, public_key_hash, checksum) do
-      {:ok} -> {:ok, public_key_hash, address_type}
+      {:ok} -> {:ok, public_key_hash, address_type, network}
       {:error, message} -> {:error, message}
     end
   end
@@ -82,9 +82,17 @@ defmodule BitcoinLib.Key.Address do
   defp get_prefix(:p2sh, :testnet), do: "C4"
   defp get_prefix(_, _), do: ""
 
-  defp get_address_type_from_prefix(0), do: :p2pkh
-  defp get_address_type_from_prefix(5), do: :p2sh
-  defp get_address_type_from_prefix(111), do: :p2pkh
-  defp get_address_type_from_prefix(196), do: :p2sh
+  # example 17VZNX1SN5NtKa8UQFxwQbFeFc3iqRYhem
+  defp get_address_type_from_prefix(0), do: {:p2pkh, :mainnet}
+
+  # example 3EktnHQD7RiAE6uzMj2ZifT9YgRrkSgzQX
+  defp get_address_type_from_prefix(5), do: {:p2sh, :mainnet}
+
+  # example mipcBbFg9gMiCh81Kj8tqqdgoZub1ZJRfn
+  defp get_address_type_from_prefix(111), do: {:p2pkh, :testnet}
+
+  # example 2MzQwSSnBHWHqSAqtTVQ6v47XtaisrJa1Vc
+  defp get_address_type_from_prefix(196), do: {:p2sh, :testnet}
+
   defp get_address_type_from_prefix(_), do: :unknown
 end

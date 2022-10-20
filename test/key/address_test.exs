@@ -58,7 +58,7 @@ defmodule BitcoinLib.Key.AddressTest do
   test "destructure an address" do
     address = "mtzUk1zTJzTdyC8Pz6PPPyCHTEL5RLVyDJ"
 
-    {:ok, public_key_hash, :p2pkh} =
+    {:ok, public_key_hash, :p2pkh, :testnet} =
       address
       |> Address.destructure()
 

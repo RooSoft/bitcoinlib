@@ -155,7 +155,7 @@ defmodule BitcoinLib.Test.Integration.LockingScripts.ManualExampleTest do
       |> PrivateKey.from_derivation_path("m/44'/1'/0'/0/0")
       |> elem(1)
 
-    {:ok, target_public_key_hash, :p2pkh} =
+    {:ok, target_public_key_hash, :p2pkh, :testnet} =
       "n4YK3tKZPhNA7ENidWPjm6ojCZBivchFR6"
       |> Address.destructure()
 
@@ -205,7 +205,7 @@ defmodule BitcoinLib.Test.Integration.LockingScripts.ManualExampleTest do
       |> PublicKey.from_private_key()
       |> PublicKey.hash()
 
-    {:ok, target_public_key_hash, :p2pkh} =
+    {:ok, target_public_key_hash, :p2pkh, :testnet} =
       Address.destructure("mwKte669tM8ascBhvpw31phG2Ecauy8DUp")
 
     signed_transaction =
