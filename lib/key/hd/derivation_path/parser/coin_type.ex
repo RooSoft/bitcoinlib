@@ -12,8 +12,8 @@ defmodule BitcoinLib.Key.HD.DerivationPath.Parser.CoinType do
   Converts an integer into an atom representing the bitcoin chain
 
   ## Examples
-    iex> BitcoinLib.Key.HD.DerivationPath.Parser.CoinType.parse(0)
-    :bitcoin
+      iex> BitcoinLib.Key.HD.DerivationPath.Parser.CoinType.parse(0)
+      :bitcoin
   """
   @spec parse(integer()) :: :bitcoin | :bitcoin_testnet | :invalid
   def parse(nil), do: nil

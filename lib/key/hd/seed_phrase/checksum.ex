@@ -26,9 +26,9 @@ defmodule BitcoinLib.Key.HD.SeedPhrase.Checksum do
   Computes the checksum, which is the first few bits of a SHA256 hash
 
   ## Examples
-    iex> <<27, 172, 62, 126, 195, 84, 6, 180, 26, 1, 13, 250, 0, 254, 239, 132>>
-    ...> |> BitcoinLib.Key.HD.SeedPhrase.Checksum.compute(4)
-    2
+      iex> <<27, 172, 62, 126, 195, 84, 6, 180, 26, 1, 13, 250, 0, 254, 239, 132>>
+      ...> |> BitcoinLib.Key.HD.SeedPhrase.Checksum.compute(4)
+      2
   """
   @spec compute(binary(), integer()) :: integer()
   def compute(binary_seed, nb_bits_to_keep) do
@@ -41,9 +41,9 @@ defmodule BitcoinLib.Key.HD.SeedPhrase.Checksum do
   Computes the checksum, and verify that it matches to the one received
 
   ## Examples
-    iex> <<5, 235, 104, 86, 249, 249, 27, 246, 234, 99, 13, 18, 209, 116, 50, 248, 35>>
-    ...> |> BitcoinLib.Key.HD.SeedPhrase.Checksum.validate_seed()
-    true
+      iex> <<5, 235, 104, 86, 249, 249, 27, 246, 234, 99, 13, 18, 209, 116, 50, 248, 35>>
+      ...> |> BitcoinLib.Key.HD.SeedPhrase.Checksum.validate_seed()
+      true
   """
   @spec validate_seed(binary()) :: boolean()
   def validate_seed(binary_seed) do

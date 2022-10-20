@@ -17,8 +17,8 @@ defmodule BitcoinLib.Key.HD.DerivationPath.Parser.Purpose do
   Converts an bip integer into an atom representing the purpose
 
   ## Examples
-    iex> BitcoinLib.Key.HD.DerivationPath.Parser.Purpose.parse(44)
-    :bip44
+      iex> BitcoinLib.Key.HD.DerivationPath.Parser.Purpose.parse(44)
+      :bip44
   """
   @spec parse(integer()) :: :bip44 | :bip49 | :bip84 | :invalid
   def parse(purpose) when is_integer(purpose) do

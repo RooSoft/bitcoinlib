@@ -20,21 +20,21 @@ defmodule BitcoinLib.Key.PublicKey.Serialization do
   @doc """
   Serialization of a master public key into an exportable version
 
-  ## Examples
-    values from https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki#test-vector-1
+  values from https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki#test-vector-1
 
-    iex> %BitcoinLib.Key.PublicKey{
-    ...>   key: <<0x339A36013301597DAEF41FBE593A02CC513D0B55527EC2DF1050E2E8FF49C85C2::264>>,
-    ...>   chain_code: <<0x873DFF81C02F525623FD1FE5167EAC3A55A049DE3D314BB42EE227FFED37D508::256>>,
-    ...>   depth: 0,
-    ...>   index: 0,
-    ...>   parent_fingerprint: <<0::32>>
-    ...> }
-    ...> |> BitcoinLib.Key.PublicKey.Serialization.serialize(:mainnet, :bip32)
-    {
-      :ok,
-      "xpub661MyMwAqRbcFtXgS5sYJABqqG9YLmC4Q1Rdap9gSE8NqtwybGhePY2gZ29ESFjqJoCu1Rupje8YtGqsefD265TMg7usUDFdp6W1EGMcet8"
-    }
+  ## Examples
+      iex> %BitcoinLib.Key.PublicKey{
+      ...>   key: <<0x339A36013301597DAEF41FBE593A02CC513D0B55527EC2DF1050E2E8FF49C85C2::264>>,
+      ...>   chain_code: <<0x873DFF81C02F525623FD1FE5167EAC3A55A049DE3D314BB42EE227FFED37D508::256>>,
+      ...>   depth: 0,
+      ...>   index: 0,
+      ...>   parent_fingerprint: <<0::32>>
+      ...> }
+      ...> |> BitcoinLib.Key.PublicKey.Serialization.serialize(:mainnet, :bip32)
+      {
+        :ok,
+        "xpub661MyMwAqRbcFtXgS5sYJABqqG9YLmC4Q1Rdap9gSE8NqtwybGhePY2gZ29ESFjqJoCu1Rupje8YtGqsefD265TMg7usUDFdp6W1EGMcet8"
+      }
   """
   @spec serialize(%PublicKey{}, :mainnet | :testnet, :bip32 | :bip49 | :bip84) ::
           {:ok, binary()} | {:error, binary()}

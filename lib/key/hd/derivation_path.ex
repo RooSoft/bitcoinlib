@@ -23,18 +23,18 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
   Transforms a derivation path string into an elixir structure
 
   ## Examples
-    iex> "m / 44' / 1' / 2' / 1 / 4"
-    ...> |> BitcoinLib.Key.HD.DerivationPath.parse()
-    { :ok,
-      %BitcoinLib.Key.HD.DerivationPath{
-        type: :private,
-        purpose: :bip44,
-        coin_type: :bitcoin_testnet,
-        account: %BitcoinLib.Key.HD.DerivationPath.Level{hardened?: true, value: 2},
-        change: :change_chain,
-        address_index: %BitcoinLib.Key.HD.DerivationPath.Level{hardened?: false, value: 4}
+      iex> "m / 44' / 1' / 2' / 1 / 4"
+      ...> |> BitcoinLib.Key.HD.DerivationPath.parse()
+      { :ok,
+        %BitcoinLib.Key.HD.DerivationPath{
+          type: :private,
+          purpose: :bip44,
+          coin_type: :bitcoin_testnet,
+          account: %BitcoinLib.Key.HD.DerivationPath.Level{hardened?: true, value: 2},
+          change: :change_chain,
+          address_index: %BitcoinLib.Key.HD.DerivationPath.Level{hardened?: false, value: 4}
+        }
       }
-    }
   """
   @spec parse(binary()) :: {:ok, %BitcoinLib.Key.HD.DerivationPath{}}
   def parse(derivation_path) do
@@ -48,15 +48,15 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
   coin_type, account, change, address_index
 
   ## Examples
-    iex> BitcoinLib.Key.HD.DerivationPath.from_values("M", 0x80000054, 0x80000000, 0x80000000, 0, 0)
-    %BitcoinLib.Key.HD.DerivationPath{
-      type: "M",
-      purpose: :bip84,
-      coin_type: :bitcoin,
-      account: 0x80000000,
-      change: 0,
-      address_index: 0
-    }
+      iex> BitcoinLib.Key.HD.DerivationPath.from_values("M", 0x80000054, 0x80000000, 0x80000000, 0, 0)
+      %BitcoinLib.Key.HD.DerivationPath{
+        type: "M",
+        purpose: :bip84,
+        coin_type: :bitcoin,
+        account: 0x80000000,
+        change: 0,
+        address_index: 0
+      }
   """
   @spec from_values(
           binary(),
@@ -89,14 +89,14 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
   Turns a list of path values into a %DerivationPath{}
 
   ## Examples
-    iex> ["m", 0x80000054, 0x80000000, 0x80000005]
-    ...> |> BitcoinLib.Key.HD.DerivationPath.from_list
-    %BitcoinLib.Key.HD.DerivationPath{
-      type: "m",
-      purpose: :bip84,
-      coin_type: :bitcoin,
-      account: 0x80000005
-    }
+      iex> ["m", 0x80000054, 0x80000000, 0x80000005]
+      ...> |> BitcoinLib.Key.HD.DerivationPath.from_list
+      %BitcoinLib.Key.HD.DerivationPath{
+        type: "m",
+        purpose: :bip84,
+        coin_type: :bitcoin,
+        account: 0x80000005
+      }
   """
   @spec from_list(list()) :: %DerivationPath{}
   def from_list(values_list) do

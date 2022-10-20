@@ -11,8 +11,8 @@ defmodule BitcoinLib.Key.HD.DerivationPath.Parser.Change do
   Converts an integer into an atom representing the receiving or change chain
 
   ## Examples
-    iex> BitcoinLib.Key.HD.DerivationPath.Parser.Change.parse(0)
-    :receiving_chain
+      iex> BitcoinLib.Key.HD.DerivationPath.Parser.Change.parse(0)
+      :receiving_chain
   """
   @spec parse(integer()) :: :receiving_chain | :change_chain | :invalid
   def parse(value) when is_integer(value) do

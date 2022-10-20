@@ -9,8 +9,8 @@ defmodule BitcoinLib.Key.HD.SeedPhrase.Wordlist do
   Get a single word from the wordlist by index
 
   ## Examples
-    iex> BitcoinLib.Key.HD.SeedPhrase.Wordlist.get_word(8)
-    "absurd"
+      iex> BitcoinLib.Key.HD.SeedPhrase.Wordlist.get_word(8)
+      "absurd"
   """
   @spec get_word(integer()) :: binary()
   def get_word(index) when is_integer(index) do
@@ -22,8 +22,8 @@ defmodule BitcoinLib.Key.HD.SeedPhrase.Wordlist do
   Convert a list of indices into words from the wordlist
 
   ## Examples
-    iex> BitcoinLib.Key.HD.SeedPhrase.Wordlist.get_words([8, 2, 5])
-    ["absurd", "able", "absent"]
+      iex> BitcoinLib.Key.HD.SeedPhrase.Wordlist.get_words([8, 2, 5])
+      ["absurd", "able", "absent"]
   """
   @spec get_words(list(integer())) :: list(binary())
   def get_words(indices) do
@@ -54,9 +54,9 @@ defmodule BitcoinLib.Key.HD.SeedPhrase.Wordlist do
   Convert a list of words into a list of indices from the wordlist
 
   ## Examples
-    iex> ["absurd", "able", "absent"]
-    ...> |> BitcoinLib.Key.HD.SeedPhrase.Wordlist.get_indices()
-    [8, 2, 5]
+      iex> ["absurd", "able", "absent"]
+      ...> |> BitcoinLib.Key.HD.SeedPhrase.Wordlist.get_indices()
+      [8, 2, 5]
   """
   @spec get_indices(list(binary())) :: list(integer())
   def get_indices(words) do
@@ -72,9 +72,9 @@ defmodule BitcoinLib.Key.HD.SeedPhrase.Wordlist do
   Get a list of all words in the wordlist
 
   ## Examples
-    iex> BitcoinLib.Key.HD.SeedPhrase.Wordlist.all
-    ...> |> Enum.count()
-    2048
+      iex> BitcoinLib.Key.HD.SeedPhrase.Wordlist.all
+      ...> |> Enum.count()
+      2048
   """
   @spec all() :: list(binary())
   def all do

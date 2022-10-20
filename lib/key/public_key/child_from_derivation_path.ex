@@ -12,23 +12,23 @@ defmodule BitcoinLib.Key.PublicKey.ChildFromDerivationPath do
   Computes a public key from a derivation path
 
   ## Examples
-    iex> { :ok, derivation_path } = BitcoinLib.Key.HD.DerivationPath.parse("M/84'/0'/0'/0/0")
-    ...> %BitcoinLib.Key.PublicKey{
-    ...>  key: <<0x252C616D91A2488C1FD1F0F172E98F7D1F6E51F8F389B2F8D632A8B490D5F6DA9::264>>,
-    ...>  chain_code: <<0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B::256>>
-    ...> }
-    ...> |> BitcoinLib.Key.PublicKey.ChildFromDerivationPath.get(derivation_path)
-    {
-      :ok,
-      %BitcoinLib.Key.PublicKey{
-        key: <<0x3D8E202D3D91B13E955D79BA88EADD709B98640D9633868C6274B9ACEED0F70EF::264>>,
-        chain_code: <<0x3159D0A560A856F5894C15EB0D657A74218B4979D8C6D76F8E78A42C83D22DA8::256>>,
-        depth: 5,
-        index: 0,
-        parent_fingerprint: <<0x3E4142F6::32>>,
-        fingerprint: <<0xD0D8EFE4::32>>
+      iex> { :ok, derivation_path } = BitcoinLib.Key.HD.DerivationPath.parse("M/84'/0'/0'/0/0")
+      ...> %BitcoinLib.Key.PublicKey{
+      ...>  key: <<0x252C616D91A2488C1FD1F0F172E98F7D1F6E51F8F389B2F8D632A8B490D5F6DA9::264>>,
+      ...>  chain_code: <<0x463223AAC10FB13F291A1BC76BC26003D98DA661CB76DF61E750C139826DEA8B::256>>
+      ...> }
+      ...> |> BitcoinLib.Key.PublicKey.ChildFromDerivationPath.get(derivation_path)
+      {
+        :ok,
+        %BitcoinLib.Key.PublicKey{
+          key: <<0x3D8E202D3D91B13E955D79BA88EADD709B98640D9633868C6274B9ACEED0F70EF::264>>,
+          chain_code: <<0x3159D0A560A856F5894C15EB0D657A74218B4979D8C6D76F8E78A42C83D22DA8::256>>,
+          depth: 5,
+          index: 0,
+          parent_fingerprint: <<0x3E4142F6::32>>,
+          fingerprint: <<0xD0D8EFE4::32>>
+        }
       }
-    }
   """
   @spec get(%PublicKey{}, %DerivationPath{}) :: {:ok, %PublicKey{}}
   def get(%PublicKey{} = public_key, %DerivationPath{} = derivation_path) do

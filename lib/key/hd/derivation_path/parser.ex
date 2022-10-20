@@ -15,19 +15,19 @@ defmodule BitcoinLib.Key.HD.DerivationPath.Parser do
   out of a string if the tuple starts by :ok
 
   ## Examples
-    iex> {:ok, "m/44'/0'/0'/1/0"}
-    ...> |> BitcoinLib.Key.HD.DerivationPath.Parser.maybe_parse_valid_derivation_path
-    {
-      :ok,
-      %BitcoinLib.Key.HD.DerivationPath{
-        type: :private,
-        purpose: :bip44,
-        coin_type: :bitcoin,
-        account: %BitcoinLib.Key.HD.DerivationPath.Level{hardened?: true, value: 0},
-        change: :change_chain,
-        address_index: %BitcoinLib.Key.HD.DerivationPath.Level{hardened?: false, value: 0}
+      iex> {:ok, "m/44'/0'/0'/1/0"}
+      ...> |> BitcoinLib.Key.HD.DerivationPath.Parser.maybe_parse_valid_derivation_path
+      {
+        :ok,
+        %BitcoinLib.Key.HD.DerivationPath{
+          type: :private,
+          purpose: :bip44,
+          coin_type: :bitcoin,
+          account: %BitcoinLib.Key.HD.DerivationPath.Level{hardened?: true, value: 0},
+          change: :change_chain,
+          address_index: %BitcoinLib.Key.HD.DerivationPath.Level{hardened?: false, value: 0}
+        }
       }
-    }
   """
   @spec maybe_parse_valid_derivation_path({:ok, binary()} | {:error, binary()}) ::
           {:ok, %DerivationPath{}} | {:error, binary()}
@@ -35,6 +35,7 @@ defmodule BitcoinLib.Key.HD.DerivationPath.Parser do
     {:error, message}
   end
 
+  ### TODO: document
   def maybe_parse_valid_derivation_path({:ok, derivation_path}) do
     derivation_path
     |> split_path

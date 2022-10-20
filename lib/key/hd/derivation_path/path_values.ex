@@ -13,14 +13,14 @@ defmodule BitcoinLib.Key.HD.DerivationPath.PathValues do
   Transform a list of integer into a DerivationPath values structure
 
   ## Examples
-    iex> ["m", 0x80000000, 0x80000000, 0x80000005]
-    ...> |> BitcoinLib.Key.HD.DerivationPath.PathValues.from_list
-    %BitcoinLib.Key.HD.DerivationPath.PathValues{
-      type: "m",
-      purpose: 0x80000000,
-      coin_type: 0x80000000,
-      account: 0x80000005
-    }
+      iex> ["m", 0x80000000, 0x80000000, 0x80000005]
+      ...> |> BitcoinLib.Key.HD.DerivationPath.PathValues.from_list
+      %BitcoinLib.Key.HD.DerivationPath.PathValues{
+        type: "m",
+        purpose: 0x80000000,
+        coin_type: 0x80000000,
+        account: 0x80000005
+      }
   """
   @spec from_list(list()) :: %PathValues{}
   def from_list([type | remaining_values]) do
