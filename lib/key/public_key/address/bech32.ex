@@ -30,7 +30,7 @@ defmodule BitcoinLib.Key.PublicKey.Address.Bech32 do
   end
 
   @doc """
-  Creates a Bech32 address, which is starting by bc1, out of an Extended Public Key
+  Creates a Bech32 address, which is starting by bc1, out of a 160 bits public key hash
 
   ## Examples
     iex> <<0x751e76e8199196d454941c45d1b3a323f1433bd6::160>>
