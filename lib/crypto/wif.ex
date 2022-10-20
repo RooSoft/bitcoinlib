@@ -14,10 +14,10 @@ defmodule BitcoinLib.Crypto.Wif do
   Converts a raw private key to the WIF format
 
   ## Examples
-    iex> <<10, 141, 40, 107, 17, 185, 143, 108, 178, 88, 91, 98, 127, 244, 77, 18, 5,
-    ...> 149, 96, 172, 212, 48, 220, 250, 18, 96, 239, 43, 217, 86, 147, 115>>
-    ...> |> BitcoinLib.Crypto.Wif.from_bitstring
-    "KwaDo7PNi4XPMaABfSEo9rP6uviDUATAqvyjjWTcKp4fxdkVJWLe"
+      iex> <<10, 141, 40, 107, 17, 185, 143, 108, 178, 88, 91, 98, 127, 244, 77, 18, 5,
+      ...> 149, 96, 172, 212, 48, 220, 250, 18, 96, 239, 43, 217, 86, 147, 115>>
+      ...> |> BitcoinLib.Crypto.Wif.from_bitstring
+      "KwaDo7PNi4XPMaABfSEo9rP6uviDUATAqvyjjWTcKp4fxdkVJWLe"
   """
   @spec from_bitstring(bitstring()) :: String.t()
   def from_bitstring(value) do
@@ -32,9 +32,9 @@ defmodule BitcoinLib.Crypto.Wif do
   Converts a WIF encoded private key into its binary format
 
   ## Examples
-    iex> "cThjSL4HkRECuDxUTnfAmkXFBEg78cufVBy3ZfEhKoxZo6Q38R5L"
-    ...> |> BitcoinLib.Crypto.Wif.to_private_key()
-    <<0xb6a42d01917404b740f9ef9d5cef08e13f998011246874dd65c033c4669e7009::256>>
+      iex> "cThjSL4HkRECuDxUTnfAmkXFBEg78cufVBy3ZfEhKoxZo6Q38R5L"
+      ...> |> BitcoinLib.Crypto.Wif.to_private_key()
+      <<0xb6a42d01917404b740f9ef9d5cef08e13f998011246874dd65c033c4669e7009::256>>
   """
   @spec to_private_key(binary()) :: bitstring()
   def to_private_key(wif) do
