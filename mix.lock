@@ -1,4 +1,5 @@
 %{
+  "bech32": {:hex, :bech32, "1.0.0", "85a3bb58c408d735b5becb39e8a23536660ec0df1ef0afee72377c130939de1b", [:mix], [], "hexpm", "f781b8524c30a524922613d97c1858c27bd9f639b4e6b350f4a4843ee97607d3"},
   "binary": {:hex, :binary, "0.0.4", "dd077db70c0ded3e85c132b802338e14b80694684a7e2277666bfa4004b7fa66", [:mix], [], "hexpm", "a2faf5d5c22caec3efacf95370d8b050c003f48e03c221c37e0d1e2dd515b970"},
   "bip0173": {:hex, :bip0173, "0.1.2", "b771e275692ed3353ecfecb38330693cbba90d2ac4a2e8fd1908a86ec7e6318f", [:mix], [], "hexpm", "6e12dfe7baacf9b4c422cae8f9cc6bbd791bf5ec3e9055fa3f418071b799b0db"},
   "comeonin": {:hex, :comeonin, "5.3.3", "2c564dac95a35650e9b6acfe6d2952083d8a08e4a89b93a481acb552b325892e", [:mix], [], "hexpm", "3e38c9c2cb080828116597ca8807bb482618a315bfafd98c90bc22a821cc84df"},

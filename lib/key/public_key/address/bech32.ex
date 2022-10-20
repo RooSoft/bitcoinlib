@@ -25,7 +25,7 @@ defmodule BitcoinLib.Key.PublicKey.Address.Bech32 do
   @spec from_public_key(%PublicKey{}, :mainnet | :testnet) :: binary()
   def from_public_key(%PublicKey{key: key}, network \\ :mainnet) do
     key
-    |> hash160
+    |> Crypto.hash160()
     |> from_public_key_hash(network)
   end
 
@@ -39,48 +39,42 @@ defmodule BitcoinLib.Key.PublicKey.Address.Bech32 do
   """
   @spec from_public_key_hash(<<_::160>>, :mainnet | :testnet) :: binary()
   def from_public_key_hash(public_key_hash = <<_::160>>, network \\ :mainnet) do
-    public_key_hash
-    |> to_base5_array
-    |> prepend_witness_version(0)
-    |> encode(network)
+    hrp = get_hrp(network)
+
+    SegwitAddr.encode(hrp, 0, public_key_hash |> :binary.bin_to_list())
   end
 
   @doc """
-  Creates a Bech32 native segwit address out of a 22 bytes script hash
+  Creates either of these Bech32 native address types
+
+  - pay to witness public key hash address out of a 20 bytes pub key
+  - pay to witness script hash address out of a 32 bytes script hash
 
   ## Examples
-    iex> <<0x0014::16, 0x00d21980ae3e9641db6897dad7b8b69b07d9aaac::160>>
+    iex> <<0x001400d21980ae3e9641db6897dad7b8b69b07d9aaac::176>>
     ...> |> BitcoinLib.Key.PublicKey.Address.Bech32.from_script_hash(:testnet)
     "tb1qqrfpnq9w86tyrkmgjldd0w9knvran24v2hzspx"
+
+    iex> <<0x00201863143c14c5166804bd19203356da136c985678cd4d27a1b8c6329604903262::272>>
+    ...> |> BitcoinLib.Key.PublicKey.Address.Bech32.from_script_hash(:testnet)
+    "tb1qrp33g0q5c5txsp9arysrx4k6zdkfs4nce4xj0gdcccefvpysxf3q0sl5k7"
   """
+  def from_script_hash(data, network \\ :mainnet)
+
   @spec from_script_hash(<<_::176>>, :mainnet | :testnet) :: binary()
-  def from_script_hash(<<0x0014::16, keyhash::bitstring-160>>, network \\ :mainnet) do
-    keyhash
-    |> to_base5_array
-    |> prepend_witness_version(0)
-    |> encode(network)
+  def from_script_hash(<<keyhash::bitstring-176>>, network) do
+    hrp = get_hrp(network)
+
+    SegwitAddr.encode(hrp, keyhash |> Binary.to_hex())
   end
 
-  defp hash160(value) do
-    value
-    |> Crypto.hash160()
+  @spec from_script_hash(<<_::272>>, :mainnet | :testnet) :: binary()
+  def from_script_hash(<<script_hash::bitstring-272>>, network) do
+    hrp = get_hrp(network)
+
+    SegwitAddr.encode(hrp, script_hash |> Binary.to_hex())
   end
 
-  defp to_base5_array(value) do
-    for <<chunk::size(5) <- value>> do
-      chunk
-    end
-  end
-
-  defp prepend_witness_version(base5array, witness_version) do
-    [witness_version | base5array]
-  end
-
-  defp encode(base5array, :mainnet) do
-    Bech32.encode("bc", base5array)
-  end
-
-  defp encode(base5array, :testnet) do
-    Bech32.encode("tb", base5array)
-  end
+  defp get_hrp(:mainnet), do: "bc"
+  defp get_hrp(:testnet), do: "tb"
 end
