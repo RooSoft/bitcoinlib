@@ -2,7 +2,7 @@ alias BitcoinLib.Console
 alias BitcoinLib.Crypto
 alias BitcoinLib.Script
 alias BitcoinLib.Transaction
-alias BitcoinLib.Key.{Address, PrivateKey, PublicKey, PublicKeyHash}
+alias BitcoinLib.Key.{Address, PrivateKey, PublicKey}
 alias BitcoinLib.Key.HD.{DerivationPath, Entropy, SeedPhrase}
 
 orange = IO.ANSI.color(5, 3, 1)
@@ -71,4 +71,3 @@ p2pkh_testnet_address =
 p2sh_testnet_address =
   <<0x93CE48570B55C42C2AF816AEABA06CFEE1224FAE::160>>
   |> Address.from_public_key_hash(:p2sh, :testnet)
-

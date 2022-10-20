@@ -3,7 +3,7 @@ defmodule BitcoinLib do
   High level bitcoin operations
   """
 
-  alias BitcoinLib.Key.{PrivateKey, PublicKey, PublicKeyHash, Address}
+  alias BitcoinLib.Key.{PrivateKey, PublicKey, Address}
 
   @doc """
   Creates a bitcoin private key both in raw and WIF format
@@ -51,7 +51,7 @@ defmodule BitcoinLib do
   @spec generate_p2pkh_address(%PublicKey{}) :: binary()
   def generate_p2pkh_address(public_key) do
     public_key
-    |> PublicKeyHash.from_public_key()
+    |> PublicKey.hash()
     |> Address.from_public_key_hash(:p2pkh)
   end
 end

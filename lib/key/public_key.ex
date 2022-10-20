@@ -23,7 +23,7 @@ defmodule BitcoinLib.Key.PublicKey do
   }
 
   alias BitcoinLib.Crypto
-  alias BitcoinLib.Key.{PrivateKey, PublicKey, PublicKeyHash}
+  alias BitcoinLib.Key.{PrivateKey, PublicKey}
   alias BitcoinLib.Key.HD.{DerivationPath, Fingerprint}
 
   @doc """
@@ -84,6 +84,21 @@ defmodule BitcoinLib.Key.PublicKey do
   def to_address(%PublicKey{} = public_key, type \\ :bech32, network \\ :mainnet) do
     public_key
     |> Address.from_public_key(type, network)
+  end
+
+  @doc """
+  Creates a public key hash
+
+  ## Examples
+      iex> %BitcoinLib.Key.PublicKey{
+      ...>   key: <<0x02b4632d08485ff1df2db55b9dafd23347d1c47a457072a1e87be26896549a8737::264>>
+      ...> }
+      ...> |> BitcoinLib.Key.PublicKey.hash()
+      <<0x93ce48570b55c42c2af816aeaba06cfee1224fae::160>>
+  """
+  @spec hash(%PublicKey{}) :: <<_::160>>
+  def hash(%PublicKey{key: key}) do
+    Crypto.hash160(key)
   end
 
   @doc """
@@ -279,21 +294,6 @@ defmodule BitcoinLib.Key.PublicKey do
   @spec from_derivation_path(%PublicKey{}, %DerivationPath{}) :: {:ok, %PublicKey{}}
   def from_derivation_path(%PublicKey{} = public_key, %DerivationPath{} = derivation_path) do
     ChildFromDerivationPath.get(public_key, derivation_path)
-  end
-
-  @doc """
-  Computes a public key hash out of a public key
-
-  ## Examples
-    iex> %BitcoinLib.Key.PublicKey{
-    ...>   key: <<0x0343B337DEC65A47B3362C9620A6E6FF39A1DDFA908ABAB1666C8A30A3F8A7CCCC::264>>,
-    ...>   chain_code: <<0x1D7D2A4C940BE028B945302AD79DD2CE2AFE5ED55E1A2937A5AF57F8401E73DD::256>>
-    ...> }
-    ...> |> BitcoinLib.Key.PublicKey.get_hash()
-    <<0xED104CB8EF3ADABEC5D2BE8178C99847F9694269::160>>
-  """
-  def get_hash(%PublicKey{} = public_key) do
-    PublicKeyHash.from_public_key(public_key)
   end
 
   @doc """

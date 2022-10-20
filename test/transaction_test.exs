@@ -3,7 +3,7 @@ defmodule BitcoinLib.TransactionTest do
 
   doctest BitcoinLib.Transaction
 
-  alias BitcoinLib.Key.{PrivateKey, PublicKey, PublicKeyHash}
+  alias BitcoinLib.Key.{PrivateKey, PublicKey}
   alias BitcoinLib.Transaction
   alias BitcoinLib.Transaction.{Input, Output}
   alias BitcoinLib.Script.Opcodes
@@ -187,7 +187,7 @@ defmodule BitcoinLib.TransactionTest do
 
     public_key_hash =
       public_key
-      |> PublicKeyHash.from_public_key()
+      |> PublicKey.hash()
 
     address =
       public_key_hash

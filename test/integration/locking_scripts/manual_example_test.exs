@@ -5,7 +5,7 @@ defmodule BitcoinLib.Test.Integration.LockingScripts.ManualExampleTest do
   """
   use ExUnit.Case, async: true
 
-  alias BitcoinLib.Key.{PrivateKey, PublicKey, PublicKeyHash}
+  alias BitcoinLib.Key.{PrivateKey, PublicKey, Address}
   alias BitcoinLib.Transaction
   alias BitcoinLib.Transaction.{Input, Output}
   alias BitcoinLib.Script
@@ -25,7 +25,7 @@ defmodule BitcoinLib.Test.Integration.LockingScripts.ManualExampleTest do
 
     public_key_hash =
       public_key
-      |> PublicKeyHash.from_public_key()
+      |> PublicKey.hash()
 
     # the transaction can be found in a block explorer such as here:
     # https://mempool.space/testnet/tx/e4c226432a9319d603b2ed1fa609bffe4cd91f89b3176a9e73b19f7891a92bb6
@@ -109,7 +109,7 @@ defmodule BitcoinLib.Test.Integration.LockingScripts.ManualExampleTest do
     public_key_hash =
       private_key
       |> PublicKey.from_private_key()
-      |> PublicKeyHash.from_public_key()
+      |> PublicKey.hash()
 
     # the transaction can be found in a block explorer such as here:
     # https://mempool.space/testnet/tx/e4c226432a9319d603b2ed1fa609bffe4cd91f89b3176a9e73b19f7891a92bb6
@@ -157,7 +157,7 @@ defmodule BitcoinLib.Test.Integration.LockingScripts.ManualExampleTest do
 
     {:ok, target_public_key_hash, :p2pkh} =
       "n4YK3tKZPhNA7ENidWPjm6ojCZBivchFR6"
-      |> PublicKeyHash.from_address()
+      |> Address.destructure()
 
     # the transaction can be found in a block explorer such as here:
     # https://mempool.space/testnet/tx/e4c226432a9319d603b2ed1fa609bffe4cd91f89b3176a9e73b19f7891a92bb6
@@ -203,10 +203,10 @@ defmodule BitcoinLib.Test.Integration.LockingScripts.ManualExampleTest do
       master_private_key
       |> PrivateKey.from_derivation_path!("m/44'/1'/0'/1/1")
       |> PublicKey.from_private_key()
-      |> PublicKeyHash.from_public_key()
+      |> PublicKey.hash()
 
     {:ok, target_public_key_hash, :p2pkh} =
-      PublicKeyHash.from_address("mwKte669tM8ascBhvpw31phG2Ecauy8DUp")
+      Address.destructure("mwKte669tM8ascBhvpw31phG2Ecauy8DUp")
 
     signed_transaction =
       %Transaction.Spec{}

@@ -3,14 +3,14 @@ defmodule BitcoinLib.Script.RunnerTest do
 
   doctest BitcoinLib.Script.Runner
 
-  alias BitcoinLib.Key.{PrivateKey, PublicKey, PublicKeyHash}
+  alias BitcoinLib.Key.{PrivateKey, PublicKey}
   alias BitcoinLib.Script.Runner
   alias BitcoinLib.Script.Opcodes.{Data, BitwiseLogic, Crypto, Stack}
 
   test "run a basic script from an opcode list" do
     private_key = %PrivateKey{key: PrivateKey.generate().raw}
     public_key = PublicKey.from_private_key(private_key)
-    public_key_hash = PublicKeyHash.from_public_key(public_key)
+    public_key_hash = PublicKey.hash(public_key)
 
     opcodes = [
       %Stack.Dup{},

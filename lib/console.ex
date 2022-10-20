@@ -1,5 +1,5 @@
 defmodule BitcoinLib.Console do
-  alias BitcoinLib.Key.{PrivateKey, PublicKey, PublicKeyHash}
+  alias BitcoinLib.Key.{PrivateKey, PublicKey}
 
   @defaults %{serialization_format: nil}
 
@@ -82,7 +82,7 @@ defmodule BitcoinLib.Console do
       |> PrivateKey.from_seed_phrase()
       |> PrivateKey.from_derivation_path!(derivation_path)
       |> PublicKey.from_private_key()
-      |> PublicKeyHash.from_public_key()
+      |> PublicKey.hash()
 
     IO.puts("#{derivation_path} -> #{public_key_hash |> Binary.to_hex()}")
 

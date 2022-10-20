@@ -3,7 +3,7 @@ defmodule BitcoinLib.ScriptTest do
 
   doctest BitcoinLib.Script
 
-  alias BitcoinLib.Key.{PrivateKey, PublicKey, PublicKeyHash}
+  alias BitcoinLib.Key.{PrivateKey, PublicKey}
   alias BitcoinLib.Script
   alias BitcoinLib.Script.Opcodes.{BitwiseLogic, Constants, Crypto, Data, Stack}
 
@@ -25,7 +25,7 @@ defmodule BitcoinLib.ScriptTest do
   test "parse a standard transaction to bitcoin address (pay-to-pubkey-hash)" do
     private_key = %PrivateKey{key: PrivateKey.generate().raw}
     public_key = PublicKey.from_private_key(private_key)
-    public_key_hash = PublicKeyHash.from_public_key(public_key)
+    public_key_hash = PublicKey.hash(public_key)
 
     pub_key_hash_size = 0x14
 

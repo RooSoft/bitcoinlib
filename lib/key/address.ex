@@ -32,11 +32,11 @@ defmodule BitcoinLib.Key.Address do
 
   ## Examples
     iex> address = "mwYKDe7uJcgqyVHJAPURddeZvM5zBVQj5L"
-    ...> BitcoinLib.Key.Address.to_public_key_hash(address)
+    ...> BitcoinLib.Key.Address.destructure(address)
     {:ok, <<0xafc3e518577316386188af748a816cd14ce333f2::160>>, :p2pkh}
   """
-  @spec to_public_key_hash(binary()) :: {:ok, <<_::160>>, atom()} | {:error, binary()}
-  def to_public_key_hash(address) do
+  @spec destructure(binary()) :: {:ok, <<_::160>>, atom()} | {:error, binary()}
+  def destructure(address) do
     <<prefix::8, public_key_hash::bitstring-160, checksum::bitstring-32>> =
       address
       |> Base58.decode()
