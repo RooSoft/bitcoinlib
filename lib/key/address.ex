@@ -73,6 +73,9 @@ defmodule BitcoinLib.Key.Address do
     end
   end
 
+  # Here is a useful list of address prefixes
+  # https://en.bitcoin.it/wiki/List_of_address_prefixes
+
   defp get_prefix(:p2pkh, :mainnet), do: "00"
   defp get_prefix(:p2sh, :mainnet), do: "05"
   defp get_prefix(:p2pkh, :testnet), do: "6F"
