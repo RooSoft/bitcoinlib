@@ -26,6 +26,20 @@ defmodule BitcoinLib.Key.PublicKey.Address.Bech32 do
   def from_public_key(%PublicKey{key: key}, network \\ :mainnet) do
     key
     |> hash160
+    |> from_public_key_hash(network)
+  end
+
+  @doc """
+  Creates a Bech32 address, which is starting by bc1, out of an Extended Public Key
+
+  ## Examples
+    iex> <<0x751e76e8199196d454941c45d1b3a323f1433bd6::160>>
+    ...> |> BitcoinLib.Key.PublicKey.Address.Bech32.from_public_key_hash()
+    "bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4"
+  """
+  @spec from_public_key_hash(<<_::160>>, :mainnet | :testnet) :: binary()
+  def from_public_key_hash(public_key_hash = <<_::160>>, network \\ :mainnet) do
+    public_key_hash
     |> to_base5_array
     |> prepend_witness_version(0)
     |> encode(network)
