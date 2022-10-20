@@ -1,4 +1,4 @@
-defmodule BitcoinLib.Key.PublicKey.Address.P2PKH do
+defmodule BitcoinLib.Key.Address.P2PKH do
   @moduledoc """
   Implementation of P2PKH addresses
 
@@ -16,7 +16,7 @@ defmodule BitcoinLib.Key.PublicKey.Address.P2PKH do
     iex> %BitcoinLib.Key.PublicKey{
     ...>  key: <<0x02D0DE0AAEAEFAD02B8BDC8A01A1B8B11C696BD3D66A2C5F10780D95B7DF42645C::264>>,
     ...>  chain_code: <<0::256>>
-    ...> } |> BitcoinLib.Key.PublicKey.Address.P2PKH.from_public_key()
+    ...> } |> BitcoinLib.Key.Address.P2PKH.from_public_key()
     "1LoVGDgRs9hTfTNJNuXKSpywcbdvwRXpmK"
   """
   @spec from_public_key(%PublicKey{}, :mainnet | :testnet) :: binary()

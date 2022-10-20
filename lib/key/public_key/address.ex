@@ -3,7 +3,7 @@ defmodule BitcoinLib.Key.PublicKey.Address do
   Converts public keys into Bitcoin addresses of different formats
   """
   alias BitcoinLib.Key.PublicKey
-  alias BitcoinLib.Key.PublicKey.Address.{P2PKH, P2SH, Bech32}
+  alias BitcoinLib.Key.Address.{P2PKH, P2SH, Bech32}
 
   @doc """
   Turns a public key into an address of the specified format
