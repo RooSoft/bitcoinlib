@@ -13,11 +13,11 @@ defmodule BitcoinLib.Key.Address do
   Turns a public key into an address of the specified format
 
   ## Examples
-    iex> %BitcoinLib.Key.PublicKey{
-    ...>   key: <<0x0343B337DEC65A47B3362C9620A6E6FF39A1DDFA908ABAB1666C8A30A3F8A7CCCC::264>>
-    ...> }
-    ...> |> BitcoinLib.Key.Address.from_public_key(:bech32, :mainnet)
-    "bc1qa5gyew808tdta3wjh6qh3jvcglukjsnfg0qx4u"
+      iex> %BitcoinLib.Key.PublicKey{
+      ...>   key: <<0x0343B337DEC65A47B3362C9620A6E6FF39A1DDFA908ABAB1666C8A30A3F8A7CCCC::264>>
+      ...> }
+      ...> |> BitcoinLib.Key.Address.from_public_key(:bech32, :mainnet)
+      "bc1qa5gyew808tdta3wjh6qh3jvcglukjsnfg0qx4u"
   """
   @spec from_public_key(%PublicKey{}, :p2pkh | :p2sh | :bech32, :mainnet | :testnet) ::
           binary()
