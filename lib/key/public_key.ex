@@ -15,7 +15,6 @@ defmodule BitcoinLib.Key.PublicKey do
   ]
 
   alias BitcoinLib.Key.PublicKey.{
-    Address,
     ChildFromIndex,
     ChildFromDerivationPath,
     Serialization,
@@ -23,7 +22,7 @@ defmodule BitcoinLib.Key.PublicKey do
   }
 
   alias BitcoinLib.Crypto
-  alias BitcoinLib.Key.{PrivateKey, PublicKey}
+  alias BitcoinLib.Key.{PrivateKey, PublicKey, Address}
   alias BitcoinLib.Key.HD.{DerivationPath, Fingerprint}
 
   @doc """
