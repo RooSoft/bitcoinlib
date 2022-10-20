@@ -13,7 +13,7 @@ defmodule BitcoinLib.Key.PublicKey.AddressTest do
 
     address = Address.from_public_key(public_key, :bech32, :testnet)
 
-    assert "tc1qa5gyew808tdta3wjh6qh3jvcglukjsnfvepz4d" == address
+    assert "tb1qa5gyew808tdta3wjh6qh3jvcglukjsnfzfm4w0" == address
   end
 
   test "generate a testnet P2PKH address" do

@@ -294,6 +294,6 @@ defmodule BitcoinLib.Key.PublicKeyTest do
       public_key
       |> PublicKey.to_address(:bech32, :testnet)
 
-    assert address == "tc1qw508d6qejxtdg4y5r3zarvary0c5xw7kg3g4ty"
+    assert address == "tb1qw508d6qejxtdg4y5r3zarvary0c5xw7kxpjzsx"
   end
 end

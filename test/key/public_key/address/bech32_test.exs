@@ -29,6 +29,6 @@ defmodule BitcoinLib.Key.PublicKey.Address.Bech32Test do
       public_key
       |> Bech32.from_public_key(:testnet)
 
-    assert "tc1qw508d6qejxtdg4y5r3zarvary0c5xw7kg3g4ty" == address
+    assert "tb1qw508d6qejxtdg4y5r3zarvary0c5xw7kxpjzsx" == address
   end
 end

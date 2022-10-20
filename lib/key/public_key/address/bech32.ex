@@ -45,6 +45,22 @@ defmodule BitcoinLib.Key.PublicKey.Address.Bech32 do
     |> encode(network)
   end
 
+  @doc """
+  Creates a Bech32 native segwit address out of a 22 bytes script hash
+
+  ## Examples
+    iex> <<0x0014::16, 0x00d21980ae3e9641db6897dad7b8b69b07d9aaac::160>>
+    ...> |> BitcoinLib.Key.PublicKey.Address.Bech32.from_script_hash(:testnet)
+    "tb1qqrfpnq9w86tyrkmgjldd0w9knvran24v2hzspx"
+  """
+  @spec from_script_hash(<<_::176>>, :mainnet | :testnet) :: binary()
+  def from_script_hash(<<0x0014::16, keyhash::bitstring-160>>, network \\ :mainnet) do
+    keyhash
+    |> to_base5_array
+    |> prepend_witness_version(0)
+    |> encode(network)
+  end
+
   defp hash160(value) do
     value
     |> Crypto.hash160()
@@ -65,6 +81,6 @@ defmodule BitcoinLib.Key.PublicKey.Address.Bech32 do
   end
 
   defp encode(base5array, :testnet) do
-    Bech32.encode("tc", base5array)
+    Bech32.encode("tb", base5array)
   end
 end
