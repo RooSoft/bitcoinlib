@@ -67,7 +67,8 @@ defmodule BitcoinLib.Key.Address do
       ...> BitcoinLib.Key.Address.destructure(address)
       {:ok, <<0xafc3e518577316386188af748a816cd14ce333f2::160>>, :p2pkh, :testnet}
   """
-  @spec destructure(binary()) :: {:ok, <<_::160>>, atom()} | {:error, binary()}
+  @spec destructure(binary()) ::
+          {:ok, <<_::160>>, :p2pkh | :p2sh, :mainnet | :testnet} | {:error, binary()}
   def destructure(address) do
     <<prefix::8, public_key_hash::bitstring-160, checksum::bitstring-32>> =
       address
