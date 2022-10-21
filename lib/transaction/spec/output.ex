@@ -12,21 +12,21 @@ defmodule BitcoinLib.Transaction.Spec.Output do
   Converts a human readable output into a %Transaction.Output{}
 
   ## Examples
-    iex> %BitcoinLib.Transaction.Spec.Output{
-    ...>   script_pub_key: BitcoinLib.Script.Types.P2pkh.create(<<0xfc8ca28ea75e45f538242c257e1f07fe19baa0f3::160>>),
-    ...>   value: 1000
-    ...> }
-    ...> |> BitcoinLib.Transaction.Spec.Output.to_transaction_output()
-    %BitcoinLib.Transaction.Output{
-      script_pub_key: [
-        %BitcoinLib.Script.Opcodes.Stack.Dup{},
-        %BitcoinLib.Script.Opcodes.Crypto.Hash160{},
-        %BitcoinLib.Script.Opcodes.Data{value: <<0xfc8ca28ea75e45f538242c257e1f07fe19baa0f3::160>>},
-        %BitcoinLib.Script.Opcodes.BitwiseLogic.EqualVerify{},
-        %BitcoinLib.Script.Opcodes.Crypto.CheckSig{}
-      ],
-      value: 1000
-    }
+      iex> %BitcoinLib.Transaction.Spec.Output{
+      ...>   script_pub_key: BitcoinLib.Script.Types.P2pkh.create(<<0xfc8ca28ea75e45f538242c257e1f07fe19baa0f3::160>>),
+      ...>   value: 1000
+      ...> }
+      ...> |> BitcoinLib.Transaction.Spec.Output.to_transaction_output()
+      %BitcoinLib.Transaction.Output{
+        script_pub_key: [
+          %BitcoinLib.Script.Opcodes.Stack.Dup{},
+          %BitcoinLib.Script.Opcodes.Crypto.Hash160{},
+          %BitcoinLib.Script.Opcodes.Data{value: <<0xfc8ca28ea75e45f538242c257e1f07fe19baa0f3::160>>},
+          %BitcoinLib.Script.Opcodes.BitwiseLogic.EqualVerify{},
+          %BitcoinLib.Script.Opcodes.Crypto.CheckSig{}
+        ],
+        value: 1000
+      }
   """
   @spec to_transaction_output(%Spec.Output{}) :: %Transaction.Output{}
   def to_transaction_output(%Spec.Output{script_pub_key: script_pub_key, value: value}) do

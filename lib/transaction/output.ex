@@ -15,22 +15,22 @@ defmodule BitcoinLib.Transaction.Output do
   Extracts a transaction output from a bitstring
 
   ## Examples
-    iex> <<0xf0ca052a010000001976a914cbc20a7664f2f69e5355aa427045bc15e7c6c77288ac00000000::304>>
-    ...> |> BitcoinLib.Transaction.Output.extract_from
-    {
-      :ok,
-      %BitcoinLib.Transaction.Output{
-        value: 4999990000,
-        script_pub_key: [
-          %BitcoinLib.Script.Opcodes.Stack.Dup{},
-          %BitcoinLib.Script.Opcodes.Crypto.Hash160{},
-          %BitcoinLib.Script.Opcodes.Data{value: <<0xcbc20a7664f2f69e5355aa427045bc15e7c6c772::160>>},
-          %BitcoinLib.Script.Opcodes.BitwiseLogic.EqualVerify{},
-          %BitcoinLib.Script.Opcodes.Crypto.CheckSig{script: <<0x76a914cbc20a7664f2f69e5355aa427045bc15e7c6c77288ac::200>>}
-        ]
-      },
-      <<0, 0, 0, 0>>
-    }
+      iex> <<0xf0ca052a010000001976a914cbc20a7664f2f69e5355aa427045bc15e7c6c77288ac00000000::304>>
+      ...> |> BitcoinLib.Transaction.Output.extract_from
+      {
+        :ok,
+        %BitcoinLib.Transaction.Output{
+          value: 4999990000,
+          script_pub_key: [
+            %BitcoinLib.Script.Opcodes.Stack.Dup{},
+            %BitcoinLib.Script.Opcodes.Crypto.Hash160{},
+            %BitcoinLib.Script.Opcodes.Data{value: <<0xcbc20a7664f2f69e5355aa427045bc15e7c6c772::160>>},
+            %BitcoinLib.Script.Opcodes.BitwiseLogic.EqualVerify{},
+            %BitcoinLib.Script.Opcodes.Crypto.CheckSig{script: <<0x76a914cbc20a7664f2f69e5355aa427045bc15e7c6c77288ac::200>>}
+          ]
+        },
+        <<0, 0, 0, 0>>
+      }
   """
   @spec extract_from(binary()) :: {:ok, %Output{}, bitstring()} | {:error, binary()}
   def extract_from(<<value::little-64, remaining::bitstring>>) do
@@ -48,20 +48,19 @@ defmodule BitcoinLib.Transaction.Output do
   Encodes an output into a bitstring
 
   ## Examples
-
-    iex> %BitcoinLib.Transaction.Output{
-    ...>   script_pub_key: [
-    ...>     %BitcoinLib.Script.Opcodes.Stack.Dup{},
-    ...>     %BitcoinLib.Script.Opcodes.Crypto.Hash160{},
-    ...>     %BitcoinLib.Script.Opcodes.Data{value: <<0xf86f0bc0a2232970ccdf4569815db500f1268361::160>>},
-    ...>     %BitcoinLib.Script.Opcodes.BitwiseLogic.EqualVerify{},
-    ...>     %BitcoinLib.Script.Opcodes.Crypto.CheckSig{}
-    ...>   ],
-    ...>   value: 129000000
-    ...> } |> BitcoinLib.Transaction.Output.encode
-    <<0x4062b00700000000::64>> <> # value
-    <<0x19::8>>                       <> # script_pub_key size
-    <<0x76a914f86f0bc0a2232970ccdf4569815db500f126836188ac::200>> # script_pub_key
+      iex> %BitcoinLib.Transaction.Output{
+      ...>   script_pub_key: [
+      ...>     %BitcoinLib.Script.Opcodes.Stack.Dup{},
+      ...>     %BitcoinLib.Script.Opcodes.Crypto.Hash160{},
+      ...>     %BitcoinLib.Script.Opcodes.Data{value: <<0xf86f0bc0a2232970ccdf4569815db500f1268361::160>>},
+      ...>     %BitcoinLib.Script.Opcodes.BitwiseLogic.EqualVerify{},
+      ...>     %BitcoinLib.Script.Opcodes.Crypto.CheckSig{}
+      ...>   ],
+      ...>   value: 129000000
+      ...> } |> BitcoinLib.Transaction.Output.encode
+      <<0x4062b00700000000::64>> <> # value
+      <<0x19::8>>                       <> # script_pub_key size
+      <<0x76a914f86f0bc0a2232970ccdf4569815db500f126836188ac::200>> # script_pub_key
   """
   @spec encode(%Output{}) :: bitstring()
   def encode(%Output{} = output) do

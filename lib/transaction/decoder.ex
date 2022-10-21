@@ -16,36 +16,36 @@ defmodule BitcoinLib.Transaction.Decoder do
   Converts a bitstring into a %Transaction{}
 
   ## Examples
-    iex> <<0x01000000017b1eabe0209b1fe794124575ef807057c77ada2138ae4fa8d6c4de0398a14f3f0000000000ffffffff01f0ca052a010000001976a914cbc20a7664f2f69e5355aa427045bc15e7c6c77288ac92040000::680>>
-    ...> |> BitcoinLib.Transaction.Decoder.to_struct()
-    {
-      :ok,
-      %BitcoinLib.Transaction{
-        version: 1,
-        id: "b1caa607a324ed9132c3d894d2cf7a22d59cdb4022bd8827c49e2f0d8ca018c6",
-        inputs: [
-          %BitcoinLib.Transaction.Input{
-            txid: "3f4fa19803dec4d6a84fae3821da7ac7577080ef75451294e71f9b20e0ab1e7b",
-            vout: 0,
-            script_sig: [],
-            sequence: 4294967295
-          }
-        ],
-        outputs: [
-          %BitcoinLib.Transaction.Output{
-            value: 4999990000,
-            script_pub_key: [
-              %BitcoinLib.Script.Opcodes.Stack.Dup{},
-              %BitcoinLib.Script.Opcodes.Crypto.Hash160{},
-              %BitcoinLib.Script.Opcodes.Data{value: <<0xcbc20a7664f2f69e5355aa427045bc15e7c6c772::160>>},
-              %BitcoinLib.Script.Opcodes.BitwiseLogic.EqualVerify{},
-              %BitcoinLib.Script.Opcodes.Crypto.CheckSig{script: <<0x76a914cbc20a7664f2f69e5355aa427045bc15e7c6c77288ac::200>>}
-            ]
-          }
-        ],
-        locktime: 1170
+      iex> <<0x01000000017b1eabe0209b1fe794124575ef807057c77ada2138ae4fa8d6c4de0398a14f3f0000000000ffffffff01f0ca052a010000001976a914cbc20a7664f2f69e5355aa427045bc15e7c6c77288ac92040000::680>>
+      ...> |> BitcoinLib.Transaction.Decoder.to_struct()
+      {
+        :ok,
+        %BitcoinLib.Transaction{
+          version: 1,
+          id: "b1caa607a324ed9132c3d894d2cf7a22d59cdb4022bd8827c49e2f0d8ca018c6",
+          inputs: [
+            %BitcoinLib.Transaction.Input{
+              txid: "3f4fa19803dec4d6a84fae3821da7ac7577080ef75451294e71f9b20e0ab1e7b",
+              vout: 0,
+              script_sig: [],
+              sequence: 4294967295
+            }
+          ],
+          outputs: [
+            %BitcoinLib.Transaction.Output{
+              value: 4999990000,
+              script_pub_key: [
+                %BitcoinLib.Script.Opcodes.Stack.Dup{},
+                %BitcoinLib.Script.Opcodes.Crypto.Hash160{},
+                %BitcoinLib.Script.Opcodes.Data{value: <<0xcbc20a7664f2f69e5355aa427045bc15e7c6c772::160>>},
+                %BitcoinLib.Script.Opcodes.BitwiseLogic.EqualVerify{},
+                %BitcoinLib.Script.Opcodes.Crypto.CheckSig{script: <<0x76a914cbc20a7664f2f69e5355aa427045bc15e7c6c77288ac::200>>}
+              ]
+            }
+          ],
+          locktime: 1170
+        }
       }
-    }
   """
   @spec to_struct(bitstring()) :: {:ok, %Transaction{}} | {:error, binary()}
   def to_struct(encoded_transaction) do
