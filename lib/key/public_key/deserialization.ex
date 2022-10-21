@@ -59,15 +59,15 @@ defmodule BitcoinLib.Key.PublicKey.Deserialization do
   end
 
   def deserialize(@bip32_testnet_human_readable <> _data = serialized) do
-    {:ok, execute(serialized), :tesnet, :bip32}
+    {:ok, execute(serialized), :testnet, :bip32}
   end
 
   def deserialize(@bip49_testnet_human_readable <> _data = serialized) do
-    {:ok, execute(serialized), :tesnet, :bip49}
+    {:ok, execute(serialized), :testnet, :bip49}
   end
 
   def deserialize(@bip84_testnet_human_readable <> _data = serialized) do
-    {:ok, execute(serialized), :tesnet, :bip84}
+    {:ok, execute(serialized), :testnet, :bip84}
   end
 
   def deserialize(_) do
