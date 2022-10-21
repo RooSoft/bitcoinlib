@@ -22,8 +22,8 @@ defmodule BitcoinLib.Script.Opcodes.BitwiseLogic.Equal do
   Returns 0x87
 
   ## Examples
-    iex> BitcoinLib.Script.Opcodes.BitwiseLogic.Equal.v()
-    0x87
+      iex> BitcoinLib.Script.Opcodes.BitwiseLogic.Equal.v()
+      0x87
   """
   @spec v() :: 0x87
   def v do
@@ -34,8 +34,8 @@ defmodule BitcoinLib.Script.Opcodes.BitwiseLogic.Equal do
   Returns <<0x87>>
 
   ## Examples
-    iex> BitcoinLib.Script.Opcodes.BitwiseLogic.Equal.encode()
-    <<0x87>>
+      iex> BitcoinLib.Script.Opcodes.BitwiseLogic.Equal.encode()
+      <<0x87>>
   """
   @spec encode() :: <<_::8>>
   def encode() do
@@ -46,11 +46,11 @@ defmodule BitcoinLib.Script.Opcodes.BitwiseLogic.Equal do
   Returns 1 if the inputs are exactly equal, 0 otherwise.
 
   ## Examples
-    iex> BitcoinLib.Script.Opcodes.BitwiseLogic.Equal.execute(
-    ...>   %BitcoinLib.Script.Opcodes.BitwiseLogic.Equal{},
-    ...>   [3, 3, 4]
-    ...> )
-    {:ok, [1, 4]}
+      iex> BitcoinLib.Script.Opcodes.BitwiseLogic.Equal.execute(
+      ...>   %BitcoinLib.Script.Opcodes.BitwiseLogic.Equal{},
+      ...>   [3, 3, 4]
+      ...> )
+      {:ok, [1, 4]}
   """
   @spec execute(%Equal{}, list()) ::
           {:ok, [1 | list()]} | {:ok, [0 | list()]} | {:error, binary()}

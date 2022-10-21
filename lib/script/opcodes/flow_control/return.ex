@@ -30,8 +30,8 @@ defmodule BitcoinLib.Script.Opcodes.FlowControl.Return do
   Returns 0x6A
 
   ## Examples
-    iex> BitcoinLib.Script.Opcodes.FlowControl.Return.v()
-    0x6a
+      iex> BitcoinLib.Script.Opcodes.FlowControl.Return.v()
+      0x6a
   """
   @spec v() :: 0x6A
   def v do
@@ -48,10 +48,10 @@ defmodule BitcoinLib.Script.Opcodes.FlowControl.Return do
   83 bytes.
 
   ## Examples
-    iex> stack = [3]
-    ...> %BitcoinLib.Script.Opcodes.FlowControl.Return{}
-    ...> |> BitcoinLib.Script.Opcodes.FlowControl.Return.execute(stack)
-    {:error, "OP_RETURN has been hit"}
+      iex> stack = [3]
+      ...> %BitcoinLib.Script.Opcodes.FlowControl.Return{}
+      ...> |> BitcoinLib.Script.Opcodes.FlowControl.Return.execute(stack)
+      {:error, "OP_RETURN has been hit"}
   """
   @spec execute(%Return{}, list()) :: {:error, binary()}
   def execute(%Return{}, _stack) do

@@ -22,8 +22,8 @@ defmodule BitcoinLib.Script.Opcodes.Constants.Zero do
   Returns 0
 
   ## Examples
-    iex> BitcoinLib.Script.Opcodes.Constants.Zero.v()
-    0
+      iex> BitcoinLib.Script.Opcodes.Constants.Zero.v()
+      0
   """
   @spec v() :: 0
   def v do
@@ -34,8 +34,8 @@ defmodule BitcoinLib.Script.Opcodes.Constants.Zero do
   Returns <<0>>
 
   ## Examples
-    iex> BitcoinLib.Script.Opcodes.Constants.Zero.encode()
-    <<0>>
+      iex> BitcoinLib.Script.Opcodes.Constants.Zero.encode()
+      <<0>>
   """
   @spec encode() :: <<_::8>>
   def encode() do
@@ -46,11 +46,11 @@ defmodule BitcoinLib.Script.Opcodes.Constants.Zero do
   An empty array of bytes is pushed onto the stack.
 
   ## Examples
-    iex> BitcoinLib.Script.Opcodes.Constants.Zero.execute(
-    ...>  %BitcoinLib.Script.Opcodes.Constants.Zero{},
-    ...>  [3]
-    ...> )
-    {:ok, [nil ,3]}
+      iex> BitcoinLib.Script.Opcodes.Constants.Zero.execute(
+      ...>  %BitcoinLib.Script.Opcodes.Constants.Zero{},
+      ...>  [3]
+      ...> )
+      {:ok, [nil ,3]}
   """
   def execute(%Zero{}, [remaining]) do
     {:ok, [nil, remaining]}

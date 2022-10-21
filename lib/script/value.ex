@@ -9,8 +9,8 @@ defmodule BitcoinLib.Script.Value do
   Returns true if the value passed to it is considered as such
 
   ## Examples
-    iex> BitcoinLib.Script.Value.is_true?(1)
-    true
+      iex> BitcoinLib.Script.Value.is_true?(1)
+      true
   """
   @spec is_true?(list() | integer() | any()) :: boolean()
   def is_true?([]), do: false

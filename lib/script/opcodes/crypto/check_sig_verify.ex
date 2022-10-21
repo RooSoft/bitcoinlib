@@ -22,8 +22,8 @@ defmodule BitcoinLib.Script.Opcodes.Crypto.CheckSigVerify do
   Returns 0xad
 
   ## Examples
-    iex> BitcoinLib.Script.Opcodes.Crypto.CheckSigVerify.v()
-    0xad
+      iex> BitcoinLib.Script.Opcodes.Crypto.CheckSigVerify.v()
+      0xad
   """
   @spec v() :: 0xAD
   def v do

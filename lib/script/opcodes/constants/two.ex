@@ -22,8 +22,8 @@ defmodule BitcoinLib.Script.Opcodes.Constants.Two do
   Returns 0x52
 
   ## Examples
-    iex> BitcoinLib.Script.Opcodes.Constants.Two.v()
-    0x52
+      iex> BitcoinLib.Script.Opcodes.Constants.Two.v()
+      0x52
   """
   def v do
     @value
@@ -33,8 +33,8 @@ defmodule BitcoinLib.Script.Opcodes.Constants.Two do
   Returns <<0x52>>
 
   ## Examples
-    iex> BitcoinLib.Script.Opcodes.Constants.Two.encode()
-    <<0x52>>
+      iex> BitcoinLib.Script.Opcodes.Constants.Two.encode()
+      <<0x52>>
   """
   @spec encode() :: <<_::8>>
   def encode() do
@@ -45,11 +45,11 @@ defmodule BitcoinLib.Script.Opcodes.Constants.Two do
   The number 2 is pushed onto the stack.
 
   ## Examples
-    iex> BitcoinLib.Script.Opcodes.Constants.Two.execute(
-    ...>  %BitcoinLib.Script.Opcodes.Constants.Two{},
-    ...>  [3]
-    ...> )
-    {:ok, [2,3]}
+      iex> BitcoinLib.Script.Opcodes.Constants.Two.execute(
+      ...>  %BitcoinLib.Script.Opcodes.Constants.Two{},
+      ...>  [3]
+      ...> )
+      {:ok, [2,3]}
   """
   @spec execute(%Two{}, list()) :: {:ok, list()}
   def execute(%Two{}, [remaining]) do

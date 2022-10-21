@@ -10,9 +10,9 @@ defmodule BitcoinLib.Script.Opcodes.Data do
   Adds between 1 and 75 bytes of data into the stack
 
   ## Examples
-    iex> %BitcoinLib.Script.Opcodes.Data{value: <<1, 2, 3, 4, 5>>}
-    ...> |> BitcoinLib.Script.Opcodes.Data.encode()
-    <<5, 1, 2, 3, 4, 5>>
+      iex> %BitcoinLib.Script.Opcodes.Data{value: <<1, 2, 3, 4, 5>>}
+      ...> |> BitcoinLib.Script.Opcodes.Data.encode()
+      <<5, 1, 2, 3, 4, 5>>
   """
   @spec encode(%Data{}) :: bitstring()
   def encode(%Data{value: value}) do

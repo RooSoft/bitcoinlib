@@ -31,8 +31,8 @@ defmodule BitcoinLib.Script.Opcodes.Crypto.CheckMultiSig do
   Returns 0xaf
 
   ## Examples
-    iex> BitcoinLib.Script.Opcodes.Crypto.CheckMultiSig.v()
-    0xae
+      iex> BitcoinLib.Script.Opcodes.Crypto.CheckMultiSig.v()
+      0xae
   """
   @spec v() :: 0xAE
   def v do

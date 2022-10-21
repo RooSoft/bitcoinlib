@@ -10,18 +10,18 @@ defmodule BitcoinLib.Script.Parser do
   Takes a binary script and converts it into an opcode list
 
   ## Examples
-    iex> <<0x76a914cbc20a7664f2f69e5355aa427045bc15e7c6c77288ac::200>>
-    ...> |> BitcoinLib.Script.Parser.parse
-    {
-      :ok,
-      [
-        %BitcoinLib.Script.Opcodes.Stack.Dup{},
-        %BitcoinLib.Script.Opcodes.Crypto.Hash160{},
-        %BitcoinLib.Script.Opcodes.Data{value: <<0xcbc20a7664f2f69e5355aa427045bc15e7c6c772::160>>},
-        %BitcoinLib.Script.Opcodes.BitwiseLogic.EqualVerify{},
-        %BitcoinLib.Script.Opcodes.Crypto.CheckSig{script: <<0x76a914cbc20a7664f2f69e5355aa427045bc15e7c6c77288ac::200>>}
-      ]
-    }
+      iex> <<0x76a914cbc20a7664f2f69e5355aa427045bc15e7c6c77288ac::200>>
+      ...> |> BitcoinLib.Script.Parser.parse
+      {
+        :ok,
+        [
+          %BitcoinLib.Script.Opcodes.Stack.Dup{},
+          %BitcoinLib.Script.Opcodes.Crypto.Hash160{},
+          %BitcoinLib.Script.Opcodes.Data{value: <<0xcbc20a7664f2f69e5355aa427045bc15e7c6c772::160>>},
+          %BitcoinLib.Script.Opcodes.BitwiseLogic.EqualVerify{},
+          %BitcoinLib.Script.Opcodes.Crypto.CheckSig{script: <<0x76a914cbc20a7664f2f69e5355aa427045bc15e7c6c77288ac::200>>}
+        ]
+      }
   """
   @spec parse(bitstring()) :: {:ok, list()} | {:error, binary()}
   def parse(script) do

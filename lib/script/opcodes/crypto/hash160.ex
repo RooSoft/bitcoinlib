@@ -23,8 +23,8 @@ defmodule BitcoinLib.Script.Opcodes.Crypto.Hash160 do
   Returns 0xa9
 
   ## Examples
-    iex> BitcoinLib.Script.Opcodes.Crypto.Hash160.v()
-    0xa9
+      iex> BitcoinLib.Script.Opcodes.Crypto.Hash160.v()
+      0xa9
   """
   @spec v() :: 0xA9
   def v do
@@ -35,8 +35,8 @@ defmodule BitcoinLib.Script.Opcodes.Crypto.Hash160 do
   Returns <<0xa9>>
 
   ## Examples
-    iex> BitcoinLib.Script.Opcodes.Crypto.Hash160.encode()
-    <<0xa9>>
+      iex> BitcoinLib.Script.Opcodes.Crypto.Hash160.encode()
+      <<0xa9>>
   """
   @spec encode() :: <<_::8>>
   def encode() do
@@ -47,10 +47,10 @@ defmodule BitcoinLib.Script.Opcodes.Crypto.Hash160 do
   The input is hashed twice: first with SHA-256 and then with RIPEMD-160.
 
   ## Examples
-    iex> pub_key = <<0x0218fb7aff2c6cb9c25b7cd9aa0b9bdd712e5617f07cb0c96bdda0b44c25a5d25f::264>>
-    ...> %BitcoinLib.Script.Opcodes.Crypto.Hash160{}
-    ...> |> BitcoinLib.Script.Opcodes.Crypto.Hash160.execute([pub_key, 3])
-    {:ok, [<<0x17cdc02e31846f9e7c25952700f53e9752a0a3c2::160>>, 3]}
+      iex> pub_key = <<0x0218fb7aff2c6cb9c25b7cd9aa0b9bdd712e5617f07cb0c96bdda0b44c25a5d25f::264>>
+      ...> %BitcoinLib.Script.Opcodes.Crypto.Hash160{}
+      ...> |> BitcoinLib.Script.Opcodes.Crypto.Hash160.execute([pub_key, 3])
+      {:ok, [<<0x17cdc02e31846f9e7c25952700f53e9752a0a3c2::160>>, 3]}
   """
   @spec execute(%Hash160{}, [<<_::264>> | list()]) :: {:ok, [<<_::160>> | list()]}
   def execute(_opcode, []), do: {:error, "trying to execute OP_HASH160 on an empty stack"}

@@ -27,8 +27,8 @@ defmodule BitcoinLib.Script.Opcodes.Crypto.CheckSig do
   Returns 0xac
 
   ## Examples
-    iex> BitcoinLib.Script.Opcodes.Crypto.CheckSig.v()
-    0xac
+      iex> BitcoinLib.Script.Opcodes.Crypto.CheckSig.v()
+      0xac
   """
   @spec v() :: 0xAC
   def v do
@@ -39,8 +39,8 @@ defmodule BitcoinLib.Script.Opcodes.Crypto.CheckSig do
   Returns <<0xac>>
 
   ## Examples
-    iex> BitcoinLib.Script.Opcodes.Crypto.CheckSig.encode()
-    <<0xac>>
+      iex> BitcoinLib.Script.Opcodes.Crypto.CheckSig.encode()
+      <<0xac>>
   """
   @spec encode() :: <<_::8>>
   def encode() do
@@ -53,13 +53,13 @@ defmodule BitcoinLib.Script.Opcodes.Crypto.CheckSig do
   valid signature for this hash and public key. If it is, 1 is returned, 0 otherwise.
 
   ## Examples
-    iex> sig_pub_key = <<0x0218fb7aff2c6cb9c25b7cd9aa0b9bdd712e5617f07cb0c96bdda0b44c25a5d25f::264>>
-    ...> signature = <<0x304402202911998439e90fc7c3e12c8fd9e5b65d451c3e157fdfdf0991281fb90038eaf20220623615e5e4a768edc19fd480ac67b7f39d46689fdbfb54ffa49145117d17aa71::560>>
-    ...> %BitcoinLib.Script.Opcodes.Crypto.CheckSig{
-    ...>   script: <<0x76a91417cdc02e31846f9e7c25952700f53e9752a0a3c288ac::200>>
-    ...> }
-    ...> |> BitcoinLib.Script.Opcodes.Crypto.CheckSig.execute([sig_pub_key, signature, 3])
-    {:ok, [1, 3]}
+      iex> sig_pub_key = <<0x0218fb7aff2c6cb9c25b7cd9aa0b9bdd712e5617f07cb0c96bdda0b44c25a5d25f::264>>
+      ...> signature = <<0x304402202911998439e90fc7c3e12c8fd9e5b65d451c3e157fdfdf0991281fb90038eaf20220623615e5e4a768edc19fd480ac67b7f39d46689fdbfb54ffa49145117d17aa71::560>>
+      ...> %BitcoinLib.Script.Opcodes.Crypto.CheckSig{
+      ...>   script: <<0x76a91417cdc02e31846f9e7c25952700f53e9752a0a3c288ac::200>>
+      ...> }
+      ...> |> BitcoinLib.Script.Opcodes.Crypto.CheckSig.execute([sig_pub_key, signature, 3])
+      {:ok, [1, 3]}
   """
   @spec execute(%CheckSig{}, list()) :: {:ok, list()}
   def execute(%CheckSig{script: script}, [sig_pub_key | [sig | remaining]]) do
