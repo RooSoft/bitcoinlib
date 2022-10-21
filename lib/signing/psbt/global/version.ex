@@ -3,6 +3,7 @@ defmodule BitcoinLib.Signing.Psbt.Global.Version do
 
   alias BitcoinLib.Signing.Psbt.Global.Version
 
+  # TODO: document
   def parse(<<version::little-32>>) do
     %Version{value: version}
   end

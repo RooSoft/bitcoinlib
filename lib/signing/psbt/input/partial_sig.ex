@@ -6,6 +6,7 @@ defmodule BitcoinLib.Signing.Psbt.Input.PartialSig do
 
   alias BitcoinLib.Signing.Psbt.Input.PartialSig
 
+  # TODO: document
   def parse(pub_key, signature) do
     %{pub_key: pub_key, signature: signature}
     |> validate_pub_key()

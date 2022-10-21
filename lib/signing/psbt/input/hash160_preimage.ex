@@ -4,6 +4,7 @@ defmodule BitcoinLib.Signing.Psbt.Input.Hash160Preimage do
   alias BitcoinLib.Signing.Psbt.Input.Hash160Preimage
   alias BitcoinLib.Crypto
 
+  # TODO: document
   def parse(<<preimage_hash::bitstring-160>>, <<preimage::bitstring>>) do
     case validate(preimage_hash, preimage) do
       true ->

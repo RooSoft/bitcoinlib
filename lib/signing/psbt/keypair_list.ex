@@ -12,6 +12,7 @@ defmodule BitcoinLib.Signing.Psbt.KeypairList do
 
   alias BitcoinLib.Signing.Psbt.{KeypairList, Keypair}
 
+  # TODO: document
   def from_data(data) do
     {remaining_data, keypairs} =
       data

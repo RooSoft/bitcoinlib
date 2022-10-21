@@ -12,6 +12,7 @@ defmodule BitcoinLib.Signing.Psbt.Keypair do
   alias BitcoinLib.Signing.Psbt.Keypair
   alias BitcoinLib.Signing.Psbt.Keypair.{Key, Value}
 
+  # TODO: document
   def extract_from(data) do
     {key, data} = extract_key(data)
     {value, data} = extract_value(data)

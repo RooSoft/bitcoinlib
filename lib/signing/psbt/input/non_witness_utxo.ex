@@ -4,11 +4,9 @@ defmodule BitcoinLib.Signing.Psbt.Input.NonWitnessUtxo do
   alias BitcoinLib.Signing.Psbt.Input.NonWitnessUtxo
   alias BitcoinLib.Signing.Psbt.Keypair
   alias BitcoinLib.Signing.Psbt.Keypair.{Key, Value}
-  # alias BitcoinLib.Script
-
   alias BitcoinLib.Transaction
-  # alias BitcoinLib.Transaction.Output
 
+  # TODO: document
   def parse(keypair) do
     %{keypair: keypair}
     |> validate_keypair()

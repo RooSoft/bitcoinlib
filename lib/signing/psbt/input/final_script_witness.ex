@@ -4,6 +4,7 @@ defmodule BitcoinLib.Signing.Psbt.Input.FinalScriptWitness do
   alias BitcoinLib.Signing.Psbt.Input.FinalScriptWitness
   alias BitcoinLib.Signing.Psbt.Keypair.{Key}
 
+  # TODO: document
   def parse(keypair) do
     %{keypair: keypair, final_script_witness: %FinalScriptWitness{}}
     |> validate_keypair()

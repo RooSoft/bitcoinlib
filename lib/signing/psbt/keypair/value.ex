@@ -10,6 +10,7 @@ defmodule BitcoinLib.Signing.Psbt.Keypair.Value do
   alias BitcoinLib.Signing.Psbt.CompactInteger
   alias BitcoinLib.Signing.Psbt.Keypair.Value
 
+  # TODO: doctests
   @doc """
   Extracts a value from some arbitrary data, returning a tuple containing the value and the remaining data
   """

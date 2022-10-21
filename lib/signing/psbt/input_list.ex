@@ -1,6 +1,7 @@
 defmodule BitcoinLib.Signing.Psbt.InputList do
   alias BitcoinLib.Signing.Psbt.Input
 
+  # TODO: document
   def extract(keypair_lists) do
     keypair_lists
     |> call()

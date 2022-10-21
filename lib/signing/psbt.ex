@@ -7,6 +7,7 @@ defmodule BitcoinLib.Signing.Psbt do
   @magic 0x70736274
   @separator 0xFF
 
+  # TODO: document
   @spec parse(binary()) :: {:ok, %Psbt{}} | {:error, binary()}
   def parse(encoded) do
     map =

@@ -19,6 +19,7 @@ defmodule BitcoinLib.Signing.Psbt.CompactInteger do
   @max_32_bits_value 0xFFFFFFFF
   @max_64_bits_value 0xFFFFFFFFFFFFFFFF
 
+  # TODO: doctests
   @doc """
   Encodes an integer according to the spec linked to in the moduledoc
   """

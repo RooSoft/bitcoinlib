@@ -3,6 +3,7 @@ defmodule BitcoinLib.Signing.Psbt.Input.OutputIndex do
 
   alias BitcoinLib.Signing.Psbt.Input.OutputIndex
 
+  # TODO: document
   def parse(<<value::unsigned-little-32>>) do
     %OutputIndex{
       value: value

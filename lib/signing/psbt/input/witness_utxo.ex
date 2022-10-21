@@ -9,6 +9,7 @@ defmodule BitcoinLib.Signing.Psbt.Input.WitnessUtxo do
 
   @bits 8
 
+  # TODO: document
   @spec parse(%Keypair{}) :: {:ok, %WitnessUtxo{}} | {:error, binary()}
   def parse(keypair) do
     %{keypair: keypair}

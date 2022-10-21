@@ -1,6 +1,7 @@
 defmodule BitcoinLib.Signing.Psbt.Global.UnsignedTx do
   alias BitcoinLib.Transaction
 
+  # TODO: document
   def parse(keypair) do
     keypair
     |> validate_keypair()

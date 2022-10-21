@@ -3,6 +3,7 @@ defmodule BitcoinLib.Signing.Psbt.Global.Xpub do
 
   alias BitcoinLib.Signing.Psbt.Global.Xpub
 
+  # TODO: document
   def parse(<<fingerprint::binary-4, remaining::bitstring>>) do
     {path_elements, remaining} =
       remaining

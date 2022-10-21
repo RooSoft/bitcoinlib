@@ -6,6 +6,7 @@ defmodule BitcoinLib.Signing.Psbt.GenericProperties.RedeemScript do
   alias BitcoinLib.Signing.Psbt.Keypair.{Key}
   alias BitcoinLib.Script
 
+  # TODO: document
   @spec parse(%Keypair{}) :: {:ok, %RedeemScript{}} | {:error, binary()}
   def parse(keypair) do
     %{keypair: keypair}

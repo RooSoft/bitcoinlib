@@ -10,6 +10,7 @@ defmodule BitcoinLib.Signing.Psbt.GenericProperties.Bip32Derivation do
   alias BitcoinLib.Key.PublicKey
   alias BitcoinLib.Key.HD.DerivationPath
 
+  # TODO: document
   def parse(%Keypair{key: %Key{data: binary_pub_key}, value: %Value{data: remaining}}) do
     {master_key_fingerprint, remaining} = extract_master_key_fingerprint(remaining)
     {derivation_path, _remaining} = extract_derivation_path(remaining, [])

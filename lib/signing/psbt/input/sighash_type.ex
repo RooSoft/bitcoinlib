@@ -3,6 +3,7 @@ defmodule BitcoinLib.Signing.Psbt.Input.SighashType do
 
   alias BitcoinLib.Signing.Psbt.Input.SighashType
 
+  # TODO: document
   def parse(<<value::little-32>>) do
     %SighashType{
       value: value

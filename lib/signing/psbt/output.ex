@@ -15,10 +15,12 @@ defmodule BitcoinLib.Signing.Psbt.Output do
   @bip32_derivation 0x2
   @proprietary 0xFC
 
+  # TODO: document
   def from_keypair_list(nil) do
     nil
   end
 
+  # TODO: document
   def from_keypair_list(%KeypairList{} = keypair_list) do
     keypair_list.keypairs
     |> validate_keys

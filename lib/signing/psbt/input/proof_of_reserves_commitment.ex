@@ -4,6 +4,7 @@ defmodule BitcoinLib.Signing.Psbt.Input.ProofOfReservesCommitment do
   alias BitcoinLib.Signing.Psbt.Input.ProofOfReservesCommitment
   alias BitcoinLib.Signing.Psbt.{Keypair}
 
+  # TODO: document
   def parse(%Keypair{key: _, value: <<value::bitstring>>}) do
     %ProofOfReservesCommitment{
       value: value
