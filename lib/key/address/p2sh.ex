@@ -34,6 +34,22 @@ defmodule BitcoinLib.Key.Address.P2SH do
     |> base58_encode
   end
 
+  @doc """
+  Creates a P2SH-P2WPKH address, which is starting by 3, out of a script hash
+
+  ## Examples
+      iex> <<0x11c371a2b2d22c7b8b1b51d9fde0e44a9dfdc7bb::160>>
+      ...> |> BitcoinLib.Key.Address.P2SH.from_script_hash(:testnet)
+      "2Mts9cDyaoGfxPseMzxab2bAKHLW4o4SzAK"
+  """
+  @spec from_script_hash(bitstring(), :mainnet | :testnet) :: binary()
+  def from_script_hash(script_hash, network \\ :mainnet) do
+    script_hash
+    |> prepend_version_bytes(network)
+    |> append_checksum()
+    |> base58_encode
+  end
+
   defp hash160(value) do
     value
     |> Crypto.hash160()
@@ -44,11 +60,11 @@ defmodule BitcoinLib.Key.Address.P2SH do
   end
 
   defp prepend_version_bytes(redeem_script, :mainnet) do
-    <<5::size(8), redeem_script::bitstring>>
+    <<5::8, redeem_script::bitstring>>
   end
 
   defp prepend_version_bytes(redeem_script, :testnet) do
-    <<0xC4::size(8), redeem_script::bitstring>>
+    <<0xC4::8, redeem_script::bitstring>>
   end
 
   defp append_checksum(public_key_hash) do
