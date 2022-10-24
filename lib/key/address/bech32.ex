@@ -75,6 +75,49 @@ defmodule BitcoinLib.Key.Address.Bech32 do
     SegwitAddr.encode(hrp, script_hash |> Binary.to_hex())
   end
 
+  def destructure(address) do
+    case SegwitAddr.decode(address) do
+      {:ok, {hrp, _segwit_version, encoding}} -> classify(hrp, encoding)
+      {:error, message} -> {:error, "Bech32 error: #{message}"}
+    end
+  end
+
+  defp classify("bc", script_hash_list) do
+    script_hash =
+      script_hash_list
+      |> :binary.list_to_bin()
+
+    {:ok, script_hash, :p2wpkh, :mainnet}
+  end
+
+  defp classify("tb", script_hash_list) do
+    script_hash =
+      script_hash_list
+      |> :binary.list_to_bin()
+
+    {:ok, script_hash, :p2wpkh, :testnet}
+  end
+
+  # defp interpret_decoding({:error, <<_::64, _::size(8)>>}) do
+  #   {:error, "message"}
+  # end
+
+  # defp interpret_decoding({:ok, {"bc", _version, script_hash_list}}) do
+  #   script_hash =
+  #     script_hash_list
+  #     |> :binary.list_to_bin()
+
+  #   {:ok, script_hash, :p2wpkh, :mainnet}
+  # end
+
+  # defp interpret_decoding({:ok, {"tb", _version, script_hash_list}}) do
+  #   script_hash =
+  #     script_hash_list
+  #     |> :binary.list_to_bin()
+
+  #   {:ok, script_hash, :p2wpkh, :testnet}
+  # end
+
   defp get_hrp(:mainnet), do: "bc"
   defp get_hrp(:testnet), do: "tb"
 end

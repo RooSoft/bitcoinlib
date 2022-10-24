@@ -63,12 +63,21 @@ defmodule BitcoinLib.Key.Address do
   Extracts the public key hash from an address, and make sure the checkum is ok
 
   ## Examples
+      iex> address = "tb1qxrd42xz49clfrs5mz6thglwlu5vxmdqxsvpnks"
+      ...> BitcoinLib.Key.Address.destructure(address)
+      {:ok, <<0x30db5518552e3e91c29b1697747ddfe5186db406::160>>, :p2wpkh, :testnet}
+
       iex> address = "mwYKDe7uJcgqyVHJAPURddeZvM5zBVQj5L"
       ...> BitcoinLib.Key.Address.destructure(address)
       {:ok, <<0xafc3e518577316386188af748a816cd14ce333f2::160>>, :p2pkh, :testnet}
   """
   @spec destructure(binary()) ::
-          {:ok, <<_::160>>, :p2pkh | :p2sh, :mainnet | :testnet} | {:error, binary()}
+          {:ok, <<_::272>> | <<_::160>>, :p2pkh | :p2sh, :p2wpkh, :mainnet | :testnet}
+          | {:error, binary()}
+
+  def destructure("bc1" <> _ = bech32_address), do: Bech32.destructure(bech32_address)
+  def destructure("tb1" <> _ = bech32_address), do: Bech32.destructure(bech32_address)
+
   def destructure(address) do
     <<prefix::8, public_key_hash::bitstring-160, checksum::bitstring-32>> =
       address
