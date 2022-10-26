@@ -1,8 +1,5 @@
-alias BitcoinLib.Console
-alias BitcoinLib.Crypto
-alias BitcoinLib.Script
-alias BitcoinLib.Transaction
-alias BitcoinLib.Key.{Address, PrivateKey, PublicKey}
+alias BitcoinLib.{Address, Console, Crypto, Script, Transaction}
+alias BitcoinLib.Key.{PrivateKey, PublicKey}
 alias BitcoinLib.Key.HD.{DerivationPath, Entropy, SeedPhrase}
 
 orange = IO.ANSI.color(5, 3, 1)
