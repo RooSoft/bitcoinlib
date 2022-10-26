@@ -3,11 +3,10 @@ defmodule BitcoinLib.TransactionTest do
 
   doctest BitcoinLib.Transaction
 
-  alias BitcoinLib.Key.{PrivateKey, PublicKey, Address}
-  alias BitcoinLib.Transaction
+  alias BitcoinLib.{Address, Transaction, Script}
+  alias BitcoinLib.Key.{PrivateKey, PublicKey}
   alias BitcoinLib.Transaction.{Input, Output}
   alias BitcoinLib.Script.Opcodes
-  alias BitcoinLib.Script
 
   test "decode a transaction" do
     raw =

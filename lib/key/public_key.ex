@@ -21,8 +21,8 @@ defmodule BitcoinLib.Key.PublicKey do
     Deserialization
   }
 
-  alias BitcoinLib.Crypto
-  alias BitcoinLib.Key.{PrivateKey, PublicKey, Address}
+  alias BitcoinLib.{Address, Crypto}
+  alias BitcoinLib.Key.{PrivateKey, PublicKey}
   alias BitcoinLib.Key.HD.{DerivationPath, Fingerprint}
 
   @doc """

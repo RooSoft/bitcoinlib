@@ -3,7 +3,8 @@ defmodule BitcoinLib do
   High level bitcoin operations
   """
 
-  alias BitcoinLib.Key.{PrivateKey, PublicKey, Address}
+  alias BitcoinLib.Address
+  alias BitcoinLib.Key.{PrivateKey, PublicKey}
 
   @doc """
   Creates a bitcoin private key both in raw and WIF format

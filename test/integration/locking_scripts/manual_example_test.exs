@@ -5,12 +5,10 @@ defmodule BitcoinLib.Test.Integration.LockingScripts.ManualExampleTest do
   """
   use ExUnit.Case, async: true
 
-  alias BitcoinLib.Key.{PrivateKey, PublicKey, Address}
-  alias BitcoinLib.Transaction
+  alias BitcoinLib.{Address, Transaction, Script, Crypto}
+  alias BitcoinLib.Key.{PrivateKey, PublicKey}
   alias BitcoinLib.Transaction.{Input, Output}
-  alias BitcoinLib.Script
   alias BitcoinLib.Script.Opcodes
-  alias BitcoinLib.Crypto
 
   test "bitcoin testnet signing own P2PKH" do
     private_key =

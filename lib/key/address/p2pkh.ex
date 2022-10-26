@@ -7,8 +7,8 @@ defmodule BitcoinLib.Key.Address.P2PKH do
   - https://en.bitcoinwiki.org/wiki/Pay-to-Pubkey_Hash
   """
 
-  alias BitcoinLib.Key.{PublicKey, Address}
-  alias BitcoinLib.Crypto
+  alias BitcoinLib.{Address, Crypto}
+  alias BitcoinLib.Key.{PublicKey}
 
   @doc """
   Converts an extended public key into a P2PKH address starting by 1
