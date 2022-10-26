@@ -66,23 +66,28 @@ defmodule BitcoinLib.Key.Address do
 
   ## Examples
       iex> "tb1qxrd42xz49clfrs5mz6thglwlu5vxmdqxsvpnks"
-      ...> |> BitcoinLib.Key.Address.validate()
+      ...> |> BitcoinLib.Key.Address.valid?()
       true
   """
-  @spec validate(binary()) :: boolean()
+  @spec valid?(binary()) :: boolean()
 
-  def validate("3" <> _ = address) do
+  def valid?("2" <> _ = address) do
+    P2SH.valid?(address)
   end
 
-  def validate("bc1" <> _ = address) do
+  def valid?("3" <> _ = address) do
+    P2SH.valid?(address)
+  end
+
+  def valid?("tb1" <> _ = address) do
     Bech32.valid?(address)
   end
 
-  def validate("tb1" <> _ = address) do
+  def valid?("bc1" <> _ = address) do
     Bech32.valid?(address)
   end
 
-  def validate(address) do
+  def valid?(address) do
     Logger.error("#{address} is of an unknown address type")
   end
 
