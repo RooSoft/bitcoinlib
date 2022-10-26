@@ -9,7 +9,7 @@ defmodule BitcoinLib.Address do
 
   alias BitcoinLib.Crypto
   alias BitcoinLib.Key.PublicKey
-  alias BitcoinLib.Key.Address.{P2PKH, P2SH, Bech32}
+  alias BitcoinLib.Address.{P2PKH, P2SH, Bech32}
 
   @doc """
   Turns a public key into an address of the specified format

@@ -1,10 +1,10 @@
-defmodule BitcoinLib.Key.Address.P2SHTest do
+defmodule BitcoinLib.Address.P2SHTest do
   use ExUnit.Case, async: true
 
-  doctest BitcoinLib.Key.Address.P2SH
+  doctest BitcoinLib.Address.P2SH
 
   alias BitcoinLib.Key.PublicKey
-  alias BitcoinLib.Key.Address.P2SH
+  alias BitcoinLib.Address.P2SH
 
   test "create a P2SH-P2WPKH address from an extended public key" do
     public_key = %PublicKey{

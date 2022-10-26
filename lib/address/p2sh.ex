@@ -1,4 +1,4 @@
-defmodule BitcoinLib.Key.Address.P2SH do
+defmodule BitcoinLib.Address.P2SH do
   @moduledoc """
   Implementation of P2SH-P2WPKH addresses
 
@@ -22,7 +22,7 @@ defmodule BitcoinLib.Key.Address.P2SH do
       ...>  key: <<0x02D0DE0AAEAEFAD02B8BDC8A01A1B8B11C696BD3D66A2C5F10780D95B7DF42645C::264>>,
       ...>  chain_code: <<0::256>>
       ...> }
-      ...> |> BitcoinLib.Key.Address.P2SH.from_public_key()
+      ...> |> BitcoinLib.Address.P2SH.from_public_key()
       "3D9iyFHi1Zs9KoyynUfrL82rGhJfYTfSG4"
   """
   @spec from_public_key(%PublicKey{}, :mainnet | :testnet) :: binary()
@@ -41,7 +41,7 @@ defmodule BitcoinLib.Key.Address.P2SH do
 
   ## Examples
       iex> <<0x11c371a2b2d22c7b8b1b51d9fde0e44a9dfdc7bb::160>>
-      ...> |> BitcoinLib.Key.Address.P2SH.from_script_hash(:testnet)
+      ...> |> BitcoinLib.Address.P2SH.from_script_hash(:testnet)
       "2Mts9cDyaoGfxPseMzxab2bAKHLW4o4SzAK"
   """
   @spec from_script_hash(bitstring(), :mainnet | :testnet) :: binary()
@@ -57,7 +57,7 @@ defmodule BitcoinLib.Key.Address.P2SH do
 
   ## Examples
       iex> "2N4GxhpXrgdWJf5CaEoGWkoWCsW8NhygsKg"
-      ...> |> BitcoinLib.Key.Address.P2SH.valid?()
+      ...> |> BitcoinLib.Address.P2SH.valid?()
       true
   """
   @spec valid?(binary()) :: boolean()

@@ -1,4 +1,4 @@
-defmodule BitcoinLib.Key.Address.Bech32 do
+defmodule BitcoinLib.Address.Bech32 do
   require Logger
 
   @moduledoc """
@@ -21,7 +21,7 @@ defmodule BitcoinLib.Key.Address.Bech32 do
       iex> %BitcoinLib.Key.PublicKey{
       ...>  key: <<0x0279BE667EF9DCBBAC55A06295CE870B07029BFCDB2DCE28D959F2815B16F81798::264>>,
       ...>  chain_code: 0
-      ...> } |> BitcoinLib.Key.Address.Bech32.from_public_key()
+      ...> } |> BitcoinLib.Address.Bech32.from_public_key()
       "bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4"
   """
   @spec from_public_key(%PublicKey{}, :mainnet | :testnet) :: binary()
@@ -36,7 +36,7 @@ defmodule BitcoinLib.Key.Address.Bech32 do
 
   ## Examples
       iex> <<0x751e76e8199196d454941c45d1b3a323f1433bd6::160>>
-      ...> |> BitcoinLib.Key.Address.Bech32.from_public_key_hash()
+      ...> |> BitcoinLib.Address.Bech32.from_public_key_hash()
       "bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4"
   """
   @spec from_public_key_hash(<<_::160>>, :mainnet | :testnet) :: binary()
@@ -54,11 +54,11 @@ defmodule BitcoinLib.Key.Address.Bech32 do
 
   ## Examples
       iex> <<0x001400d21980ae3e9641db6897dad7b8b69b07d9aaac::176>>
-      ...> |> BitcoinLib.Key.Address.Bech32.from_script_hash(:testnet)
+      ...> |> BitcoinLib.Address.Bech32.from_script_hash(:testnet)
       "tb1qqrfpnq9w86tyrkmgjldd0w9knvran24v2hzspx"
 
       iex> <<0x00201863143c14c5166804bd19203356da136c985678cd4d27a1b8c6329604903262::272>>
-      ...> |> BitcoinLib.Key.Address.Bech32.from_script_hash(:testnet)
+      ...> |> BitcoinLib.Address.Bech32.from_script_hash(:testnet)
       "tb1qrp33g0q5c5txsp9arysrx4k6zdkfs4nce4xj0gdcccefvpysxf3q0sl5k7"
   """
   def from_script_hash(data, network \\ :mainnet)
@@ -82,7 +82,7 @@ defmodule BitcoinLib.Key.Address.Bech32 do
 
   ## Examples
       iex> "tb1qxrd42xz49clfrs5mz6thglwlu5vxmdqxsvpnks"
-      ...> |> BitcoinLib.Key.Address.Bech32.valid?()
+      ...> |> BitcoinLib.Address.Bech32.valid?()
       true
   """
   @spec valid?(binary()) :: boolean()
