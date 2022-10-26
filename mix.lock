@@ -1,4 +1,5 @@
 %{
+  "b58": {:hex, :b58, "1.0.3", "d300d6ae5a3de956a54b9e8220e924e4fee1a349de983df2340fe61e0e464202", [:mix], [], "hexpm", "af62a98a8661fd89978cf3a3a4b5b2ebe82209de6ac6164f0b112e36af72fc59"},
   "bech32": {:hex, :bech32, "1.0.0", "85a3bb58c408d735b5becb39e8a23536660ec0df1ef0afee72377c130939de1b", [:mix], [], "hexpm", "f781b8524c30a524922613d97c1858c27bd9f639b4e6b350f4a4843ee97607d3"},
   "binary": {:hex, :binary, "0.0.4", "dd077db70c0ded3e85c132b802338e14b80694684a7e2277666bfa4004b7fa66", [:mix], [], "hexpm", "a2faf5d5c22caec3efacf95370d8b050c003f48e03c221c37e0d1e2dd515b970"},
   "bip0173": {:hex, :bip0173, "0.1.2", "b771e275692ed3353ecfecb38330693cbba90d2ac4a2e8fd1908a86ec7e6318f", [:mix], [], "hexpm", "6e12dfe7baacf9b4c422cae8f9cc6bbd791bf5ec3e9055fa3f418071b799b0db"},
