@@ -9,6 +9,8 @@ defmodule BitcoinLib.Key.Address.P2SH do
   Source: https://github.com/bitcoin/bips/blob/master/bip-0013.mediawiki
   """
 
+  require Logger
+
   alias BitcoinLib.Crypto
   alias BitcoinLib.Key.PublicKey
 
@@ -50,6 +52,32 @@ defmodule BitcoinLib.Key.Address.P2SH do
     |> base58_encode
   end
 
+  @doc """
+  Applies the address's checksum to make sure it's valid
+
+  ## Examples
+      iex> "2N4GxhpXrgdWJf5CaEoGWkoWCsW8NhygsKg"
+      ...> |> BitcoinLib.Key.Address.P2SH.validate()
+      true
+  """
+  @spec validate(binary()) :: boolean()
+
+  def validate("2" <> _ = address) do
+    address
+    |> base58_decode
+    |> validate_checksum()
+  end
+
+  def validate("3" <> _ = address) do
+    address
+    |> base58_decode
+    |> validate_checksum()
+  end
+
+  def validate(address) do
+    {:error, "#{address} is not a valid P2SH address"}
+  end
+
   defp hash160(value) do
     value
     |> Crypto.hash160()
@@ -75,8 +103,17 @@ defmodule BitcoinLib.Key.Address.P2SH do
     <<public_key_hash::bitstring, checksum::bitstring>>
   end
 
+  defp validate_checksum(<<data::bitstring-168, address_checksum::bitstring-32>>) do
+    Crypto.checksum(data) == address_checksum
+  end
+
   defp base58_encode(value) do
     value
     |> Base58.encode()
+  end
+
+  defp base58_decode(value) do
+    value
+    |> Base58.decode()
   end
 end
