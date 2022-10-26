@@ -57,18 +57,18 @@ defmodule BitcoinLib.Key.Address.P2SH do
 
   ## Examples
       iex> "2N4GxhpXrgdWJf5CaEoGWkoWCsW8NhygsKg"
-      ...> |> BitcoinLib.Key.Address.P2SH.validate()
+      ...> |> BitcoinLib.Key.Address.P2SH.valid?()
       true
   """
-  @spec validate(binary()) :: boolean()
+  @spec valid?(binary()) :: boolean()
 
-  def validate("2" <> _ = address) do
+  def valid?("2" <> _ = address) do
     address
     |> base58_decode
     |> validate_checksum()
   end
 
-  def validate("3" <> _ = address) do
+  def valid?("3" <> _ = address) do
     address
     |> base58_decode
     |> validate_checksum()

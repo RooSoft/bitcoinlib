@@ -85,7 +85,7 @@ defmodule BitcoinLib.Key.Address.Bech32 do
       ...> |> BitcoinLib.Key.Address.Bech32.valid?()
       true
   """
-  @spec validate(binary()) :: boolean()
+  @spec valid?(binary()) :: boolean()
 
   def valid?("bc1" <> _ = address) do
     case SegwitAddr.decode(address) do
