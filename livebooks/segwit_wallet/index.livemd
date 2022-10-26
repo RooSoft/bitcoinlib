@@ -83,7 +83,7 @@ receive_public_key_hash =
 Convert the `public key hash` to an `address`, which will be needed by faucets to receive funds
 
 ```elixir
-receive_address = Address.from_public_key_hash(receive_public_key_hash, :p2sh, :testnet)
+receive_address = Address.from_script_hash(receive_public_key_hash, :testnet)
 ```
 
 ## Request some funds

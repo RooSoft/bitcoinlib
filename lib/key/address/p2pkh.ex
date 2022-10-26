@@ -24,7 +24,7 @@ defmodule BitcoinLib.Key.Address.P2PKH do
   def from_public_key(%PublicKey{} = public_key, network \\ :mainnet) do
     public_key
     |> PublicKey.hash()
-    |> Address.from_public_key_hash(:p2pkh, network)
+    |> Address.from_public_key_hash(network)
   end
 
   @doc """
@@ -41,7 +41,6 @@ defmodule BitcoinLib.Key.Address.P2PKH do
     |> prepend_version_bytes(network)
     |> append_checksum()
     |> base58_encode
-    |> dbg
   end
 
   defp prepend_version_bytes(data, network) do

@@ -23,6 +23,8 @@ defmodule BitcoinLib.Key.Address do
   """
   @spec from_public_key(%PublicKey{}, :p2pkh | :p2sh | :bech32, :mainnet | :testnet) ::
           binary()
+  def from_public_key(public_key, script_type, network \\ :mainnet)
+
   def from_public_key(%PublicKey{} = public_key, :p2pkh, :mainnet),
     do: P2PKH.from_public_key(public_key)
 
@@ -48,17 +50,16 @@ defmodule BitcoinLib.Key.Address do
 
   ## Examples
       iex> <<0x6ae201797de3fa7d1d95510f50c1a9c50ce4cc36::160>>
-      ...> |> BitcoinLib.Key.Address.from_public_key_hash(:p2pkh)
+      ...> |> BitcoinLib.Key.Address.from_public_key_hash()
       "1Ak9NVPmwCHEpsSWvM6cNRC7dsYniRmwMG"
   """
-  @spec from_public_key_hash(binary(), :p2pkh | :p2sh, :mainnet | :testnet) :: bitstring()
-  def from_public_key_hash(public_key_hash, address_type \\ :p2sh, network \\ :mainnet) do
-    public_key_hash
-    |> Binary.to_hex()
-    |> prepend_prefix(address_type, network)
-    |> Binary.from_hex()
-    |> append_checksum
-    |> Base58.encode()
+  @spec from_public_key_hash(binary(), :mainnet | :testnet) :: bitstring()
+  def from_public_key_hash(public_key_hash, network \\ :mainnet) do
+    P2PKH.from_public_key_hash(public_key_hash, network)
+  end
+
+  def from_script_hash(public_key_hash, network \\ :mainnet) do
+    P2SH.from_script_hash(public_key_hash, network)
   end
 
   @doc """
@@ -123,18 +124,6 @@ defmodule BitcoinLib.Key.Address do
     end
   end
 
-  defp prepend_prefix(public_key_hash, address_type, network) do
-    get_prefix(address_type, network) <> public_key_hash
-  end
-
-  defp append_checksum(public_key_hash) do
-    checksum =
-      public_key_hash
-      |> Crypto.checksum()
-
-    public_key_hash <> checksum
-  end
-
   @spec test_checksum(integer(), bitstring(), bitstring()) :: {:ok} | {:error, binary()}
   defp test_checksum(prefix, public_key_hash, original_checksum) do
     calculated_checksum =
@@ -146,15 +135,6 @@ defmodule BitcoinLib.Key.Address do
       _ -> {:error, "checksums don't match"}
     end
   end
-
-  # Here is a useful list of address prefixes
-  # https://en.bitcoin.it/wiki/List_of_address_prefixes
-
-  defp get_prefix(:p2pkh, :mainnet), do: "00"
-  defp get_prefix(:p2sh, :mainnet), do: "05"
-  defp get_prefix(:p2pkh, :testnet), do: "6F"
-  defp get_prefix(:p2sh, :testnet), do: "C4"
-  defp get_prefix(_, _), do: ""
 
   # example 17VZNX1SN5NtKa8UQFxwQbFeFc3iqRYhem
   defp get_address_type_from_prefix(0), do: {:p2pkh, :mainnet}

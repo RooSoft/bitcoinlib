@@ -78,7 +78,7 @@ master_public_key =
 address =
   master_public_key
   |> PublicKeyHash.from_public_key()
-  |> Address.from_public_key_hash(:p2pkh, :mainnet)
+  |> Address.from_public_key_hash(:mainnet)
 ```
 
 ```elixir

@@ -48,7 +48,6 @@ defmodule BitcoinLib do
   @spec generate_p2pkh_address(%PublicKey{}) :: binary()
   def generate_p2pkh_address(public_key) do
     public_key
-    |> PublicKey.hash()
-    |> Address.from_public_key_hash(:p2pkh)
+    |> Address.from_public_key(:p2pkh)
   end
 end

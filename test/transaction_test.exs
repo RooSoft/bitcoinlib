@@ -3,7 +3,7 @@ defmodule BitcoinLib.TransactionTest do
 
   doctest BitcoinLib.Transaction
 
-  alias BitcoinLib.Key.{PrivateKey, PublicKey}
+  alias BitcoinLib.Key.{PrivateKey, PublicKey, Address}
   alias BitcoinLib.Transaction
   alias BitcoinLib.Transaction.{Input, Output}
   alias BitcoinLib.Script.Opcodes
@@ -62,12 +62,11 @@ defmodule BitcoinLib.TransactionTest do
     seed_phrase = "erode gloom apart system broom lemon dismiss post artist slot humor occur"
     derivation_path = "m/44'/1'/0'/0/0"
     network = :testnet
-    address_type = :p2pkh
 
     %{
       private_key: private_key,
       public_key_hash: public_key_hash
-    } = create_keys(seed_phrase, derivation_path, network, address_type)
+    } = create_keys(seed_phrase, derivation_path, network)
 
     # the transaction can be found in a block explorer such as here:
     # https://mempool.space/testnet/tx/e4c226432a9319d603b2ed1fa609bffe4cd91f89b3176a9e73b19f7891a92bb6
@@ -173,8 +172,8 @@ defmodule BitcoinLib.TransactionTest do
              "01000000000101db6b1b20aa0fd7b23880be2ecbd4a98130974cf4748fb66092ac4d3ceb1a5477010000001716001479091972186c449eb1ded22b78e40d009bdf0089feffffff02b8b4eb0b000000001976a914a457b684d7f0d539a46a45bbc043f35b59d0d96388ac0008af2f000000001976a914fd270b1ee6abcaea97fea7ad0402e8bd8ad6d77c88ac02473044022047ac8e878352d3ebbde1c94ce3a10d057c24175747116f8288e5d794d12d482f0220217f36a485cae903c713331d877c1f64677e3622ad4010726870540656fe9dcb012103ad1d8e89212f0b92c74d23bb710c00662ad1470198ac48c43f7d6f93a2a2687392040000"
   end
 
-  @spec create_keys(binary(), binary(), :mainnet | :testnet, :p2pkh) :: map()
-  defp create_keys(seed_phrase, derivation_path, network, address_type) do
+  @spec create_keys(binary(), binary(), :mainnet | :testnet) :: map()
+  defp create_keys(seed_phrase, derivation_path, network) do
     private_key =
       seed_phrase
       |> PrivateKey.from_seed_phrase()
@@ -191,7 +190,7 @@ defmodule BitcoinLib.TransactionTest do
 
     address =
       public_key_hash
-      |> BitcoinLib.Key.Address.from_public_key_hash(address_type, network)
+      |> Address.from_public_key_hash(network)
 
     %{
       private_key: private_key,

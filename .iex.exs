@@ -66,8 +66,8 @@ blue_wallet_address_0 =
 
 p2pkh_testnet_address =
   <<0x93CE48570B55C42C2AF816AEABA06CFEE1224FAE::160>>
-  |> Address.from_public_key_hash(:p2pkh, :testnet)
+  |> Address.from_public_key_hash(:testnet)
 
 p2sh_testnet_address =
   <<0x93CE48570B55C42C2AF816AEABA06CFEE1224FAE::160>>
-  |> Address.from_public_key_hash(:p2sh, :testnet)
+  |> Address.from_script_hash(:testnet)
