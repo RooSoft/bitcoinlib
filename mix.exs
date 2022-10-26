@@ -32,7 +32,7 @@ defmodule BitcoinLib.MixProject do
   def package do
     [
       maintainers: ["Marc Lacoursière"],
-      licenses: ["MIT"],
+      licenses: ["UNLICENCE"],
       links: %{"GitHub" => "https://github.com/roosoft/bitcoinlib"}
     ]
   end
