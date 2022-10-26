@@ -165,4 +165,44 @@ defmodule BitcoinLib.Key.AddressTest do
 
     assert !valid?
   end
+
+  test "test a valid P2SH mainnet address" do
+    address = "3JLNiLRT7h5bjKEqXMneA7ckzFN3BbJUFY"
+
+    valid? =
+      address
+      |> Address.valid?()
+
+    assert valid?
+  end
+
+  test "test a invalid P2SH mainnet address" do
+    address = "3JLNiLRT7h5bjKEqXMneA7ckzFN3BbJUFy"
+
+    valid? =
+      address
+      |> Address.valid?()
+
+    assert !valid?
+  end
+
+  test "test a valid P2SH testnet address" do
+    address = "2N4YXTxKEso3yeYXNn5h42Vqu3FzTTQ8Lq5"
+
+    valid? =
+      address
+      |> Address.valid?()
+
+    assert valid?
+  end
+
+  test "test a invalid P2SH testnet address" do
+    address = "2N4YXTxKEso3yeYXNn5h42Vqu3FzTTQ8Lq4"
+
+    valid? =
+      address
+      |> Address.valid?()
+
+    assert !valid?
+  end
 end
