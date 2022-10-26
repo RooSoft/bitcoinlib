@@ -125,4 +125,24 @@ defmodule BitcoinLib.Key.AddressTest do
 
     assert <<_::160>> = public_key_hash
   end
+
+  test "test a valid P2PKH testnet address" do
+    address = "mtzUk1zTJzTdyC8Pz6PPPyCHTEL5RLVyDJ"
+
+    valid? =
+      address
+      |> Address.valid?()
+
+    assert valid?
+  end
+
+  test "test a invalid P2PKH testnet address" do
+    address = "mtzUk1zTJzTdyC8Pz6PPPyCHTEL5RLVyDj"
+
+    valid? =
+      address
+      |> Address.valid?()
+
+    assert !valid?
+  end
 end
