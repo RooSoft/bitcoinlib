@@ -1,4 +1,6 @@
 defmodule BitcoinLib.Key.Address.Bech32 do
+  require Logger
+
   @moduledoc """
   Implementation of Bech32 addresses
 
@@ -73,6 +75,34 @@ defmodule BitcoinLib.Key.Address.Bech32 do
     hrp = get_hrp(network)
 
     SegwitAddr.encode(hrp, script_hash |> Binary.to_hex())
+  end
+
+  @doc """
+  Applies the address's checksum to make sure it's valid
+
+  ## Examples
+      iex> "tb1qxrd42xz49clfrs5mz6thglwlu5vxmdqxsvpnks"
+      ...> |> BitcoinLib.Key.Address.Bech32.validate()
+      true
+  """
+  @spec validate(binary()) :: boolean()
+
+  def validate("bc1" <> _ = address) do
+    case SegwitAddr.decode(address) do
+      {:error, "Invalid checksum"} -> false
+      _ -> true
+    end
+  end
+
+  def validate("tb1" <> _ = address) do
+    case SegwitAddr.decode(address) do
+      {:error, "Invalid checksum"} -> false
+      _ -> true
+    end
+  end
+
+  def validate(address) do
+    Logger.error("#{address} is not a valid bech32 address")
   end
 
   def destructure(address) do
