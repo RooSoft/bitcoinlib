@@ -101,7 +101,7 @@ defmodule BitcoinLib.Key.Address.Bech32 do
     end
   end
 
-  def validate(address) do
+  def valid?(address) do
     Logger.error("#{address} is not a valid bech32 address")
   end
 

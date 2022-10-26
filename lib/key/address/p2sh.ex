@@ -74,7 +74,7 @@ defmodule BitcoinLib.Key.Address.P2SH do
     |> validate_checksum()
   end
 
-  def validate(address) do
+  def valid?(address) do
     {:error, "#{address} is not a valid P2SH address"}
   end
 
