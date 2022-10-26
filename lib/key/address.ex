@@ -5,6 +5,8 @@ defmodule BitcoinLib.Key.Address do
   Inspired by https://learnmeabitcoin.com/technical/public-key-hash
   """
 
+  require Logger
+
   alias BitcoinLib.Crypto
   alias BitcoinLib.Key.PublicKey
   alias BitcoinLib.Key.Address.{P2PKH, P2SH, Bech32}
@@ -57,6 +59,31 @@ defmodule BitcoinLib.Key.Address do
     |> Binary.from_hex()
     |> append_checksum
     |> Base58.encode()
+  end
+
+  @doc """
+  Applies the address's checksum to make sure it's valid
+
+  ## Examples
+      iex> "tb1qxrd42xz49clfrs5mz6thglwlu5vxmdqxsvpnks"
+      ...> |> BitcoinLib.Key.Address.validate()
+      true
+  """
+  @spec validate(binary()) :: boolean()
+
+  def validate("3" <> _ = address) do
+  end
+
+  def validate("bc1" <> _ = address) do
+    Bech32.valid?(address)
+  end
+
+  def validate("tb1" <> _ = address) do
+    Bech32.valid?(address)
+  end
+
+  def validate(address) do
+    Logger.error("#{address} is of an unknown address type")
   end
 
   @doc """

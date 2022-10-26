@@ -12,7 +12,7 @@ defmodule BitcoinLib.Crypto do
       ...> value |> BitcoinLib.Crypto.checksum()
       <<181, 108, 54, 177>>
   """
-  @spec checksum(bitstring()) :: bitstring()
+  @spec checksum(bitstring()) :: <<_::32>>
   def checksum(bin) when is_bitstring(bin) do
     bin
     |> double_sha256()
@@ -27,7 +27,7 @@ defmodule BitcoinLib.Crypto do
       ...> |> BitcoinLib.Crypto.ripemd160()
       <<242, 61, 151, 37, 33, 49, 198, 6, 102, 112, 142, 74, 226, 197, 159, 237, 19, 73, 244, 57>>
   """
-  @spec ripemd160(String.t()) :: bitstring()
+  @spec ripemd160(String.t()) :: <<_::160>>
   def ripemd160(bin) when is_bitstring(bin), do: :crypto.hash(:ripemd160, bin)
 
   @doc """
@@ -38,7 +38,7 @@ defmodule BitcoinLib.Crypto do
       ...> |> BitcoinLib.Crypto.sha1()
       <<28, 144, 213, 16, 97, 233, 15, 148, 131, 216, 156, 178, 53, 37, 165, 241, 222, 50, 60, 216>>
   """
-  @spec sha1(String.t()) :: bitstring()
+  @spec sha1(String.t()) :: <<_::160>>
   def sha1(bin) when is_bitstring(bin), do: :crypto.hash(:sha, bin)
 
   @doc """
@@ -49,7 +49,7 @@ defmodule BitcoinLib.Crypto do
       ...> |> BitcoinLib.Crypto.sha256()
       <<171, 106, 143, 29, 158, 43, 3, 51, 223, 248, 227, 112, 237, 111, 223, 226, 11, 46, 128, 8, 224, 69, 239, 179, 251, 50, 152, 194, 47, 117, 105, 218>>
   """
-  @spec sha256(String.t()) :: bitstring()
+  @spec sha256(String.t()) :: <<_::256>>
   def sha256(bin) when is_bitstring(bin) do
     :crypto.hash(:sha256, bin)
   end
@@ -62,7 +62,7 @@ defmodule BitcoinLib.Crypto do
       ...> |> BitcoinLib.Crypto.double_sha256()
       <<222, 67, 52, 47, 110, 139, 204, 52, 217, 95, 54, 228, 225, 184, 234, 185, 87, 160, 206, 47, 243, 176, 225, 131, 20, 45, 145, 168, 113, 23, 15, 43>>
   """
-  @spec double_sha256(String.t()) :: bitstring()
+  @spec double_sha256(String.t()) :: <<_::256>>
   def double_sha256(bin) when is_bitstring(bin) do
     bin
     |> sha256
@@ -94,7 +94,7 @@ defmodule BitcoinLib.Crypto do
       ...> |> BitcoinLib.Crypto.hash160()
       <<251, 126, 153, 20, 166, 224, 56, 154, 55, 180, 46, 3, 58, 245, 19, 162, 196, 12, 64, 2>>
   """
-  @spec hash160(bitstring()) :: bitstring()
+  @spec hash160(bitstring()) :: <<_::160>>
   def hash160(data) do
     data
     |> sha256()

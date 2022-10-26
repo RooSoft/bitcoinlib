@@ -82,19 +82,19 @@ defmodule BitcoinLib.Key.Address.Bech32 do
 
   ## Examples
       iex> "tb1qxrd42xz49clfrs5mz6thglwlu5vxmdqxsvpnks"
-      ...> |> BitcoinLib.Key.Address.Bech32.validate()
+      ...> |> BitcoinLib.Key.Address.Bech32.valid?()
       true
   """
   @spec validate(binary()) :: boolean()
 
-  def validate("bc1" <> _ = address) do
+  def valid?("bc1" <> _ = address) do
     case SegwitAddr.decode(address) do
       {:error, "Invalid checksum"} -> false
       _ -> true
     end
   end
 
-  def validate("tb1" <> _ = address) do
+  def valid?("tb1" <> _ = address) do
     case SegwitAddr.decode(address) do
       {:error, "Invalid checksum"} -> false
       _ -> true
