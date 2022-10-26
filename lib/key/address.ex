@@ -72,6 +72,14 @@ defmodule BitcoinLib.Key.Address do
   """
   @spec valid?(binary()) :: boolean()
 
+  def valid?("1" <> _ = address) do
+    P2PKH.valid?(address)
+  end
+
+  def valid?("m" <> _ = address) do
+    P2PKH.valid?(address)
+  end
+
   def valid?("2" <> _ = address) do
     P2SH.valid?(address)
   end

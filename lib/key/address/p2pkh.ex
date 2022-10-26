@@ -43,6 +43,32 @@ defmodule BitcoinLib.Key.Address.P2PKH do
     |> base58_encode
   end
 
+  @doc """
+  Applies the address's checksum to make sure it's valid
+
+  ## Examples
+      iex> "mxVFsFW5N4mu1HPkxPttorvocvzeZ7KZyk"
+      ...> |> BitcoinLib.Key.Address.P2PKH.valid?()
+      true
+  """
+  @spec valid?(binary()) :: boolean()
+
+  def valid?("1" <> _ = address) do
+    address
+    |> base58_decode
+    |> validate_checksum()
+  end
+
+  def valid?("m" <> _ = address) do
+    address
+    |> base58_decode
+    |> validate_checksum()
+  end
+
+  def valid?(address) do
+    {:error, "#{address} is not a valid P2PKH address"}
+  end
+
   defp prepend_version_bytes(data, network) do
     prefix = get_prefix(network)
 
@@ -60,7 +86,15 @@ defmodule BitcoinLib.Key.Address.P2PKH do
     data <> checksum
   end
 
+  defp validate_checksum(<<data::bitstring-168, address_checksum::bitstring-32>>) do
+    Crypto.checksum(data) == address_checksum
+  end
+
   defp base58_encode(data) do
     Base58.encode(data)
+  end
+
+  defp base58_decode(data) do
+    Base58.decode(data)
   end
 end
