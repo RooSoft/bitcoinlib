@@ -205,4 +205,44 @@ defmodule BitcoinLib.Key.AddressTest do
 
     assert !valid?
   end
+
+  test "test a valid bech32 mainnet address" do
+    address = "bc1qxnxxnlxf9m4yxq4vqlg82n7gse6xr6rh6glhweecz8r0svx95wks5qky4h"
+
+    valid? =
+      address
+      |> Address.valid?()
+
+    assert valid?
+  end
+
+  test "test a invalid bech32 mainnet address" do
+    address = "bc1qxnxxnlxf9m4yxq4vqlg82n7gse6xr6rh6glhweecz8r0svx95wks5qky42"
+
+    valid? =
+      address
+      |> Address.valid?()
+
+    assert !valid?
+  end
+
+  test "test a valid bech32 testnet address" do
+    address = "tb1q20tpjwdpwtvja2kc7g79yndaa4xarcpr98lvxl"
+
+    valid? =
+      address
+      |> Address.valid?()
+
+    assert valid?
+  end
+
+  test "test a invalid bech32 testnet address" do
+    address = "tb1q20tpjwdpwtvja2kc7g79yndaa4xarcpr98lvx3"
+
+    valid? =
+      address
+      |> Address.valid?()
+
+    assert !valid?
+  end
 end
