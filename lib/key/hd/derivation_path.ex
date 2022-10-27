@@ -39,8 +39,7 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
   @spec parse(binary()) :: {:ok, %BitcoinLib.Key.HD.DerivationPath{}}
   def parse(derivation_path) do
     derivation_path
-    |> validate
-    |> Parser.maybe_parse_valid_derivation_path()
+    |> Parser.parse_valid_derivation_path()
   end
 
   @doc """
@@ -120,16 +119,5 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
 
   defp parse_coin_type(coin_type) do
     CoinType.parse(coin_type - @hardened)
-  end
-
-  defp validate(derivation_path) do
-    trimmed_path =
-      derivation_path
-      |> String.replace(" ", "")
-
-    case Regex.match?(~r/^(m|M)((\/(\d+\'?)*){0,5})$/, trimmed_path) do
-      true -> {:ok, trimmed_path}
-      false -> {:error, "Invalid derivation path"}
-    end
   end
 end

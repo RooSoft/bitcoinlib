@@ -15,8 +15,8 @@ defmodule BitcoinLib.Key.HD.DerivationPath.Parser do
   out of a string if the tuple starts by :ok
 
   ## Examples
-      iex> {:ok, "m/44'/0'/0'/1/0"}
-      ...> |> BitcoinLib.Key.HD.DerivationPath.Parser.maybe_parse_valid_derivation_path
+      iex> "m/44'/0'/0'/1/0"
+      ...> |> BitcoinLib.Key.HD.DerivationPath.Parser.parse_valid_derivation_path
       {
         :ok,
         %BitcoinLib.Key.HD.DerivationPath{
@@ -29,24 +29,36 @@ defmodule BitcoinLib.Key.HD.DerivationPath.Parser do
         }
       }
   """
-  @spec maybe_parse_valid_derivation_path({:ok, binary()} | {:error, binary()}) ::
+  @spec parse_valid_derivation_path(binary()) ::
           {:ok, %DerivationPath{}} | {:error, binary()}
-  def maybe_parse_valid_derivation_path({:error, message}) do
-    {:error, message}
+  def parse_valid_derivation_path(derivation_path) do
+    case validate(derivation_path) do
+      {:ok, derivation_path} ->
+        derivation_path
+        |> split_path
+        |> extract_string_values
+        |> parse_values
+        |> assign_keys
+        |> create_hash(derivation_path)
+        |> parse_purpose
+        |> parse_coin_type
+        |> parse_change
+        |> add_status_code
+
+      {:error, message} ->
+        {:error, message}
+    end
   end
 
-  ### TODO: document
-  def maybe_parse_valid_derivation_path({:ok, derivation_path}) do
-    derivation_path
-    |> split_path
-    |> extract_string_values
-    |> parse_values
-    |> assign_keys
-    |> create_hash(derivation_path)
-    |> parse_purpose
-    |> parse_coin_type
-    |> parse_change
-    |> add_status_code
+  defp validate(derivation_path) do
+    trimmed_path =
+      derivation_path
+      |> String.replace(" ", "")
+
+    case Regex.match?(~r/^(m|M)((\/(\d+\'?)*){0,5})$/, trimmed_path) do
+      true -> {:ok, trimmed_path}
+      false -> {:error, "Invalid derivation path"}
+    end
   end
 
   defp extract_type("m" <> _rest), do: :private
