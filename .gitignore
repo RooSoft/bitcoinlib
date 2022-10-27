@@ -28,3 +28,5 @@ bitcoinlib-*.tar
 /priv/wordlists/wordlist.ex
 
 .DS_Store
+
+/livebooks/local
