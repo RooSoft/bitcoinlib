@@ -32,21 +32,19 @@ defmodule BitcoinLib.Key.HD.DerivationPath.Parser do
   @spec parse_valid_derivation_path(binary()) ::
           {:ok, %DerivationPath{}} | {:error, binary()}
   def parse_valid_derivation_path(derivation_path) do
-    case validate(derivation_path) do
-      {:ok, derivation_path} ->
-        derivation_path
-        |> split_path
-        |> extract_string_values
-        |> parse_values
-        |> assign_keys
-        |> create_hash(derivation_path)
-        |> parse_purpose
-        |> parse_coin_type
-        |> parse_change
-        |> add_status_code
-
-      {:error, message} ->
-        {:error, message}
+    with {:ok, derivation_path} <- validate(derivation_path) do
+      derivation_path
+      |> split_path
+      |> extract_string_values
+      |> parse_values
+      |> assign_keys
+      |> create_hash(derivation_path)
+      |> parse_purpose
+      |> parse_coin_type
+      |> parse_change
+      |> add_status_code
+    else
+      {:error, message} -> {:error, message}
     end
   end
 
