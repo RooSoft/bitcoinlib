@@ -30,7 +30,7 @@ defmodule BitcoinLib.Key.HD.DerivationPath.Parser do
           {:ok, %DerivationPath{}} | {:error, binary()}
   def parse_valid_derivation_path(derivation_path) do
     with {:ok, derivation_path} <- validate(derivation_path),
-         tokens <- separate_path(derivation_path),
+         tokens <- split_path(derivation_path),
          {:ok, type, tokens} <- Type.extract(tokens),
          {:ok, purpose, tokens} <- Purpose.extract(tokens),
          {:ok, coin_type, tokens} <- CoinType.extract(tokens),
@@ -64,7 +64,7 @@ defmodule BitcoinLib.Key.HD.DerivationPath.Parser do
     end
   end
 
-  defp separate_path(derivation_path) do
+  defp split_path(derivation_path) do
     String.split(derivation_path, "/")
   end
 end
