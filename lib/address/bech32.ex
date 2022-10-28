@@ -112,6 +112,16 @@ defmodule BitcoinLib.Address.Bech32 do
     Logger.error("#{address} is not a valid bech32 address")
   end
 
+  @doc """
+  Segment a bech32 address into its hrp and encoding values
+
+  ## Examples
+      iex> "tb1qcq670zweall6zz4f96flfrefhr8myfxz9ll9l2"
+      ...> |> BitcoinLib.Address.Bech32.destructure()
+      {:ok, <<0xc035e789d9efffa10aa92e93f48f29b8cfb224c2::160>>, :p2wpkh, :testnet}
+  """
+  @spec destructure(binary()) ::
+          {:ok, <<_::160>>, :p2wpkh, :mainnet | :testnet} | {:error, binary()}
   def destructure(address) do
     case SegwitAddr.decode(address) do
       {:ok, {hrp, _segwit_version, encoding}} -> classify(hrp, encoding)
