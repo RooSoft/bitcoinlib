@@ -128,25 +128,9 @@ defmodule BitcoinLib.Address.Bech32 do
     {:ok, script_hash, :p2wpkh, :testnet}
   end
 
-  # defp interpret_decoding({:error, <<_::64, _::size(8)>>}) do
-  #   {:error, "message"}
-  # end
-
-  # defp interpret_decoding({:ok, {"bc", _version, script_hash_list}}) do
-  #   script_hash =
-  #     script_hash_list
-  #     |> :binary.list_to_bin()
-
-  #   {:ok, script_hash, :p2wpkh, :mainnet}
-  # end
-
-  # defp interpret_decoding({:ok, {"tb", _version, script_hash_list}}) do
-  #   script_hash =
-  #     script_hash_list
-  #     |> :binary.list_to_bin()
-
-  #   {:ok, script_hash, :p2wpkh, :testnet}
-  # end
+  defp classify(prefix, _script_hash_list) do
+    {:error, "#{prefix} is an unknown bech32 prefix"}
+  end
 
   defp get_hrp(:mainnet), do: "bc"
   defp get_hrp(:testnet), do: "tb"
