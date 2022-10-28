@@ -3,10 +3,9 @@ defmodule BitcoinLib.Key.HD.DerivationPathTest do
 
   doctest BitcoinLib.Key.HD.DerivationPath
 
-  @hardened 0x80000000
+  @hardened :math.pow(2, 31) |> trunc
 
   alias BitcoinLib.Key.HD.DerivationPath
-  alias BitcoinLib.Key.HD.DerivationPath.{Level}
 
   test "can parse a basic derivation path with a lowercase m" do
     path = "m / 44' / 0' / 0' / 0 / 0"
@@ -19,9 +18,9 @@ defmodule BitcoinLib.Key.HD.DerivationPathTest do
              type: :private,
              purpose: :bip44,
              coin_type: :bitcoin,
-             account: %Level{hardened?: true, value: 0},
+             account: 0,
              change: :receiving_chain,
-             address_index: %Level{hardened?: false, value: 0}
+             address_index: 0
            } = result
   end
 
@@ -36,9 +35,9 @@ defmodule BitcoinLib.Key.HD.DerivationPathTest do
              type: :private,
              purpose: :bip44,
              coin_type: :bitcoin,
-             account: %Level{hardened?: true, value: 0},
+             account: 0,
              change: :receiving_chain,
-             address_index: %Level{hardened?: false, value: 0}
+             address_index: 0
            } = result
   end
 
@@ -73,7 +72,7 @@ defmodule BitcoinLib.Key.HD.DerivationPathTest do
       path
       |> DerivationPath.parse()
 
-    assert "Invalid purpose" = result
+    assert result =~ "not a valid purpose"
   end
 
   test "valid derivation path with an uppper case M" do
@@ -87,9 +86,9 @@ defmodule BitcoinLib.Key.HD.DerivationPathTest do
              type: :public,
              purpose: :bip44,
              coin_type: :bitcoin,
-             account: %Level{hardened?: true, value: 0},
+             account: 0,
              change: :receiving_chain,
-             address_index: %Level{hardened?: false, value: 0}
+             address_index: 0
            } = result
   end
 
@@ -160,7 +159,7 @@ defmodule BitcoinLib.Key.HD.DerivationPathTest do
       path
       |> DerivationPath.parse()
 
-    assert "Invalid coin type" = result
+    assert result =~ "not a valid coin type"
   end
 
   test "minimal derivation path returning no level information" do
@@ -190,10 +189,10 @@ defmodule BitcoinLib.Key.HD.DerivationPathTest do
       DerivationPath.from_values(type, purpose, coin_type, account, change, address_index)
 
     assert %DerivationPath{
-             type: "M",
+             type: :public,
              purpose: :bip84,
              coin_type: :bitcoin,
-             account: 0x80000000,
+             account: 0,
              change: 0,
              address_index: 0
            } = derivation_path
@@ -208,10 +207,10 @@ defmodule BitcoinLib.Key.HD.DerivationPathTest do
     derivation_path = DerivationPath.from_values(type, purpose, coin_type, account)
 
     assert %DerivationPath{
-             type: "M",
+             type: :public,
              purpose: :bip84,
              coin_type: :bitcoin,
-             account: 0x80000000,
+             account: 0,
              change: nil,
              address_index: nil
            } = derivation_path
@@ -224,7 +223,7 @@ defmodule BitcoinLib.Key.HD.DerivationPathTest do
     derivation_path = DerivationPath.from_values(type, purpose)
 
     assert %DerivationPath{
-             type: "M",
+             type: :public,
              purpose: :bip84,
              coin_type: nil,
              account: nil,

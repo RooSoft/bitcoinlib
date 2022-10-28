@@ -6,7 +6,6 @@ defmodule BitcoinLib.Key.PublicKey.ChildFromDerivationPath do
   alias BitcoinLib.Key.PublicKey
   alias BitcoinLib.Key.PublicKey.{ChildFromIndex}
   alias BitcoinLib.Key.HD.{DerivationPath}
-  alias BitcoinLib.Key.HD.DerivationPath.{Level}
 
   @doc """
   Computes a public key from a derivation path
@@ -90,7 +89,7 @@ defmodule BitcoinLib.Key.PublicKey.ChildFromDerivationPath do
   end
 
   defp maybe_derive_account(
-         {public_key, %DerivationPath{account: %Level{value: account}} = derivation_path}
+         {public_key, %DerivationPath{account: account} = derivation_path}
        ) do
     {:ok, child_public_key} = ChildFromIndex.get(public_key, account)
 
@@ -120,7 +119,7 @@ defmodule BitcoinLib.Key.PublicKey.ChildFromDerivationPath do
 
   defp maybe_derive_address_index(
          {%PublicKey{} = public_key,
-          %DerivationPath{address_index: %Level{value: index}} = derivation_path}
+          %DerivationPath{address_index: index} = derivation_path}
        ) do
     {:ok, child_public_key} = ChildFromIndex.get(public_key, index)
 

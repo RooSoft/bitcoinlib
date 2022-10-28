@@ -15,9 +15,9 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
 
   alias BitcoinLib.Key.HD.DerivationPath
   alias BitcoinLib.Key.HD.DerivationPath.{Parser, PathValues}
-  alias BitcoinLib.Key.HD.DerivationPath.Parser.{Purpose, CoinType}
+  alias BitcoinLib.Key.HD.DerivationPath.Parser.{Type, Purpose, CoinType}
 
-  @hardened 0x80000000
+  @hardened :math.pow(2, 31) |> trunc
 
   @doc """
   Transforms a derivation path string into an elixir structure
@@ -30,9 +30,9 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
           type: :private,
           purpose: :bip44,
           coin_type: :bitcoin_testnet,
-          account: %BitcoinLib.Key.HD.DerivationPath.Level{hardened?: true, value: 2},
+          account: 2,
           change: :change_chain,
-          address_index: %BitcoinLib.Key.HD.DerivationPath.Level{hardened?: false, value: 4}
+          address_index: 4
         }
       }
   """
@@ -49,10 +49,10 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
   ## Examples
       iex> BitcoinLib.Key.HD.DerivationPath.from_values("M", 0x80000054, 0x80000000, 0x80000000, 0, 0)
       %BitcoinLib.Key.HD.DerivationPath{
-        type: "M",
+        type: :public,
         purpose: :bip84,
         coin_type: :bitcoin,
-        account: 0x80000000,
+        account: 0,
         change: 0,
         address_index: 0
       }
@@ -75,10 +75,10 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
         address_index \\ nil
       ) do
     %DerivationPath{
-      type: type,
+      type: parse_type(type),
       purpose: parse_purpose(purpose),
       coin_type: parse_coin_type(coin_type),
-      account: account,
+      account: convert_hardened_account(account),
       change: change,
       address_index: address_index
     }
@@ -91,10 +91,10 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
       iex> ["m", 0x80000054, 0x80000000, 0x80000005]
       ...> |> BitcoinLib.Key.HD.DerivationPath.from_list
       %BitcoinLib.Key.HD.DerivationPath{
-        type: "m",
+        type: :private,
         purpose: :bip84,
         coin_type: :bitcoin,
-        account: 0x80000005
+        account: 5
       }
   """
   @spec from_list(list()) :: %DerivationPath{}
@@ -111,13 +111,23 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
     from_values(type, purpose, coin_type, account, change, address_index)
   end
 
+  defp parse_type(type) do
+    Type.get_atom(type)
+  end
+
   defp parse_purpose(purpose) when is_integer(purpose) do
-    Purpose.parse(purpose - @hardened)
+    Purpose.get_atom(purpose - @hardened)
   end
 
   defp parse_coin_type(nil), do: nil
 
   defp parse_coin_type(coin_type) do
-    CoinType.parse(coin_type - @hardened)
+    CoinType.get_atom(coin_type - @hardened)
+  end
+
+  defp convert_hardened_account(nil), do: nil
+
+  defp convert_hardened_account(hardened_account) when is_integer(hardened_account) do
+    hardened_account - @hardened
   end
 end

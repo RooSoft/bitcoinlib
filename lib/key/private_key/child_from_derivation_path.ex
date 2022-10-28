@@ -5,7 +5,6 @@ defmodule BitcoinLib.Key.PrivateKey.ChildFromDerivationPath do
 
   alias BitcoinLib.Key.PrivateKey
   alias BitcoinLib.Key.HD.{DerivationPath}
-  alias BitcoinLib.Key.HD.DerivationPath.{Level}
   alias BitcoinLib.Key.PrivateKey.{ChildFromIndex}
 
   @doc """
@@ -88,10 +87,7 @@ defmodule BitcoinLib.Key.PrivateKey.ChildFromDerivationPath do
     hash
   end
 
-  defp maybe_derive_account(
-         {private_key,
-          %DerivationPath{account: %Level{hardened?: true, value: account}} = derivation_path}
-       ) do
+  defp maybe_derive_account({private_key, %DerivationPath{account: account} = derivation_path}) do
     {:ok, child_private_key} = ChildFromIndex.get(private_key, account, true)
 
     {child_private_key, derivation_path}
@@ -117,11 +113,9 @@ defmodule BitcoinLib.Key.PrivateKey.ChildFromDerivationPath do
   end
 
   defp maybe_derive_address_index(
-         {private_key,
-          %DerivationPath{address_index: %Level{hardened?: hardened?, value: index}} =
-            derivation_path}
+         {private_key, %DerivationPath{address_index: index} = derivation_path}
        ) do
-    {:ok, child_private_key} = ChildFromIndex.get(private_key, index, hardened?)
+    {:ok, child_private_key} = ChildFromIndex.get(private_key, index, false)
 
     {child_private_key, derivation_path}
   end
