@@ -21,7 +21,6 @@ defmodule BitcoinLib.Signing.Psbt.GenericProperties.Bip32Derivation do
       derivation_path: DerivationPath.from_list(["M" | derivation_path])
     }
     |> validate_pub_key()
-    |> validate_derivation_path()
   end
 
   defp extract_master_key_fingerprint(<<fingerprint::bitstring-32, remaining::bitstring>>) do
@@ -49,38 +48,6 @@ defmodule BitcoinLib.Signing.Psbt.GenericProperties.Bip32Derivation do
         |> Map.put(:error, "wrong pub key size, which is #{wrong_size} in hex format")
     end
   end
-
-  defp validate_derivation_path(
-         %Bip32Derivation{derivation_path: derivation_path} = bip32_derivation
-       ) do
-    derivation_path =
-      derivation_path
-      |> validate_coin_type
-
-    case(Map.get(derivation_path, :error)) do
-      nil ->
-        bip32_derivation
-
-      message ->
-        bip32_derivation
-        |> Map.put(:error, message)
-    end
-  end
-
-  # defp validate_purpose(%DerivationPath{purpose: :invalid} = derivation_path) do
-  #   derivation_path
-  #   |> Map.put(:error, "invalid purpose in derivation path")
-  #   |> IO.inspect()
-  # end
-
-  # defp validate_purpose(derivation_path), do: derivation_path
-
-  defp validate_coin_type(%DerivationPath{coin_type: :invalid} = derivation_path) do
-    derivation_path
-    |> Map.put(:error, "invalid coin type in derivation path")
-  end
-
-  defp validate_coin_type(derivation_path), do: derivation_path
 end
 
 defimpl Inspect, for: BitcoinLib.Signing.Psbt.GenericProperties.Bip32Derivation do
