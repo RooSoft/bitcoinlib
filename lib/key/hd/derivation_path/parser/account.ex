@@ -1,6 +1,22 @@
 defmodule BitcoinLib.Key.HD.DerivationPath.Parser.Account do
-  # https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki#account
+  @moduledoc """
+  Splits the key space into independent user identities.
 
+  This is a hardened value.
+
+  See: https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki#account
+  """
+
+  @doc """
+  Converts a list of path levels managed up until the account value, extracts
+  the account and returns the remaining levels.any()
+
+  ## Examples
+      iex> ["0'", "1", "2"]
+      ...> |> BitcoinLib.Key.HD.DerivationPath.Parser.Account.extract()
+      {:ok, 0, ["1", "2"]}
+  """
+  @spec extract(list()) :: {:ok, nil | integer(), list()} | {:error, binary()}
   def extract([]), do: {:ok, nil, []}
 
   def extract([account | rest]) do
