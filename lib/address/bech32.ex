@@ -11,6 +11,14 @@ defmodule BitcoinLib.Address.Bech32 do
   - https://bitcointalk.org/index.php?topic=4992632.0
   """
 
+  ## Had to disable warning for these functions because of a problem
+  ## arising from the use of SegwitAddr.decode/1. Much time has been
+  ## spent to understand why, but these below instructions had been
+  ## added in the spirit of moving forward, as the function was operating
+  ## perfectly despite Dialyzer thinking otherwise.
+  @dialyzer {:nowarn_function, destructure: 1}
+  @dialyzer {:nowarn_function, classify: 2}
+
   alias BitcoinLib.Crypto
   alias BitcoinLib.Key.PublicKey
 
@@ -63,14 +71,13 @@ defmodule BitcoinLib.Address.Bech32 do
   """
   def from_script_hash(data, network \\ :mainnet)
 
-  @spec from_script_hash(<<_::176>>, :mainnet | :testnet) :: binary()
+  @spec from_script_hash(<<_::176>> | <<_::272>>, :mainnet | :testnet) :: binary()
   def from_script_hash(<<keyhash::bitstring-176>>, network) do
     hrp = get_hrp(network)
 
     SegwitAddr.encode(hrp, keyhash |> Binary.to_hex())
   end
 
-  @spec from_script_hash(<<_::272>>, :mainnet | :testnet) :: binary()
   def from_script_hash(<<script_hash::bitstring-272>>, network) do
     hrp = get_hrp(network)
 
