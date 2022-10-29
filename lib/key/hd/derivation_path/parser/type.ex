@@ -37,5 +37,5 @@ defmodule BitcoinLib.Key.HD.DerivationPath.Parser.Type do
 
   defp convert(@private, rest), do: {:ok, @private_atom, rest}
   defp convert(@public, rest), do: {:ok, @public_atom, rest}
-  defp convert(purpose, _rest), do: {:error, "#{purpose} is not a valid purpose"}
+  defp convert(purpose, _rest), do: {:error, "#{purpose} is not a valid type"}
 end
