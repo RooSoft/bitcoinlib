@@ -20,12 +20,19 @@ defmodule BitcoinLib.Key.HD.DerivationPath.Parser.Index do
   def extract([]), do: {:ok, nil}
 
   def extract([index]) do
-    index
-    |> Integer.parse()
-    |> convert()
+    with {:ok, index} <- validate_non_hardened(index),
+         {integer_index, ""} <- Integer.parse(index) do
+      {:ok, integer_index}
+    else
+      {:error, message} -> {:error, message}
+      :error -> {:error, "index should be a valid integer"}
+    end
   end
 
-  defp convert({index, ""}), do: {:ok, index}
-  defp convert({_index, _remainder}), do: {:error, "index should be an integer"}
-  defp convert(:error), do: {:error, "index should be a valid integer"}
+  defp validate_non_hardened(index) do
+    case String.ends_with?(index, "'") do
+      true -> {:error, "account number must NOT be a hardened value"}
+      false -> {:ok, index}
+    end
+  end
 end
