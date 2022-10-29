@@ -1,4 +1,12 @@
 defmodule BitcoinLib.Key.HD.DerivationPath.Parser.Purpose do
+  @moduledoc """
+  Determines which address space is being used, either bip44, bip49 or bip84.
+
+  This is a hardened value.
+
+  See: https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki#purpose
+  """
+
   # https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki#purpose
   @bip44_purpose "44'"
   @bip44_value 44
@@ -14,6 +22,16 @@ defmodule BitcoinLib.Key.HD.DerivationPath.Parser.Purpose do
   @bip84_value 84
   @bip84_atom :bip84
 
+  @doc """
+  Converts a list of path levels managed up until the purpose value, extracts
+  the purpose and returns the remaining levels
+
+  ## Examples
+      iex> ["84'", "0", "1", "2", "3"]
+      ...> |> BitcoinLib.Key.HD.DerivationPath.Parser.Purpose.extract()
+      {:ok, :bip84, ["0", "1", "2", "3"]}
+  """
+  @spec extract(list()) :: {:ok, nil, []} | {:ok, integer(), list()} | {:error, binary()}
   def extract([]), do: {:ok, nil, []}
 
   def extract([purpose | rest]) do

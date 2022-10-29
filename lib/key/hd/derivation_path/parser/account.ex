@@ -9,7 +9,7 @@ defmodule BitcoinLib.Key.HD.DerivationPath.Parser.Account do
 
   @doc """
   Converts a list of path levels managed up until the account value, extracts
-  the account and returns the remaining levels.any()
+  the account and returns the remaining levels
 
   ## Examples
       iex> ["0'", "1", "2"]

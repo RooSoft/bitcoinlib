@@ -15,7 +15,7 @@ defmodule BitcoinLib.Key.HD.DerivationPath.Parser.Type do
 
   @doc """
   Converts a list of path levels managed up until the type value, extracts
-  the type and returns the remaining levels.any()
+  the type and returns the remaining levels
 
   ## Examples
       iex> ["m", "0", "1", "2", "3", "4"]
