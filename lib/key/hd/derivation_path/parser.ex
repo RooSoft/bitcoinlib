@@ -36,7 +36,7 @@ defmodule BitcoinLib.Key.HD.DerivationPath.Parser do
          {:ok, coin_type, tokens} <- CoinType.extract(tokens),
          {:ok, account, tokens} <- Account.extract(tokens),
          {:ok, change, tokens} <- Change.extract(tokens),
-         {:ok, index, _tokens} <- Index.extract(tokens) do
+         {:ok, index} <- Index.extract(tokens) do
       {
         :ok,
         %DerivationPath{
