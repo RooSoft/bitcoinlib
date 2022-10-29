@@ -14,4 +14,14 @@ defmodule BitcoinLib.Key.HD.DerivationPath.Parser.PurposeTest do
 
     assert message == "0 is not a valid purpose"
   end
+
+  test "derivation path extraction of an empty purpose" do
+    derivation_path = []
+
+    result =
+      derivation_path
+      |> Purpose.extract()
+
+    assert {:ok, nil, []} == result
+  end
 end
