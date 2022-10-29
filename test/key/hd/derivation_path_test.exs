@@ -159,7 +159,7 @@ defmodule BitcoinLib.Key.HD.DerivationPathTest do
       path
       |> DerivationPath.parse()
 
-    assert result =~ "not a valid coin type"
+    assert result =~ "invalid coin type"
   end
 
   test "minimal derivation path returning no level information" do

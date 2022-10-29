@@ -28,7 +28,16 @@ defmodule BitcoinLib.Key.HD.DerivationPath.Parser.CoinType do
   def extract([]), do: {:ok, nil, []}
   def extract([@bitcoin_coin_type | rest]), do: {:ok, @bitcoin_atom, rest}
   def extract([@bitcoin_testnet_coin_type | rest]), do: {:ok, @bitcoin_testnet_atom, rest}
-  def extract([coin_type | _rest]), do: {:error, "#{coin_type} is not a valid coin type"}
+
+  def extract([coin_type | _rest]) do
+    message =
+      case String.ends_with?(coin_type, "'") do
+        true -> "#{coin_type} is an invalid coin type"
+        false -> "coin type must be a hardened value"
+      end
+
+    {:error, message}
+  end
 
   def get_atom(@bitcoin_value), do: @bitcoin_atom
   def get_atom(@bitcoin_testnet_value), do: @bitcoin_testnet_atom
