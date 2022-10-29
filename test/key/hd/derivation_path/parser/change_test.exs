@@ -5,7 +5,7 @@ defmodule BitcoinLib.Key.HD.DerivationPath.Parser.ChangeTest do
 
   alias BitcoinLib.Key.HD.DerivationPath.Parser.Change
 
-  test "derivation path extraction of a hardened change" do
+  test "derivation path extraction of a hardened change chain" do
     derivation_path = ["3'", "4"]
 
     {:error, message} =
@@ -13,5 +13,15 @@ defmodule BitcoinLib.Key.HD.DerivationPath.Parser.ChangeTest do
       |> Change.extract()
 
     assert message == "change chain must NOT be a hardened value"
+  end
+
+  test "derivation path extraction of an invalid change chain" do
+    derivation_path = ["3", "4"]
+
+    {:error, message} =
+      derivation_path
+      |> Change.extract()
+
+    assert message =~ "is not a valid change chain"
   end
 end
