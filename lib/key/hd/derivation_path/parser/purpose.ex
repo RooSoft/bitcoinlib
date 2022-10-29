@@ -31,7 +31,7 @@ defmodule BitcoinLib.Key.HD.DerivationPath.Parser.Purpose do
       ...> |> BitcoinLib.Key.HD.DerivationPath.Parser.Purpose.extract()
       {:ok, :bip84, ["0", "1", "2", "3"]}
   """
-  @spec extract(list()) :: {:ok, nil, []} | {:ok, integer(), list()} | {:error, binary()}
+  @spec extract(list()) :: {:ok, nil, []} | {:ok, atom(), list()} | {:error, binary()}
   def extract([]), do: {:ok, nil, []}
 
   def extract([purpose | rest]) do

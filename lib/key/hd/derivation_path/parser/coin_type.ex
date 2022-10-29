@@ -6,6 +6,7 @@ defmodule BitcoinLib.Key.HD.DerivationPath.Parser.CoinType do
 
   See: https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki#registered-coin-types
   """
+
   @bitcoin_coin_type "0'"
   @bitcoin_value 0
   @bitcoin_atom :bitcoin
@@ -23,7 +24,7 @@ defmodule BitcoinLib.Key.HD.DerivationPath.Parser.CoinType do
       ...> |> BitcoinLib.Key.HD.DerivationPath.Parser.CoinType.extract()
       {:ok, :bitcoin_testnet, ["1", "2", "3"]}
   """
-  @spec extract(list()) :: {:ok, nil, []} | {:ok, integer(), list()} | {:error, binary()}
+  @spec extract(list()) :: {:ok, nil, []} | {:ok, atom(), list()} | {:error, binary()}
   def extract([]), do: {:ok, nil, []}
   def extract([@bitcoin_coin_type | rest]), do: {:ok, @bitcoin_atom, rest}
   def extract([@bitcoin_testnet_coin_type | rest]), do: {:ok, @bitcoin_testnet_atom, rest}
