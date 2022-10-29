@@ -14,4 +14,14 @@ defmodule BitcoinLib.Key.HD.DerivationPath.Parser.IndexTest do
 
     assert message == "account number must NOT be a hardened value"
   end
+
+  test "derivation path extraction of an empty index" do
+    derivation_path = []
+
+    result =
+      derivation_path
+      |> Index.extract()
+
+    assert {:ok, nil} == result
+  end
 end
