@@ -24,4 +24,14 @@ defmodule BitcoinLib.Key.HD.DerivationPath.Parser.ChangeTest do
 
     assert message =~ "is not a valid change chain"
   end
+
+  test "derivation path extraction of an empty change chain" do
+    derivation_path = []
+
+    result =
+      derivation_path
+      |> Change.extract()
+
+    assert {:ok, nil, []} == result
+  end
 end
