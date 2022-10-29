@@ -14,8 +14,8 @@ defmodule BitcoinLib.Key.HD.DerivationPath.Parser.Type do
   @public_atom :public
 
   @doc """
-  Converts a list of path levels managed up until the account value, extracts
-  the account and returns the remaining levels.any()
+  Converts a list of path levels managed up until the type value, extracts
+  the type and returns the remaining levels.any()
 
   ## Examples
       iex> ["m", "0", "1", "2", "3", "4"]
