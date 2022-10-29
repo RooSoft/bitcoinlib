@@ -12,4 +12,14 @@ defmodule BitcoinLib.Key.HD.DerivationPath.Parser.TypeTest do
 
     assert message =~ "is not a valid type"
   end
+
+  test "extract the type of an empty derivation path" do
+    derivation_path = []
+
+    {:error, message} =
+      derivation_path
+      |> BitcoinLib.Key.HD.DerivationPath.Parser.Type.extract()
+
+    assert message == "a derivation path must have a type"
+  end
 end

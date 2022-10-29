@@ -23,7 +23,7 @@ defmodule BitcoinLib.Key.HD.DerivationPath.Parser.Type do
       {:ok, :private, ["0", "1", "2", "3", "4"]}
   """
   @spec extract(list()) :: {:ok, atom(), list()} | {:ok, nil, []} | {:error, binary()}
-  def extract([]), do: {:ok, nil, []}
+  def extract([]), do: {:error, "a derivation path must have a type"}
 
   def extract([type | rest]) do
     type
