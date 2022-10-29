@@ -15,6 +15,10 @@ defmodule BitcoinLib.Key.HD.DerivationPath.Parser.Account do
       iex> ["0'", "1", "2"]
       ...> |> BitcoinLib.Key.HD.DerivationPath.Parser.Account.extract()
       {:ok, 0, ["1", "2"]}
+
+      iex> ["0", "1", "2"]
+      ...> |> BitcoinLib.Key.HD.DerivationPath.Parser.Account.extract()
+      {:error, "account number must be a hardened value"}
   """
   @spec extract(list()) :: {:ok, nil | integer(), list()} | {:error, binary()}
   def extract([]), do: {:ok, nil, []}
