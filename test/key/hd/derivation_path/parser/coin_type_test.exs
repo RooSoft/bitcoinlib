@@ -14,4 +14,14 @@ defmodule BitcoinLib.Key.HD.DerivationPath.Parser.CoinTypeTest do
 
     assert message == "coin type must be a hardened value"
   end
+
+  test "derivation path extraction of an empty coin type" do
+    derivation_path = []
+
+    result =
+      derivation_path
+      |> CoinType.extract()
+
+    assert {:ok, nil, []} == result
+  end
 end
