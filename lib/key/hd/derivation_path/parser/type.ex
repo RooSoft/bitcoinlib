@@ -1,6 +1,6 @@
 defmodule BitcoinLib.Key.HD.DerivationPath.Parser.Type do
   @moduledoc """
-  Splits the key space into independent user identities.
+  Extracts the first value of a derivation path, which is public or private.
 
   This is a hardened value.
 
