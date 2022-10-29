@@ -48,5 +48,14 @@ defmodule BitcoinLib.Key.HD.DerivationPath.Parser.Purpose do
   defp convert(@bip44_purpose, rest), do: {:ok, @bip44_atom, rest}
   defp convert(@bip49_purpose, rest), do: {:ok, @bip49_atom, rest}
   defp convert(@bip84_purpose, rest), do: {:ok, @bip84_atom, rest}
-  defp convert(purpose, _rest), do: {:error, "#{purpose} is not a valid purpose"}
+
+  defp convert(purpose, _rest) do
+    message =
+      case String.ends_with?(purpose, "'") do
+        true -> "#{purpose} is an invalid purpose"
+        false -> "purpose must be a hardened value"
+      end
+
+    {:error, message}
+  end
 end

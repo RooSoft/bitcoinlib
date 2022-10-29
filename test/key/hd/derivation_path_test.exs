@@ -72,7 +72,7 @@ defmodule BitcoinLib.Key.HD.DerivationPathTest do
       path
       |> DerivationPath.parse()
 
-    assert result =~ "not a valid purpose"
+    assert result =~ "is an invalid purpose"
   end
 
   test "valid derivation path with an uppper case M" do
