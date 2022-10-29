@@ -38,5 +38,14 @@ defmodule BitcoinLib.Key.HD.DerivationPath.Parser.Change do
 
   defp convert(@receiving_chain, rest), do: {:ok, @receiving_chain_atom, rest}
   defp convert(@change_chain, rest), do: {:ok, @change_chain_atom, rest}
-  defp convert(change_chain, _rest), do: {:error, "#{change_chain} is not a valid change chain"}
+
+  defp convert(change, _rest) do
+    message =
+      case String.ends_with?(change, "'") do
+        true -> "change chain must NOT be a hardened value"
+        false -> "#{change} is not a valid change chain"
+      end
+
+    {:error, message}
+  end
 end
