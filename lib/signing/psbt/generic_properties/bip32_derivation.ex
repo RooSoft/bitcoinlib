@@ -18,7 +18,7 @@ defmodule BitcoinLib.Signing.Psbt.GenericProperties.Bip32Derivation do
     %Bip32Derivation{
       pub_key: %PublicKey{key: binary_pub_key},
       master_key_fingerprint: master_key_fingerprint,
-      derivation_path: DerivationPath.from_list(["M" | derivation_path])
+      derivation_path: DerivationPath.from_list(["m" | derivation_path])
     }
     |> validate_pub_key()
   end
