@@ -224,13 +224,18 @@ defmodule BitcoinLib.Key.PrivateKey do
           chain_code: <<0xF42DE823EE78F6227822D79BC6F6101D084D7F0F876B7828BF027D681294E538::256>>,
           depth: 1,
           index: 0x8000002C,
-          parent_fingerprint: <<0x18C1259::32>>
+          parent_fingerprint: <<0x18C1259::32>>,
+          fingerprint: <<0x68b1f6f8::32>>
         }
       }
   """
   @spec from_derivation_path(%PrivateKey{}, %DerivationPath{}) :: {:ok, %PrivateKey{}}
   def from_derivation_path(%PrivateKey{} = private_key, %DerivationPath{} = derivation_path) do
-    ChildFromDerivationPath.get(private_key, derivation_path)
+    with {:ok, private_key} = ChildFromDerivationPath.get(private_key, derivation_path) do
+      {:ok, add_fingerprint(private_key)}
+    else
+      {:error, message} -> {:error, message}
+    end
   end
 
   @spec from_derivation_path(%PrivateKey{}, binary()) :: {:ok, %PrivateKey{}}
@@ -257,7 +262,8 @@ defmodule BitcoinLib.Key.PrivateKey do
         chain_code: <<0xF42DE823EE78F6227822D79BC6F6101D084D7F0F876B7828BF027D681294E538::256>>,
         depth: 1,
         index: 0x8000002C,
-        parent_fingerprint: <<0x18C1259::32>>
+        parent_fingerprint: <<0x18C1259::32>>,
+        fingerprint: <<0x68b1f6f8::32>>
       }
   """
   @spec from_derivation_path!(%PrivateKey{}, %DerivationPath{}) :: %PrivateKey{}

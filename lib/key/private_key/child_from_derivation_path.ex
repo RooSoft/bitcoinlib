@@ -28,7 +28,7 @@ defmodule BitcoinLib.Key.PrivateKey.ChildFromDerivationPath do
         }
       }
   """
-  @spec get(%PrivateKey{}, %DerivationPath{}) :: {:ok, %PrivateKey{}}
+  @spec get(%PrivateKey{}, %DerivationPath{}) :: {:ok, %PrivateKey{}} | {:error, binary()}
   def get(%PrivateKey{} = private_key, %DerivationPath{} = derivation_path) do
     case derivation_path.type == :private do
       true -> derive(private_key, derivation_path)

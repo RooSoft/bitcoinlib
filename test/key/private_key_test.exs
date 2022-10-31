@@ -265,7 +265,8 @@ defmodule BitcoinLib.Key.PrivateKeyTest do
                <<0xAFC5B0F32E8D0028F19B3D664192A3A7FBC8EC6269F2BEF42897148BC34CA2ED::256>>,
              depth: 4,
              index: 1,
-             parent_fingerprint: <<0x8DF69D92::32>>
+             parent_fingerprint: <<0x8DF69D92::32>>,
+             fingerprint: <<0xb4ea7af3::32>>
            } == child_private_key
   end
 
@@ -291,5 +292,15 @@ defmodule BitcoinLib.Key.PrivateKeyTest do
              index: 0,
              parent_fingerprint: <<0xB4EA7AF3::32>>
            } = child_private_key
+  end
+
+  test "a derived key must have a fingerprint" do
+    master_private_key =
+      "rally celery split order almost twenty ignore record legend learn chaos decade"
+      |> PrivateKey.from_seed_phrase()
+
+    private_key = PrivateKey.from_derivation_path!(master_private_key, "m/49'/0'/0'/0/0")
+
+    assert <<0x17f8b50f::32>> = private_key.fingerprint
   end
 end
