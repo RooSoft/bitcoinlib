@@ -193,7 +193,7 @@ defmodule BitcoinLib.Key.HD.DerivationPathTest do
              purpose: :bip84,
              coin_type: :bitcoin,
              account: 0,
-             change: 0,
+             change: :receiving_chain,
              address_index: 0
            } = derivation_path
   end

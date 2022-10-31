@@ -15,7 +15,7 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
 
   alias BitcoinLib.Key.HD.DerivationPath
   alias BitcoinLib.Key.HD.DerivationPath.{Parser, PathValues}
-  alias BitcoinLib.Key.HD.DerivationPath.Parser.{Type, Purpose, CoinType}
+  alias BitcoinLib.Key.HD.DerivationPath.Parser.{Type, Purpose, CoinType, Change}
 
   @hardened :math.pow(2, 31) |> trunc
 
@@ -53,7 +53,7 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
         purpose: :bip84,
         coin_type: :bitcoin,
         account: 0,
-        change: 0,
+        change: :receiving_chain,
         address_index: 0
       }
   """
@@ -79,7 +79,7 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
       purpose: parse_purpose(purpose),
       coin_type: parse_coin_type(coin_type),
       account: convert_hardened_account(account),
-      change: change,
+      change: parse_change(change),
       address_index: address_index
     }
   end
@@ -129,5 +129,11 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
 
   defp convert_hardened_account(hardened_account) when is_integer(hardened_account) do
     hardened_account - @hardened
+  end
+
+  defp parse_change(nil), do: nil
+
+  defp parse_change(change_chain) do
+    Change.get_atom(change_chain)
   end
 end
