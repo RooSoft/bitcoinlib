@@ -5,7 +5,6 @@ defmodule BitcoinLib.Transaction.Spec do
 
   defstruct inputs: [], outputs: []
 
-  alias BitcoinLib.Crypto
   alias BitcoinLib.Key.PrivateKey
   alias BitcoinLib.Script
   alias BitcoinLib.Transaction
@@ -138,7 +137,7 @@ defmodule BitcoinLib.Transaction.Spec do
       ...>  |> BitcoinLib.Transaction.Spec.to_transaction()
       %BitcoinLib.Transaction{
         version: 1,
-        id: "449197f1facb86f68d5d16b048d34c3300f091085ac163e07f22db64b8aacd72",
+        id: "72cdaab864db227fe063c15a0891f000334cd348b0165d8df686cbfaf1979144",
         inputs: [
           %BitcoinLib.Transaction.Input{
             txid: "6925062befcf8aafae78de879fec2535ec016e251c19b1c0792993258a6fda26",
@@ -172,12 +171,8 @@ defmodule BitcoinLib.Transaction.Spec do
       inputs: Enum.map(spec_inputs, &Spec.Input.to_transaction_input/1)
     }
 
-    id =
-      transaction
-      |> Transaction.add_id()
-
     transaction
-    |> Map.put(:id, id)
+    |> Transaction.add_id()
   end
 
   @doc """

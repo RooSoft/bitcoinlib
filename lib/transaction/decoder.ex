@@ -3,7 +3,6 @@ defmodule BitcoinLib.Transaction.Decoder do
   Transform binaries into Transactions
   """
 
-  alias BitcoinLib.Crypto
   alias BitcoinLib.Transaction
   alias BitcoinLib.Signing.Psbt.CompactInteger
   alias BitcoinLib.Transaction.{InputList, OutputList}
