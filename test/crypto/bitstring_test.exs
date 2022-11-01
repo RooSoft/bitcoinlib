@@ -1,5 +1,5 @@
-defmodule BitcoinLib.BitstringTest do
+defmodule BitcoinLib.Crypto.BitstringTest do
   use ExUnit.Case, async: true
 
-  doctest BitcoinLib.Bitstring
+  doctest BitcoinLib.Crypto.Bitstring
 end
