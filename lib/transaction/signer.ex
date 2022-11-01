@@ -49,9 +49,10 @@ defmodule BitcoinLib.Transaction.Signer do
       hashed_preimage
       |> PrivateKey.sign_message(private_key)
 
-    # is_valid =
-    #   signature
-    #   |> PublicKey.validate_signature(hashed_preimage, public_key)
+    #    valid? =
+    # signature
+    # |> PublicKey.validate_signature(hashed_preimage, public_key)
+    # |> IO.inspect(label: "is signature valid?")
 
     encoded_signature = Opcodes.Data.encode(%Opcodes.Data{value: <<signature::bitstring, 1>>})
     encoded_public_key = Opcodes.Data.encode(%Opcodes.Data{value: public_key.key})
@@ -62,6 +63,13 @@ defmodule BitcoinLib.Transaction.Signer do
     new_input = %{old_input | script_sig: script_sig}
 
     transaction = %{transaction | inputs: [new_input]}
+
+    # transaction
+    # |> Map.get(:inputs)
+    # |> List.first()
+    # |> Map.get(:script_sig)
+    # |> Binary.to_hex()
+    # |> IO.inspect(limit: :infinity, label: "script sig")
 
     Transaction.encode(transaction)
     |> Binary.to_hex()
