@@ -7,6 +7,7 @@ defmodule BitcoinLib.Transaction.Input do
 
   @byte 8
 
+  alias BitcoinLib.Crypto.Bitstring
   alias BitcoinLib.Transaction.Input
   alias BitcoinLib.Script
   alias BitcoinLib.Signing.Psbt.CompactInteger
@@ -29,7 +30,12 @@ defmodule BitcoinLib.Transaction.Input do
       }
   """
   @spec extract_from(binary()) :: {:ok, %Input{}, bitstring()} | {:error, binary()}
-  def extract_from(<<txid::little-256, vout::little-32, remaining::bitstring>>) do
+  def extract_from(<<little_txid::bitstring-256, vout::little-32, remaining::bitstring>>) do
+    txid =
+      little_txid
+      |> Bitstring.reverse()
+      |> Binary.to_hex()
+
     case extract_script_sig(remaining) do
       {:error, message} ->
         {:error, message}
@@ -40,7 +46,7 @@ defmodule BitcoinLib.Transaction.Input do
         {
           :ok,
           %Input{
-            txid: Integer.to_string(txid, 16) |> String.downcase(),
+            txid: txid,
             vout: vout,
             script_sig: script_sig,
             sequence: sequence
@@ -63,19 +69,17 @@ defmodule BitcoinLib.Transaction.Input do
   """
   @spec encode(%Input{}) :: bitstring()
   def encode(%Input{} = input) do
-    little_endian_txid =
-      Binary.from_hex(input.txid)
-      |> :binary.decode_unsigned(:big)
-      |> :binary.encode_unsigned(:little)
+    txid =
+      input.txid
+      |> Binary.from_hex()
+      |> Bitstring.reverse()
 
     {script_size, script} =
       input.script_sig
       |> format_script_sig()
 
-    <<script_size::bitstring, script::bitstring>>
-
-    <<little_endian_txid::bitstring-256, input.vout::little-32, script_size::bitstring,
-      script::bitstring, input.sequence::little-32>>
+    <<txid::bitstring-256, input.vout::little-32, script_size::bitstring, script::bitstring,
+      input.sequence::little-32>>
   end
 
   defp format_script_sig(nil), do: {<<0::8>>, <<>>}
