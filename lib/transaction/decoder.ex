@@ -50,7 +50,7 @@ defmodule BitcoinLib.Transaction.Decoder do
   @spec to_struct(bitstring()) :: {:ok, %Transaction{}} | {:error, binary()}
   def to_struct(encoded_transaction) do
     # see https://github.com/bitcoin/bips/blob/master/bip-0144.mediawiki#hashes
-    get_id(encoded_transaction)
+    Transaction.id_from_encoded_transaction(encoded_transaction)
     |> version_specific_extract(encoded_transaction)
   end
 
@@ -218,19 +218,5 @@ defmodule BitcoinLib.Transaction.Decoder do
         map
         |> Map.put(:error, message)
     end
-  end
-
-  defp get_id(encoded_transaction) do
-    encoded_transaction
-    |> Crypto.double_sha256()
-    |> reverse_bitstring
-    |> Binary.to_hex()
-  end
-
-  defp reverse_bitstring(bitstring) do
-    bitstring
-    |> :binary.bin_to_list()
-    |> Enum.reverse()
-    |> :binary.list_to_bin()
   end
 end

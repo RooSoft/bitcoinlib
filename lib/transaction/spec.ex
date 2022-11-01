@@ -174,9 +174,7 @@ defmodule BitcoinLib.Transaction.Spec do
 
     id =
       transaction
-      |> Transaction.encode()
-      |> Crypto.double_sha256()
-      |> Binary.to_hex()
+      |> Transaction.add_id()
 
     transaction
     |> Map.put(:id, id)

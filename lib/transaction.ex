@@ -4,6 +4,7 @@ defmodule BitcoinLib.Transaction do
   """
   defstruct [:version, :id, :inputs, :outputs, :locktime, witness: []]
 
+  alias BitcoinLib.Crypto
   alias BitcoinLib.Key.PrivateKey
   alias BitcoinLib.Transaction
   alias BitcoinLib.Transaction.{Encoder, Decoder, Signer}
@@ -128,6 +129,86 @@ defmodule BitcoinLib.Transaction do
   def encode(%Transaction{} = transaction) do
     transaction
     |> Encoder.from_struct()
+  end
+
+  @doc """
+  Computes a transaction's ID and adds it to its own structure
+
+  ## Examples
+      iex> %BitcoinLib.Transaction{
+      ...>   version: 2,
+      ...>   inputs: [
+      ...>     %BitcoinLib.Transaction.Input{
+      ...>       txid: "5a957f4bff6d23140eb7e9b6fcedd41d3febf1e145d37519c593c939789a49af",
+      ...>       vout: 0,
+      ...>       script_sig: [],
+      ...>       sequence: 4294967293
+      ...>     }
+      ...>   ],
+      ...>   outputs: [
+      ...>     %BitcoinLib.Transaction.Output{
+      ...>       value: 1303734,
+      ...>       script_pub_key: [%BitcoinLib.Script.Opcodes.Stack.Dup{},
+      ...>        %BitcoinLib.Script.Opcodes.Crypto.Hash160{},
+      ...>        %BitcoinLib.Script.Opcodes.Data{value: <<0x05e17c02fb238ca0779b3533271ebe916b01bcab::160>>},
+      ...>        %BitcoinLib.Script.Opcodes.BitwiseLogic.EqualVerify{},
+      ...>        %BitcoinLib.Script.Opcodes.Crypto.CheckSig{script: <<0x76a91405e17c02fb238ca0779b3533271ebe916b01bcab88ac::200>>}]
+      ...>     }
+      ...>   ],
+      ...>   locktime: 2378041,
+      ...>   witness: []
+      ...> }
+      ...> |> BitcoinLib.Transaction.add_id()
+      %BitcoinLib.Transaction{
+        version: 2,
+        id: "b62e9d36389427d39e5d438a05045c23d1938e4242661c5fe2ad87c46337b091",
+        inputs: [
+          %BitcoinLib.Transaction.Input{
+            txid: "5a957f4bff6d23140eb7e9b6fcedd41d3febf1e145d37519c593c939789a49af",
+            vout: 0,
+            script_sig: [],
+            sequence: 4294967293
+          }
+        ],
+        outputs: [
+          %BitcoinLib.Transaction.Output{
+            value: 1303734,
+            script_pub_key: [%BitcoinLib.Script.Opcodes.Stack.Dup{},
+            %BitcoinLib.Script.Opcodes.Crypto.Hash160{},
+            %BitcoinLib.Script.Opcodes.Data{value: <<0x05e17c02fb238ca0779b3533271ebe916b01bcab::160>>},
+            %BitcoinLib.Script.Opcodes.BitwiseLogic.EqualVerify{},
+            %BitcoinLib.Script.Opcodes.Crypto.CheckSig{script: <<0x76a91405e17c02fb238ca0779b3533271ebe916b01bcab88ac::200>>}]
+          }
+        ],
+        locktime: 2378041,
+        witness: []
+      }
+  """
+  @spec add_id(%Transaction{}) :: %Transaction{}
+  def add_id(%Transaction{} = transaction) do
+    id =
+      transaction
+      |> encode()
+      |> id_from_encoded_transaction()
+
+    transaction
+    |> Map.put(:id, id)
+  end
+
+  @doc """
+  Computes a transaction id from an encoded transaction in bitstring format
+
+  ## Examples
+      iex> <<0x01000000010000000000000000000000000000000000000000000000000000000000000000FFFFFFFF4D04FFFF001D0104455468652054696D65732030332F4A616E2F32303039204368616E63656C6C6F72206F6E206272696E6B206F66207365636F6E64206261696C6F757420666F722062616E6B73FFFFFFFF0100F2052A01000000434104678AFDB0FE5548271967F1A67130B7105CD6A828E03909A67962E0EA1F61DEB649F6BC3F4CEF38C4F35504E51EC112DE5C384DF7BA0B8D578A4C702B6BF11D5FAC00000000::1632>>
+      ...> |> BitcoinLib.Transaction.id_from_encoded_transaction()
+      "4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b"
+  """
+  @spec id_from_encoded_transaction(bitstring()) :: binary()
+  def id_from_encoded_transaction(encoded_transaction) do
+    encoded_transaction
+    |> Crypto.double_sha256()
+    |> Crypto.Bitstring.reverse()
+    |> Binary.to_hex()
   end
 
   @doc """
