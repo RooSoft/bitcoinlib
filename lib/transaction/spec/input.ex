@@ -2,12 +2,10 @@ defmodule BitcoinLib.Transaction.Spec.Input do
   @moduledoc """
   A simplified version of a %BitcoinLib.Transaction.Input that can be filled with human readable formats
   """
-  defstruct [:txid, :vout, :redeem_script]
+  defstruct [:txid, :vout, :redeem_script, sequence: 0xFFFFFFFD]
 
   alias BitcoinLib.Transaction.Spec
   alias BitcoinLib.Transaction
-
-  @default_sequence 0xFFFFFFFF
 
   @doc """
   Converts a human readable input into a %Transaction.Input{}
@@ -27,11 +25,16 @@ defmodule BitcoinLib.Transaction.Spec.Input do
       }
   """
   @spec to_transaction_input(%Spec.Input{}) :: %Transaction.Input{}
-  def to_transaction_input(%Spec.Input{txid: txid, vout: vout, redeem_script: redeem_script}) do
+  def to_transaction_input(%Spec.Input{
+        txid: txid,
+        vout: vout,
+        redeem_script: redeem_script,
+        sequence: sequence
+      }) do
     %Transaction.Input{
       txid: txid,
       vout: vout,
-      sequence: @default_sequence,
+      sequence: sequence,
       script_sig: redeem_script
     }
   end
