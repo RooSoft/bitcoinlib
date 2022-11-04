@@ -3,7 +3,7 @@ defmodule BitcoinLib.Transaction.Spec do
   A simplified version of a %BitcoinLib.Transaction that can be filled with human readable formats
   """
 
-  defstruct inputs: [], outputs: []
+  defstruct inputs: [], outputs: [], locktime: 2404140
 
   alias BitcoinLib.Key.PrivateKey
   alias BitcoinLib.Script
@@ -163,10 +163,10 @@ defmodule BitcoinLib.Transaction.Spec do
       }
   """
   @spec to_transaction(%Spec{}) :: %Transaction{}
-  def to_transaction(%Spec{outputs: spec_outputs, inputs: spec_inputs}) do
+  def to_transaction(%Spec{outputs: spec_outputs, inputs: spec_inputs, locktime: locktime}) do
     transaction = %Transaction{
       version: 1,
-      locktime: 0,
+      locktime: locktime,
       outputs: Enum.map(spec_outputs, &Spec.Output.to_transaction_output/1),
       inputs: Enum.map(spec_inputs, &Spec.Input.to_transaction_input/1)
     }
