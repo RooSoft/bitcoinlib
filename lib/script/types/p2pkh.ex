@@ -20,12 +20,18 @@ defmodule BitcoinLib.Script.Types.P2pkh do
   """
   @spec create(bitstring()) :: list()
   def create(target_public_key_hash) do
+    script_prefix = <<0x76A914::24>>
+    script_suffix = <<0x88AC::16>>
+
+    script =
+      <<script_prefix::bitstring, target_public_key_hash::bitstring, script_suffix::bitstring>>
+
     [
       %Opcodes.Stack.Dup{},
       %Opcodes.Crypto.Hash160{},
       %Opcodes.Data{value: target_public_key_hash},
       %Opcodes.BitwiseLogic.EqualVerify{},
-      %Opcodes.Crypto.CheckSig{}
+      %Opcodes.Crypto.CheckSig{script: script}
     ]
   end
 end
