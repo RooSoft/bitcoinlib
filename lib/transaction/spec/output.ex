@@ -23,7 +23,7 @@ defmodule BitcoinLib.Transaction.Spec.Output do
           %BitcoinLib.Script.Opcodes.Crypto.Hash160{},
           %BitcoinLib.Script.Opcodes.Data{value: <<0xfc8ca28ea75e45f538242c257e1f07fe19baa0f3::160>>},
           %BitcoinLib.Script.Opcodes.BitwiseLogic.EqualVerify{},
-          %BitcoinLib.Script.Opcodes.Crypto.CheckSig{}
+          %BitcoinLib.Script.Opcodes.Crypto.CheckSig{script: <<0x76a914fc8ca28ea75e45f538242c257e1f07fe19baa0f388ac::200>>}
         ],
         value: 1000
       }

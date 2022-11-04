@@ -15,7 +15,7 @@ defmodule BitcoinLib.Script.Types.P2pkh do
         %BitcoinLib.Script.Opcodes.Crypto.Hash160{},
         %BitcoinLib.Script.Opcodes.Data{value: <<0xafc3e518577316386188af748a816cd14ce333f2::160>>},
         %BitcoinLib.Script.Opcodes.BitwiseLogic.EqualVerify{},
-        %BitcoinLib.Script.Opcodes.Crypto.CheckSig{}
+        %BitcoinLib.Script.Opcodes.Crypto.CheckSig{script: <<0x76a914afc3e518577316386188af748a816cd14ce333f288ac::200>>}
       ]
   """
   @spec create(bitstring()) :: list()

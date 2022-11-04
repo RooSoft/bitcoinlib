@@ -3,7 +3,7 @@ defmodule BitcoinLib.Transaction.Spec do
   A simplified version of a %BitcoinLib.Transaction that can be filled with human readable formats
   """
 
-  defstruct inputs: [], outputs: [], locktime: 2404140
+  defstruct version: 2, inputs: [], outputs: [], locktime: 2_404_140
 
   alias BitcoinLib.Key.PrivateKey
   alias BitcoinLib.Script
@@ -89,7 +89,7 @@ defmodule BitcoinLib.Transaction.Spec do
             %BitcoinLib.Script.Opcodes.Crypto.Hash160{},
             %BitcoinLib.Script.Opcodes.Data{value: <<0xad6a62e2d23d1c060897cd0cc79c42dad715e4c7::160>>},
             %BitcoinLib.Script.Opcodes.BitwiseLogic.EqualVerify{},
-            %BitcoinLib.Script.Opcodes.Crypto.CheckSig{}
+            %BitcoinLib.Script.Opcodes.Crypto.CheckSig{script: <<0x76a914ad6a62e2d23d1c060897cd0cc79c42dad715e4c788ac::200>>}
           ],
           value: 1000
           }
@@ -136,14 +136,14 @@ defmodule BitcoinLib.Transaction.Spec do
       ...>  }
       ...>  |> BitcoinLib.Transaction.Spec.to_transaction()
       %BitcoinLib.Transaction{
-        version: 1,
-        id: "72cdaab864db227fe063c15a0891f000334cd348b0165d8df686cbfaf1979144",
+        version: 2,
+        id: "346330ef042212b04fabfdf91ce17f0c615a7458f159d4892d5e8385dbb742ce",
         inputs: [
           %BitcoinLib.Transaction.Input{
             txid: "6925062befcf8aafae78de879fec2535ec016e251c19b1c0792993258a6fda26",
             vout: 1,
             script_sig: "76a914c39658833d83f2299416e697af2fb95a998853d388ac",
-            sequence: 4294967295
+            sequence: 4294967293
           }
         ],
         outputs: [
@@ -158,14 +158,19 @@ defmodule BitcoinLib.Transaction.Spec do
             ]
           }
         ],
-        locktime: 0,
+        locktime: 2404140,
         witness: []
       }
   """
   @spec to_transaction(%Spec{}) :: %Transaction{}
-  def to_transaction(%Spec{outputs: spec_outputs, inputs: spec_inputs, locktime: locktime}) do
+  def to_transaction(%Spec{
+        version: version,
+        outputs: spec_outputs,
+        inputs: spec_inputs,
+        locktime: locktime
+      }) do
     transaction = %Transaction{
-      version: 1,
+      version: version,
       locktime: locktime,
       outputs: Enum.map(spec_outputs, &Spec.Output.to_transaction_output/1),
       inputs: Enum.map(spec_inputs, &Spec.Input.to_transaction_input/1)
@@ -204,7 +209,7 @@ defmodule BitcoinLib.Transaction.Spec do
       ...>  ]
       ...>}
       ...>  |> BitcoinLib.Transaction.Spec.sign_and_encode(private_key)
-      "010000000126da6f8a25932979c0b1191c256e01ec3525ec9f87de78aeaf8acfef2b062569010000006a47304402203d219d9ae0cb87ff298ea0d54757abbb8a8a07c724b0d3979476f572178a9c2402203b026acc059654813b5ad6f5ad24422cbc4b92a76193f5765c8d77cb5ad3ec4f012102702ded1cca9816fa1a94787ffc6f3ace62cd3b63164f76d227d0935a33ee48c3ffffffff01e8030000000000001976a914ad6a62e2d23d1c060897cd0cc79c42dad715e4c788ac00000000"
+      "020000000126da6f8a25932979c0b1191c256e01ec3525ec9f87de78aeaf8acfef2b062569010000006b483045022100fdb5f58ab2dd24aeea72c0f832abde538e176f4474b3fe62a9c6e7e8a1a79e92022049565926bb564b996a19c6c3abd1dfbf35f9432ea7aadb10976dacee97d2e10c012102702ded1cca9816fa1a94787ffc6f3ace62cd3b63164f76d227d0935a33ee48c3fdffffff01e8030000000000001976a914ad6a62e2d23d1c060897cd0cc79c42dad715e4c788ac2caf2400"
   """
   @spec sign_and_encode(%Spec{}, %PrivateKey{}) :: binary()
   def sign_and_encode(spec, %PrivateKey{} = private_key) do

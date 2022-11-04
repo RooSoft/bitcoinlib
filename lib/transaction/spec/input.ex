@@ -20,7 +20,7 @@ defmodule BitcoinLib.Transaction.Spec.Input do
       %BitcoinLib.Transaction.Input{
         txid: "6925062befcf8aafae78de879fec2535ec016e251c19b1c0792993258a6fda26",
         vout: 1,
-        sequence: 4294967295,
+        sequence: 4294967293,
         script_sig: "76a914c39658833d83f2299416e697af2fb95a998853d388ac"
       }
   """
