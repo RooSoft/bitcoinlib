@@ -30,7 +30,7 @@ defmodule BitcoinLib.Script.Analyzer do
   """
 
   # 41 <<_pub_key::520>> ac
-  @spec identify(binary() | list()) :: {atom(), bitstring()}
+  @spec identify(binary() | list()) :: {:p2pk | :p2pkh | :p2wpkh | :p2sh | :p2wsh, bitstring()}
   def identify(<<@uncompressed_pub_key_size::8, pub_key::bitstring-520, @check_sig::8>>),
     do: {:p2pk, pub_key}
 
