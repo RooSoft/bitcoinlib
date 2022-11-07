@@ -113,7 +113,7 @@ defmodule BitcoinLib.Address do
       {:ok, <<0xafc3e518577316386188af748a816cd14ce333f2::160>>, :p2pkh, :testnet}
   """
   @spec destructure(binary()) ::
-          {:ok, <<_::272>> | <<_::160>>, :p2pkh | :p2sh, :p2wpkh, :mainnet | :testnet}
+          {:ok, <<_::272>> | <<_::160>>, :p2pkh | :p2sh | :p2wpkh, :mainnet | :testnet}
           | {:error, binary()}
 
   def destructure("bc1" <> _ = bech32_address), do: Bech32.destructure(bech32_address)
