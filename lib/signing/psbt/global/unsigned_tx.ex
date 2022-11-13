@@ -6,6 +6,7 @@ defmodule BitcoinLib.Signing.Psbt.Global.UnsignedTx do
     keypair
     |> validate_keypair()
     |> decode_transaction()
+    |> validate_witness()
   end
 
   defp validate_keypair(keypair) do
@@ -34,4 +35,11 @@ defmodule BitcoinLib.Signing.Psbt.Global.UnsignedTx do
         end
     end
   end
+
+  defp validate_witness({:error, message}), do: {:error, message}
+
+  defp validate_witness({:ok, %Transaction{segwit?: true, witness: []}}),
+    do: {:error, "unsigned tx serialized with witness serialization format"}
+
+  defp validate_witness({:ok, transaction}), do: {:ok, transaction}
 end

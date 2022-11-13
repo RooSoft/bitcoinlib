@@ -62,6 +62,7 @@ defmodule BitcoinLib.Test.Integration.Transactions.DecodeRawTransactionTest do
                }
              ],
              locktime: 0,
+             segwit?: false,
              witness: []
            }
   end

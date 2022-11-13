@@ -16,7 +16,7 @@ defmodule BitcoinLib.Transaction.Encoder do
   Encodes a transaction in binary format from a structure
 
   ## Examples
-      iex> transaction = %BitcoinLib.Transaction{
+      iex> %BitcoinLib.Transaction{
       ...>   inputs: [
       ...>     %BitcoinLib.Transaction.Input{
       ...>       script_sig: nil,
@@ -40,7 +40,7 @@ defmodule BitcoinLib.Transaction.Encoder do
       ...>   locktime: 0,
       ...>   version: 1
       ...> }
-      ...> BitcoinLib.Transaction.Encoder.from_struct(transaction)
+      ...> |> BitcoinLib.Transaction.Encoder.from_struct()
       <<1, 0, 0, 0>> <> # version
       <<1>> <>          # input_count
       <<0x449d45bbbfe7fc93bbe649bb7b6106b248a15da5dbd6fdc9bdfc7efede83235e0100000000ffffffff::328>> <> # inputs
@@ -58,6 +58,49 @@ defmodule BitcoinLib.Transaction.Encoder do
     |> append_output_count
     |> append_outputs
     |> maybe_append_witnesses
+    |> append_locktime
+    |> Map.get(:encoded)
+  end
+
+  @doc """
+  Specific encoding meant to generate Transaction ID's
+
+  ## Examples
+
+      iex> %BitcoinLib.Transaction{
+      ...>   inputs: [
+      ...>     %BitcoinLib.Transaction.Input{
+      ...>       script_sig: nil,
+      ...>       sequence: 0xFFFFFFFF,
+      ...>       txid: "5e2383defe7efcbdc9fdd6dba55da148b206617bbb49e6bb93fce7bfbb459d44",
+      ...>       vout: 1
+      ...>     }
+      ...>   ],
+      ...>   outputs: [
+      ...>     %BitcoinLib.Transaction.Output{
+      ...>       script_pub_key: [
+      ...>         %BitcoinLib.Script.Opcodes.Stack.Dup{},
+      ...>         %BitcoinLib.Script.Opcodes.Crypto.Hash160{},
+      ...>         %BitcoinLib.Script.Opcodes.Data{value: <<0xf86f0bc0a2232970ccdf4569815db500f1268361::160>>},
+      ...>         %BitcoinLib.Script.Opcodes.BitwiseLogic.EqualVerify{},
+      ...>         %BitcoinLib.Script.Opcodes.Crypto.CheckSig{}
+      ...>       ],
+      ...>       value: 129000000
+      ...>     }
+      ...>   ],
+      ...>   locktime: 0,
+      ...>   version: 1
+      ...> }
+      ...> |> BitcoinLib.Transaction.Encoder.for_txid()
+      <<0x0100000001449d45bbbfe7fc93bbe649bb7b6106b248a15da5dbd6fdc9bdfc7efede83235e0100000000ffffffff014062b007000000001976a914f86f0bc0a2232970ccdf4569815db500f126836188ac00000000::680>>
+  """
+  def for_txid(%Transaction{} = transaction) do
+    %{transaction: transaction, encoded: <<>>}
+    |> append_version
+    |> append_input_count
+    |> append_inputs
+    |> append_output_count
+    |> append_outputs
     |> append_locktime
     |> Map.get(:encoded)
   end
