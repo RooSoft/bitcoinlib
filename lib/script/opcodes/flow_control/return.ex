@@ -39,6 +39,18 @@ defmodule BitcoinLib.Script.Opcodes.FlowControl.Return do
   end
 
   @doc """
+  Returns <<0x6a>>
+
+  ## Examples
+      iex> BitcoinLib.Script.Opcodes.FlowControl.Return.encode()
+      <<0x6a>>
+  """
+  @spec encode() :: <<_::8>>
+  def encode() do
+    <<@value::8>>
+  end
+
+  @doc """
   Marks transaction as invalid. Since bitcoin 0.9, a standard way of attaching extra data
   to transactions is to add a zero-value output with a scriptPubKey consisting of OP_RETURN
   followed by data. Such outputs are provably unspendable and specially discarded from

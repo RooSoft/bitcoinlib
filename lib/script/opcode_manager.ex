@@ -48,6 +48,10 @@ defmodule BitcoinLib.Script.OpcodeManager do
     Crypto.Hash160.encode()
   end
 
+  def encode_opcode(%FlowControl.Return{}) do
+    FlowControl.Return.encode()
+  end
+
   def encode_opcode(%BitwiseLogic.EqualVerify{}) do
     BitwiseLogic.EqualVerify.encode()
   end
