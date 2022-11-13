@@ -14,6 +14,7 @@ defmodule BitcoinLib.Script.Analyzer do
   @script_hash_size 32
 
   @zero Constants.Zero.v()
+  @one Constants.One.v()
   @dup Stack.Dup.v()
   @equal BitwiseLogic.Equal.v()
   @equal_verify BitwiseLogic.EqualVerify.v()
@@ -88,6 +89,18 @@ defmodule BitcoinLib.Script.Analyzer do
         %BitcoinLib.Script.Opcodes.Data{value: <<script_hash::bitstring-256>>}
       ]),
       do: {:p2wsh, script_hash}
+
+  # see https://github.com/bitcoin/bips/blob/master/bip-0341.mediawiki#script-validation-rules
+  # address example: bc1pmzfrwwndsqmk5yh69yjr5lfgfg4ev8c0tsc06e
+  # 01 20 <<_witness_script_hash::256>>
+  def identify(<<@one::8, @script_hash_size::8, script_hash::bitstring-256>>),
+    do: {:p2tr, script_hash}
+
+  def identify([
+        %BitcoinLib.Script.Opcodes.Constants.One{},
+        %BitcoinLib.Script.Opcodes.Data{value: <<script_hash::bitstring-256>>}
+      ]),
+      do: {:p2tr, script_hash}
 
   def identify(script) when is_bitstring(script), do: :unknown
 end
