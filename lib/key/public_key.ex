@@ -79,8 +79,8 @@ defmodule BitcoinLib.Key.PublicKey do
       ...> |> BitcoinLib.Key.PublicKey.to_address(:p2pkh)
       "1BRjWnoAVg3EASJHex5YeyDWC1zZ4CA5vc"
   """
-  @spec to_address(%PublicKey{}, :p2pkh | :p2sh | :bech32) :: binary()
-  def to_address(%PublicKey{} = public_key, type \\ :bech32, network \\ :mainnet) do
+  @spec to_address(%PublicKey{}, :p2pkh | :p2sh | :p2wpkh) :: binary()
+  def to_address(%PublicKey{} = public_key, type \\ :p2wpkh, network \\ :mainnet) do
     public_key
     |> Address.from_public_key(type, network)
   end

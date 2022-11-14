@@ -18,10 +18,10 @@ defmodule BitcoinLib.Address do
       iex> %BitcoinLib.Key.PublicKey{
       ...>   key: <<0x0343B337DEC65A47B3362C9620A6E6FF39A1DDFA908ABAB1666C8A30A3F8A7CCCC::264>>
       ...> }
-      ...> |> BitcoinLib.Address.from_public_key(:bech32, :mainnet)
+      ...> |> BitcoinLib.Address.from_public_key(:p2wpkh, :mainnet)
       "bc1qa5gyew808tdta3wjh6qh3jvcglukjsnfg0qx4u"
   """
-  @spec from_public_key(%PublicKey{}, :p2pkh | :p2sh | :bech32, :mainnet | :testnet) ::
+  @spec from_public_key(%PublicKey{}, :p2pkh | :p2sh | :p2wpkh, :mainnet | :testnet) ::
           binary()
   def from_public_key(public_key, script_type, network \\ :mainnet)
 
@@ -37,10 +37,10 @@ defmodule BitcoinLib.Address do
   def from_public_key(%PublicKey{} = public_key, :p2sh, :testnet),
     do: P2SH.from_public_key(public_key, :testnet)
 
-  def from_public_key(%PublicKey{} = public_key, :bech32, :mainnet),
+  def from_public_key(%PublicKey{} = public_key, :p2wpkh, :mainnet),
     do: Bech32.from_public_key(public_key)
 
-  def from_public_key(%PublicKey{} = public_key, :bech32, :testnet),
+  def from_public_key(%PublicKey{} = public_key, :p2wpkh, :testnet),
     do: Bech32.from_public_key(public_key, :testnet)
 
   @doc """

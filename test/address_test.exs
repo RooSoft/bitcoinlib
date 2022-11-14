@@ -11,7 +11,7 @@ defmodule BitcoinLib.AddressTest do
       key: <<0x0343B337DEC65A47B3362C9620A6E6FF39A1DDFA908ABAB1666C8A30A3F8A7CCCC::264>>
     }
 
-    address = Address.from_public_key(public_key, :bech32, :testnet)
+    address = Address.from_public_key(public_key, :p2wpkh, :testnet)
 
     assert "tb1qa5gyew808tdta3wjh6qh3jvcglukjsnfzfm4w0" == address
   end
@@ -41,7 +41,7 @@ defmodule BitcoinLib.AddressTest do
       key: <<0x0343B337DEC65A47B3362C9620A6E6FF39A1DDFA908ABAB1666C8A30A3F8A7CCCC::264>>
     }
 
-    address = Address.from_public_key(public_key, :bech32, :mainnet)
+    address = Address.from_public_key(public_key, :p2wpkh, :mainnet)
 
     assert "bc1qa5gyew808tdta3wjh6qh3jvcglukjsnfg0qx4u" == address
   end

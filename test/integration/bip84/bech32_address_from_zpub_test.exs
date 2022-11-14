@@ -15,7 +15,7 @@ defmodule BitcoinLib.Test.Integration.Bip84.Bech32AddressFromZpub do
       private_key
       |> PrivateKey.from_derivation_path!("m/84'/0'/0'/0/0")
       |> PublicKey.from_private_key()
-      |> PublicKey.to_address(:bech32)
+      |> PublicKey.to_address(:p2wpkh)
 
     assert address == "bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu"
   end
@@ -32,7 +32,7 @@ defmodule BitcoinLib.Test.Integration.Bip84.Bech32AddressFromZpub do
       private_key
       |> PrivateKey.from_derivation_path!("m/84'/0'/0'/0/1")
       |> PublicKey.from_private_key()
-      |> PublicKey.to_address(:bech32)
+      |> PublicKey.to_address(:p2wpkh)
 
     assert address == "bc1qnjg0jd8228aq7egyzacy8cys3knf9xvrerkf9g"
   end
@@ -49,7 +49,7 @@ defmodule BitcoinLib.Test.Integration.Bip84.Bech32AddressFromZpub do
       private_key
       |> PrivateKey.from_derivation_path!("m/84'/0'/0'/1/0")
       |> PublicKey.from_private_key()
-      |> PublicKey.to_address(:bech32)
+      |> PublicKey.to_address(:p2wpkh)
 
     assert address == "bc1q8c6fshw2dlwun7ekn9qwf37cu2rn755upcp6el"
   end
@@ -63,7 +63,7 @@ defmodule BitcoinLib.Test.Integration.Bip84.Bech32AddressFromZpub do
       private_key
       |> PrivateKey.from_derivation_path!("m/84'/0'/0'/0/0")
       |> PublicKey.from_private_key()
-      |> PublicKey.to_address(:bech32)
+      |> PublicKey.to_address(:p2wpkh)
 
     assert address == "bc1qcmxt22gjgvy74cjtf73r3hzwfg249tql6ps767"
   end
