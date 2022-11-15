@@ -13,8 +13,18 @@ defmodule BitcoinLib.Block.Transactions do
       value: _transaction_count
     } = CompactInteger.extract_from(transactions_data)
 
-    {:ok, transaction} = Transaction.decode(remaining)
+    with {:ok, transactions} <- scan(remaining) do
+      {:ok, transactions}
+    else
+      {:error, message} -> {:error, message}
+    end
+  end
 
-    {:ok, [transaction]}
+  defp scan(remaininig) do
+    with {:ok, transaction} <- Transaction.decode(remaininig) do
+      {:ok, [transaction]}
+    else
+      {:error, message} -> {:error, message}
+    end
   end
 end
