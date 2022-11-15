@@ -28,16 +28,14 @@ defmodule BitcoinLib.Block.Header do
       }
   """
   @spec parse(<<_::640>>) :: {:ok, %Header{}} | {:error, binary()}
-  def parse(<<header::bitstring-640>>) do
-    <<
-      version::little-32,
-      previous_block_hash::bitstring-256,
-      merkle_root_hash::bitstring-256,
-      time::little-32,
-      bits::little-32,
-      nonce::little-32
-    >> = header
-
+  def parse(<<
+        version::little-32,
+        previous_block_hash::bitstring-256,
+        merkle_root_hash::bitstring-256,
+        time::little-32,
+        bits::little-32,
+        nonce::little-32
+      >>) do
     %Header{
       version: version,
       previous_block_hash: previous_block_hash |> Bitstring.reverse(),
