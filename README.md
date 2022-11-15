@@ -20,7 +20,7 @@ Then, create a project and add the dependency in `mix.exs`.
 ```elixir
 def deps do
   [
-    {:bitcoinlib, "~> 0.3.4"}
+    {:bitcoinlib, "~> 0.3.5"}
   ]
 end
 ```
