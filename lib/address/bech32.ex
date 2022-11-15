@@ -57,28 +57,28 @@ defmodule BitcoinLib.Address.Bech32 do
   @doc """
   Creates either of these Bech32 native address types
 
-  - pay to witness public key hash address out of a 20 bytes pub key
-  - pay to witness script hash address out of a 32 bytes script hash
+  - P2WPKH pay to witness public key hash address out of a 20 bytes pub key
+  - P2WSH  pay to witness script hash address out of a 32 bytes script hash
 
   ## Examples
       iex> <<0x001400d21980ae3e9641db6897dad7b8b69b07d9aaac::176>>
-      ...> |> BitcoinLib.Address.Bech32.from_script_hash(:testnet)
+      ...> |> BitcoinLib.Address.Bech32.from_script_pub_key(:testnet)
       "tb1qqrfpnq9w86tyrkmgjldd0w9knvran24v2hzspx"
 
       iex> <<0x00201863143c14c5166804bd19203356da136c985678cd4d27a1b8c6329604903262::272>>
-      ...> |> BitcoinLib.Address.Bech32.from_script_hash(:testnet)
+      ...> |> BitcoinLib.Address.Bech32.from_script_pub_key(:testnet)
       "tb1qrp33g0q5c5txsp9arysrx4k6zdkfs4nce4xj0gdcccefvpysxf3q0sl5k7"
   """
-  def from_script_hash(data, network \\ :mainnet)
+  def from_script_pub_key(data, network \\ :mainnet)
 
-  @spec from_script_hash(<<_::176>> | <<_::272>>, :mainnet | :testnet) :: binary()
-  def from_script_hash(<<keyhash::bitstring-176>>, network) do
+  @spec from_script_pub_key(<<_::176>> | <<_::272>>, :mainnet | :testnet) :: binary()
+  def from_script_pub_key(<<keyhash::bitstring-176>>, network) do
     hrp = get_hrp(network)
 
     SegwitAddr.encode(hrp, keyhash |> Binary.to_hex())
   end
 
-  def from_script_hash(<<script_hash::bitstring-272>>, network) do
+  def from_script_pub_key(<<script_hash::bitstring-272>>, network) do
     hrp = get_hrp(network)
 
     SegwitAddr.encode(hrp, script_hash |> Binary.to_hex())
