@@ -7,7 +7,7 @@ defmodule BitcoinLib.Block do
   defstruct [:header, transactions: []]
 
   alias BitcoinLib.Block
-  alias BitcoinLib.Block.Header
+  alias BitcoinLib.Block.{Header, Transactions}
 
   @doc """
   Converts a hex binary into a %Block{}
@@ -31,11 +31,15 @@ defmodule BitcoinLib.Block do
       }
   """
   @spec parse(binary()) :: {:ok, %Block{}} | {:error, binary()}
-  def parse(<<header_data::bitstring-640, _transactions_data::bitstring>>) do
-    header = Header.parse(header_data)
-
-    %Block{
-      header: header
-    }
+  def parse(<<header_data::bitstring-640, transactions_data::bitstring>>) do
+    with {:ok, header} <- Header.parse(header_data),
+         {:ok, transactions} <- Transactions.parse(transactions_data) do
+      %Block{
+        header: header,
+        transactions: transactions
+      }
+    else
+      {:error, message} -> {:error, message}
+    end
   end
 end
