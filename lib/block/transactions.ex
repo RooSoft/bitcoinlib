@@ -20,14 +20,16 @@ defmodule BitcoinLib.Block.Transactions do
     end
   end
 
-  defp scan(expected_transaction_count, remaininig) do
-    with {:ok, transaction} <- Transaction.decode(remaininig) do
-      transactions = [transaction]
-
+  defp scan(expected_transaction_count, remaining) do
+    with {:ok, transactions} <- extract_transactions(remaining) do
       validate(expected_transaction_count, transactions)
     else
       {:error, message} -> {:error, message}
     end
+  end
+
+  defp extract_transactions(remaining) do
+    {:ok, Transaction.decode(remaining)}
   end
 
   defp validate(expected_transaction_count, transactions) do
