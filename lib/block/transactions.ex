@@ -29,8 +29,17 @@ defmodule BitcoinLib.Block.Transactions do
   end
 
   defp extract_transactions(remaining) do
-    with {:ok, transaction, <<>>} <- Transaction.decode(remaining) do
-      {:ok, [transaction]}
+    extract_next_transaction([], remaining)
+  end
+
+  defp extract_next_transaction(transactions, remaining) do
+    with {:ok, transaction, remaining} <- Transaction.decode(remaining) do
+      transactions = [transaction | transactions]
+
+      case remaining do
+        <<>> -> {:ok, transactions}
+        _ -> extract_next_transaction(transactions, remaining)
+      end
     end
   end
 
