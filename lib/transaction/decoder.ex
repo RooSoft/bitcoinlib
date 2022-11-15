@@ -12,7 +12,7 @@ defmodule BitcoinLib.Transaction.Decoder do
   @byte 8
 
   @doc """
-  Converts a bitstring into a %Transaction{}
+  Converts a bitstring into a %Transaction{} and the remaining unused data
 
   ## Examples
       iex> <<0x01000000017b1eabe0209b1fe794124575ef807057c77ada2138ae4fa8d6c4de0398a14f3f0000000000ffffffff01f0ca052a010000001976a914cbc20a7664f2f69e5355aa427045bc15e7c6c77288ac92040000::680>>
@@ -43,10 +43,11 @@ defmodule BitcoinLib.Transaction.Decoder do
           ],
           locktime: 1170,
           segwit?: false
-        }
+        },
+        <<>>
       }
   """
-  @spec to_struct(bitstring()) :: {:ok, %Transaction{}} | {:error, binary()}
+  @spec to_struct(bitstring()) :: {:ok, %Transaction{}, bitstring()} | {:error, binary()}
   def to_struct(encoded_transaction) do
     # see https://github.com/bitcoin/bips/blob/master/bip-0144.mediawiki#hashes
     version_specific_extract(encoded_transaction)
@@ -70,7 +71,13 @@ defmodule BitcoinLib.Transaction.Decoder do
       %{error: message} ->
         {:error, message}
 
-      %{inputs: inputs, outputs: outputs, witness: witness, locktime: locktime} ->
+      %{
+        inputs: inputs,
+        outputs: outputs,
+        witness: witness,
+        locktime: locktime,
+        remaining: remaining
+      } ->
         {:ok,
          %Transaction{
            version: version,
@@ -79,7 +86,7 @@ defmodule BitcoinLib.Transaction.Decoder do
            witness: witness,
            locktime: locktime,
            segwit?: true
-         }}
+         }, remaining}
     end
   end
 
@@ -99,7 +106,13 @@ defmodule BitcoinLib.Transaction.Decoder do
       %{error: message} ->
         {:error, message}
 
-      %{version: version, inputs: inputs, outputs: outputs, locktime: locktime} ->
+      %{
+        version: version,
+        inputs: inputs,
+        outputs: outputs,
+        locktime: locktime,
+        remaining: remaining
+      } ->
         {:ok,
          %Transaction{
            version: version,
@@ -107,7 +120,7 @@ defmodule BitcoinLib.Transaction.Decoder do
            outputs: outputs,
            locktime: locktime,
            segwit?: false
-         }}
+         }, remaining}
     end
   end
 

@@ -13,7 +13,7 @@ defmodule BitcoinLib.TransactionTest do
       "01000000017b1eabe0209b1fe794124575ef807057c77ada2138ae4fa8d6c4de0398a14f3f0000000000ffffffff01f0ca052a010000001976a914cbc20a7664f2f69e5355aa427045bc15e7c6c77288ac00000000"
       |> Binary.from_hex()
 
-    {:ok, transaction} = Transaction.decode(raw)
+    {:ok, transaction, <<>>} = Transaction.decode(raw)
 
     assert 1 == transaction.version
     assert 0 == transaction.locktime
@@ -49,7 +49,7 @@ defmodule BitcoinLib.TransactionTest do
   test "decode a testnet transaction" do
     # txid = e3600a1bc8a564bb29a79a38ec8ff456edf3bed757112ec70541cf2e3500d221
 
-    {:ok, %Transaction{inputs: [%Input{txid: txid}]}} =
+    {:ok, %Transaction{inputs: [%Input{txid: txid}]}, <<>>} =
       "010000000197ca410de9ab568ab647984cd2b3f38284a8283ff261e26f96162abfb6358983000000006a473044022016bcad84e20bc6ec1a837c99ab552d8157c60c4ef5e9db3f2fe0c03b2ff8a78002205b404d67f4feb4fda8f86c16a0c8dac6530a54962ed961095ee7205b591dd4cc012103f0e5a53db9f85e5b2eecf677925ffe21dd1409bcfe9a0730404053599b0901e5ffffffff01e8030000000000001976a914fc8ca28ea75e45f538242c257e1f07fe19baa0f388ac00000000"
       |> Binary.from_hex()
       |> Transaction.decode()
@@ -97,7 +97,7 @@ defmodule BitcoinLib.TransactionTest do
     encoded =
       "01000000000101db6b1b20aa0fd7b23880be2ecbd4a98130974cf4748fb66092ac4d3ceb1a5477010000001716001479091972186c449eb1ded22b78e40d009bdf0089feffffff02b8b4eb0b000000001976a914a457b684d7f0d539a46a45bbc043f35b59d0d96388ac0008af2f000000001976a914fd270b1ee6abcaea97fea7ad0402e8bd8ad6d77c88ac02473044022047ac8e878352d3ebbde1c94ce3a10d057c24175747116f8288e5d794d12d482f0220217f36a485cae903c713331d877c1f64677e3622ad4010726870540656fe9dcb012103ad1d8e89212f0b92c74d23bb710c00662ad1470198ac48c43f7d6f93a2a2687392040000"
 
-    {:ok, transaction} = Transaction.parse(encoded)
+    {:ok, transaction, <<>>} = Transaction.parse(encoded)
 
     assert [
              %BitcoinLib.Transaction.Input{

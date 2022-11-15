@@ -10,7 +10,7 @@ defmodule BitcoinLib.Transaction do
   alias BitcoinLib.Transaction.{Encoder, Decoder, Signer}
 
   @doc """
-  Converts a hex binary into a %Transaction{}
+  Converts a hex binary into a %Transaction{} and the remaining unused data
 
   ## Examples
       iex> "01000000017b1eabe0209b1fe794124575ef807057c77ada2138ae4fa8d6c4de0398a14f3f0000000000ffffffff01f0ca052a010000001976a914cbc20a7664f2f69e5355aa427045bc15e7c6c77288ac00000000"
@@ -42,10 +42,11 @@ defmodule BitcoinLib.Transaction do
           ],
           locktime: 0,
           segwit?: false
-        }
+        },
+        <<>>
       }
   """
-  @spec parse(binary()) :: {:ok, %Transaction{}} | {:error, binary()}
+  @spec parse(binary()) :: {:ok, %Transaction{}, bitstring()} | {:error, binary()}
   def parse(hex_transaction) do
     hex_transaction
     |> Binary.from_hex()
@@ -53,7 +54,7 @@ defmodule BitcoinLib.Transaction do
   end
 
   @doc """
-  Converts a bitstring into a %Transaction{}
+  Converts a bitstring into a %Transaction{} and the remaining unused data
 
   ## Examples
       iex> <<0x01000000017b1eabe0209b1fe794124575ef807057c77ada2138ae4fa8d6c4de0398a14f3f0000000000ffffffff01f0ca052a010000001976a914cbc20a7664f2f69e5355aa427045bc15e7c6c77288ac00000000::680>>
@@ -85,13 +86,14 @@ defmodule BitcoinLib.Transaction do
           ],
           locktime: 0,
           segwit?: false
-        }
+        },
+        <<>>
       }
   """
-  @spec decode(bitstring()) :: {:ok, %Transaction{}} | {:error, binary()}
+  @spec decode(bitstring()) :: {:ok, %Transaction{}, bitstring()} | {:error, binary()}
   def decode(encoded_transaction) do
-    with {:ok, transaction} <- Decoder.to_struct(encoded_transaction) do
-      {:ok, add_id(transaction)}
+    with {:ok, transaction, remaining} <- Decoder.to_struct(encoded_transaction) do
+      {:ok, add_id(transaction), remaining}
     else
       {:error, message} -> {:error, message}
     end
@@ -282,7 +284,7 @@ defmodule BitcoinLib.Transaction do
   """
   @spec id_from_encoded_transaction(bitstring()) :: binary()
   def id_from_encoded_transaction(encoded_transaction) do
-    with {:ok, transaction} <- Decoder.to_struct(encoded_transaction) do
+    with {:ok, transaction, <<>>} <- Decoder.to_struct(encoded_transaction) do
       {:ok, to_id(transaction)}
     else
       {:error, message} -> {:error, message}

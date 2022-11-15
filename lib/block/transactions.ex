@@ -29,7 +29,9 @@ defmodule BitcoinLib.Block.Transactions do
   end
 
   defp extract_transactions(remaining) do
-    {:ok, Transaction.decode(remaining)}
+    with {:ok, transaction, <<>>} <- Transaction.decode(remaining) do
+      {:ok, [transaction]}
+    end
   end
 
   defp validate(expected_transaction_count, transactions) do
