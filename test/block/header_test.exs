@@ -5,10 +5,10 @@ defmodule BitcoinLib.Block.HeaderTest do
 
   alias BitcoinLib.Block.Header
 
-  test "parsing an invalid block" do
+  test "try decoding an invalid block" do
     invalid_block_data = <<0>>
 
-    {:error, message} = Header.parse(invalid_block_data)
+    {:error, message} = Header.decode(invalid_block_data)
 
     assert "invalid block" == message
   end

@@ -17,7 +17,7 @@ defmodule BitcoinLib.Block.Header do
 
       iex> "0100000000000000000000000000000000000000000000000000000000000000000000003ba3edfd7a7b12b27ac72c3e67768f617fc81bc3888a51323a9fb8aa4b1e5e4a29ab5f49ffff001d1dac2b7c"
       ...> |> Binary.from_hex()
-      ...> |> BitcoinLib.Block.Header.parse()
+      ...> |> BitcoinLib.Block.Header.decode()
       {
         :ok,
         %BitcoinLib.Block.Header{
@@ -30,8 +30,8 @@ defmodule BitcoinLib.Block.Header do
         }
       }
   """
-  @spec parse(<<_::640>>) :: {:ok, %Header{}} | {:error, binary()}
-  def parse(<<
+  @spec decode(<<_::640>>) :: {:ok, %Header{}} | {:error, binary()}
+  def decode(<<
         version::little-32,
         previous_block_hash::bitstring-256,
         merkle_root_hash::bitstring-256,
@@ -52,5 +52,5 @@ defmodule BitcoinLib.Block.Header do
     }
   end
 
-  def parse(_), do: {:error, "invalid block"}
+  def decode(_), do: {:error, "invalid block"}
 end

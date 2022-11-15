@@ -6,8 +6,8 @@ defmodule BitcoinLib.Block.Transactions do
   alias BitcoinLib.Signing.Psbt.CompactInteger
   alias BitcoinLib.Transaction
 
-  @spec parse(binary()) :: {:ok, list()} | {:error, binary()}
-  def parse(transactions_data) do
+  @spec decode(binary()) :: {:ok, list()} | {:error, binary()}
+  def decode(transactions_data) do
     %CompactInteger{
       remaining: remaining,
       value: _transaction_count

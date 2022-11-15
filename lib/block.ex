@@ -61,8 +61,8 @@ defmodule BitcoinLib.Block do
   """
   @spec parse(binary()) :: {:ok, %Block{}} | {:error, binary()}
   def parse(<<header_data::bitstring-640, transactions_data::bitstring>>) do
-    with {:ok, header} <- Header.parse(header_data),
-         {:ok, transactions} <- Transactions.parse(transactions_data) do
+    with {:ok, header} <- Header.decode(header_data),
+         {:ok, transactions} <- Transactions.decode(transactions_data) do
       %Block{
         header: header,
         transactions: transactions
