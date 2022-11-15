@@ -3,7 +3,18 @@ defmodule BitcoinLib.Block.Transactions do
   Converts a list of bytes into a list of transactions
   """
 
-  def parse(_transactions_data) do
-    {:ok, []}
+  alias BitcoinLib.Signing.Psbt.CompactInteger
+  alias BitcoinLib.Transaction
+
+  @spec parse(binary()) :: {:ok, list()} | {:error, binary()}
+  def parse(transactions_data) do
+    %CompactInteger{
+      remaining: remaining,
+      value: _transaction_count
+    } = CompactInteger.extract_from(transactions_data)
+
+    {:ok, transaction} = Transaction.decode(remaining)
+
+    {:ok, [transaction]}
   end
 end
