@@ -10,6 +10,24 @@ keeps the cryptography jargon to a minimum, while sticking to the
 
 The easiest way to start is to try the [wallet operations livebook](https://github.com/RooSoft/bitcoinlib/blob/main/livebooks/wallet_operations/index.livemd).
 
+## Donations
+
+This library is being built in the wild according to these principles
+
+- Free to use
+- Developer friendly
+- Modular
+
+Arguably, the most important part is that it is `umbiased`.
+
+If you want to keep it that way, and want to promote its active development, please send domations
+here: `bc1qs0hd8wws09jm68fg4ymnsdvxdjggsg3jg09xh4`
+
+That address, along with the private key that goes with it have both been created using the current lib.
+The same will apply for the spending of said funds.
+
+Thank you!
+
 ## How to use
 
 First, make sure you've got [elixir set up](https://elixir-lang.org/install.html) and that you
