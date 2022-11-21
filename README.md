@@ -18,7 +18,7 @@ This library is being built in the wild according to these principles
 - Developer friendly
 - Modular
 
-Arguably, the most important part is that it is `umbiased`.
+Arguably, the most important part is that it is `unbiased`.
 
 If you want to keep it that way, and want to promote its active development, please send domations
 here: `bc1qs0hd8wws09jm68fg4ymnsdvxdjggsg3jg09xh4`
