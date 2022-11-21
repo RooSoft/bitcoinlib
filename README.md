@@ -20,11 +20,11 @@ This library is being built in the wild according to these principles
 
 Arguably, the most important part is that it is `unbiased`.
 
-If you want to keep it that way, and want to promote its active development, please send domations
+If you want to keep it that way, and want to promote its active development, please send donations
 here: `bc1qs0hd8wws09jm68fg4ymnsdvxdjggsg3jg09xh4`
 
 That address, along with the private key that goes with it have both been created using the current lib.
-The same will apply for the spending of said funds.
+The same will apply for very transaction created to spend said funds.
 
 Thank you!
 
