@@ -1,7 +1,7 @@
 %{
   "b58": {:hex, :b58, "1.0.3", "d300d6ae5a3de956a54b9e8220e924e4fee1a349de983df2340fe61e0e464202", [:mix], [], "hexpm", "af62a98a8661fd89978cf3a3a4b5b2ebe82209de6ac6164f0b112e36af72fc59"},
   "bech32": {:hex, :bech32, "1.0.0", "85a3bb58c408d735b5becb39e8a23536660ec0df1ef0afee72377c130939de1b", [:mix], [], "hexpm", "f781b8524c30a524922613d97c1858c27bd9f639b4e6b350f4a4843ee97607d3"},
-  "binary": {:hex, :binary, "0.0.4", "dd077db70c0ded3e85c132b802338e14b80694684a7e2277666bfa4004b7fa66", [:mix], [], "hexpm", "a2faf5d5c22caec3efacf95370d8b050c003f48e03c221c37e0d1e2dd515b970"},
+  "binary": {:hex, :binary, "0.0.5", "20d816f7274ea34f1b673b4cff2fdb9ebec9391a7a68c349070d515c66b1b2cf", [:mix], [], "hexpm", "ee1e9ebcab703a4e24db554957fbb540642fe9327eb9e295cb3f07dd7c11ddb2"},
   "bip0173": {:hex, :bip0173, "0.1.2", "b771e275692ed3353ecfecb38330693cbba90d2ac4a2e8fd1908a86ec7e6318f", [:mix], [], "hexpm", "6e12dfe7baacf9b4c422cae8f9cc6bbd791bf5ec3e9055fa3f418071b799b0db"},
   "comeonin": {:hex, :comeonin, "5.3.3", "2c564dac95a35650e9b6acfe6d2952083d8a08e4a89b93a481acb552b325892e", [:mix], [], "hexpm", "3e38c9c2cb080828116597ca8807bb482618a315bfafd98c90bc22a821cc84df"},
   "curvy": {:hex, :curvy, "0.3.0", "cd097f77434baf783cd18a8374e1eae37dc203588902a3b59d1b4056ac9e7366", [:mix], [], "hexpm", "1fa6104cb458cfe6962b8353a0a6563bd191f9e72807fca0fa22b5a61809695c"},

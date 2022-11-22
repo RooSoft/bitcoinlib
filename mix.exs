@@ -1,7 +1,7 @@
 defmodule BitcoinLib.MixProject do
   use Mix.Project
 
-  @version "0.4.0"
+  @version "0.4.1"
 
   def project do
     [
@@ -74,7 +74,7 @@ defmodule BitcoinLib.MixProject do
     [
       {:ex_doc, "~> 0.27", only: :dev, runtime: false},
       {:dialyxir, "~> 1.2", only: [:dev], runtime: false},
-      {:binary, "0.0.4"},
+      {:binary, "~> 0.0.5"},
       {:b58, "~> 1.0"},
       {:pbkdf2_elixir, "~> 2.0"},
       {:curvy, "~> 0.3.0"},
