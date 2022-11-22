@@ -49,6 +49,10 @@ defmodule BitcoinLib.Script.OpcodeManager do
     Crypto.Hash160.encode()
   end
 
+  def encode_opcode(%FlowControl.Nop{}) do
+    FlowControl.Nop.encode()
+  end
+
   def encode_opcode(%FlowControl.Return{}) do
     FlowControl.Return.encode()
   end
