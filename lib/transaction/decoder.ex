@@ -152,7 +152,7 @@ defmodule BitcoinLib.Transaction.Decoder do
 
   defp extract_output_count(%{remaining: remaining} = map) do
     %CompactInteger{value: output_count, remaining: remaining} =
-      CompactInteger.extract_from(remaining, :big_endian)
+      CompactInteger.extract_from(remaining, :little_endian)
 
     %{map | remaining: remaining}
     |> Map.put(:output_count, output_count)
