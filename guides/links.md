@@ -7,3 +7,4 @@
 * [Bitcoin PSBT explorer](https://bip174.org)
 * [Address prefixes](https://en.bitcoin.it/wiki/List_of_address_prefixes)
 * [Script opcodes](https://en.bitcoin.it/wiki/Script)
+* [xpubs and output descriptors](https://bitcoin.stackexchange.com/questions/89261/why-does-importmulti-not-support-zpub-and-ypub)
