@@ -95,13 +95,20 @@ defmodule BitcoinLib.Transaction.Input do
     %CompactInteger{value: script_sig_size, remaining: remaining} =
       CompactInteger.extract_from(remaining)
 
-    script_sig_bit_size = script_sig_size * @byte
+    remaining_size = byte_size(remaining)
 
-    <<script_sig::bitstring-size(script_sig_bit_size), remaining::bitstring>> = remaining
+    if script_sig_size > remaining_size do
+      {:error,
+       "trying to get a #{script_sig_size} bytes signature in a #{remaining_size} block of data"}
+    else
+      script_sig_bit_size = script_sig_size * @byte
 
-    case Script.parse(script_sig) do
-      {:ok, script_sig} -> {:ok, script_sig, remaining}
-      {:error, message} -> {:error, message}
+      <<script_sig::bitstring-size(script_sig_bit_size), remaining::bitstring>> = remaining
+
+      case Script.parse(script_sig) do
+        {:ok, script_sig} -> {:ok, script_sig, remaining}
+        {:error, message} -> {:error, message}
+      end
     end
   end
 
