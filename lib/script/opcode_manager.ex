@@ -3,7 +3,7 @@ defmodule BitcoinLib.Script.OpcodeManager do
   Converts back and forts from script to opcode list
   """
 
-  alias BitcoinLib.Script.Opcodes.{BitwiseLogic, Constants, Crypto, FlowControl, Stack}
+  alias BitcoinLib.Script.Opcodes.{BitwiseLogic, Constants, Crypto, FlowControl, Stack, Locktime}
 
   @byte 8
 
@@ -26,6 +26,7 @@ defmodule BitcoinLib.Script.OpcodeManager do
   @check_sig_verify Crypto.CheckSigVerify.v()
   @check_multi_sig Crypto.CheckMultiSig.v()
   @check_multi_sig_verify Crypto.CheckMultiSigVerify.v()
+  @check_lock_time_verify Locktime.CheckLockTimeVerify.v()
 
   alias BitcoinLib.Signing.Psbt.CompactInteger
   alias BitcoinLib.Script.Opcodes.Data
@@ -92,6 +93,10 @@ defmodule BitcoinLib.Script.OpcodeManager do
 
   def encode_opcode(%Crypto.CheckSig{}) do
     Crypto.CheckSig.encode()
+  end
+
+  def encode_opcode(%Locktime.CheckLockTimeVerify{}) do
+    Locktime.CheckLockTimeVerify.encode()
   end
 
   def encode_opcode(%Data{} = data) do
@@ -187,6 +192,10 @@ defmodule BitcoinLib.Script.OpcodeManager do
 
   def extract_from_script(<<@check_multi_sig_verify::8, remaining::bitstring>>, _whole_script) do
     {:opcode, %Crypto.CheckMultiSigVerify{}, remaining}
+  end
+
+  def extract_from_script(<<@check_lock_time_verify::8, remaining::bitstring>>, _whole_script) do
+    {:opcode, %Locktime.CheckLockTimeVerify{}, remaining}
   end
 
   def extract_from_script(<<unknown_opcode::8, remaining::bitstring>> = script, _whole_script) do
