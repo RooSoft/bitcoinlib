@@ -19,7 +19,7 @@ defmodule BitcoinLib.Script.Opcodes.Constants.Three do
   @value 0x53
 
   @doc """
-  Returns 0
+  Returns 0x53
 
   ## Examples
       iex> BitcoinLib.Script.Opcodes.Constants.Three.v()
