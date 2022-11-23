@@ -12,7 +12,7 @@ defmodule BitcoinLib.Script.Opcodes.Constants.PushData1 do
 
   @behaviour BitcoinLib.Script.Opcode
 
-  defstruct []
+  defstruct [:value]
 
   alias BitcoinLib.Script.Opcodes.Constants.PushData1
 
@@ -47,21 +47,19 @@ defmodule BitcoinLib.Script.Opcodes.Constants.PushData1 do
 
   ## Examples
       iex> BitcoinLib.Script.Opcodes.Constants.PushData1.execute(
-      ...>  %BitcoinLib.Script.Opcodes.Constants.PushData1{},
-      ...>  [<<3, 4, 2, 1>>, 3]
+      ...>  %BitcoinLib.Script.Opcodes.Constants.PushData1{value: <<3, 4, 2, 1>>},
+      ...>  [3]
       ...> )
-      {:ok, [<<4, 2, 1>>, 3]}
+      {:ok, [<<4, 2, 1>> | [3]]}
   """
   @spec execute(%PushData1{}, list()) :: {:ok, list()} | {:error, binary()}
-  def execute(%PushData1{}, [<<count::8, data::bitstring>>, remaining]) do
+  def execute(%PushData1{value: <<count::8, data::bitstring>>}, remaining) do
     case byte_size(data) do
       ^count ->
-        {:ok, [data, remaining]}
+        {:ok, [data | remaining]}
 
       data_size ->
         {:error, "trying to OP_PUSHDATA1 of size #{count}, but got #{data_size} bytes to store"}
     end
-
-    {:ok, [data, remaining]}
   end
 end
