@@ -24,6 +24,7 @@ defmodule BitcoinLib.Script.OpcodeManager do
   @three Constants.Three.v()
   @four Constants.Four.v()
   @push_data_1 Constants.PushData1.v()
+  @push_data_2 Constants.PushData2.v()
   @nop FlowControl.Nop.v()
   @if FlowControl.If.v()
   @verify FlowControl.Verify.v()
@@ -78,6 +79,10 @@ defmodule BitcoinLib.Script.OpcodeManager do
 
   def encode_opcode(%Constants.PushData1{}) do
     Constants.PushData1.encode()
+  end
+
+  def encode_opcode(%Constants.PushData2{}) do
+    Constants.PushData2.encode()
   end
 
   def encode_opcode(%Stack.IfDup{}) do
@@ -204,6 +209,15 @@ defmodule BitcoinLib.Script.OpcodeManager do
 
   def extract_from_script(
         <<@push_data_1::8, data_length::8, remaining::bitstring>>,
+        _whole_script
+      ) do
+    <<data::bitstring-size(data_length * 8), remaining::bitstring>> = remaining
+
+    {:data, data, remaining}
+  end
+
+  def extract_from_script(
+        <<@push_data_2::8, data_length::little-16, remaining::bitstring>>,
         _whole_script
       ) do
     <<data::bitstring-size(data_length * 8), remaining::bitstring>> = remaining

@@ -1,5 +1,5 @@
-defmodule BitcoinLib.Script.Opcodes.Constants.PushData1Test do
+defmodule BitcoinLib.Script.Opcodes.Constants.PushData2Test do
   use ExUnit.Case, async: true
 
-  doctest BitcoinLib.Script.Opcodes.Constants.PushData1
+  doctest BitcoinLib.Script.Opcodes.Constants.PushData2
 end
