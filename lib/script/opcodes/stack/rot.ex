@@ -45,10 +45,10 @@ defmodule BitcoinLib.Script.Opcodes.Stack.Rot do
   The 3rd item down the stack is moved to the top.
 
   ## Examples
-      iex> stack = [4, 3, 6]
+      iex> stack = [4, 3, 6, 1, 2]
       ...> %BitcoinLib.Script.Opcodes.Stack.Rot{}
       ...> |> BitcoinLib.Script.Opcodes.Stack.Rot.execute(stack)
-      {:ok, [6, 4, 3]}
+      {:ok, [6, 4, 3, 1, 2]}
   """
   @spec execute(%Rot{}, list()) :: {:ok, list()} | {:error, binary()}
   def execute(_opcode, []), do: {:error, "trying to execute OP_ROT on an empty stack"}
