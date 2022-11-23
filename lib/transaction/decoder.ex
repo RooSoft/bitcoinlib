@@ -16,7 +16,7 @@ defmodule BitcoinLib.Transaction.Decoder do
 
   ## Examples
       iex> <<0x01000000017b1eabe0209b1fe794124575ef807057c77ada2138ae4fa8d6c4de0398a14f3f0000000000ffffffff01f0ca052a010000001976a914cbc20a7664f2f69e5355aa427045bc15e7c6c77288ac92040000::680>>
-      ...> |> BitcoinLib.Transaction.Decoder.to_struct()
+      ...> |> BitcoinLib.Transaction.Decoder.to_struct(false)
       {
         :ok,
         %BitcoinLib.Transaction{
@@ -47,20 +47,22 @@ defmodule BitcoinLib.Transaction.Decoder do
         <<>>
       }
   """
-  @spec to_struct(bitstring()) :: {:ok, %Transaction{}, bitstring()} | {:error, binary()}
-  def to_struct(encoded_transaction) do
+  @spec to_struct(bitstring(), boolean()) ::
+          {:ok, %Transaction{}, bitstring()} | {:error, binary()}
+  def to_struct(encoded_transaction, is_coinbase? \\ false) do
     # see https://github.com/bitcoin/bips/blob/master/bip-0144.mediawiki#hashes
-    version_specific_extract(encoded_transaction)
+    version_specific_extract(encoded_transaction, is_coinbase?)
   end
 
   # Extracts a witness transaction
   defp version_specific_extract(
-         <<version::little-32, @marker::8, @flag::8, remaining::bitstring>>
+         <<version::little-32, @marker::8, @flag::8, remaining::bitstring>>,
+         is_coinbase?
        ) do
     result =
       %{remaining: remaining}
       |> extract_input_count
-      |> extract_inputs
+      |> extract_inputs(is_coinbase?)
       |> extract_output_count
       |> extract_outputs
       |> extract_witness
@@ -91,12 +93,12 @@ defmodule BitcoinLib.Transaction.Decoder do
   end
 
   # Extracts a non-witness transaction
-  defp version_specific_extract(remaining) do
+  defp version_specific_extract(remaining, is_coinbase?) do
     result =
       %{remaining: remaining}
       |> extract_version
       |> extract_input_count
-      |> extract_inputs
+      |> extract_inputs(is_coinbase?)
       |> extract_output_count
       |> extract_outputs
       |> extract_locktime
@@ -137,8 +139,8 @@ defmodule BitcoinLib.Transaction.Decoder do
     |> Map.put(:input_count, input_count)
   end
 
-  defp extract_inputs(%{input_count: input_count, remaining: remaining} = map) do
-    case InputList.extract(remaining, input_count) do
+  defp extract_inputs(%{input_count: input_count, remaining: remaining} = map, is_coinbase?) do
+    case InputList.extract(remaining, input_count, is_coinbase?) do
       {:ok, inputs, remaining} ->
         %{map | remaining: remaining}
         |> Map.put(:inputs, Enum.reverse(inputs))

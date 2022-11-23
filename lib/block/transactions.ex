@@ -29,17 +29,22 @@ defmodule BitcoinLib.Block.Transactions do
   end
 
   defp extract_transactions(remaining) do
-    extract_next_transaction([], remaining)
+    with {:ok, coinbase, remaining} <- extract_coinbase(remaining) do
+      extract_next_transaction([coinbase], remaining)
+    else
+      {:error, message} -> {:error, message}
+    end
   end
 
-  defp extract_next_transaction(transactions, remaining) do
-    with {:ok, transaction, remaining} <- Transaction.decode(remaining) do
-      transactions = [transaction | transactions]
+  defp extract_coinbase(remaining) do
+    Transaction.decode(remaining, true)
+  end
 
-      case remaining do
-        <<>> -> {:ok, transactions}
-        _ -> extract_next_transaction(transactions, remaining)
-      end
+  defp extract_next_transaction(transactions, <<>>), do: {:ok, transactions}
+
+  defp extract_next_transaction(transactions, remaining) do
+    with {:ok, transaction, remaining} <- Transaction.decode(remaining, false) do
+      extract_next_transaction([transaction | transactions], remaining)
     else
       {:error, message} ->
         transaction_count = Enum.count(transactions)

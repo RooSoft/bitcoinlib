@@ -17,7 +17,7 @@ defmodule BitcoinLib.Transaction.Input do
 
   ## Examples
       iex> <<0x7b1eabe0209b1fe794124575ef807057c77ada2138ae4fa8d6c4de0398a14f3f0000000000ffffffff01f0ca052a010000001976a914cbc20a7664f2f69e5355aa427045bc15e7c6c77288ac00000000::640>>
-      ...> |> BitcoinLib.Transaction.Input.extract_from()
+      ...> |> BitcoinLib.Transaction.Input.extract_from(false)
       {
         :ok,
         %BitcoinLib.Transaction.Input{
@@ -29,14 +29,17 @@ defmodule BitcoinLib.Transaction.Input do
         <<0x01f0ca052a010000001976a914cbc20a7664f2f69e5355aa427045bc15e7c6c77288ac00000000::312>>
       }
   """
-  @spec extract_from(binary()) :: {:ok, %Input{}, bitstring()} | {:error, binary()}
-  def extract_from(<<little_txid::bitstring-256, vout::little-32, remaining::bitstring>>) do
+  @spec extract_from(binary(), bool) :: {:ok, %Input{}, bitstring()} | {:error, binary()}
+  def extract_from(
+        <<little_txid::bitstring-256, vout::little-32, remaining::bitstring>>,
+        is_coinbase? \\ false
+      ) do
     txid =
       little_txid
       |> Bitstring.reverse()
       |> Binary.to_hex()
 
-    case extract_script_sig(remaining) do
+    case extract_script_sig(remaining, is_coinbase?) do
       {:error, message} ->
         {:error, message}
 
@@ -91,7 +94,18 @@ defmodule BitcoinLib.Transaction.Input do
     {<<script_sig_bit_size::8>>, script_sig}
   end
 
-  defp extract_script_sig(remaining) do
+  defp extract_script_sig(remaining, _is_coinbase? = true) do
+    %CompactInteger{value: script_sig_size, remaining: remaining} =
+      CompactInteger.extract_from(remaining)
+
+    script_sig_bit_size = script_sig_size * @byte
+
+    <<script_sig::bitstring-size(script_sig_bit_size), remaining::bitstring>> = remaining
+
+    {:ok, script_sig, remaining}
+  end
+
+  defp extract_script_sig(remaining, _is_coinbase? = false) do
     %CompactInteger{value: script_sig_size, remaining: remaining} =
       CompactInteger.extract_from(remaining)
 
