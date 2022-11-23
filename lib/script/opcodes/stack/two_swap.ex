@@ -42,7 +42,7 @@ defmodule BitcoinLib.Script.Opcodes.Stack.TwoSwap do
   end
 
   @doc """
-  Duplicates the top stack item.
+  Swaps the top two pairs of items.
 
   ## Examples
       iex> stack = [1, 2, 3, 4, 5]
