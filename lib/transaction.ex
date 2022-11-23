@@ -287,7 +287,7 @@ defmodule BitcoinLib.Transaction do
       ...> |> BitcoinLib.Transaction.id_from_encoded_transaction()
       {:ok, "4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b"}
   """
-  @spec id_from_encoded_transaction(bitstring()) :: binary()
+  @spec id_from_encoded_transaction(bitstring()) :: {:ok, binary()} | {:error, binary()}
   def id_from_encoded_transaction(encoded_transaction) do
     with {:ok, transaction, <<>>} <- Decoder.to_struct(encoded_transaction) do
       {:ok, to_id(transaction)}
