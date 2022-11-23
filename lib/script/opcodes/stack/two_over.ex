@@ -51,10 +51,10 @@ defmodule BitcoinLib.Script.Opcodes.Stack.TwoOver do
       {:ok, [1, 2, 3, 4, 1, 2, 5]}
   """
   @spec execute(%TwoOver{}, list()) :: {:ok, list()} | {:error, binary()}
-  def execute(_opcode, []), do: {:error, "trying to execute OP_DUP on an empty stack"}
-  def execute(_opcode, [_]), do: {:error, "trying to execute OP_DUP on a 1 element stack"}
-  def execute(_opcode, [_, _]), do: {:error, "trying to execute OP_DUP on a 2 elements stack"}
-  def execute(_opcode, [_, _, _]), do: {:error, "trying to execute OP_DUP on a 3 elements stack"}
+  def execute(_opcode, []), do: {:error, "trying to execute OP_2OVER on an empty stack"}
+  def execute(_opcode, [_]), do: {:error, "trying to execute OP_2OVER on a 1 element stack"}
+  def execute(_opcode, [_, _]), do: {:error, "trying to execute OP_2OVER on a 2 elements stack"}
+  def execute(_opcode, [_, _, _]), do: {:error, "trying to execute OP_2OVER on a 3 elements stack"}
 
   def execute(_opcode, [x1, x2, x3, x4] ++ rest) do
     {:ok, [x1, x2, x3, x4, x1, x2] ++ rest}
