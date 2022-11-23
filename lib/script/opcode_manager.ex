@@ -15,6 +15,7 @@ defmodule BitcoinLib.Script.OpcodeManager do
   @verify FlowControl.Verify.v()
   @return FlowControl.Return.v()
   @dup Stack.Dup.v()
+  @rot Stack.Rot.v()
   @equal BitwiseLogic.Equal.v()
   @equal_verify BitwiseLogic.EqualVerify.v()
   @hash160 Crypto.Hash160.v()
@@ -48,6 +49,10 @@ defmodule BitcoinLib.Script.OpcodeManager do
 
   def encode_opcode(%Stack.Dup{}) do
     Stack.Dup.encode()
+  end
+
+  def encode_opcode(%Stack.Rot{}) do
+    Stack.Rot.encode()
   end
 
   def encode_opcode(%Crypto.Hash160{}) do
@@ -118,6 +123,10 @@ defmodule BitcoinLib.Script.OpcodeManager do
 
   def extract_from_script(<<@dup::8, remaining::bitstring>>, _whole_script) do
     {:opcode, %Stack.Dup{}, remaining}
+  end
+
+  def extract_from_script(<<@rot::8, remaining::bitstring>>, _whole_script) do
+    {:opcode, %Stack.Rot{}, remaining}
   end
 
   def extract_from_script(<<@equal::8, remaining::bitstring>>, _whole_script) do
