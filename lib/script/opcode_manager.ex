@@ -105,8 +105,13 @@ defmodule BitcoinLib.Script.OpcodeManager do
     {:opcode, %Constants.Two{}, remaining}
   end
 
-  def extract_from_script(<<@push_data_1::8, remaining::bitstring>>, _whole_script) do
-    {:opcode, %Constants.PushData1{}, remaining}
+  def extract_from_script(
+        <<@push_data_1::8, data_length::8, remaining::bitstring>>,
+        _whole_script
+      ) do
+    <<data::bitstring-size(data_length*8), remaining::bitstring>> = remaining
+
+    {:data, data, remaining}
   end
 
   def extract_from_script(<<@nop::8, remaining::bitstring>>, _whole_script) do
