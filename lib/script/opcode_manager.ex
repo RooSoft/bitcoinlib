@@ -28,6 +28,7 @@ defmodule BitcoinLib.Script.OpcodeManager do
   @drop Stack.Drop.v()
   @dup Stack.Dup.v()
   @rot Stack.Rot.v()
+  @two_over Stack.TwoOver.v()
   @two_swap Stack.TwoSwap.v()
   @equal BitwiseLogic.Equal.v()
   @equal_verify BitwiseLogic.EqualVerify.v()
@@ -83,6 +84,10 @@ defmodule BitcoinLib.Script.OpcodeManager do
 
   def encode_opcode(%Stack.Rot{}) do
     Stack.Rot.encode()
+  end
+
+  def encode_opcode(%Stack.TwoOver{}) do
+    Stack.TwoOver.encode()
   end
 
   def encode_opcode(%Stack.TwoSwap{}) do
@@ -206,6 +211,10 @@ defmodule BitcoinLib.Script.OpcodeManager do
 
   def extract_from_script(<<@dup::8, remaining::bitstring>>, _whole_script) do
     {:opcode, %Stack.Dup{}, remaining}
+  end
+
+  def extract_from_script(<<@two_over::8, remaining::bitstring>>, _whole_script) do
+    {:opcode, %Stack.TwoOver{}, remaining}
   end
 
   def extract_from_script(<<@two_swap::8, remaining::bitstring>>, _whole_script) do
