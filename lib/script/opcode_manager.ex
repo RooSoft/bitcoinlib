@@ -151,7 +151,7 @@ defmodule BitcoinLib.Script.OpcodeManager do
   def extract_from_script(<<unknown_opcode::8, remaining::bitstring>> = script, _whole_script) do
     case unknown_opcode do
       opcode when opcode in 0x01..0x4B -> extract_and_return_data(script)
-      _ -> {:error, "trying to extract an unknown upcode: #{unknown_opcode}", remaining}
+      _ -> {:error, "trying to extract an unknown opcode: #{unknown_opcode}", remaining}
     end
   end
 
