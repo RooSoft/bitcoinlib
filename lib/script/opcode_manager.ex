@@ -123,6 +123,10 @@ defmodule BitcoinLib.Script.OpcodeManager do
     FlowControl.Nop.encode()
   end
 
+  def encode_opcode(%FlowControl.Verify{}) do
+    FlowControl.Return.encode()
+  end
+
   def encode_opcode(%FlowControl.Return{}) do
     FlowControl.Return.encode()
   end
