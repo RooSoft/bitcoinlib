@@ -53,7 +53,7 @@ defmodule BitcoinLib.Script.Opcodes.FlowControl.Nop do
       ...> |> BitcoinLib.Script.Opcodes.FlowControl.Nop.execute(stack)
       {:ok, [3]}
   """
-  @spec execute(%Nop{}, list()) :: {:error, binary()}
+  @spec execute(%Nop{}, list()) :: {:ok, list()}
   def execute(%Nop{}, stack) do
     {:ok, stack}
   end
