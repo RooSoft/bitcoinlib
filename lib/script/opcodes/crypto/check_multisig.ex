@@ -40,6 +40,18 @@ defmodule BitcoinLib.Script.Opcodes.Crypto.CheckMultiSig do
   end
 
   @doc """
+  Returns <<0xae>>
+
+  ## Examples
+      iex> BitcoinLib.Script.Opcodes.Crypto.CheckMultiSig.encode()
+      <<0xae>>
+  """
+  @spec encode() :: <<_::8>>
+  def encode() do
+    <<@value::8>>
+  end
+
+  @doc """
   NOT IMPLEMENTED YET
   """
   def execute(%CheckMultiSig{}, []) do
