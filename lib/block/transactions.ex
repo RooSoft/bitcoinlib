@@ -40,6 +40,10 @@ defmodule BitcoinLib.Block.Transactions do
         <<>> -> {:ok, transactions}
         _ -> extract_next_transaction(transactions, remaining)
       end
+    else
+      {:error, message} ->
+        transaction_count = Enum.count(transactions)
+        {:error, "#{transaction_count} transactions in the block, #{message}"}
     end
   end
 
