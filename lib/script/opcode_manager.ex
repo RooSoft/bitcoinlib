@@ -3,7 +3,10 @@ defmodule BitcoinLib.Script.OpcodeManager do
   Converts back and forts from script to opcode list
   """
 
+  alias BitcoinLib.Script.Opcodes.Arithmetic
+
   alias BitcoinLib.Script.Opcodes.{
+    Arithmetic,
     BitwiseLogic,
     Constants,
     Crypto,
@@ -33,6 +36,7 @@ defmodule BitcoinLib.Script.OpcodeManager do
   @two_swap Stack.TwoSwap.v()
   @equal BitwiseLogic.Equal.v()
   @equal_verify BitwiseLogic.EqualVerify.v()
+  @min Arithmetic.Min.v()
   @ripemd160 Crypto.Ripemd160.v()
   @sha256 Crypto.Sha256.v()
   @hash160 Crypto.Hash160.v()
@@ -137,6 +141,10 @@ defmodule BitcoinLib.Script.OpcodeManager do
 
   def encode_opcode(%BitwiseLogic.Equal{}) do
     BitwiseLogic.Equal.encode()
+  end
+
+  def encode_opcode(%Arithmetic.Min{}) do
+    Arithmetic.Min.encode()
   end
 
   def encode_opcode(%Crypto.CheckSig{}) do
@@ -244,6 +252,10 @@ defmodule BitcoinLib.Script.OpcodeManager do
 
   def extract_from_script(<<@equal_verify::8, remaining::bitstring>>, _whole_script) do
     {:opcode, %BitwiseLogic.EqualVerify{}, remaining}
+  end
+
+  def extract_from_script(<<@min::8, remaining::bitstring>>, _whole_script) do
+    {:opcode, %Arithmetic.Min{}, remaining}
   end
 
   def extract_from_script(<<@sha256::8, remaining::bitstring>>, _whole_script) do
