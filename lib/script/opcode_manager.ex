@@ -20,6 +20,7 @@ defmodule BitcoinLib.Script.OpcodeManager do
   @equal BitwiseLogic.Equal.v()
   @equal_verify BitwiseLogic.EqualVerify.v()
   @ripemd160 Crypto.Ripemd160.v()
+  @sha256 Crypto.Sha256.v()
   @hash160 Crypto.Hash160.v()
   @check_sig Crypto.CheckSig.v()
   @check_sig_verify Crypto.CheckSigVerify.v()
@@ -59,6 +60,10 @@ defmodule BitcoinLib.Script.OpcodeManager do
 
   def encode_opcode(%Stack.Rot{}) do
     Stack.Rot.encode()
+  end
+
+  def encode_opcode(%Crypto.Sha256{}) do
+    Crypto.Sha256.encode()
   end
 
   def encode_opcode(%Crypto.Ripemd160{}) do
@@ -154,6 +159,10 @@ defmodule BitcoinLib.Script.OpcodeManager do
 
   def extract_from_script(<<@equal_verify::8, remaining::bitstring>>, _whole_script) do
     {:opcode, %BitwiseLogic.EqualVerify{}, remaining}
+  end
+
+  def extract_from_script(<<@sha256::8, remaining::bitstring>>, _whole_script) do
+    {:opcode, %Crypto.Sha256{}, remaining}
   end
 
   def extract_from_script(<<@ripemd160::8, remaining::bitstring>>, _whole_script) do
