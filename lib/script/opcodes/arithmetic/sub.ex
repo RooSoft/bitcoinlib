@@ -43,7 +43,7 @@ defmodule BitcoinLib.Script.Opcodes.Arithmetic.Sub do
   end
 
   @doc """
-  The input is made positive.
+  b is subtracted from a.
 
   ## Examples
       iex> BitcoinLib.Script.Opcodes.Arithmetic.Sub.execute(
