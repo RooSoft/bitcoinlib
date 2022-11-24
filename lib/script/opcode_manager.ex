@@ -40,6 +40,7 @@ defmodule BitcoinLib.Script.OpcodeManager do
   @equal_verify BitwiseLogic.EqualVerify.v()
   @min Arithmetic.Min.v()
   @ripemd160 Crypto.Ripemd160.v()
+  @sha1 Crypto.Sha1.v()
   @sha256 Crypto.Sha256.v()
   @hash160 Crypto.Hash160.v()
   @hash256 Crypto.Hash256.v()
@@ -112,6 +113,10 @@ defmodule BitcoinLib.Script.OpcodeManager do
 
   def encode_opcode(%Stack.TwoSwap{}) do
     Stack.TwoSwap.encode()
+  end
+
+  def encode_opcode(%Crypto.Sha1{}) do
+    Crypto.Sha1.encode()
   end
 
   def encode_opcode(%Crypto.Sha256{}) do
@@ -284,6 +289,10 @@ defmodule BitcoinLib.Script.OpcodeManager do
 
   def extract_from_script(<<@min::8, remaining::bitstring>>, _whole_script) do
     {:opcode, %Arithmetic.Min{}, remaining}
+  end
+
+  def extract_from_script(<<@sha1::8, remaining::bitstring>>, _whole_script) do
+    {:opcode, %Crypto.Sha1{}, remaining}
   end
 
   def extract_from_script(<<@sha256::8, remaining::bitstring>>, _whole_script) do
