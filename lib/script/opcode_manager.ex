@@ -41,8 +41,9 @@ defmodule BitcoinLib.Script.OpcodeManager do
   @depth Stack.Depth.v()
   @drop Stack.Drop.v()
   @dup Stack.Dup.v()
-  @swap Stack.Swap.v()
   @rot Stack.Rot.v()
+  @swap Stack.Swap.v()
+  @two_dup Stack.TwoDup.v()
   @two_over Stack.TwoOver.v()
   @two_swap Stack.TwoSwap.v()
   @size Splice.Size.v()
@@ -139,12 +140,16 @@ defmodule BitcoinLib.Script.OpcodeManager do
     Stack.Dup.encode()
   end
 
+  def encode_opcode(%Stack.Rot{}) do
+    Stack.Rot.encode()
+  end
+
   def encode_opcode(%Stack.Swap{}) do
     Stack.Swap.encode()
   end
 
-  def encode_opcode(%Stack.Rot{}) do
-    Stack.Rot.encode()
+  def encode_opcode(%Stack.TwoDup{}) do
+    Stack.TwoDup.encode()
   end
 
   def encode_opcode(%Stack.TwoOver{}) do
@@ -387,8 +392,16 @@ defmodule BitcoinLib.Script.OpcodeManager do
     {:opcode, %Stack.Dup{}, remaining}
   end
 
+  def extract_from_script(<<@rot::8, remaining::bitstring>>, _whole_script) do
+    {:opcode, %Stack.Rot{}, remaining}
+  end
+
   def extract_from_script(<<@swap::8, remaining::bitstring>>, _whole_script) do
     {:opcode, %Stack.Swap{}, remaining}
+  end
+
+  def extract_from_script(<<@two_dup::8, remaining::bitstring>>, _whole_script) do
+    {:opcode, %Stack.TwoDup{}, remaining}
   end
 
   def extract_from_script(<<@two_over::8, remaining::bitstring>>, _whole_script) do
@@ -401,10 +414,6 @@ defmodule BitcoinLib.Script.OpcodeManager do
 
   def extract_from_script(<<@size::8, remaining::bitstring>>, _whole_script) do
     {:opcode, %Splice.Size{}, remaining}
-  end
-
-  def extract_from_script(<<@rot::8, remaining::bitstring>>, _whole_script) do
-    {:opcode, %Stack.Rot{}, remaining}
   end
 
   def extract_from_script(<<@equal::8, remaining::bitstring>>, _whole_script) do
