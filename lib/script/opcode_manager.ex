@@ -42,6 +42,7 @@ defmodule BitcoinLib.Script.OpcodeManager do
   @ripemd160 Crypto.Ripemd160.v()
   @sha256 Crypto.Sha256.v()
   @hash160 Crypto.Hash160.v()
+  @hash256 Crypto.Hash256.v()
   @code_separator Crypto.CodeSeparator.v()
   @check_sig Crypto.CheckSig.v()
   @check_sig_verify Crypto.CheckSigVerify.v()
@@ -127,6 +128,10 @@ defmodule BitcoinLib.Script.OpcodeManager do
 
   def encode_opcode(%Crypto.Hash160{}) do
     Crypto.Hash160.encode()
+  end
+
+  def encode_opcode(%Crypto.Hash256{}) do
+    Crypto.Hash256.encode()
   end
 
   def encode_opcode(%FlowControl.If{}) do
@@ -291,6 +296,10 @@ defmodule BitcoinLib.Script.OpcodeManager do
 
   def extract_from_script(<<@hash160::8, remaining::bitstring>>, _whole_script) do
     {:opcode, %Crypto.Hash160{}, remaining}
+  end
+
+  def extract_from_script(<<@hash256::8, remaining::bitstring>>, _whole_script) do
+    {:opcode, %Crypto.Hash256{}, remaining}
   end
 
   def extract_from_script(<<@code_separator::8, remaining::bitstring>>, _whole_script) do
