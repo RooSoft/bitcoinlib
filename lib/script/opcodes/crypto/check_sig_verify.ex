@@ -31,6 +31,18 @@ defmodule BitcoinLib.Script.Opcodes.Crypto.CheckSigVerify do
   end
 
   @doc """
+  Returns <<0xad>>
+
+  ## Examples
+      iex> BitcoinLib.Script.Opcodes.Crypto.CheckSigVerify.encode()
+      <<0xad>>
+  """
+  @spec encode() :: <<_::8>>
+  def encode() do
+    <<@value::8>>
+  end
+
+  @doc """
   NOT IMPLEMENTED YET
   """
   @spec execute(%CheckSigVerify{}, list()) :: {:ok, [list()]} | {:error, binary()}

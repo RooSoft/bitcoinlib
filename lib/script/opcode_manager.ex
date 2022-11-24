@@ -227,6 +227,10 @@ defmodule BitcoinLib.Script.OpcodeManager do
     Crypto.CheckSig.encode()
   end
 
+  def encode_opcode(%Crypto.CheckSigVerify{}) do
+    Crypto.CheckSigVerify.encode()
+  end
+
   def encode_opcode(%Crypto.CheckMultiSig{}) do
     Crypto.CheckMultiSig.encode()
   end
