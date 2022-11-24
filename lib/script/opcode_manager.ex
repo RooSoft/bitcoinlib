@@ -337,8 +337,12 @@ defmodule BitcoinLib.Script.OpcodeManager do
     Crypto.CheckMultiSig.encode()
   end
 
-  def encode_opcode(%Locktime.CheckLockTimeVerify{}) do
+  def encode_opcode(%Crypto.CheckMultiSigVerify{}) do
     Locktime.CheckLockTimeVerify.encode()
+  end
+
+  def encode_opcode(%Locktime.CheckLockTimeVerify{}) do
+    Crypto.CheckMultiSigVerify.encode()
   end
 
   def encode_opcode(%Reserved.Nop1{}) do
