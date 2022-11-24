@@ -41,9 +41,6 @@ defmodule BitcoinLib.Transaction.OutputList do
     case Output.extract_from(remaining) do
       {:ok, output, remaining} ->
         decode(remaining, count - 1, [output | outputs])
-
-      {:error, message} ->
-        {:error, message}
     end
   end
 end

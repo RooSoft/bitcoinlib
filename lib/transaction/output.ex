@@ -32,18 +32,19 @@ defmodule BitcoinLib.Transaction.Output do
         <<0, 0, 0, 0>>
       }
   """
-  @spec extract_from(binary()) :: {:ok, %Output{}, bitstring()} | {:error, binary()}
+  @spec extract_from(binary()) ::
+          {:ok, %Output{}, bitstring()} | {:error, binary(), bitstring(), bitstring()}
   def extract_from(<<value::little-64, remaining::bitstring>>) do
     case extract_script_pub_key(remaining) do
       {:ok, script_pub_key, remaining} ->
         output = %Output{value: value, script_pub_key: script_pub_key}
         {:ok, output, remaining}
 
-      {:error, message} ->
+      {:error, message, remaining_from_script, remaining} ->
         output = %Output{
           value: value,
           script_pub_key: [],
-          invalid_script: remaining,
+          invalid_script: remaining_from_script,
           error_message: message
         }
 
@@ -90,12 +91,15 @@ defmodule BitcoinLib.Transaction.Output do
           remaining
 
         case Script.parse(script_pub_key) do
-          {:ok, script_pub_key} -> {:ok, script_pub_key, remaining}
-          {:error, message} -> {:error, message}
+          {:ok, script_pub_key} ->
+            {:ok, script_pub_key, remaining}
+
+          {:error, message} ->
+            {:error, message, script_pub_key, remaining}
         end
 
       false ->
-        {:error, "badly formatted script pub key"}
+        {:error, "badly formatted script pub key", remaining}
     end
   end
 end

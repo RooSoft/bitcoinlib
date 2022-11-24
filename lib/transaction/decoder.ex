@@ -192,9 +192,6 @@ defmodule BitcoinLib.Transaction.Decoder do
       {:ok, outputs, remaining} ->
         %{map | remaining: remaining}
         |> Map.put(:outputs, Enum.reverse(outputs))
-
-      {:error, message} ->
-        Map.put(map, :error, "in transaction outputs, " <> message)
     end
   end
 

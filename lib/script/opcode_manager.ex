@@ -29,6 +29,7 @@ defmodule BitcoinLib.Script.OpcodeManager do
   @sixteen Constants.Sixteen.v()
   @push_data_1 Constants.PushData1.v()
   @push_data_2 Constants.PushData2.v()
+  @push_data_4 Constants.PushData4.v()
   @nop FlowControl.Nop.v()
   @if FlowControl.If.v()
   @else_ FlowControl.Else.v()
@@ -115,6 +116,10 @@ defmodule BitcoinLib.Script.OpcodeManager do
 
   def encode_opcode(%Constants.PushData2{}) do
     Constants.PushData2.encode()
+  end
+
+  def encode_opcode(%Constants.PushData4{}) do
+    Constants.PushData4.encode()
   end
 
   def encode_opcode(%Stack.ToAltStack{}) do
@@ -332,21 +337,75 @@ defmodule BitcoinLib.Script.OpcodeManager do
   end
 
   def extract_from_script(
-        <<@push_data_1::8, data_length::8, remaining::bitstring>>,
+        <<@push_data_1::8, remaining::bitstring>>,
         _whole_script
       ) do
-    <<data::bitstring-size(data_length * 8), remaining::bitstring>> = remaining
+    if byte_size(remaining) >= 1 do
+      <<data_byte_size::8, remaining::bitstring>> = remaining
+      remaining_size = byte_size(remaining)
 
-    {:data, data, remaining}
+      if data_byte_size <= remaining_size do
+        <<data::bitstring-size(data_byte_size * 8), remaining::bitstring>> = remaining
+
+        {:data, data, remaining}
+      else
+        {
+          :error,
+          "OP_PUSHDATA1: trying to get #{data_byte_size} bytes out of a #{remaining_size} bytes binary",
+          remaining
+        }
+      end
+    else
+      {:error, "no data while trying to extract a OP_PUSHDATA1", remaining}
+    end
   end
 
   def extract_from_script(
-        <<@push_data_2::8, data_length::little-16, remaining::bitstring>>,
+        <<@push_data_2::8, remaining::bitstring>>,
         _whole_script
       ) do
-    <<data::bitstring-size(data_length * 8), remaining::bitstring>> = remaining
+    if byte_size(remaining) >= 2 do
+      <<data_byte_size::16, remaining::bitstring>> = remaining
+      remaining_size = byte_size(remaining)
 
-    {:data, data, remaining}
+      if data_byte_size <= remaining_size do
+        <<data::bitstring-size(data_byte_size * 8), remaining::bitstring>> = remaining
+
+        {:data, data, remaining}
+      else
+        {
+          :error,
+          "OP_PUSHDATA2: trying to get #{data_byte_size} bytes out of a #{remaining_size} bytes binary",
+          remaining
+        }
+      end
+    else
+      {:error, "no data while trying to extract a OP_PUSHDATA2", remaining}
+    end
+  end
+
+  def extract_from_script(
+        <<@push_data_4::8, remaining::bitstring>>,
+        _whole_script
+      ) do
+    if byte_size(remaining) >= 2 do
+      <<data_byte_size::32, remaining::bitstring>> = remaining
+      remaining_size = byte_size(remaining)
+
+      if data_byte_size <= remaining_size do
+        <<data::bitstring-size(data_byte_size * 8), remaining::bitstring>> = remaining
+
+        {:data, data, remaining}
+      else
+        {
+          :error,
+          "OP_PUSHDATA4: trying to get #{data_byte_size} bytes out of a #{remaining_size} bytes binary",
+          remaining
+        }
+      end
+    else
+      {:error, "no data while trying to extract a OP_PUSHDATA4", remaining}
+    end
   end
 
   def extract_from_script(<<@nop::8, remaining::bitstring>>, _whole_script) do
