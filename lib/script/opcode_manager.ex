@@ -13,7 +13,8 @@ defmodule BitcoinLib.Script.OpcodeManager do
     FlowControl,
     Stack,
     Locktime,
-    Reserved
+    Reserved,
+    Splice
   }
 
   @byte 8
@@ -38,6 +39,7 @@ defmodule BitcoinLib.Script.OpcodeManager do
   @rot Stack.Rot.v()
   @two_over Stack.TwoOver.v()
   @two_swap Stack.TwoSwap.v()
+  @size Splice.Size.v()
   @equal BitwiseLogic.Equal.v()
   @equal_verify BitwiseLogic.EqualVerify.v()
   @min Arithmetic.Min.v()
@@ -115,6 +117,10 @@ defmodule BitcoinLib.Script.OpcodeManager do
 
   def encode_opcode(%Stack.TwoSwap{}) do
     Stack.TwoSwap.encode()
+  end
+
+  def encode_opcode(%Splice.Size{}) do
+    Splice.Size.encode()
   end
 
   def encode_opcode(%Crypto.Sha1{}) do
@@ -291,6 +297,10 @@ defmodule BitcoinLib.Script.OpcodeManager do
 
   def extract_from_script(<<@two_swap::8, remaining::bitstring>>, _whole_script) do
     {:opcode, %Stack.TwoSwap{}, remaining}
+  end
+
+  def extract_from_script(<<@size::8, remaining::bitstring>>, _whole_script) do
+    {:opcode, %Splice.Size{}, remaining}
   end
 
   def extract_from_script(<<@rot::8, remaining::bitstring>>, _whole_script) do
