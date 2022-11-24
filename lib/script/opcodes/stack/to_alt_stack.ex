@@ -5,8 +5,8 @@ defmodule BitcoinLib.Script.Opcodes.Stack.ToAltStack do
   Word OP_TOALTSTACK
   Opcode 107
   Hex 0x6b
-  Input nothing
-  Output stack size
+  Input x1
+  Output (alt)x1
   Puts the input onto the top of the alt stack. Removes it from the main stack.
   """
 
