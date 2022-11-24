@@ -45,6 +45,7 @@ defmodule BitcoinLib.Script.OpcodeManager do
   @less_than Arithmetic.LessThan.v()
   @greater_than Arithmetic.GreaterThan.v()
   @negate Arithmetic.Negate.v()
+  @abs Arithmetic.Abs.v()
   @min Arithmetic.Min.v()
   @ripemd160 Crypto.Ripemd160.v()
   @sha1 Crypto.Sha1.v()
@@ -194,6 +195,10 @@ defmodule BitcoinLib.Script.OpcodeManager do
     Arithmetic.Negate.encode()
   end
 
+  def encode_opcode(%Arithmetic.Abs{}) do
+    Arithmetic.Abs.encode()
+  end
+
   def encode_opcode(%Arithmetic.Min{}) do
     Arithmetic.Min.encode()
   end
@@ -340,6 +345,10 @@ defmodule BitcoinLib.Script.OpcodeManager do
 
   def extract_from_script(<<@negate::8, remaining::bitstring>>, _whole_script) do
     {:opcode, %Arithmetic.Negate{}, remaining}
+  end
+
+  def extract_from_script(<<@abs::8, remaining::bitstring>>, _whole_script) do
+    {:opcode, %Arithmetic.Abs{}, remaining}
   end
 
   def extract_from_script(<<@min::8, remaining::bitstring>>, _whole_script) do
