@@ -6,8 +6,8 @@ defmodule BitcoinLib.Script.Opcodes.Constants.Five do
   Opcode 85
   Hex 0x55
   Input Nothing
-  Output 4
-  The number 4 is pushed onto the stack.
+  Output 5
+  The number 5 is pushed onto the stack.
   """
 
   @behaviour BitcoinLib.Script.Opcode
@@ -43,7 +43,7 @@ defmodule BitcoinLib.Script.Opcodes.Constants.Five do
   end
 
   @doc """
-  The number 4 is pushed onto the stack.
+  The number 5 is pushed onto the stack.
 
   ## Examples
       iex> BitcoinLib.Script.Opcodes.Constants.Five.execute(
