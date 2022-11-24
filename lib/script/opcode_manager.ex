@@ -365,7 +365,7 @@ defmodule BitcoinLib.Script.OpcodeManager do
         _whole_script
       ) do
     if byte_size(remaining) >= 2 do
-      <<data_byte_size::16, remaining::bitstring>> = remaining
+      <<data_byte_size::little-16, remaining::bitstring>> = remaining
       remaining_size = byte_size(remaining)
 
       if data_byte_size <= remaining_size do
@@ -389,7 +389,7 @@ defmodule BitcoinLib.Script.OpcodeManager do
         _whole_script
       ) do
     if byte_size(remaining) >= 2 do
-      <<data_byte_size::32, remaining::bitstring>> = remaining
+      <<data_byte_size::little-32, remaining::bitstring>> = remaining
       remaining_size = byte_size(remaining)
 
       if data_byte_size <= remaining_size do
