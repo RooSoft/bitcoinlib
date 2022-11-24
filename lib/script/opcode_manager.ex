@@ -536,10 +536,20 @@ defmodule BitcoinLib.Script.OpcodeManager do
     %CompactInteger{value: data_length, remaining: remaining} =
       CompactInteger.extract_from(script)
 
-    data_length = data_length * @byte
+    remaining_size = byte_size(remaining)
 
-    <<data::bitstring-size(data_length), remaining::bitstring>> = remaining
+    if data_length <= remaining_size do
+      bits_data_length = data_length * @byte
 
-    {:data, data, remaining}
+      <<data::bitstring-size(bits_data_length), remaining::bitstring>> = remaining
+
+      {:data, data, remaining}
+    else
+      {
+        :error,
+        "trying to get #{data_length} bytes out of a #{remaining_size} bytes binary",
+        remaining
+      }
+    end
   end
 end

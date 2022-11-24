@@ -3,7 +3,7 @@ defmodule BitcoinLib.Transaction.Output do
   Based on https://learnmeabitcoin.com/technical/output
   """
 
-  defstruct [:value, :script_pub_key]
+  defstruct [:value, :script_pub_key, :invalid_script, :error_message]
 
   alias BitcoinLib.Signing.Psbt.CompactInteger
   alias BitcoinLib.Transaction.Output
@@ -40,7 +40,14 @@ defmodule BitcoinLib.Transaction.Output do
         {:ok, output, remaining}
 
       {:error, message} ->
-        {:error, message}
+        output = %Output{
+          value: value,
+          script_pub_key: [],
+          invalid_script: remaining,
+          error_message: message
+        }
+
+        {:ok, output, remaining}
     end
   end
 
