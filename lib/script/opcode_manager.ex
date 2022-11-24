@@ -28,6 +28,7 @@ defmodule BitcoinLib.Script.OpcodeManager do
   @nop FlowControl.Nop.v()
   @if FlowControl.If.v()
   @else_ FlowControl.Else.v()
+  @end_if FlowControl.EndIf.v()
   @verify FlowControl.Verify.v()
   @return FlowControl.Return.v()
   @if_dup Stack.IfDup.v()
@@ -148,6 +149,10 @@ defmodule BitcoinLib.Script.OpcodeManager do
     FlowControl.Else.encode()
   end
 
+  def encode_opcode(%FlowControl.EndIf{}) do
+    FlowControl.EndIf.encode()
+  end
+
   def encode_opcode(%FlowControl.Nop{}) do
     FlowControl.Nop.encode()
   end
@@ -250,6 +255,10 @@ defmodule BitcoinLib.Script.OpcodeManager do
 
   def extract_from_script(<<@else_::8, remaining::bitstring>>, _whole_script) do
     {:opcode, %FlowControl.Else{}, remaining}
+  end
+
+  def extract_from_script(<<@end_if::8, remaining::bitstring>>, _whole_script) do
+    {:opcode, %FlowControl.EndIf{}, remaining}
   end
 
   def extract_from_script(<<@verify::8, remaining::bitstring>>, _whole_script) do
