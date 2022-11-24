@@ -43,7 +43,7 @@ defmodule BitcoinLib.Script.Opcodes.Arithmetic.Negate do
   end
 
   @doc """
-  Returns the smaller of a and b.
+  The sign of the input is flipped.
 
   ## Examples
       iex> BitcoinLib.Script.Opcodes.Arithmetic.Negate.execute(
