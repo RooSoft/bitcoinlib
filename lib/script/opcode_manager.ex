@@ -14,7 +14,8 @@ defmodule BitcoinLib.Script.OpcodeManager do
     Stack,
     Locktime,
     Reserved,
-    Splice
+    Splice,
+    PseudoWords
   }
 
   @byte 8
@@ -46,6 +47,7 @@ defmodule BitcoinLib.Script.OpcodeManager do
   @size Splice.Size.v()
   @equal BitwiseLogic.Equal.v()
   @equal_verify BitwiseLogic.EqualVerify.v()
+  @one_add Arithmetic.OneAdd.v()
   @one_sub Arithmetic.OneSub.v()
   @sub Arithmetic.Sub.v()
   @bool_or Arithmetic.BoolOr.v()
@@ -67,6 +69,7 @@ defmodule BitcoinLib.Script.OpcodeManager do
   @check_multi_sig_verify Crypto.CheckMultiSigVerify.v()
   @check_lock_time_verify Locktime.CheckLockTimeVerify.v()
   @nop1 Reserved.Nop1.v()
+  @invalid_opcode PseudoWords.InvalidOpcode.v()
 
   alias BitcoinLib.Signing.Psbt.CompactInteger
   alias BitcoinLib.Script.Opcodes.Data
@@ -207,6 +210,10 @@ defmodule BitcoinLib.Script.OpcodeManager do
     BitwiseLogic.Equal.encode()
   end
 
+  def encode_opcode(%Arithmetic.OneAdd{}) do
+    Arithmetic.OneAdd.encode()
+  end
+
   def encode_opcode(%Arithmetic.OneSub{}) do
     Arithmetic.OneSub.encode()
   end
@@ -261,6 +268,10 @@ defmodule BitcoinLib.Script.OpcodeManager do
 
   def encode_opcode(%Reserved.Nop1{}) do
     Reserved.Nop1.encode()
+  end
+
+  def encode_opcode(%PseudoWords.InvalidOpcode{}) do
+    PseudoWords.InvalidOpcode.encode()
   end
 
   def encode_opcode(%Data{} = data) do
@@ -395,6 +406,10 @@ defmodule BitcoinLib.Script.OpcodeManager do
     {:opcode, %BitwiseLogic.EqualVerify{}, remaining}
   end
 
+  def extract_from_script(<<@one_add::8, remaining::bitstring>>, _whole_script) do
+    {:opcode, %Arithmetic.OneAdd{}, remaining}
+  end
+
   def extract_from_script(<<@one_sub::8, remaining::bitstring>>, _whole_script) do
     {:opcode, %Arithmetic.OneSub{}, remaining}
   end
@@ -473,6 +488,10 @@ defmodule BitcoinLib.Script.OpcodeManager do
 
   def extract_from_script(<<@nop1::8, remaining::bitstring>>, _whole_script) do
     {:opcode, %Reserved.Nop1{}, remaining}
+  end
+
+  def extract_from_script(<<@invalid_opcode::8, remaining::bitstring>>, _whole_script) do
+    {:opcode, %PseudoWords.InvalidOpcode{}, remaining}
   end
 
   def extract_from_script(<<@check_lock_time_verify::8, remaining::bitstring>>, _whole_script) do
