@@ -43,6 +43,7 @@ defmodule BitcoinLib.Script.OpcodeManager do
   @equal BitwiseLogic.Equal.v()
   @equal_verify BitwiseLogic.EqualVerify.v()
   @greater_than Arithmetic.GreaterThan.v()
+  @negate Arithmetic.Negate.v()
   @min Arithmetic.Min.v()
   @ripemd160 Crypto.Ripemd160.v()
   @sha1 Crypto.Sha1.v()
@@ -184,6 +185,10 @@ defmodule BitcoinLib.Script.OpcodeManager do
     Arithmetic.GreaterThan.encode()
   end
 
+  def encode_opcode(%Arithmetic.Negate{}) do
+    Arithmetic.Negate.encode()
+  end
+
   def encode_opcode(%Arithmetic.Min{}) do
     Arithmetic.Min.encode()
   end
@@ -322,6 +327,10 @@ defmodule BitcoinLib.Script.OpcodeManager do
 
   def extract_from_script(<<@greater_than::8, remaining::bitstring>>, _whole_script) do
     {:opcode, %Arithmetic.GreaterThan{}, remaining}
+  end
+
+  def extract_from_script(<<@negate::8, remaining::bitstring>>, _whole_script) do
+    {:opcode, %Arithmetic.Negate{}, remaining}
   end
 
   def extract_from_script(<<@min::8, remaining::bitstring>>, _whole_script) do
