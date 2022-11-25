@@ -15,7 +15,8 @@ defmodule BitcoinLib.Script.OpcodeManager do
     Locktime,
     Reserved,
     Splice,
-    PseudoWords
+    PseudoWords,
+    Data
   }
 
   @byte 8
@@ -165,16 +166,25 @@ defmodule BitcoinLib.Script.OpcodeManager do
     Constants.Sixteen.encode()
   end
 
-  def encode_opcode(%Constants.PushData1{}) do
-    Constants.PushData1.encode()
+  def encode_opcode(%Constants.PushData1{value: value}) do
+    opcode = Constants.PushData1.encode()
+    data = Data.encode(%Data{value: value})
+
+    <<opcode::bitstring-8, data::bitstring>>
   end
 
-  def encode_opcode(%Constants.PushData2{}) do
-    Constants.PushData2.encode()
+  def encode_opcode(%Constants.PushData2{value: value}) do
+    opcode = Constants.PushData2.encode()
+    data = Data.encode(%Data{value: value})
+
+    <<opcode::bitstring-8, data::bitstring>>
   end
 
-  def encode_opcode(%Constants.PushData4{}) do
-    Constants.PushData4.encode()
+  def encode_opcode(%Constants.PushData4{value: value}) do
+    opcode = Constants.PushData4.encode()
+    data = Data.encode(%Data{value: value})
+
+    <<opcode::bitstring-8, data::bitstring>>
   end
 
   def encode_opcode(%Stack.ToAltStack{}) do
@@ -450,7 +460,7 @@ defmodule BitcoinLib.Script.OpcodeManager do
       if data_byte_size <= remaining_size do
         <<data::bitstring-size(data_byte_size * 8), remaining::bitstring>> = remaining
 
-        {:data, data, remaining}
+        {:opcode, %Constants.PushData1{value: data}, remaining}
       else
         {
           :error,
@@ -474,7 +484,7 @@ defmodule BitcoinLib.Script.OpcodeManager do
       if data_byte_size <= remaining_size do
         <<data::bitstring-size(data_byte_size * 8), remaining::bitstring>> = remaining
 
-        {:data, data, remaining}
+        {:opcode, %Constants.PushData2{value: data}, remaining}
       else
         {
           :error,
@@ -498,7 +508,7 @@ defmodule BitcoinLib.Script.OpcodeManager do
       if data_byte_size <= remaining_size do
         <<data::bitstring-size(data_byte_size * 8), remaining::bitstring>> = remaining
 
-        {:data, data, remaining}
+        {:opcode, %Constants.PushData4{value: data}, remaining}
       else
         {
           :error,
