@@ -60,12 +60,12 @@ defmodule BitcoinLib.Transaction.Decoder do
          is_coinbase?
        ) do
     result =
-      %{remaining: remaining}
+      %{witnesses: [], remaining: remaining}
       |> extract_input_count
       |> extract_inputs(is_coinbase?)
       |> extract_output_count
       |> extract_outputs
-      |> extract_witness
+      |> extract_witnesses
       |> extract_locktime
       |> validate_outputs
 
@@ -76,7 +76,7 @@ defmodule BitcoinLib.Transaction.Decoder do
       %{
         inputs: inputs,
         outputs: outputs,
-        witness: witness,
+        witnesses: witnesses,
         locktime: locktime,
         remaining: remaining
       } ->
@@ -85,7 +85,7 @@ defmodule BitcoinLib.Transaction.Decoder do
            version: version,
            inputs: inputs,
            outputs: outputs,
-           witness: witness,
+           witness: witnesses,
            locktime: locktime,
            segwit?: true
          }, remaining}
@@ -160,29 +160,42 @@ defmodule BitcoinLib.Transaction.Decoder do
     |> Map.put(:output_count, output_count)
   end
 
-  defp extract_witness(%{error: message}), do: %{error: message}
+  defp extract_witnesses(%{error: message}), do: %{error: message}
 
-  defp extract_witness(%{remaining: remaining} = map) do
-    %CompactInteger{value: witness_count, remaining: remaining} =
-      CompactInteger.extract_from(remaining, :big_endian)
+  defp extract_witnesses(%{inputs: inputs, remaining: remaining} = map) do
+    {witnesses, remaining} =
+      inputs
+      |> Enum.reduce(
+        {[], remaining},
+        fn _input, {witnesses, remaining} ->
+          {new_witnesses, remaining} = extract_witness_for_input(remaining)
 
-    {witness, remaining} = extract_witness_list([], remaining, witness_count)
+          {[new_witnesses |> Enum.reverse() | witnesses], remaining}
+        end
+      )
 
-    %{map | remaining: remaining}
-    |> Map.put(:witness, witness)
+    %{map | witnesses: witnesses |> Enum.reverse(), remaining: remaining}
   end
 
-  defp extract_witness_list(witnesses, remaining, 0), do: {witnesses, remaining}
+  defp extract_witness_for_input(remaining) do
+    %CompactInteger{value: witness_count, remaining: remaining} =
+      CompactInteger.extract_from(remaining, :little_endian)
 
-  defp extract_witness_list(witnesses, remaining, count) do
-    %CompactInteger{value: witness_length, remaining: remaining} =
-      CompactInteger.extract_from(remaining, :big_endian)
+    if witness_count > 0 do
+      1..witness_count
+      |> Enum.reduce({[], remaining}, fn _, {witnesses, remaining} ->
+        %CompactInteger{value: witness_length, remaining: remaining} =
+          CompactInteger.extract_from(remaining, :little_endian)
 
-    bits_witness_length = witness_length * @byte
+        bits_witness_length = witness_length * @byte
 
-    <<witness::bitstring-size(bits_witness_length), remaining::bitstring>> = remaining
+        <<witness::bitstring-size(bits_witness_length), remaining::bitstring>> = remaining
 
-    extract_witness_list([witness | witnesses], remaining, count - 1)
+        {[witness | witnesses], remaining}
+      end)
+    else
+      {[], remaining}
+    end
   end
 
   defp extract_outputs(%{error: message}), do: %{error: message}

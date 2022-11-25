@@ -38,8 +38,18 @@ defmodule BitcoinLib.Signing.Psbt.Global.UnsignedTx do
 
   defp validate_witness({:error, message}), do: {:error, message}
 
-  defp validate_witness({:ok, %Transaction{segwit?: true, witness: []}}),
-    do: {:error, "unsigned tx serialized with witness serialization format"}
+  defp validate_witness({:ok, %Transaction{segwit?: true, witness: witness} = transaction}) do
+    case get_non_empty_witness_count(witness) do
+      0 -> {:error, "unsigned tx serialized with witness serialization format"}
+      _ -> {:ok, transaction}
+    end
+  end
 
   defp validate_witness({:ok, transaction}), do: {:ok, transaction}
+
+  defp get_non_empty_witness_count(witness) do
+    witness
+    |> Enum.concat()
+    |> Enum.count()
+  end
 end

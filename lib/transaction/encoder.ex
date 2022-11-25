@@ -162,7 +162,7 @@ defmodule BitcoinLib.Transaction.Encoder do
   defp maybe_append_witnesses(%{transaction: %Transaction{witness: []}} = map), do: map
 
   defp maybe_append_witnesses(
-         %{transaction: %Transaction{witness: [public_key, signature]}, encoded: encoded} = map
+         %{transaction: %Transaction{witness: [[signature, public_key]]}, encoded: encoded} = map
        ) do
     encoded_witness = P2wpkhWitness.encode(signature, public_key)
 

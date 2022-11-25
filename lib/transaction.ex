@@ -367,7 +367,10 @@ defimpl Inspect, for: BitcoinLib.Transaction do
 
   defp format_witness(witness) do
     witness
-    |> Enum.map(&format_witness_item/1)
+    |> Enum.map(fn input_witnesses ->
+      input_witnesses
+      |> Enum.map(&format_witness_item/1)
+    end)
   end
 
   defp format_witness_item(witness_item) do
