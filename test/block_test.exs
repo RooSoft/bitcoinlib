@@ -19,7 +19,7 @@ defmodule BitcoinLib.BlockTest do
     filename = "#{__DIR__}/support/raw_blocks/block-39318.raw"
     {:ok, block_data} = File.read(filename)
 
-    {:ok, %Block{transactions: [tx, _coinbase]}} = Block.decode(block_data)
+    {:ok, %Block{transactions: [_coinbase, tx]}} = Block.decode(block_data)
 
     transaction_input_count = Enum.count(tx.inputs)
 

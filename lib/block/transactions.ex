@@ -40,7 +40,7 @@ defmodule BitcoinLib.Block.Transactions do
     Transaction.decode(remaining, true)
   end
 
-  defp extract_next_transaction(transactions, <<>>), do: {:ok, transactions}
+  defp extract_next_transaction(transactions, <<>>), do: {:ok, transactions |> Enum.reverse()}
 
   defp extract_next_transaction(transactions, remaining) do
     with {:ok, transaction, remaining} <- Transaction.decode(remaining, false) do
