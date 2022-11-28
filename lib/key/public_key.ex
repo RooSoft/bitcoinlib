@@ -3,6 +3,8 @@ defmodule BitcoinLib.Key.PublicKey do
   Bitcoin extended public key management module
   """
 
+  require Integer
+
   @enforce_keys [:key]
   defstruct [
     :key,
@@ -310,6 +312,22 @@ defmodule BitcoinLib.Key.PublicKey do
   @spec validate_signature(bitstring(), bitstring(), %PublicKey{}) :: boolean()
   def validate_signature(signature, message, %PublicKey{} = public_key) do
     Crypto.Secp256k1.validate(signature, message, public_key)
+  end
+
+  @doc """
+  Returns a compressed version of an uncompressed public key
+
+  ## Examples
+    iex> <<0x0411DB93E1DCDB8A016B49840F8C53BC1EB68A382E97B1482ECAD7B148A6909A5CB2E0EADDFB84CCF9744464F82E160BFA9B8B64F9D4C03F999B8643F656B412A3::520>>
+    ...> |> BitcoinLib.Key.PublicKey.compress()
+    <<0x0211db93e1dcdb8a016b49840f8c53bc1eb68a382e97b1482ecad7b148a6909a5c::264>>
+  """
+  @spec compress(<<_::520>>) :: <<_::264>>
+  def compress(<<prefix::8, x::bitstring-256, _::bitstring-256>>) do
+    case Integer.is_even(prefix) do
+      true -> <<2::8, x::bitstring-256>>
+      false -> <<3::8, x::bitstring-256>>
+    end
   end
 
   defp add_fingerprint(%PublicKey{} = public_key) do
