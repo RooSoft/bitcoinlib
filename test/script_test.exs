@@ -17,7 +17,7 @@ defmodule BitcoinLib.ScriptTest do
     input = [0x3]
     script = <<@dup::8, @equal::8>>
 
-    {:ok, result} = Script.execute(script, input)
+    {:ok, result} = Script.validate(script, input)
 
     assert true == result
   end
@@ -37,7 +37,7 @@ defmodule BitcoinLib.ScriptTest do
 
     sig = PrivateKey.sign_message(script |> Binary.to_hex(), private_key)
 
-    {:ok, result} = Script.execute(script, [public_key.key, sig])
+    {:ok, result} = Script.validate(script, [public_key.key, sig])
 
     assert true == result
   end

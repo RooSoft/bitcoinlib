@@ -100,6 +100,20 @@ defmodule BitcoinLib.Script do
     |> Runner.execute(stack)
   end
 
+  @spec validate(bitstring(), list()) :: {:ok, boolean()} | {:error, binary()}
+  def validate(script, stack) when is_bitstring(script) do
+    case Parser.parse(script) do
+      {:ok, parsed_script} -> validate(parsed_script, stack)
+      {:error, message} -> {:error, message}
+    end
+  end
+
+  @spec validate(list(), list()) :: {:ok, boolean()} | {:error, binary()}
+  def validate(script, stack) when is_list(script) do
+    script
+    |> Runner.validate(stack)
+  end
+
   @spec identify(bitstring() | list()) ::
           {:unknown} | {:p2pk | :p2pkh | :p2sh | :p2wsh | :p2wpkh, bitstring()}
   def identify(script) do

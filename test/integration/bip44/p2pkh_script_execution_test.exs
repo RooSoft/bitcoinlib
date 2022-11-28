@@ -38,7 +38,7 @@ defmodule BitcoinLib.Test.Integration.Bip44.P2pkhScriptExecutionTest do
 
     script_sig = BitcoinLib.Crypto.Secp256k1.sign(hex_script, private_key)
 
-    result = Script.execute(script, [public_key.key, script_sig])
+    result = Script.validate(script, [public_key.key, script_sig])
 
     assert {:ok, true} = result
   end
