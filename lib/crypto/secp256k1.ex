@@ -49,7 +49,7 @@ defmodule BitcoinLib.Crypto.Secp256k1 do
   ## Examples
       iex> signature = <<0x3044022048b3b0eb98ae5f2c997e41a2630a5e3512f24a1f5b6165e2867847a11b2b22350220032211844eec911dab6d91836a45c37ca1d498433d87b6b09e2f401025131a05::560>>
       ...> message = "76a914c825a1ecf2a6830c4401620c3a16f1995057c2ab88ac"
-      ...> public_key = %BitcoinLib.Key.PublicKey{key: <<0x02702ded1cca9816fa1a94787ffc6f3ace62cd3b63164f76d227d0935a33ee48c3::264>>}
+      ...> public_key = <<0x02702ded1cca9816fa1a94787ffc6f3ace62cd3b63164f76d227d0935a33ee48c3::264>>
       ...> BitcoinLib.Crypto.Secp256k1.validate(signature, message, public_key)
       true
   """
