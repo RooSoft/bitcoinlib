@@ -85,6 +85,33 @@ defmodule BitcoinLib.Transaction.Input do
       input.sequence::little-32>>
   end
 
+  @doc """
+  Replaces a potential signature in the input with []
+
+  ## Examples
+    iex> %BitcoinLib.Transaction.Input{
+    ...>   txid: "77541aeb3c4dac9260b68f74f44c973081a9d4cb2ebe8038b2d70faa201b6bdb",
+    ...>   vout: 1,
+    ...>   script_sig: [
+    ...>     %BitcoinLib.Script.Opcodes.Data{
+    ...>       value: <<0x001479091972186C449EB1DED22B78E40D009BDF0089::176>>
+    ...>     }
+    ...>   ],
+    ...>   sequence: 4_294_967_294
+    ...> }
+    ...> |> BitcoinLib.Transaction.Input.strip_signature
+    %BitcoinLib.Transaction.Input{
+      txid: "77541aeb3c4dac9260b68f74f44c973081a9d4cb2ebe8038b2d70faa201b6bdb",
+      vout: 1,
+      script_sig: [],
+      sequence: 4_294_967_294
+    }
+  """
+  @spec strip_signature(%Input{}) :: %Input{}
+  def strip_signature(%Input{} = input) do
+    %{input | script_sig: <<>>}
+  end
+
   defp format_script_sig(nil), do: {<<0::8>>, <<>>}
   defp format_script_sig(script_sig) when is_list(script_sig), do: script_sig |> Script.encode()
 
