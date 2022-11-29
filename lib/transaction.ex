@@ -7,7 +7,7 @@ defmodule BitcoinLib.Transaction do
   alias BitcoinLib.Crypto
   alias BitcoinLib.Key.PrivateKey
   alias BitcoinLib.Transaction
-  alias BitcoinLib.Transaction.{Encoder, Decoder, Signer}
+  alias BitcoinLib.Transaction.{Input, Encoder, Decoder, Signer}
 
   @doc """
   Converts a hex binary into a %Transaction{} and the remaining unused data
@@ -350,6 +350,54 @@ defmodule BitcoinLib.Transaction do
   @spec sign_and_encode(%Transaction{}, %PrivateKey{}) :: binary()
   def sign_and_encode(%Transaction{} = transaction, %PrivateKey{} = private_key) do
     Signer.sign_and_encode(transaction, private_key)
+  end
+
+    @doc """
+  Signs a transaction and transforms it into a binary that can be sent to the network
+
+  ## Examples
+      iex>  %BitcoinLib.Transaction{
+      ...>    version: 1,
+      ...>    inputs: [
+      ...>      %BitcoinLib.Transaction.Input{
+      ...>        txid: "e4c226432a9319d603b2ed1fa609bffe4cd91f89b3176a9e73b19f7891a92bb6",
+      ...>        vout: 0,
+      ...>        sequence: 0xFFFFFFFF,
+      ...>        script_sig: <<0x76A914AFC3E518577316386188AF748A816CD14CE333F288AC::200>> |> BitcoinLib.Script.parse!()
+      ...>      }
+      ...>    ],
+      ...>    outputs: [%BitcoinLib.Transaction.Output{
+      ...>       script_pub_key: <<0x76a9283265393261373463333431393661303236653839653061643561633431386366393430613361663288ac::360>> |> BitcoinLib.Script.parse!(),
+      ...>       value: 10_000}
+      ...>    ],
+      ...>    locktime: 0
+      ...>  }
+      ...>  |> BitcoinLib.Transaction.strip_signatures()
+      %BitcoinLib.Transaction{
+        version: 1,
+        inputs: [
+          %BitcoinLib.Transaction.Input{
+            txid: "e4c226432a9319d603b2ed1fa609bffe4cd91f89b3176a9e73b19f7891a92bb6",
+            vout: 0,
+            sequence: 0xFFFFFFFF,
+            script_sig: []
+          }
+        ],
+        outputs: [%BitcoinLib.Transaction.Output{
+          script_pub_key: <<0x76a9283265393261373463333431393661303236653839653061643561633431386366393430613361663288ac::360>> |> BitcoinLib.Script.parse!(),
+          value: 10_000}
+        ],
+        locktime: 0
+      }
+      |> BitcoinLib.Transaction.strip_signatures()
+  """
+  @spec strip_signatures(%Transaction{}) :: %Transaction{}
+  def strip_signatures(%Transaction{inputs: inputs} = transaction) do
+    inputs_without_signatures =
+      inputs
+      |> Enum.map(&Input.strip_signature/1)
+
+    %{transaction | inputs: inputs_without_signatures}
   end
 end
 
