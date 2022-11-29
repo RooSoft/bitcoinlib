@@ -103,7 +103,7 @@ defmodule BitcoinLib.Transaction.Input do
     %BitcoinLib.Transaction.Input{
       txid: "77541aeb3c4dac9260b68f74f44c973081a9d4cb2ebe8038b2d70faa201b6bdb",
       vout: 1,
-      script_sig: [],
+      script_sig: <<>>,
       sequence: 4_294_967_294
     }
   """
