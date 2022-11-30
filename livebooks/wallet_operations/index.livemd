@@ -2,10 +2,11 @@
 
 ```elixir
 Mix.install([
-  {:bitcoinlib, "~> 0.2.4"}
+  {:bitcoinlib, "~> 0.4.2"}
 ])
 
-alias BitcoinLib.Key.{PrivateKey, PublicKey, PublicKeyHash, Address}
+alias BitcoinLib.Address
+alias BitcoinLib.Key.{PrivateKey, PublicKey, PublicKeyHash}
 alias BitcoinLib.Key.HD.SeedPhrase
 alias BitcoinLib.Transaction
 alias BitcoinLib.Script
@@ -30,25 +31,24 @@ seed_phrase = "rally celery split order almost twenty ignore record legend learn
 master_private_key = PrivateKey.from_seed_phrase(seed_phrase)
 ```
 
-Derive the receive `private key` and extract a P2PKH `public key hash` that will be useful later.
+Derive the first testnet receive `private key`.
 
 To keep things simple, just know that it's the `44'` in the derivation path that makes it a `P2PKH` transaction. This is a bit outside of the exercise's scope, so let's continue.
 
 ```elixir
 receive_private_key =
   master_private_key
-  |> PrivateKey.from_derivation_path!("m/44'/1'/0'/1/3")
+  |> PrivateKey.from_derivation_path!("m/44'/1'/0'/0/0")
 
-receive_public_key_hash =
+receive_public_key =
   receive_private_key
   |> PublicKey.from_private_key()
-  |> PublicKeyHash.from_public_key()
 ```
 
-Convert the `public key hash` to an `address`, which will be needed by faucets to receive funds
+Convert the `public key` to an `address`, which will be needed by faucets to receive funds
 
 ```elixir
-receive_address = Address.from_public_key_hash(receive_public_key_hash, :testnet)
+receive_address = Address.from_public_key(receive_public_key, :p2pkh, :testnet)
 ```
 
 ## Request some funds
@@ -91,9 +91,9 @@ Here lies the `script pub key`, also known as the `locking script`. This is what
 The following code is defining variables containing what we just talked about.
 
 ```elixir
-transaction_id = "ba9e74b6359c5ff49bb5a1dc0979ce85db8ee45aa90fbf170ff72dec0aad542f"
+transaction_id = "0c2d8359e90ef40bc49973c5bab23148262ddf880caf4a802602e8ce5702fcc1"
 vout = 0
-script_pub_key = "76a9140afcad5c79123211ad61bd4723e1b23e9480f1c788ac"
+script_pub_key = "76a914afc3e518577316386188af748a816cd14ce333f288ac"
 ```
 
 ## Extract parameters
@@ -102,31 +102,29 @@ The above `script pub key` is locking what we call a UTXO which stands for Unspe
 
 Spending from a UTXO invalidates it, creating new ones in the process.
 
-The current UTXO contains `10000` sats. We intend to send `5000` sats to a new address. This leaves `5000` sats remaining. They must end up in two other destinations: `the change` and `the transaction fee`. The change is another UTXO and we'll keep `4000` sats. The fee is what's leftover and the miner who will include the transaction in a new block will keep it. It is thus implied from the three previous amounts:
+The current UTXO contains `500 000` sats. We intend to send `1000` sats to a new address. This leaves `499 000` sats remaining. They must end up in two other destinations: `the change` and `the transaction fee`. A fee also has to be provided, we're gonna leave `500` sats for the miners, leaving `498 500` in the change address:
 
 ```elixir
-original_amount = 3_670_000
-destination_amount = 10000
-change_amount = 3_657_000
-fee = original_amount - destination_amount - change_amount
+original_amount = 500_000
+destination_amount = 1_000
+fee = 500
+change_amount = original_amount - destination_amount - fee
 ```
 
-Let's create two public key hashes: a `destination` and a `change`.
+Let's create two public keys: a `destination` and a `change`.
 
 ```elixir
-destination_public_key_hash =
+destination_public_key =
   master_private_key
-  |> PrivateKey.from_derivation_path!("m/44'/1'/0'/0/6")
+  |> PrivateKey.from_derivation_path!("m/44'/1'/0'/0/1")
   |> PublicKey.from_private_key()
-  |> PublicKeyHash.from_public_key()
 ```
 
 ```elixir
-change_public_key_hash =
+change_public_key =
   master_private_key
-  |> PrivateKey.from_derivation_path!("m/44'/1'/0'/1/4")
+  |> PrivateKey.from_derivation_path!("m/44'/1'/0'/0/1")
   |> PublicKey.from_private_key()
-  |> PublicKeyHash.from_public_key()
 ```
 
 ## Create a transaction
@@ -135,17 +133,21 @@ Now we've got everything we need to create a new transaction and sign it. Let's 
 
 ```elixir
 %Transaction.Spec{}
-|> Transaction.Spec.add_input(
+|> Transaction.Spec.add_input!(
   txid: transaction_id,
   vout: vout,
   redeem_script: script_pub_key
 )
 |> Transaction.Spec.add_output(
-  Script.Types.P2pkh.create(destination_public_key_hash),
+  receive_public_key
+  |> PublicKey.hash()
+  |> Script.Types.P2pkh.create(),
   destination_amount
 )
 |> Transaction.Spec.add_output(
-  Script.Types.P2pkh.create(change_public_key_hash),
+  receive_public_key
+  |> PublicKey.hash()
+  |> Script.Types.P2pkh.create(),
   change_amount
 )
 |> Transaction.Spec.sign_and_encode(receive_private_key)
@@ -159,9 +161,9 @@ In the present context, it returned `05517750a78fb8c38346b1bf5908d71abe728811b64
 
 ## Conclusion
 
-From now on, the previous 10000 sats transaction is considered as spent and can no longer be called a UTXO. Two new ones have been created:
+From now on, the previous 500 000 sats transaction is considered as spent and can no longer be called a UTXO. Two new ones have been created:
 
-* The destination containing 5000 sats
-* The change containing 4000 sats
+* The destination containing 1000 sats
+* The change containing 498 500 sats
 
-The remaining 1000 sats have been donated to the miner. It can be seen on `mempool.space` in the header of the transaction screen.
+The remaining 500 sats have been donated to the miner. It can be seen on `mempool.space` in the header of the transaction screen.
