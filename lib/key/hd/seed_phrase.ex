@@ -128,12 +128,8 @@ defmodule BitcoinLib.Key.HD.SeedPhrase do
 
       {missing_word, valid?}
     end)
-    |> Enum.filter(fn {_, valid?} ->
-      valid?
-    end)
-    |> Enum.map(fn {valid_word, true} ->
-      valid_word
-    end)
+    |> Enum.filter(fn {_, valid?} -> valid? end)
+    |> Enum.map(fn {valid_word, true} -> valid_word end)
   end
 
   defp append_checksum(binary_seed) do
