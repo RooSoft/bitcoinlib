@@ -21,8 +21,6 @@ To do so, just throw 50 dice, and make a string of 50 chars containing the resul
 ```elixir
 {:ok, seed_phrase} =
   SeedPhrase.from_dice_rolls("12345612345612345612345612345612345612345612345612")
-
-seed_phrase = "rally celery split order almost twenty ignore record legend learn chaos decade"
 ```
 
 🔑 Derive the `master private key` from the seed phrase.
