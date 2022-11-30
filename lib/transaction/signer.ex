@@ -6,6 +6,7 @@ defmodule BitcoinLib.Transaction.Signer do
   alias BitcoinLib.Crypto
   alias BitcoinLib.Key.{PrivateKey, PublicKey}
   alias BitcoinLib.Transaction
+  alias BitcoinLib.Script
   alias BitcoinLib.Script.Opcodes
 
   @doc """
@@ -54,10 +55,11 @@ defmodule BitcoinLib.Transaction.Signer do
     # |> PublicKey.validate_signature(hashed_preimage, public_key)
     # |> IO.inspect(label: "is signature valid?")
 
-    encoded_signature = Opcodes.Data.encode(%Opcodes.Data{value: <<signature::bitstring, 1>>})
-    encoded_public_key = Opcodes.Data.encode(%Opcodes.Data{value: public_key.key})
-
-    script_sig = <<encoded_signature::bitstring, encoded_public_key::bitstring>>
+    {_script_sig_length, script_sig} =
+      Script.encode([
+        %Opcodes.Data{value: <<signature::bitstring, 1>>},
+        %Opcodes.Data{value: public_key.key}
+      ])
 
     [old_input] = transaction.inputs
     new_input = %{old_input | script_sig: script_sig}
