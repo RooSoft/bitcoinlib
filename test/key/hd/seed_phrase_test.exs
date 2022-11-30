@@ -80,4 +80,20 @@ defmodule BitcoinLib.Key.HD.SeedPhraseTest do
 
     assert false == result
   end
+
+  test "an invalid dice roll" do
+    invalid_dice_roll = "123456"
+
+    {:error, message} = SeedPhrase.from_dice_rolls(invalid_dice_roll)
+
+    assert message =~ "got 6"
+  end
+
+  test "an invalid dice roll that raises a RuntimeError" do
+    invalid_dice_roll = "123456"
+
+    assert_raise RuntimeError,
+                 "Please provide 50 dice rolls for 12 words or 99 dice rolls for 24 words, got 6",
+                 fn -> SeedPhrase.from_dice_rolls!(invalid_dice_roll) end
+  end
 end

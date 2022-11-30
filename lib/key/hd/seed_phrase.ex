@@ -40,8 +40,9 @@ defmodule BitcoinLib.Key.HD.SeedPhrase do
   """
   @spec from_dice_rolls(binary()) :: {:ok, binary()} | {:error, binary()}
   def from_dice_rolls(dice_rolls) do
-    case Entropy.from_dice_rolls(dice_rolls) do
-      {:ok, entropy} -> {:ok, wordlist_from_entropy(entropy)}
+    with {:ok, entropy} <- Entropy.from_dice_rolls(dice_rolls) do
+      {:ok, wordlist_from_entropy(entropy)}
+    else
       {:error, message} -> {:error, message}
     end
   end
@@ -56,9 +57,10 @@ defmodule BitcoinLib.Key.HD.SeedPhrase do
   """
   @spec from_dice_rolls!(binary()) :: binary()
   def from_dice_rolls!(dice_rolls) do
-    case from_dice_rolls(dice_rolls) do
-      {:ok, wordlist} -> wordlist
-      {:error, message} -> throw(message)
+    with {:ok, wordlist} <- from_dice_rolls(dice_rolls) do
+      wordlist
+    else
+      {:error, message} -> raise message
     end
   end
 
