@@ -241,9 +241,11 @@ defmodule BitcoinLib.Key.PrivateKey do
   @spec from_derivation_path(%PrivateKey{}, binary()) :: {:ok, %PrivateKey{}}
   def from_derivation_path(%PrivateKey{} = private_key, derivation_path_string)
       when is_binary(derivation_path_string) do
-    {:ok, derivation_path} = DerivationPath.parse(derivation_path_string)
-
-    from_derivation_path(private_key, derivation_path)
+    with {:ok, derivation_path} <- DerivationPath.parse(derivation_path_string) do
+      from_derivation_path(private_key, derivation_path)
+    else
+      {:error, message} -> raise message
+    end
   end
 
   @doc """

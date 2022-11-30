@@ -266,7 +266,7 @@ defmodule BitcoinLib.Key.PrivateKeyTest do
              depth: 4,
              index: 1,
              parent_fingerprint: <<0x8DF69D92::32>>,
-             fingerprint: <<0xb4ea7af3::32>>
+             fingerprint: <<0xB4EA7AF3::32>>
            } == child_private_key
   end
 
@@ -301,6 +301,20 @@ defmodule BitcoinLib.Key.PrivateKeyTest do
 
     private_key = PrivateKey.from_derivation_path!(master_private_key, "m/49'/0'/0'/0/0")
 
-    assert <<0x17f8b50f::32>> = private_key.fingerprint
+    assert <<0x17F8B50F::32>> = private_key.fingerprint
+  end
+
+  test "try deriving private key with an invalid derivation key string" do
+    master_private_key =
+      "rally celery split order almost twenty ignore record legend learn chaos decade"
+      |> PrivateKey.from_seed_phrase()
+
+    invalid_derivation_path = "m/0'"
+
+    assert_raise RuntimeError,
+                 "0' is an invalid purpose",
+                 fn ->
+                   PrivateKey.from_derivation_path!(master_private_key, invalid_derivation_path)
+                 end
   end
 end
