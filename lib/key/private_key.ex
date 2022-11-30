@@ -229,7 +229,8 @@ defmodule BitcoinLib.Key.PrivateKey do
         }
       }
   """
-  @spec from_derivation_path(%PrivateKey{}, %DerivationPath{}) :: {:ok, %PrivateKey{}}
+  @spec from_derivation_path(%PrivateKey{}, %DerivationPath{}) ::
+          {:ok, %PrivateKey{}} | {:error, binary()}
   def from_derivation_path(%PrivateKey{} = private_key, %DerivationPath{} = derivation_path) do
     with {:ok, private_key} <- ChildFromDerivationPath.get(private_key, derivation_path) do
       {:ok, add_fingerprint(private_key)}
