@@ -10,6 +10,8 @@ defmodule BitcoinLib.Transaction.Signer do
   alias BitcoinLib.Script.Opcodes
 
   @sighash_all 1
+  @byte 8
+  @four_bytes 32
 
   @doc """
   Takes a transaction and signs it with the private key that's in the second parameter
@@ -76,13 +78,13 @@ defmodule BitcoinLib.Transaction.Signer do
 
   defp create_script_sig(signature, public_key, sighash_type) do
     Script.encode([
-      %Opcodes.Data{value: <<signature::bitstring, sighash_type::8>>},
+      %Opcodes.Data{value: <<signature::bitstring, sighash_type::@byte>>},
       %Opcodes.Data{value: public_key.key}
     ])
     |> elem(1)
   end
 
   defp append_sighash(transaction, sighash) do
-    <<transaction::bitstring, sighash::little-32>>
+    <<transaction::bitstring, sighash::little-@four_bytes>>
   end
 end
