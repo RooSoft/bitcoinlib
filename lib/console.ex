@@ -1,6 +1,15 @@
 defmodule BitcoinLib.Console do
   alias BitcoinLib.Key.{PrivateKey, PublicKey}
 
+  def print_hex(bitstring, message) do
+    hex = Binary.to_hex(bitstring)
+    size = bit_size(bitstring)
+
+    IO.puts("#{message}: <<0x#{hex}::#{size}>>")
+
+    bitstring
+  end
+
   @defaults %{serialization_format: nil}
 
   def write(key, opts \\ [])
