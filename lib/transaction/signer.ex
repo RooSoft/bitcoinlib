@@ -9,6 +9,8 @@ defmodule BitcoinLib.Transaction.Signer do
   alias BitcoinLib.Script
   alias BitcoinLib.Script.Opcodes
 
+  @sighash_all 1
+
   @doc """
   Takes a transaction and signs it with the private key that's in the second parameter
 
@@ -37,44 +39,47 @@ defmodule BitcoinLib.Transaction.Signer do
   """
   @spec sign_and_encode(%Transaction{}, %PrivateKey{}) :: binary()
   def sign_and_encode(%Transaction{} = transaction, %PrivateKey{} = private_key) do
-    transaction_hex = Transaction.encode(transaction)
-
     public_key = PublicKey.from_private_key(private_key)
 
-    hashed_preimage =
-      transaction_hex
-      |> append_sighash(1)
-      |> Crypto.double_sha256()
+    transaction
+    |> create_preimage(@sighash_all)
+    |> create_signature(private_key)
+    |> sign_input(transaction, public_key, @sighash_all)
+    |> encode()
+  end
 
-    signature =
-      hashed_preimage
-      |> PrivateKey.sign_message(private_key)
+  defp create_preimage(transaction, sighash_type) do
+    transaction
+    |> Transaction.encode()
+    |> append_sighash(sighash_type)
+    |> Crypto.double_sha256()
+  end
 
-    #    valid? =
-    # signature
-    # |> PublicKey.validate_signature(hashed_preimage, public_key)
-    # |> IO.inspect(label: "is signature valid?")
+  defp create_signature(preimage, private_key), do: PrivateKey.sign_message(preimage, private_key)
 
-    {_script_sig_length, script_sig} =
-      Script.encode([
-        %Opcodes.Data{value: <<signature::bitstring, 1>>},
-        %Opcodes.Data{value: public_key.key}
-      ])
+  defp sign_input(signature, transaction, public_key, sighash_type) do
+    script_sig =
+      signature
+      |> create_script_sig(public_key, sighash_type)
 
     [old_input] = transaction.inputs
     new_input = %{old_input | script_sig: script_sig}
 
-    transaction = %{transaction | inputs: [new_input]}
+    %{transaction | inputs: [new_input]}
+  end
 
-    # transaction
-    # |> Map.get(:inputs)
-    # |> List.first()
-    # |> Map.get(:script_sig)
-    # |> Binary.to_hex()
-    # |> IO.inspect(limit: :infinity, label: "script sig")
-
-    Transaction.encode(transaction)
+  defp encode(transaction) do
+    transaction
+    |> Transaction.encode()
     |> Binary.to_hex()
+  end
+
+  defp create_script_sig(signature, public_key, sighash_type) do
+    Script.encode([
+      %Opcodes.Data{value: <<signature::bitstring, sighash_type::8>>},
+      %Opcodes.Data{value: public_key.key}
+    ])
+    |> elem(1)
   end
 
   defp append_sighash(transaction, sighash) do
