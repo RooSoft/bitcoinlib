@@ -39,13 +39,13 @@ defmodule BitcoinLib.Transaction.Signer do
   """
   @spec sign_and_encode(%Transaction{}, %PrivateKey{}) :: binary()
   def sign_and_encode(%Transaction{} = transaction, %PrivateKey{} = private_key) do
-    public_key = PublicKey.from_private_key(private_key)
-
-    transaction
-    |> create_preimage(@sighash_all)
-    |> create_signature(private_key)
-    |> sign_input(transaction, public_key, @sighash_all)
-    |> encode()
+    with public_key <- PublicKey.from_private_key(private_key) do
+      transaction
+      |> create_preimage(@sighash_all)
+      |> create_signature(private_key)
+      |> sign_input(transaction, public_key, @sighash_all)
+      |> encode()
+    end
   end
 
   defp create_preimage(transaction, sighash_type) do
