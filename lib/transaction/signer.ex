@@ -17,6 +17,8 @@ defmodule BitcoinLib.Transaction.Signer do
   Takes a transaction and signs it with the private key that's in the second parameter
 
   ## Examples
+      testnet transaction id: 838935b6bf2a16966fe261f23f28a88482f3b3d24c9847b68a56abe90d41ca97
+
       iex>  private_key = BitcoinLib.Key.PrivateKey.from_seed_phrase(
       ...>    "rally celery split order almost twenty ignore record legend learn chaos decade"
       ...>  )
