@@ -6,7 +6,7 @@ Mix.install([
 ])
 
 alias BitcoinLib.Address
-alias BitcoinLib.Key.{PrivateKey, PublicKey, PublicKeyHash}
+alias BitcoinLib.Key.{PrivateKey, PublicKey}
 alias BitcoinLib.Key.HD.SeedPhrase
 alias BitcoinLib.Transaction
 alias BitcoinLib.Script
