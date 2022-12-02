@@ -143,7 +143,7 @@ Now we've got everything we need to create a new transaction and sign it. Let's 
   destination_amount
 )
 |> Transaction.Spec.add_output(
-  receive_public_key
+  change_public_key
   |> PublicKey.hash()
   |> Script.Types.P2pkh.create(),
   change_amount
