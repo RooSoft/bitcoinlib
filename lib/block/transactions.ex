@@ -37,13 +37,13 @@ defmodule BitcoinLib.Block.Transactions do
   end
 
   defp extract_coinbase(remaining) do
-    Transaction.decode(remaining, true)
+    Transaction.decode(remaining)
   end
 
   defp extract_next_transaction(transactions, <<>>), do: {:ok, transactions |> Enum.reverse()}
 
   defp extract_next_transaction(transactions, remaining) do
-    with {:ok, transaction, remaining} <- Transaction.decode(remaining, false) do
+    with {:ok, transaction, remaining} <- Transaction.decode(remaining) do
       extract_next_transaction([transaction | transactions], remaining)
     else
       {:error, message} ->

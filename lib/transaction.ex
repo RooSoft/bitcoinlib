@@ -46,11 +46,11 @@ defmodule BitcoinLib.Transaction do
         <<>>
       }
   """
-  @spec parse(binary(), boolean()) :: {:ok, %Transaction{}, bitstring()} | {:error, binary()}
-  def parse(hex_transaction, is_coinbase? \\ false) do
+  @spec parse(binary()) :: {:ok, %Transaction{}, bitstring()} | {:error, binary()}
+  def parse(hex_transaction) do
     hex_transaction
     |> Binary.from_hex()
-    |> decode(is_coinbase?)
+    |> decode()
   end
 
   @doc """
@@ -58,7 +58,7 @@ defmodule BitcoinLib.Transaction do
 
   ## Examples
       iex> <<0x01000000017b1eabe0209b1fe794124575ef807057c77ada2138ae4fa8d6c4de0398a14f3f0000000000ffffffff01f0ca052a010000001976a914cbc20a7664f2f69e5355aa427045bc15e7c6c77288ac00000000::680>>
-      ...> |> BitcoinLib.Transaction.decode(false)
+      ...> |> BitcoinLib.Transaction.decode()
       {
         :ok,
         %BitcoinLib.Transaction{
@@ -90,13 +90,13 @@ defmodule BitcoinLib.Transaction do
         <<>>
       }
   """
-  @spec decode(bitstring(), boolean()) :: {:ok, %Transaction{}, bitstring()} | {:error, binary()}
-  def decode(encoded_transaction, is_coinbase? \\ false) do
-    with {:ok, transaction, remaining} <- Decoder.to_struct(encoded_transaction, is_coinbase?) do
+  @spec decode(bitstring()) :: {:ok, %Transaction{}, bitstring()} | {:error, binary()}
+  def decode(encoded_transaction) do
+    with {:ok, transaction, remaining} <- Decoder.to_struct(encoded_transaction) do
       transaction =
         transaction
         |> add_id()
-        |> Map.put(:coinbase?, is_coinbase?)
+        |> Map.put(:coinbase?, transaction.coinbase?)
 
       {:ok, transaction, remaining}
     else
@@ -352,7 +352,7 @@ defmodule BitcoinLib.Transaction do
     Signer.sign_and_encode(transaction, private_key)
   end
 
-    @doc """
+  @doc """
   Signs a transaction and transforms it into a binary that can be sent to the network
 
   ## Examples

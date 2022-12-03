@@ -24,18 +24,18 @@ defmodule BitcoinLib.Transaction.InputList do
         <<0x01f0ca052a010000001976a914cbc20a7664f2f69e5355aa427045bc15e7c6c77288ac00000000::312>>
       }
   """
-  @spec extract(bitstring(), integer(), boolean()) ::
+  @spec extract(bitstring(), integer()) ::
           {:ok, list(%Input{}), bitstring()} | {:error, binary()}
-  def extract(remaining, count, is_coinbase? \\ false) do
-    decode(remaining, count, [], is_coinbase?)
+  def extract(remaining, count) do
+    decode(remaining, count, [])
   end
 
-  defp decode(remaining, 0, inputs, _is_coinbase?), do: {:ok, inputs, remaining}
+  defp decode(remaining, 0, inputs), do: {:ok, inputs, remaining}
 
-  defp decode(remaining, count, inputs, is_coinbase?) do
-    case Input.extract_from(remaining, is_coinbase?) do
+  defp decode(remaining, count, inputs) do
+    case Input.extract_from(remaining) do
       {:ok, input, remaining} ->
-        decode(remaining, count - 1, [input | inputs], is_coinbase?)
+        decode(remaining, count - 1, [input | inputs])
 
       {:error, message} ->
         {:error, message}

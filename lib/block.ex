@@ -37,7 +37,11 @@ defmodule BitcoinLib.Block do
                 %BitcoinLib.Transaction.Input{
                   txid: "0000000000000000000000000000000000000000000000000000000000000000",
                   vout: 0xffffffff,
-                  script_sig: <<0x04ffff001d0104455468652054696d65732030332f4a616e2f32303039204368616e63656c6c6f72206f6e206272696e6b206f66207365636f6e64206261696c6f757420666f722062616e6b73::616>>,
+                  script_sig: [
+                    %BitcoinLib.Script.Opcodes.Data{value: <<0xffff001d::32>>},
+                    %BitcoinLib.Script.Opcodes.Data{value: <<0x04::8>>},
+                    %BitcoinLib.Script.Opcodes.Data{value: <<0x5468652054696d65732030332f4a616e2f32303039204368616e63656c6c6f72206f6e206272696e6b206f66207365636f6e64206261696c6f757420666f722062616e6b73::552>>}
+                  ],
                   sequence: 0xffffffff
                 }
               ],
