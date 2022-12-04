@@ -6,6 +6,8 @@ defmodule BitcoinLib.Transaction.Validator.Input do
   alias BitcoinLib.Transaction.Validator.{Prevout, ScriptSig}
   alias BitcoinLib.Transaction.Validator.Input, as: ValidatorInput
 
+  require Logger
+
   defstruct [:type, :der_signature, :sighash_type]
 
   @spec validate(%Input{}, (binary() -> %Transaction{})) :: {:ok, boolean()} | {:error, binary()}
@@ -16,7 +18,7 @@ defmodule BitcoinLib.Transaction.Validator.Input do
           validate_p2pkh(input, public_key_hash)
 
         other ->
-          IO.inspect(other, label: "unknown prevout script type")
+          Logger.warning(inspect(other, label: "unknown prevout script type"))
           false
       end
     end

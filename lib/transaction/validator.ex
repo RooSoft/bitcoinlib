@@ -44,13 +44,10 @@ defmodule BitcoinLib.Transaction.Validator do
   """
   @spec verify(binary(), (binary() -> %Transaction{})) :: boolean()
   def verify(txid, get_transaction_by_id) do
-    IO.inspect(txid)
-
     with {:ok, %Transaction{inputs: inputs} = transaction} <- get_transaction_by_id.(txid) do
       [{:ok, validator_input}] =
         inputs
         |> Enum.map(&Input.validate(&1, get_transaction_by_id))
-        |> IO.inspect(label: "INPUT VALIDATION RESULTS")
 
       add_preimages(validator_input, transaction)
 
@@ -63,9 +60,7 @@ defmodule BitcoinLib.Transaction.Validator do
       ## Console.print_hex(der_signature, "der_signature")
       ## Console.print_hex(preimage, "preimage")
     else
-      {:error, message} ->
-        IO.inspect("an error occured: #{message}")
-        {:error, message}
+      {:error, message} -> {:error, message}
     end
 
     # signatures = get_signatures(transaction)
@@ -80,8 +75,6 @@ defmodule BitcoinLib.Transaction.Validator do
         %ValidatorInput{type: _type, der_signature: _der_signature, sighash_type: sighash_type},
         %Transaction{} = transaction
       ) do
-    IO.inspect(transaction, limit: :infinity)
-
     preimage = Preimage.from_transaction(transaction, sighash_type)
 
     Console.print_hex(preimage, "preimage")

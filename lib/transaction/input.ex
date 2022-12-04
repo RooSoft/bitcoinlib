@@ -12,6 +12,8 @@ defmodule BitcoinLib.Transaction.Input do
   alias BitcoinLib.Script
   alias BitcoinLib.Signing.Psbt.CompactInteger
 
+  @type t :: Input
+
   @doc """
   Extracts a transaction input from a bitstring
 
@@ -29,7 +31,7 @@ defmodule BitcoinLib.Transaction.Input do
         <<0x01f0ca052a010000001976a914cbc20a7664f2f69e5355aa427045bc15e7c6c77288ac00000000::312>>
       }
   """
-  @spec extract_from(binary(), bool) :: {:ok, %Input{}, bitstring()} | {:error, binary()}
+  @spec extract_from(binary(), bool) :: {:ok, Input.t(), bitstring()} | {:error, binary()}
   def extract_from(
         <<little_txid::bitstring-256, vout::little-32, remaining::bitstring>>,
         is_coinbase? \\ false
@@ -70,7 +72,7 @@ defmodule BitcoinLib.Transaction.Input do
       ...> } |> BitcoinLib.Transaction.Input.encode()
       <<0x449d45bbbfe7fc93bbe649bb7b6106b248a15da5dbd6fdc9bdfc7efede83235e0100000000ffffffff::328>>
   """
-  @spec encode(%Input{}) :: bitstring()
+  @spec encode(Input.t()) :: bitstring()
   def encode(%Input{} = input) do
     txid =
       input.txid
@@ -107,7 +109,7 @@ defmodule BitcoinLib.Transaction.Input do
       sequence: 4_294_967_294
     }
   """
-  @spec strip_signature(%Input{}) :: %Input{}
+  @spec strip_signature(Input.t()) :: Input.t()
   def strip_signature(%Input{} = input) do
     %{input | script_sig: <<>>}
   end

@@ -10,6 +10,8 @@ defmodule BitcoinLib.Transaction.Spec do
   alias BitcoinLib.Transaction
   alias BitcoinLib.Transaction.Spec
 
+  @type t :: %Spec{}
+
   @doc """
   Adds a human readable input into a transaction spec
 
@@ -37,7 +39,7 @@ defmodule BitcoinLib.Transaction.Spec do
         outputs: []
       }
   """
-  @spec add_input!(%Spec{}, binary() | list()) :: %Spec{}
+  @spec add_input!(Spec.t(), binary() | list()) :: Spec.t()
   def add_input!(
         %Spec{} = spec,
         txid: txid,
@@ -57,6 +59,7 @@ defmodule BitcoinLib.Transaction.Spec do
     )
   end
 
+  @spec add_input!(Spec.t(), txid: binary(), vout: integer(), redeem_script: list()) :: Spec.t()
   def add_input!(%Spec{inputs: inputs} = spec,
         txid: txid,
         vout: vout,
@@ -96,7 +99,7 @@ defmodule BitcoinLib.Transaction.Spec do
         ]
       }
   """
-  @spec add_output(%Spec{}, binary() | list(), integer()) :: %Spec{}
+  @spec add_output(Spec.t(), binary() | list(), integer()) :: Spec.t()
   def add_output(%Spec{} = spec, script_pub_key, value)
       when is_binary(script_pub_key) do
     parsed_script = script_pub_key |> Binary.from_hex() |> Script.parse!()
@@ -162,7 +165,7 @@ defmodule BitcoinLib.Transaction.Spec do
         witness: []
       }
   """
-  @spec to_transaction(%Spec{}) :: %Transaction{}
+  @spec to_transaction(Spec.t()) :: Transaction.t()
   def to_transaction(%Spec{
         version: version,
         outputs: spec_outputs,
@@ -211,7 +214,7 @@ defmodule BitcoinLib.Transaction.Spec do
       ...>  |> BitcoinLib.Transaction.Spec.sign_and_encode(private_key)
       "020000000126da6f8a25932979c0b1191c256e01ec3525ec9f87de78aeaf8acfef2b062569010000006b483045022100fdb5f58ab2dd24aeea72c0f832abde538e176f4474b3fe62a9c6e7e8a1a79e92022049565926bb564b996a19c6c3abd1dfbf35f9432ea7aadb10976dacee97d2e10c012102702ded1cca9816fa1a94787ffc6f3ace62cd3b63164f76d227d0935a33ee48c3fdffffff01e8030000000000001976a914ad6a62e2d23d1c060897cd0cc79c42dad715e4c788ac2caf2400"
   """
-  @spec sign_and_encode(%Spec{}, %PrivateKey{}) :: binary()
+  @spec sign_and_encode(Spec.t(), PrivateKey.t()) :: binary()
   def sign_and_encode(spec, %PrivateKey{} = private_key) do
     spec
     |> to_transaction

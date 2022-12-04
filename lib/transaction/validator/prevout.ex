@@ -2,13 +2,13 @@ defmodule BitcoinLib.Transaction.Validator.Prevout do
   alias BitcoinLib.Transaction
   alias BitcoinLib.Transaction.Input
 
-  @spec from_transaction(%Transaction{}, (binary() -> %Transaction{})) ::
+  @spec from_transaction(Transaction.t(), (binary() -> Transaction.t())) ::
           {:ok, list()} | {:error, binary()}
   def from_transaction(%Transaction{inputs: inputs}, get_transaction_by_id) do
     from_inputs(inputs, get_transaction_by_id)
   end
 
-  @spec from_inputs(list(%Input{}), (binary() -> %Transaction{})) ::
+  @spec from_inputs(list(Input.t()), (binary() -> Transaction.t())) ::
           {:ok, list()} | {:error, binary()}
   def from_inputs(inputs, get_transaction_by_id) do
     with {:ok, reversed_prevouts} <- apply_extraction(inputs, get_transaction_by_id) do
@@ -18,7 +18,7 @@ defmodule BitcoinLib.Transaction.Validator.Prevout do
     end
   end
 
-  @spec from_input(%Input{}, (binary() -> %Transaction{})) ::
+  @spec from_input(Input.t(), (binary() -> Transaction.t())) ::
           {:ok, bitstring()} | {:error, binary()}
   def from_input(%Input{txid: txid, vout: vout}, get_transaction_by_id) do
     with {:ok, transaction} <- get_transaction_by_id.(txid) do
