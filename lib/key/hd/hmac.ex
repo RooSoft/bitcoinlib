@@ -25,13 +25,13 @@ defmodule BitcoinLib.Key.HD.Hmac do
   @spec compute(%PrivateKey{} | %PublicKey{}, integer(), boolean()) :: {bitstring(), bitstring()}
   def compute(private_key, index, hardened? \\ false)
 
-  def compute(%PrivateKey{} = private_key, index, hardened? = false) do
+  def compute(%PrivateKey{} = private_key, index, false = hardened?) do
     private_key
     |> PublicKey.from_private_key()
     |> compute(index, hardened?)
   end
 
-  def compute(%PrivateKey{} = private_key, index, hardened? = true) do
+  def compute(%PrivateKey{} = private_key, index, true = hardened?) do
     get_input(private_key, index, hardened?)
     |> execute(private_key.chain_code)
   end

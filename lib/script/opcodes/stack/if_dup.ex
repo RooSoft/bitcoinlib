@@ -56,6 +56,6 @@ defmodule BitcoinLib.Script.Opcodes.Stack.IfDup do
   def execute(_opcode, [0 | _rest] = stack), do: {:ok, stack}
 
   def execute(_opcode, [first_element | rest]) do
-    {:ok, [first_element | [ first_element | rest]]}
+    {:ok, [first_element | [first_element | rest]]}
   end
 end

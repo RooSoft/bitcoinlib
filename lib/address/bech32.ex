@@ -48,7 +48,7 @@ defmodule BitcoinLib.Address.Bech32 do
       "bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4"
   """
   @spec from_public_key_hash(<<_::160>>, :mainnet | :testnet) :: binary()
-  def from_public_key_hash(public_key_hash = <<_::160>>, network \\ :mainnet) do
+  def from_public_key_hash(<<_::160>> = public_key_hash, network \\ :mainnet) do
     hrp = get_hrp(network)
 
     SegwitAddr.encode(hrp, 0, public_key_hash |> :binary.bin_to_list())

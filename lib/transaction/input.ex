@@ -121,7 +121,7 @@ defmodule BitcoinLib.Transaction.Input do
     {<<script_sig_bit_size::8>>, script_sig}
   end
 
-  defp extract_script_sig(remaining, _is_coinbase? = true) do
+  defp extract_script_sig(remaining, true = _is_coinbase?) do
     %CompactInteger{value: script_sig_size, remaining: remaining} =
       CompactInteger.extract_from(remaining)
 
@@ -132,7 +132,7 @@ defmodule BitcoinLib.Transaction.Input do
     {:ok, script_sig, remaining}
   end
 
-  defp extract_script_sig(remaining, _is_coinbase? = false) do
+  defp extract_script_sig(remaining, false = _is_coinbase?) do
     %CompactInteger{value: script_sig_size, remaining: remaining} =
       CompactInteger.extract_from(remaining)
 
