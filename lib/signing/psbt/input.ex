@@ -12,6 +12,8 @@ defmodule BitcoinLib.Signing.Psbt.Input do
 
   alias BitcoinLib.Signing.Psbt.{Keypair, KeypairList, Input}
 
+  alias BitcoinLib.Signing.Psbt.Keypair.Key
+
   alias BitcoinLib.Signing.Psbt.GenericProperties.{
     Bip32Derivation,
     Proprietary,
@@ -88,26 +90,59 @@ defmodule BitcoinLib.Signing.Psbt.Input do
     |> Enum.reduce(%Input{}, &dispatch_keypair/2)
   end
 
-  defp dispatch_keypair(%Keypair{key: key, value: value} = keypair, input) do
-    case key.type do
-      @non_witness_utxo -> add_non_witness_utxo(input, keypair)
-      @witness_utxo -> add_witness_utxo(input, keypair)
-      @partial_sig -> add_partial_sig(input, key.data, value)
-      @sighash_type -> add_sighash_type(input, value)
-      @redeem_script -> add_redeem_script(input, keypair)
-      @witness_script -> add_witness_script(input, keypair)
-      @bip32_derivation -> add_bip32_derivation(input, keypair)
-      @final_script_sig -> add_final_script_sig(input, keypair)
-      @final_script_witness -> add_final_script_witness(input, keypair)
-      @proof_of_reserves_commitment -> add_proof_of_reserves_commitment(input, keypair)
-      @ripemd160_preimage -> add_ripemd160_preimage(input, keypair)
-      @sha256_preimage -> add_sha256_preimage(input, keypair)
-      @hash160_preimage -> add_hash160_preimage(input, keypair)
-      @hash256_preimage -> add_hash256_preimage(input, keypair)
-      @output_index -> add_output_index(input, keypair)
-      @proprietary -> add_proprietary(input, keypair)
-      _ -> add_unknown(input, keypair)
-    end
+  defp dispatch_keypair(%Keypair{key: %Key{type: @non_witness_utxo}} = keypair, input),
+    do: add_non_witness_utxo(input, keypair)
+
+  defp dispatch_keypair(%Keypair{key: %Key{type: @witness_utxo}} = keypair, input),
+    do: add_witness_utxo(input, keypair)
+
+  defp dispatch_keypair(%Keypair{key: %Key{type: @partial_sig, data: data}, value: value}, input),
+    do: add_partial_sig(input, data, value)
+
+  defp dispatch_keypair(%Keypair{key: %Key{type: @sighash_type}, value: value}, input),
+    do: add_sighash_type(input, value)
+
+  defp dispatch_keypair(%Keypair{key: %Key{type: @redeem_script}} = keypair, input),
+    do: add_redeem_script(input, keypair)
+
+  defp dispatch_keypair(%Keypair{key: %Key{type: @witness_script}} = keypair, input),
+    do: add_witness_script(input, keypair)
+
+  defp dispatch_keypair(%Keypair{key: %Key{type: @bip32_derivation}} = keypair, input),
+    do: add_bip32_derivation(input, keypair)
+
+  defp dispatch_keypair(%Keypair{key: %Key{type: @final_script_sig}} = keypair, input),
+    do: add_final_script_sig(input, keypair)
+
+  defp dispatch_keypair(%Keypair{key: %Key{type: @final_script_witness}} = keypair, input),
+    do: add_final_script_witness(input, keypair)
+
+  defp dispatch_keypair(
+         %Keypair{key: %Key{type: @proof_of_reserves_commitment}} = keypair,
+         input
+       ),
+       do: add_proof_of_reserves_commitment(input, keypair)
+
+  defp dispatch_keypair(%Keypair{key: %Key{type: @ripemd160_preimage}} = keypair, input),
+    do: add_ripemd160_preimage(input, keypair)
+
+  defp dispatch_keypair(%Keypair{key: %Key{type: @sha256_preimage}} = keypair, input),
+    do: add_sha256_preimage(input, keypair)
+
+  defp dispatch_keypair(%Keypair{key: %Key{type: @hash160_preimage}} = keypair, input),
+    do: add_hash160_preimage(input, keypair)
+
+  defp dispatch_keypair(%Keypair{key: %Key{type: @hash256_preimage}} = keypair, input),
+    do: add_hash256_preimage(input, keypair)
+
+  defp dispatch_keypair(%Keypair{key: %Key{type: @output_index}} = keypair, input),
+    do: add_output_index(input, keypair)
+
+  defp dispatch_keypair(%Keypair{key: %Key{type: @proprietary}} = keypair, input),
+    do: add_proprietary(input, keypair)
+
+  defp dispatch_keypair(keypair, input) do
+    add_unknown(input, keypair)
   end
 
   defp add_non_witness_utxo(input, keypair) do
