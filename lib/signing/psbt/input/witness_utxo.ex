@@ -7,10 +7,12 @@ defmodule BitcoinLib.Signing.Psbt.Input.WitnessUtxo do
   alias BitcoinLib.Signing.Psbt.CompactInteger
   alias BitcoinLib.Script
 
+  @type t :: WitnessUtxo
+
   @bits 8
 
   # TODO: document
-  @spec parse(%Keypair{}) :: {:ok, %WitnessUtxo{}} | {:error, binary()}
+  @spec parse(Keypair.t()) :: {:ok, WitnessUtxo.t()} | {:error, binary()}
   def parse(keypair) do
     %{keypair: keypair}
     |> validate_keypair()

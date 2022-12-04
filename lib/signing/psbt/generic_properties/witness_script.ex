@@ -6,8 +6,10 @@ defmodule BitcoinLib.Signing.Psbt.GenericProperties.WitnessScript do
   alias BitcoinLib.Signing.Psbt.Keypair.{Key}
   alias BitcoinLib.Script
 
+  @type t :: WitnessScript
+
   # TODO: document
-  @spec parse(%Keypair{}) :: {:ok, %WitnessScript{}} | {:error, binary()}
+  @spec parse(Keypair.t()) :: {:ok, WitnessScript.t()} | {:error, binary()}
   def parse(keypair) do
     %{keypair: keypair, witness_script: %WitnessScript{}}
     |> validate_keypair()

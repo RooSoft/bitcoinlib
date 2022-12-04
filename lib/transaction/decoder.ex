@@ -47,7 +47,7 @@ defmodule BitcoinLib.Transaction.Decoder do
         <<>>
       }
   """
-  @spec to_struct(bitstring()) :: {:ok, %Transaction{}, bitstring()} | {:error, binary()}
+  @spec to_struct(bitstring()) :: {:ok, Transaction.t(), bitstring()} | {:error, binary()}
   def to_struct(encoded_transaction) do
     # see https://github.com/bitcoin/bips/blob/master/bip-0144.mediawiki#hashes
     version_specific_extract(encoded_transaction)

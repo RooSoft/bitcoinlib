@@ -46,7 +46,7 @@ defmodule BitcoinLib.Transaction do
         <<>>
       }
   """
-  @spec parse(binary()) :: {:ok, %Transaction{}, bitstring()} | {:error, binary()}
+  @spec parse(binary()) :: {:ok, Transaction.t(), bitstring()} | {:error, binary()}
   def parse(hex_transaction) do
     hex_transaction
     |> Binary.from_hex()
@@ -90,7 +90,7 @@ defmodule BitcoinLib.Transaction do
         <<>>
       }
   """
-  @spec decode(bitstring()) :: {:ok, %Transaction{}, bitstring()} | {:error, binary()}
+  @spec decode(bitstring()) :: {:ok, Transaction.t(), bitstring()} | {:error, binary()}
   def decode(encoded_transaction) do
     with {:ok, transaction, remaining} <- Decoder.to_struct(encoded_transaction) do
       transaction =
@@ -137,7 +137,7 @@ defmodule BitcoinLib.Transaction do
       ...> BitcoinLib.Transaction.encode(transaction)
       <<0x0100000001449d45bbbfe7fc93bbe649bb7b6106b248a15da5dbd6fdc9bdfc7efede83235e0100000000ffffffff014062b007000000001976a914f86f0bc0a2232970ccdf4569815db500f126836188ac00000000::680>>
   """
-  @spec encode(%Transaction{}) :: binary()
+  @spec encode(Transaction.t()) :: binary()
   def encode(%Transaction{} = transaction) do
     transaction
     |> Encoder.from_struct()
@@ -196,7 +196,7 @@ defmodule BitcoinLib.Transaction do
         witness: []
       }
   """
-  @spec add_id(%Transaction{}) :: %Transaction{}
+  @spec add_id(Transaction.t()) :: Transaction.t()
   def add_id(%Transaction{} = transaction) do
     Map.put(transaction, :id, to_id(transaction))
   end
@@ -231,7 +231,7 @@ defmodule BitcoinLib.Transaction do
       ...> |> BitcoinLib.Transaction.to_id()
       "b62e9d36389427d39e5d438a05045c23d1938e4242661c5fe2ad87c46337b091"
   """
-  @spec to_id(%Transaction{}) :: binary()
+  @spec to_id(Transaction.t()) :: binary()
   def to_id(%Transaction{} = transaction) do
     transaction
     |> Encoder.for_txid()
@@ -313,7 +313,7 @@ defmodule BitcoinLib.Transaction do
       ...> |> BitcoinLib.Transaction.check_if_unsigned
       true
   """
-  @spec check_if_unsigned(%Transaction{}) :: boolean()
+  @spec check_if_unsigned(Transaction.t()) :: boolean()
   def check_if_unsigned(%Transaction{inputs: inputs}) do
     inputs
     |> Enum.reduce(true, fn input, unsigned? ->
@@ -347,7 +347,7 @@ defmodule BitcoinLib.Transaction do
       ...>  |> BitcoinLib.Transaction.sign_and_encode(private_key)
       "0100000001b62ba991789fb1739e6a17b3891fd94cfebf09a61fedb203d619932a4326c2e4000000006a47304402207d2ff650acf4bd2f413dc04ded50fbbfc315bcb0aa97636b3c4caf55333d1c6a02207590f62363b2263b3d9b65dad3cd56e840e0d61dc0feab8f7e7956831c7e5103012102702ded1cca9816fa1a94787ffc6f3ace62cd3b63164f76d227d0935a33ee48c3ffffffff0110270000000000002d76a9283265393261373463333431393661303236653839653061643561633431386366393430613361663288ac00000000"
   """
-  @spec sign_and_encode(%Transaction{}, %PrivateKey{}) :: binary()
+  @spec sign_and_encode(Transaction.t(), PrivateKey.t()) :: binary()
   def sign_and_encode(%Transaction{} = transaction, %PrivateKey{} = private_key) do
     Signer.sign_and_encode(transaction, private_key)
   end
@@ -391,7 +391,7 @@ defmodule BitcoinLib.Transaction do
       }
       |> BitcoinLib.Transaction.strip_signatures()
   """
-  @spec strip_signatures(%Transaction{}) :: %Transaction{}
+  @spec strip_signatures(Transaction.t()) :: Transaction.t()
   def strip_signatures(%Transaction{inputs: inputs} = transaction) do
     inputs_without_signatures =
       inputs

@@ -48,7 +48,7 @@ defmodule BitcoinLib.Transaction.Encoder do
       <<0x4062b007000000001976a914f86f0bc0a2232970ccdf4569815db500f126836188ac::272>> <> # outputs
       <<0, 0, 0, 0>>    # locktime
   """
-  @spec from_struct(%Transaction{}) :: bitstring()
+  @spec from_struct(Transaction.t()) :: bitstring()
   def from_struct(%Transaction{} = transaction) do
     %{transaction: transaction, encoded: <<>>}
     |> append_version
@@ -94,7 +94,7 @@ defmodule BitcoinLib.Transaction.Encoder do
       ...> |> BitcoinLib.Transaction.Encoder.for_txid()
       <<0x0100000001449d45bbbfe7fc93bbe649bb7b6106b248a15da5dbd6fdc9bdfc7efede83235e0100000000ffffffff014062b007000000001976a914f86f0bc0a2232970ccdf4569815db500f126836188ac00000000::680>>
   """
-  def for_txid(%Transaction{} = transaction) do
+  def for_txid(Transaction.t() = transaction) do
     %{transaction: transaction, encoded: <<>>}
     |> append_version
     |> append_input_count
