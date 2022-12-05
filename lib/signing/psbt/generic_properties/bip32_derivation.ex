@@ -1,4 +1,8 @@
 defmodule BitcoinLib.Signing.Psbt.GenericProperties.Bip32Derivation do
+  @moduledoc """
+  A bip32 derivation in a partially signed bitcoin transaction
+  """
+
   defstruct [:pub_key, :master_key_fingerprint, :derivation_path]
 
   @compressed_pub_key_size 33

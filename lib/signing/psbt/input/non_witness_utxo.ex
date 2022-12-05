@@ -1,4 +1,8 @@
 defmodule BitcoinLib.Signing.Psbt.Input.NonWitnessUtxo do
+  @moduledoc """
+  A non-witness UTXO in a partially signed bitcoin transaction's input
+  """
+
   defstruct [:transaction]
 
   alias BitcoinLib.Signing.Psbt.Input.NonWitnessUtxo

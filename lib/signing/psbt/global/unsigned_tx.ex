@@ -1,4 +1,8 @@
 defmodule BitcoinLib.Signing.Psbt.Global.UnsignedTx do
+  @moduledoc """
+  An unsigned transaction in the global section of a partially signed bitcoin transaction
+  """
+
   alias BitcoinLib.Transaction
 
   # TODO: document

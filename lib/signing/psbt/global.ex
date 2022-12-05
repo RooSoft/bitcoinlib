@@ -1,4 +1,8 @@
 defmodule BitcoinLib.Signing.Psbt.Global do
+  @moduledoc """
+  The global section of a partially signed bitcoin transaction
+  """
+
   defstruct [:unsigned_tx, tx_version: 0, xpubs: [], unknowns: []]
 
   alias BitcoinLib.Signing.Psbt.GenericProperties.{Proprietary}

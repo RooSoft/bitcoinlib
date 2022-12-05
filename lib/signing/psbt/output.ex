@@ -1,4 +1,8 @@
 defmodule BitcoinLib.Signing.Psbt.Output do
+  @moduledoc """
+  An output in a partially signed bitcoin transaction
+  """
+
   defstruct unknowns: []
 
   alias BitcoinLib.Signing.Psbt.{Keypair, KeypairList, Output}

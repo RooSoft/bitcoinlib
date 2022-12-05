@@ -1,4 +1,8 @@
 defmodule BitcoinLib.Signing.Psbt.GenericProperties.WitnessScript do
+  @moduledoc """
+  A witness script in a partially signed bitcoin transaction
+  """
+
   defstruct [:script]
 
   alias BitcoinLib.Signing.Psbt.GenericProperties.WitnessScript

@@ -1,4 +1,8 @@
 defmodule BitcoinLib.Signing.Psbt.Input do
+  @moduledoc """
+  An input in a partially signed bitcoin transaction
+  """
+
   defstruct [
     :utxo,
     :partial_sig,

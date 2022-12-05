@@ -1,4 +1,8 @@
 defmodule BitcoinLib.Signing.Psbt.Input.WitnessUtxo do
+  @moduledoc """
+  A witness UTXO in a partially signed bitcoin transaction's input
+  """
+
   defstruct [:amount, :script_pub_key]
 
   alias BitcoinLib.Signing.Psbt.Input.WitnessUtxo

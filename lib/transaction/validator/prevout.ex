@@ -1,4 +1,8 @@
 defmodule BitcoinLib.Transaction.Validator.Prevout do
+  @moduledoc """
+  Correspond to an UTXO used as an input in a given transaction
+  """
+
   alias BitcoinLib.Transaction
   alias BitcoinLib.Transaction.Input
 

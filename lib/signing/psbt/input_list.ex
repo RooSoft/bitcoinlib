@@ -1,4 +1,8 @@
 defmodule BitcoinLib.Signing.Psbt.InputList do
+  @moduledoc """
+  A list ot inputs in a partially signed bitcoin transaction
+  """
+
   alias BitcoinLib.Signing.Psbt.Input
 
   # TODO: document

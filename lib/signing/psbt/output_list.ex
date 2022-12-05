@@ -1,4 +1,8 @@
 defmodule BitcoinLib.Signing.Psbt.OutputList do
+  @moduledoc """
+  A list of outputs in a given partially signed bitcoin transaction
+  """
+
   alias BitcoinLib.Signing.Psbt.Output
 
   # TODO: document
