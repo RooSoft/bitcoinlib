@@ -16,6 +16,8 @@ defmodule BitcoinLib.Script.Opcodes.Arithmetic.LessThan do
 
   alias BitcoinLib.Script.Opcodes.Arithmetic.LessThan
 
+  @type t :: LessThan
+
   @value 0x9F
 
   @doc """
@@ -52,7 +54,7 @@ defmodule BitcoinLib.Script.Opcodes.Arithmetic.LessThan do
       ...> )
       {:ok, [1, 4]}
   """
-  @spec execute(%LessThan{}, list()) :: {:ok, list()}
+  @spec execute(LessThan.t(), list()) :: {:ok, list()}
   def execute(%LessThan{}, [first, second] ++ remaining) do
     case first < second do
       true -> {:ok, [1 | remaining]}

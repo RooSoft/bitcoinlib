@@ -16,6 +16,8 @@ defmodule BitcoinLib.Script.Opcodes.Arithmetic.GreaterThan do
 
   alias BitcoinLib.Script.Opcodes.Arithmetic.GreaterThan
 
+  @type t :: GreaterThan
+
   @value 0xA0
 
   @doc """
@@ -52,7 +54,7 @@ defmodule BitcoinLib.Script.Opcodes.Arithmetic.GreaterThan do
       ...> )
       {:ok, [0, 1]}
   """
-  @spec execute(%GreaterThan{}, list()) :: {:ok, list()}
+  @spec execute(GreaterThan.t(), list()) :: {:ok, list()}
   def execute(%GreaterThan{}, [first, second] ++ remaining) do
     case first > second do
       true -> {:ok, [1 | remaining]}

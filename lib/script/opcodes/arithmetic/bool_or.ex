@@ -16,6 +16,8 @@ defmodule BitcoinLib.Script.Opcodes.Arithmetic.BoolOr do
 
   alias BitcoinLib.Script.Opcodes.Arithmetic.BoolOr
 
+  @type t :: BoolOr
+
   @value 0x9B
 
   @doc """
@@ -52,7 +54,7 @@ defmodule BitcoinLib.Script.Opcodes.Arithmetic.BoolOr do
       ...> )
       {:ok, [1, 1]}
   """
-  @spec execute(%BoolOr{}, list()) :: {:ok, list()}
+  @spec execute(BoolOr.t(), list()) :: {:ok, list()}
   def execute(%BoolOr{}, [first, second] ++ remaining) do
     or_result =
       case first != 0 || second != 0 do

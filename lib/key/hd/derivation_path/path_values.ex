@@ -9,6 +9,8 @@ defmodule BitcoinLib.Key.HD.DerivationPath.PathValues do
 
   alias BitcoinLib.Key.HD.DerivationPath.PathValues
 
+  @type t :: PathValues
+
   @doc """
   Transform a list of integer into a DerivationPath values structure
 
@@ -22,7 +24,7 @@ defmodule BitcoinLib.Key.HD.DerivationPath.PathValues do
         account: 0x80000005
       }
   """
-  @spec from_list(list()) :: %PathValues{}
+  @spec from_list(list()) :: PathValues.t()
   def from_list([type | remaining_values]) do
     {purpose, remaining_values} = extract_first_value(remaining_values)
     {coin_type, remaining_values} = extract_first_value(remaining_values)

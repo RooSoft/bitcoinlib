@@ -27,7 +27,7 @@ defmodule BitcoinLib.Key.HD.DerivationPath.Parser do
       }
   """
   @spec parse_valid_derivation_path(binary()) ::
-          {:ok, %DerivationPath{}} | {:error, binary()}
+          {:ok, DerivationPath.t()} | {:error, binary()}
   def parse_valid_derivation_path(derivation_path) do
     with {:ok, derivation_path} <- validate(derivation_path),
          tokens <- split_path(derivation_path),

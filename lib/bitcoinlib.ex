@@ -33,7 +33,7 @@ defmodule BitcoinLib do
         uncompressed_key: <<0x040f69ef8f2feb09b29393eef514761f22636b90d8e4d3f2138b2373bd37523053002119e16b613619691f760eadd486315fc9e36491c7adb76998d1b903b3dd12::520>>
       }
   """
-  @spec derive_public_key(%PrivateKey{}) :: %PublicKey{}
+  @spec derive_public_key(PrivateKey.t()) :: PublicKey.t()
   def derive_public_key(private_key) do
     PublicKey.from_private_key(private_key)
   end
@@ -46,7 +46,7 @@ defmodule BitcoinLib do
       ...> |> BitcoinLib.generate_p2pkh_address()
       "1Ak9NVPmwCHEpsSWvM6cNRC7dsYniRmwMG"
   """
-  @spec generate_p2pkh_address(%PublicKey{}) :: binary()
+  @spec generate_p2pkh_address(PublicKey.t()) :: binary()
   def generate_p2pkh_address(public_key) do
     public_key
     |> Address.from_public_key(:p2pkh)

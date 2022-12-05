@@ -16,7 +16,9 @@ defmodule BitcoinLib.Script.Opcode do
 
   alias BitcoinLib.Script.Opcodes.Data
 
-  @spec execute(%Data{}, list()) :: {:ok, list()}
+  @type t :: Data
+
+  @spec execute(Data.t(), list()) :: {:ok, list()}
   def execute(%Data{value: value}, stack) do
     {:ok, [value | stack]}
   end

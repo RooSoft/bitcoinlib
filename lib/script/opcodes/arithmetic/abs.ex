@@ -16,6 +16,8 @@ defmodule BitcoinLib.Script.Opcodes.Arithmetic.Abs do
 
   alias BitcoinLib.Script.Opcodes.Arithmetic.Abs
 
+  @type t :: Abs
+
   @value 0x90
 
   @doc """
@@ -52,7 +54,7 @@ defmodule BitcoinLib.Script.Opcodes.Arithmetic.Abs do
       ...> )
       {:ok, [2, 3, 1]}
   """
-  @spec execute(%Abs{}, list()) :: {:ok, list()}
+  @spec execute(Abs.t(), list()) :: {:ok, list()}
   def execute(%Abs{}, [first] ++ remaining) do
     {:ok, [abs(first) | remaining]}
   end

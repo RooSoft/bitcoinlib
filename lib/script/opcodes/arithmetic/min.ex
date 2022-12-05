@@ -16,6 +16,8 @@ defmodule BitcoinLib.Script.Opcodes.Arithmetic.Min do
 
   alias BitcoinLib.Script.Opcodes.Arithmetic.Min
 
+  @type t :: Min
+
   @value 0xA3
 
   @doc """
@@ -52,7 +54,7 @@ defmodule BitcoinLib.Script.Opcodes.Arithmetic.Min do
       ...> )
       {:ok, [2, 1]}
   """
-  @spec execute(%Min{}, list()) :: {:ok, list()}
+  @spec execute(Min.t(), list()) :: {:ok, list()}
   def execute(%Min{}, [first, second] ++ remaining) do
     min = Enum.min([first, second])
 

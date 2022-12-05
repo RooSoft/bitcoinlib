@@ -9,6 +9,8 @@ defmodule BitcoinLib.Block.Header do
   alias BitcoinLib.Block.Header
   alias BitcoinLib.Crypto.Bitstring
 
+  @type t :: Header
+
   @doc """
   Converts a hex binary into a %Header{}
 
@@ -30,7 +32,7 @@ defmodule BitcoinLib.Block.Header do
         }
       }
   """
-  @spec decode(<<_::640>>) :: {:ok, %Header{}} | {:error, binary()}
+  @spec decode(<<_::640>>) :: {:ok, Header.t()} | {:error, binary()}
   def decode(<<
         version::little-32,
         previous_block_hash::bitstring-256,
