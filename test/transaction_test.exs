@@ -86,7 +86,7 @@ defmodule BitcoinLib.TransactionTest do
 
     txid = "e4c226432a9319d603b2ed1fa609bffe4cd91f89b3176a9e73b19f7891a92bb6"
     vout = 0
-    value = 10000
+    value = 10_000
 
     transaction = create_transaction(txid, vout, locking_script, redeem_script, value)
 

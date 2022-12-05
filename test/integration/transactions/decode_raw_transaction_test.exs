@@ -33,7 +33,7 @@ defmodule BitcoinLib.Test.Integration.Transactions.DecodeRawTransactionTest do
              ],
              outputs: [
                %BitcoinLib.Transaction.Output{
-                 value: 98591,
+                 value: 98_591,
                  script_pub_key: [
                    %BitcoinLib.Script.Opcodes.Stack.Dup{},
                    %BitcoinLib.Script.Opcodes.Crypto.Hash160{},
