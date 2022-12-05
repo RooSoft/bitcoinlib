@@ -16,6 +16,8 @@ defmodule BitcoinLib.Script.Opcodes.Stack.Rot do
 
   alias BitcoinLib.Script.Opcodes.Stack.Rot
 
+  @type t :: Rot
+
   @value 0x7B
 
   @doc """
@@ -50,7 +52,7 @@ defmodule BitcoinLib.Script.Opcodes.Stack.Rot do
       ...> |> BitcoinLib.Script.Opcodes.Stack.Rot.execute(stack)
       {:ok, [6, 4, 3, 1, 2]}
   """
-  @spec execute(%Rot{}, list()) :: {:ok, list()} | {:error, binary()}
+  @spec execute(Rot.t(), list()) :: {:ok, list()} | {:error, binary()}
   def execute(_opcode, []), do: {:error, "trying to execute OP_ROT on an empty stack"}
   def execute(_opcode, [_]), do: {:error, "trying to execute OP_ROT on a one element stack"}
   def execute(_opcode, [_, _]), do: {:error, "trying to execute OP_ROT on a two element stack"}

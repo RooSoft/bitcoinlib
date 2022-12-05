@@ -9,6 +9,8 @@ defmodule BitcoinLib.Transaction do
   alias BitcoinLib.Transaction
   alias BitcoinLib.Transaction.{Input, Encoder, Decoder, Signer}
 
+  @type t :: Transaction
+
   @doc """
   Converts a hex binary into a %Transaction{} and the remaining unused data
 

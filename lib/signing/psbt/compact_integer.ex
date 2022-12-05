@@ -9,6 +9,8 @@ defmodule BitcoinLib.Signing.Psbt.CompactInteger do
 
   alias BitcoinLib.Signing.Psbt.CompactInteger
 
+  @type t :: CompactInteger
+
   @_8_bits_code 0xFC
   @_16_bits_code 0xFD
   @_32_bits_code 0xFE
@@ -58,7 +60,7 @@ defmodule BitcoinLib.Signing.Psbt.CompactInteger do
   Extracts a variable length integer from a bitstring according to the spec linked in the moduledoc,
   returns a tuple containing the integer with the remaining of the bitstring
   """
-  @spec extract_from(bitstring(), :big_endian | :little_endian) :: %CompactInteger{}
+  @spec extract_from(bitstring(), :big_endian | :little_endian) :: CompactInteger.t()
   def extract_from(data, endianness \\ :little_endian)
 
   def extract_from(<<@_16_bits_code::8, data::bitstring>>, endianness) do

@@ -16,6 +16,8 @@ defmodule BitcoinLib.Script.Opcodes.Stack.TwoDup do
 
   alias BitcoinLib.Script.Opcodes.Stack.TwoDup
 
+  @type t :: TwoDup
+
   @value 0x6E
 
   @doc """
@@ -50,7 +52,7 @@ defmodule BitcoinLib.Script.Opcodes.Stack.TwoDup do
       ...> |> BitcoinLib.Script.Opcodes.Stack.TwoDup.execute(stack)
       {:ok, [4, 3, 4, 3, 5]}
   """
-  @spec execute(%TwoDup{}, list()) :: {:ok, list()} | {:error, binary()}
+  @spec execute(TwoDup.t(), list()) :: {:ok, list()} | {:error, binary()}
   def execute(_opcode, []), do: {:error, "trying to execute OP_2DUP on an empty stack"}
   def execute(_opcode, [_]), do: {:error, "trying to execute OP_2DUP on a one element stack"}
 

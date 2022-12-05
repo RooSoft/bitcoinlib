@@ -16,6 +16,8 @@ defmodule BitcoinLib.Script.Opcodes.Stack.TwoSwap do
 
   alias BitcoinLib.Script.Opcodes.Stack.TwoSwap
 
+  @type t :: TwoSwap
+
   @value 0x72
 
   @doc """
@@ -50,7 +52,7 @@ defmodule BitcoinLib.Script.Opcodes.Stack.TwoSwap do
       ...> |> BitcoinLib.Script.Opcodes.Stack.TwoSwap.execute(stack)
       {:ok, [3, 4, 1, 2, 5]}
   """
-  @spec execute(%TwoSwap{}, list()) :: {:ok, list()} | {:error, binary()}
+  @spec execute(TwoSwap.t(), list()) :: {:ok, list()} | {:error, binary()}
   def execute(_opcode, []), do: {:error, "trying to execute OP_2SWAP on an empty stack"}
   def execute(_opcode, [_]), do: {:error, "trying to execute OP_2SWAP on a 1 element stack"}
   def execute(_opcode, [_, _]), do: {:error, "trying to execute OP_2SWAP on a 2 elements stack"}

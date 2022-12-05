@@ -4,11 +4,13 @@ defmodule BitcoinLib.Signing.Psbt do
   alias BitcoinLib.Signing.Psbt
   alias BitcoinLib.Signing.Psbt.{KeypairList, Global, InputList, OutputList}
 
+  @type t :: Psbt
+
   @magic 0x70736274
   @separator 0xFF
 
   # TODO: document
-  @spec parse(binary()) :: {:ok, %Psbt{}} | {:error, binary()}
+  @spec parse(binary()) :: {:ok, Psbt.t()} | {:error, binary()}
   def parse(encoded) do
     map =
       %{encoded: encoded}
