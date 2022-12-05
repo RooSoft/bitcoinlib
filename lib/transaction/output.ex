@@ -9,6 +9,8 @@ defmodule BitcoinLib.Transaction.Output do
   alias BitcoinLib.Transaction.Output
   alias BitcoinLib.Script
 
+  @type t :: Output
+
   @byte 8
 
   @doc """
@@ -33,7 +35,7 @@ defmodule BitcoinLib.Transaction.Output do
       }
   """
   @spec extract_from(binary()) ::
-          {:ok, %Output{}, bitstring()} | {:error, binary(), bitstring(), bitstring()}
+          {:ok, Output.t(), bitstring()} | {:error, binary(), bitstring(), bitstring()}
   def extract_from(<<value::little-64, remaining::bitstring>>) do
     case extract_script_pub_key(remaining) do
       {:ok, script_pub_key, remaining} ->
@@ -70,7 +72,7 @@ defmodule BitcoinLib.Transaction.Output do
       <<0x19::8>>                       <> # script_pub_key size
       <<0x76a914f86f0bc0a2232970ccdf4569815db500f126836188ac::200>> # script_pub_key
   """
-  @spec encode(%Output{}) :: bitstring()
+  @spec encode(Output.t()) :: bitstring()
   def encode(%Output{} = output) do
     {script_pub_key_size, script_pub_key} =
       output.script_pub_key

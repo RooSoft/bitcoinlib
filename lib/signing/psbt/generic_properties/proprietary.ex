@@ -4,8 +4,12 @@ defmodule BitcoinLib.Signing.Psbt.GenericProperties.Proprietary do
   alias BitcoinLib.Signing.Psbt.{CompactInteger, Keypair}
   alias BitcoinLib.Signing.Psbt.GenericProperties.Proprietary
 
+  alias BitcoinLib.Signing.Psbt.GenericProperties.Proprietary
+
+  @type t :: Proprietary
+
   # TODO: document
-  @spec parse(%Keypair{}) :: %Proprietary{}
+  @spec parse(Keypair.t()) :: Proprietary.t()
   def parse(%Keypair{key: key, value: value}) do
     %{identifier: key_identifier, key_data: key_data, data: data} =
       %{key: key, value: value}

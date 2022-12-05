@@ -16,6 +16,8 @@ defmodule BitcoinLib.Script.Opcodes.Reserved.Nop1 do
 
   alias BitcoinLib.Script.Opcodes.Reserved.Nop1
 
+  @type t :: Nop1
+
   @value 0xB0
 
   @doc """
@@ -52,7 +54,7 @@ defmodule BitcoinLib.Script.Opcodes.Reserved.Nop1 do
       ...> )
       {:ok, [3]}
   """
-  @spec execute(%Nop1{}, list()) :: {:ok, list()}
+  @spec execute(Nop1.t(), list()) :: {:ok, list()}
   def execute(%Nop1{}, remaining) do
     {:ok, remaining}
   end

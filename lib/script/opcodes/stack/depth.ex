@@ -16,6 +16,8 @@ defmodule BitcoinLib.Script.Opcodes.Stack.Depth do
 
   alias BitcoinLib.Script.Opcodes.Stack.Depth
 
+  @type t :: Depth
+
   @value 0x74
 
   @doc """
@@ -50,7 +52,7 @@ defmodule BitcoinLib.Script.Opcodes.Stack.Depth do
       ...> |> BitcoinLib.Script.Opcodes.Stack.Depth.execute(stack)
       {:ok, [5, 1, 2, 3, 4, 5]}
   """
-  @spec execute(%Depth{}, list()) :: {:ok, list()} | {:error, binary()}
+  @spec execute(Depth.t(), list()) :: {:ok, list()} | {:error, binary()}
 
   def execute(_opcode, stack) do
     depth = Enum.count(stack)

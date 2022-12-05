@@ -18,6 +18,8 @@ defmodule BitcoinLib.Script.Opcodes.FlowControl.Nop do
 
   alias BitcoinLib.Script.Opcodes.FlowControl.Nop
 
+  @type t :: Nop
+
   @value 0x61
 
   @doc """
@@ -53,7 +55,7 @@ defmodule BitcoinLib.Script.Opcodes.FlowControl.Nop do
       ...> |> BitcoinLib.Script.Opcodes.FlowControl.Nop.execute(stack)
       {:ok, [3]}
   """
-  @spec execute(%Nop{}, list()) :: {:ok, list()}
+  @spec execute(Nop.t(), list()) :: {:ok, list()}
   def execute(%Nop{}, stack) do
     {:ok, stack}
   end

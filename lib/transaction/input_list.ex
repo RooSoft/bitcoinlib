@@ -25,7 +25,7 @@ defmodule BitcoinLib.Transaction.InputList do
       }
   """
   @spec extract(bitstring(), integer()) ::
-          {:ok, list(%Input{}), bitstring()} | {:error, binary()}
+          {:ok, list(Input.t()), bitstring()} | {:error, binary()}
   def extract(remaining, count) do
     decode(remaining, count, [])
   end

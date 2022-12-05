@@ -16,6 +16,8 @@ defmodule BitcoinLib.Script.Opcodes.Splice.Size do
 
   alias BitcoinLib.Script.Opcodes.Splice.Size
 
+  @type t :: Size
+
   @value 0x82
 
   @doc """
@@ -50,7 +52,7 @@ defmodule BitcoinLib.Script.Opcodes.Splice.Size do
       ...> |> BitcoinLib.Script.Opcodes.Splice.Size.execute(stack)
       {:ok, [14, "This is a test", 5]}
   """
-  @spec execute(%Size{}, list()) :: {:ok, list()} | {:error, binary()}
+  @spec execute(Size.t(), list()) :: {:ok, list()} | {:error, binary()}
 
   def execute(_opcode, [string | remaining]) do
     size = byte_size(string)

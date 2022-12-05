@@ -16,6 +16,8 @@ defmodule BitcoinLib.Script.Opcodes.Stack.Drop do
 
   alias BitcoinLib.Script.Opcodes.Stack.Drop
 
+  @type t :: Drop
+
   @value 0x75
 
   @doc """
@@ -50,7 +52,7 @@ defmodule BitcoinLib.Script.Opcodes.Stack.Drop do
       ...> |> BitcoinLib.Script.Opcodes.Stack.Drop.execute(stack)
       {:ok, [3]}
   """
-  @spec execute(%Drop{}, list()) :: {:ok, list()} | {:error, binary()}
+  @spec execute(Drop.t(), list()) :: {:ok, list()} | {:error, binary()}
   def execute(_opcode, []), do: {:error, "trying to execute OP_DROP on an empty stack"}
 
   def execute(_opcode, [_first_element | rest]) do

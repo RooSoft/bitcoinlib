@@ -24,6 +24,8 @@ defmodule BitcoinLib.Script.Opcodes.FlowControl.Return do
 
   alias BitcoinLib.Script.Opcodes.FlowControl.Return
 
+  @type t :: Return
+
   @value 0x6A
 
   @doc """
@@ -65,7 +67,7 @@ defmodule BitcoinLib.Script.Opcodes.FlowControl.Return do
       ...> |> BitcoinLib.Script.Opcodes.FlowControl.Return.execute(stack)
       {:error, "OP_RETURN has been hit"}
   """
-  @spec execute(%Return{}, list()) :: {:error, binary()}
+  @spec execute(Return.t(), list()) :: {:error, binary()}
   def execute(%Return{}, _stack) do
     {:error, "OP_RETURN has been hit"}
   end

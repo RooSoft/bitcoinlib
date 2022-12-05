@@ -17,6 +17,8 @@ defmodule BitcoinLib.Script.Opcodes.FlowControl.Verify do
   alias BitcoinLib.Script.Value
   alias BitcoinLib.Script.Opcodes.FlowControl.Verify
 
+  @type t :: Verify
+
   @value 0x69
 
   @doc """
@@ -40,7 +42,7 @@ defmodule BitcoinLib.Script.Opcodes.FlowControl.Verify do
       ...> |> BitcoinLib.Script.Opcodes.FlowControl.Verify.execute(stack)
       {:ok, [3]}
   """
-  @spec execute(%Verify{}, list()) :: {:ok, list()} | {:error, binary()}
+  @spec execute(Verify.t(), list()) :: {:ok, list()} | {:error, binary()}
   def execute(_opcode, []), do: {:error, "trying to execute OP_VERIFY on an empty stack"}
 
   def execute(_opcode, [first_element | remaining]) do

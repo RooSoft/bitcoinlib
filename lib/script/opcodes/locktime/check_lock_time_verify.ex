@@ -22,6 +22,8 @@ defmodule BitcoinLib.Script.Opcodes.Locktime.CheckLockTimeVerify do
 
   alias BitcoinLib.Script.Opcodes.Locktime.CheckLockTimeVerify
 
+  @type t :: CheckLockTimeVerify
+
   defstruct []
 
   @value 0xB1
@@ -60,7 +62,7 @@ defmodule BitcoinLib.Script.Opcodes.Locktime.CheckLockTimeVerify do
       ...> )
       {:error, "OP_CHECKLOCKTIMEVERIFY execution has not been implemented yet"}
   """
-  @spec execute(%CheckLockTimeVerify{}, list()) ::
+  @spec execute(CheckLockTimeVerify.t(), list()) ::
           {:ok, [1 | list()]} | {:ok, [0 | list()]} | {:error, binary()}
   def execute(_opcode, []),
     do: {:error, "trying to execute OP_CHECKLOCKTIMEVERIFY on an empty stack"}
