@@ -16,6 +16,8 @@ defmodule BitcoinLib.Script.Opcodes.Stack.IfDup do
 
   alias BitcoinLib.Script.Opcodes.Stack.IfDup
 
+  @type t :: IfDup
+
   @value 0x73
 
   @doc """
@@ -50,7 +52,7 @@ defmodule BitcoinLib.Script.Opcodes.Stack.IfDup do
       ...> |> BitcoinLib.Script.Opcodes.Stack.IfDup.execute(stack)
       {:ok, [4, 4, 3]}
   """
-  @spec execute(%IfDup{}, list()) :: {:ok, list()} | {:error, binary()}
+  @spec execute(IfDup.t(), list()) :: {:ok, list()} | {:error, binary()}
   def execute(_opcode, []), do: {:error, "trying to execute OP_DROP on an empty stack"}
 
   def execute(_opcode, [0 | _rest] = stack), do: {:ok, stack}

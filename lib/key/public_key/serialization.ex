@@ -36,7 +36,7 @@ defmodule BitcoinLib.Key.PublicKey.Serialization do
         "xpub661MyMwAqRbcFtXgS5sYJABqqG9YLmC4Q1Rdap9gSE8NqtwybGhePY2gZ29ESFjqJoCu1Rupje8YtGqsefD265TMg7usUDFdp6W1EGMcet8"
       }
   """
-  @spec serialize(%PublicKey{}, :mainnet | :testnet, :bip32 | :bip49 | :bip84) ::
+  @spec serialize(PublicKey.t(), :mainnet | :testnet, :bip32 | :bip49 | :bip84) ::
           {:ok, binary()} | {:error, binary()}
   def serialize(%PublicKey{} = pub_key, :mainnet, :bip32) do
     {:ok, execute(pub_key, @xpub_version_bytes)}
@@ -66,7 +66,7 @@ defmodule BitcoinLib.Key.PublicKey.Serialization do
     {:error, "unknown serialization format"}
   end
 
-  @spec execute(%PublicKey{}, integer()) :: binary()
+  @spec execute(PublicKey.t(), integer()) :: binary()
   defp execute(
          %PublicKey{
            key: key,

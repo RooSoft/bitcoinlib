@@ -27,6 +27,8 @@ defmodule BitcoinLib.Key.PublicKey do
   alias BitcoinLib.Key.{PrivateKey, PublicKey}
   alias BitcoinLib.Key.HD.{DerivationPath, Fingerprint}
 
+  @type t :: PublicKey
+
   @doc """
   Derives an extended public key from an extended private key. Happens to be the same process
   as for regular keys.
@@ -49,7 +51,7 @@ defmodule BitcoinLib.Key.PublicKey do
         parent_fingerprint: <<0::32>>
       }
   """
-  @spec from_private_key(%PrivateKey{}) :: %PublicKey{}
+  @spec from_private_key(PrivateKey.t()) :: PublicKey.t()
   def from_private_key(%PrivateKey{} = private_key) do
     {uncompressed, compressed} =
       private_key.key
@@ -81,7 +83,7 @@ defmodule BitcoinLib.Key.PublicKey do
       ...> |> BitcoinLib.Key.PublicKey.to_address(:p2pkh)
       "1BRjWnoAVg3EASJHex5YeyDWC1zZ4CA5vc"
   """
-  @spec to_address(%PublicKey{}, :p2pkh | :p2sh | :p2wpkh) :: binary()
+  @spec to_address(PublicKey.t(), :p2pkh | :p2sh | :p2wpkh) :: binary()
   def to_address(%PublicKey{} = public_key, type \\ :p2wpkh, network \\ :mainnet) do
     public_key
     |> Address.from_public_key(type, network)
@@ -97,7 +99,7 @@ defmodule BitcoinLib.Key.PublicKey do
       ...> |> BitcoinLib.Key.PublicKey.hash()
       <<0x93ce48570b55c42c2af816aeaba06cfee1224fae::160>>
   """
-  @spec hash(%PublicKey{}) :: <<_::160>>
+  @spec hash(PublicKey.t()) :: <<_::160>>
   def hash(%PublicKey{key: key}) do
     Crypto.hash160(key)
   end
@@ -121,7 +123,7 @@ defmodule BitcoinLib.Key.PublicKey do
         "xpub661MyMwAqRbcFtXgS5sYJABqqG9YLmC4Q1Rdap9gSE8NqtwybGhePY2gZ29ESFjqJoCu1Rupje8YtGqsefD265TMg7usUDFdp6W1EGMcet8"
       }
   """
-  @spec serialize(%PublicKey{}, :mainnet | :testnet, :bip32 | :bip49 | :bip84) ::
+  @spec serialize(PublicKey.t(), :mainnet | :testnet, :bip32 | :bip49 | :bip84) ::
           {:ok, binary()} | {:error, binary()}
   def serialize(public_key, network \\ :mainnet, format \\ :bip32) do
     Serialization.serialize(public_key, network, format)
@@ -143,7 +145,7 @@ defmodule BitcoinLib.Key.PublicKey do
       ...> |> BitcoinLib.Key.PublicKey.serialize!()
       "xpub661MyMwAqRbcFtXgS5sYJABqqG9YLmC4Q1Rdap9gSE8NqtwybGhePY2gZ29ESFjqJoCu1Rupje8YtGqsefD265TMg7usUDFdp6W1EGMcet8"
   """
-  @spec serialize!(%PublicKey{}, :mainnet | :testnet, :bip32 | :bip49 | :bip84) :: binary()
+  @spec serialize!(PublicKey.t(), :mainnet | :testnet, :bip32 | :bip49 | :bip84) :: binary()
   def serialize!(public_key, network \\ :mainnet, format \\ :bip32) do
     case serialize(public_key, network, format) do
       {:ok, serialized} -> serialized
@@ -174,7 +176,7 @@ defmodule BitcoinLib.Key.PublicKey do
       }
   """
   @spec deserialize(binary()) ::
-          {:ok, %PublicKey{}, :mainnet | :testnet, :bip32 | :bip49 | :bip84}
+          {:ok, PublicKey.t(), :mainnet | :testnet, :bip32 | :bip49 | :bip84}
           | {:error, String.t()}
   def deserialize(serialized_public_key) do
     case Deserialization.deserialize(serialized_public_key) do
@@ -203,7 +205,7 @@ defmodule BitcoinLib.Key.PublicKey do
         parent_fingerprint: <<0::32>>
       }
   """
-  @spec deserialize!(binary()) :: %PublicKey{}
+  @spec deserialize!(binary()) :: PublicKey.t()
   def deserialize!(serialized_public_key) do
     with {:ok, public_key, _network, _format} <- deserialize(serialized_public_key) do
       public_key
@@ -239,7 +241,7 @@ defmodule BitcoinLib.Key.PublicKey do
         }
       }
   """
-  @spec derive_child(%PublicKey{}, integer()) :: {:ok, %PublicKey{}} | {:error, binary()}
+  @spec derive_child(PublicKey.t(), integer()) :: {:ok, PublicKey.t()} | {:error, binary()}
   def derive_child(public_key, index) do
     ChildFromIndex.get(public_key, index)
   end
@@ -264,7 +266,7 @@ defmodule BitcoinLib.Key.PublicKey do
         fingerprint: <<0x9680603F::32>>
       }
   """
-  @spec derive_child!(%PublicKey{}, integer()) :: %PublicKey{}
+  @spec derive_child!(PublicKey.t(), integer()) :: PublicKey.t()
   def derive_child!(public_key, index) do
     derive_child(public_key, index)
     |> elem(1)
@@ -292,7 +294,7 @@ defmodule BitcoinLib.Key.PublicKey do
         }
       }
   """
-  @spec from_derivation_path(%PublicKey{}, %DerivationPath{}) :: {:ok, %PublicKey{}}
+  @spec from_derivation_path(PublicKey.t(), DerivationPath.t()) :: {:ok, PublicKey.t()}
   def from_derivation_path(%PublicKey{} = public_key, %DerivationPath{} = derivation_path) do
     ChildFromDerivationPath.get(public_key, derivation_path)
   end
@@ -309,7 +311,7 @@ defmodule BitcoinLib.Key.PublicKey do
       ...> |> BitcoinLib.Key.PublicKey.validate_signature(message, public_key)
       true
   """
-  @spec validate_signature(bitstring(), bitstring(), %PublicKey{}) :: boolean()
+  @spec validate_signature(bitstring(), bitstring(), PublicKey.t()) :: boolean()
   def validate_signature(signature, message, %PublicKey{} = public_key) do
     Crypto.Secp256k1.validate(signature, message, public_key)
   end

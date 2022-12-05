@@ -32,8 +32,8 @@ defmodule BitcoinLib.Key.PrivateKey.ChildFromIndex do
         }
       }
   """
-  @spec get(%PrivateKey{}, integer(), boolean()) ::
-          {:ok, %PrivateKey{}} | {:error, binary()}
+  @spec get(PrivateKey.t(), integer(), boolean()) ::
+          {:ok, PrivateKey.t()} | {:error, binary()}
   def get(private_key, index, hardened? \\ false)
 
   def get(_, index, _) when is_integer(index) and index > @max_index do

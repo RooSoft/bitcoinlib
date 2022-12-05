@@ -14,6 +14,8 @@ defmodule BitcoinLib.Script.Opcodes.BitwiseLogic.Equal do
 
   alias BitcoinLib.Script.Opcodes.BitwiseLogic.Equal
 
+  @type t :: Equal
+
   defstruct []
 
   @value 0x87
@@ -52,7 +54,7 @@ defmodule BitcoinLib.Script.Opcodes.BitwiseLogic.Equal do
       ...> )
       {:ok, [1, 4]}
   """
-  @spec execute(%Equal{}, list()) ::
+  @spec execute(Equal.t(), list()) ::
           {:ok, [1 | list()]} | {:ok, [0 | list()]} | {:error, binary()}
   def execute(_opcode, []), do: {:error, "trying to execute OP_EQUAL on an empty stack"}
 

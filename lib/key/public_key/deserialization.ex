@@ -41,7 +41,7 @@ defmodule BitcoinLib.Key.PublicKey.Deserialization do
   @spec deserialize(binary()) ::
           {
             :ok,
-            %PublicKey{},
+            PublicKey.t(),
             :mainnet | :testnet,
             :bip32 | :bip49 | :bip84
           }

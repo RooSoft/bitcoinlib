@@ -30,8 +30,8 @@ defmodule BitcoinLib.Key.PublicKey.ChildFromIndex do
         }
       }
   """
-  @spec get(%PublicKey{}, integer()) ::
-          {:ok, %PublicKey{}} | {:error, binary()}
+  @spec get(PublicKey.t(), integer()) ::
+          {:ok, PublicKey.t()} | {:error, binary()}
   def get(_parent_public_key, index) when is_integer(index) and index > @max_index do
     {:error, "#{index} is too large of an index"}
   end

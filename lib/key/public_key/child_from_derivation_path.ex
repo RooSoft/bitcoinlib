@@ -29,7 +29,7 @@ defmodule BitcoinLib.Key.PublicKey.ChildFromDerivationPath do
         }
       }
   """
-  @spec get(%PublicKey{}, %DerivationPath{}) :: {:ok, %PublicKey{}}
+  @spec get(PublicKey.t(), DerivationPath.t()) :: {:ok, PublicKey.t()}
   def get(%PublicKey{} = public_key, %DerivationPath{} = derivation_path) do
     case derivation_path.type == :public do
       true -> derive(public_key, derivation_path)
@@ -88,9 +88,7 @@ defmodule BitcoinLib.Key.PublicKey.ChildFromDerivationPath do
     hash
   end
 
-  defp maybe_derive_account(
-         {public_key, %DerivationPath{account: account} = derivation_path}
-       ) do
+  defp maybe_derive_account({public_key, %DerivationPath{account: account} = derivation_path}) do
     {:ok, child_public_key} = ChildFromIndex.get(public_key, account)
 
     {child_public_key, derivation_path}
@@ -118,8 +116,7 @@ defmodule BitcoinLib.Key.PublicKey.ChildFromDerivationPath do
   end
 
   defp maybe_derive_address_index(
-         {%PublicKey{} = public_key,
-          %DerivationPath{address_index: index} = derivation_path}
+         {%PublicKey{} = public_key, %DerivationPath{address_index: index} = derivation_path}
        ) do
     {:ok, child_public_key} = ChildFromIndex.get(public_key, index)
 
