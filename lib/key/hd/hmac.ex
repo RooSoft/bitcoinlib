@@ -22,7 +22,8 @@ defmodule BitcoinLib.Key.HD.Hmac do
         <<0xD323F1BE5AF39A2D2F08F5E8F664633849653DBE329802E9847CFC85F8D7B52A::256>>
       }
   """
-  @spec compute(%PrivateKey{} | %PublicKey{}, integer(), boolean()) :: {bitstring(), bitstring()}
+  @spec compute(PrivateKey.t() | PublicKey.t(), integer(), boolean()) ::
+          {bitstring(), bitstring()}
   def compute(private_key, index, hardened? \\ false)
 
   def compute(%PrivateKey{} = private_key, index, false = hardened?) do

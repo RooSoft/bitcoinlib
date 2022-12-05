@@ -28,6 +28,8 @@ defmodule BitcoinLib.Key.PrivateKey do
   alias BitcoinLib.Key.HD.{DerivationPath, Fingerprint, SeedPhrase}
   alias BitcoinLib.Key.PrivateKey.{ChildFromIndex, ChildFromDerivationPath}
 
+  @type t :: PrivateKey
+
   @doc """
   Converts a seed into a master private key hash containing the key itself and the chain code
 
@@ -41,7 +43,7 @@ defmodule BitcoinLib.Key.PrivateKey do
         parent_fingerprint: <<0::32>>
       }
   """
-  @spec from_seed(binary()) :: %PrivateKey{}
+  @spec from_seed(binary()) :: PrivateKey.t()
   def from_seed(seed) do
     seed
     |> Base.decode16!(case: :lower)
@@ -64,7 +66,7 @@ defmodule BitcoinLib.Key.PrivateKey do
         index: 0x0
       }
   """
-  @spec from_seed_phrase(binary()) :: %PrivateKey{}
+  @spec from_seed_phrase(binary()) :: PrivateKey.t()
   def from_seed_phrase(seed_phrase, passphrase \\ "") do
     seed_phrase
     |> SeedPhrase.to_seed(passphrase)
@@ -84,7 +86,7 @@ defmodule BitcoinLib.Key.PrivateKey do
       ...> |> BitcoinLib.Key.PrivateKey.serialize()
       "xprv9s21ZrQH143K3QTDL4LXw2F7HEK3wJUD2nW2nRk4stbPy6cq3jPPqjiChkVvvNKmPGJxWUtg6LnF5kejMRNNU3TGtRBeJgk33yuGBxrMPHi"
   """
-  @spec serialize(%PrivateKey{}) :: binary()
+  @spec serialize(PrivateKey.t()) :: binary()
   def serialize(%PrivateKey{
         key: key,
         depth: depth,
@@ -126,7 +128,7 @@ defmodule BitcoinLib.Key.PrivateKey do
         index: 0
       }
   """
-  @spec deserialize(binary()) :: %PrivateKey{}
+  @spec deserialize(binary()) :: PrivateKey.t()
   def deserialize(serialized_private_key) do
     <<
       @version_bytes::32,
@@ -177,7 +179,7 @@ defmodule BitcoinLib.Key.PrivateKey do
         }
       }
   """
-  @spec derive_child(%PrivateKey{}, integer(), boolean()) :: {:ok, %PrivateKey{}}
+  @spec derive_child(PrivateKey.t(), integer(), boolean()) :: {:ok, PrivateKey.t()}
   def derive_child(private_key, index, hardened? \\ false) do
     ChildFromIndex.get(private_key, index, hardened?)
   end
@@ -201,7 +203,7 @@ defmodule BitcoinLib.Key.PrivateKey do
         parent_fingerprint: <<0x18C1259::32>>
       }
   """
-  @spec derive_child!(%PrivateKey{}, integer(), boolean()) :: %PrivateKey{}
+  @spec derive_child!(PrivateKey.t(), integer(), boolean()) :: PrivateKey.t()
   def derive_child!(private_key, index, hardened? \\ false) do
     derive_child(private_key, index, hardened?)
     |> elem(1)
@@ -229,8 +231,8 @@ defmodule BitcoinLib.Key.PrivateKey do
         }
       }
   """
-  @spec from_derivation_path(%PrivateKey{}, %DerivationPath{}) ::
-          {:ok, %PrivateKey{}} | {:error, binary()}
+  @spec from_derivation_path(PrivateKey.t(), DerivationPath.t()) ::
+          {:ok, PrivateKey.t()} | {:error, binary()}
   def from_derivation_path(%PrivateKey{} = private_key, %DerivationPath{} = derivation_path) do
     with {:ok, private_key} <- ChildFromDerivationPath.get(private_key, derivation_path) do
       {:ok, add_fingerprint(private_key)}
@@ -239,7 +241,7 @@ defmodule BitcoinLib.Key.PrivateKey do
     end
   end
 
-  @spec from_derivation_path(%PrivateKey{}, binary()) :: {:ok, %PrivateKey{}}
+  @spec from_derivation_path(PrivateKey.t(), binary()) :: {:ok, PrivateKey.t()}
   def from_derivation_path(%PrivateKey{} = private_key, derivation_path_string)
       when is_binary(derivation_path_string) do
     with {:ok, derivation_path} <- DerivationPath.parse(derivation_path_string) do
@@ -269,13 +271,13 @@ defmodule BitcoinLib.Key.PrivateKey do
         fingerprint: <<0x68b1f6f8::32>>
       }
   """
-  @spec from_derivation_path!(%PrivateKey{}, %DerivationPath{}) :: %PrivateKey{}
+  @spec from_derivation_path!(PrivateKey.t(), DerivationPath.t()) :: PrivateKey.t()
   def from_derivation_path!(%PrivateKey{} = private_key, %DerivationPath{} = derivation_path) do
     from_derivation_path(private_key, derivation_path)
     |> elem(1)
   end
 
-  @spec from_derivation_path!(%PrivateKey{}, binary()) :: %PrivateKey{}
+  @spec from_derivation_path!(PrivateKey.t(), binary()) :: PrivateKey.t()
   def from_derivation_path!(%PrivateKey{} = private_key, derivation_path_string)
       when is_binary(derivation_path_string) do
     from_derivation_path(private_key, derivation_path_string)
@@ -353,7 +355,7 @@ defmodule BitcoinLib.Key.PrivateKey do
       ...> private_key = %BitcoinLib.Key.PrivateKey{key: <<0xd6ead233e06c068585976b5c8373861d77e7f030ec452e65ee81c85fa6906970::256>>}
       ...> BitcoinLib.Crypto.Secp256k1.sign(message, private_key)
   """
-  @spec sign_message(binary(), %PrivateKey{}) :: binary()
+  @spec sign_message(binary(), PrivateKey.t()) :: binary()
   def sign_message(message, private_key) do
     message
     |> Secp256k1.sign(private_key)
