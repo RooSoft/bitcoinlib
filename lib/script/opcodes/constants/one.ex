@@ -16,6 +16,8 @@ defmodule BitcoinLib.Script.Opcodes.Constants.One do
 
   alias BitcoinLib.Script.Opcodes.Constants.One
 
+  @type t :: One
+
   @value 0x51
 
   @doc """
@@ -52,7 +54,7 @@ defmodule BitcoinLib.Script.Opcodes.Constants.One do
       ...> )
       {:ok, [1,3]}
   """
-  @spec execute(%One{}, list()) :: {:ok, list()}
+  @spec execute(One.t(), list()) :: {:ok, list()}
   def execute(%One{}, [remaining]) do
     {:ok, [1, remaining]}
   end

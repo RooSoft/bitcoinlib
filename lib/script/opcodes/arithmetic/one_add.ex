@@ -16,6 +16,8 @@ defmodule BitcoinLib.Script.Opcodes.Arithmetic.OneAdd do
 
   alias BitcoinLib.Script.Opcodes.Arithmetic.OneAdd
 
+  @type t :: OneAdd
+
   @value 0x8B
 
   @doc """
@@ -52,7 +54,7 @@ defmodule BitcoinLib.Script.Opcodes.Arithmetic.OneAdd do
       ...> )
       {:ok, [8, 3, 1]}
   """
-  @spec execute(%OneAdd{}, list()) :: {:ok, list()}
+  @spec execute(OneAdd.t(), list()) :: {:ok, list()}
   def execute(%OneAdd{}, [first] ++ remaining) do
     {:ok, [first + 1 | remaining]}
   end

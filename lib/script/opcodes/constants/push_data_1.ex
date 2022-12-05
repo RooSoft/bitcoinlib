@@ -16,6 +16,8 @@ defmodule BitcoinLib.Script.Opcodes.Constants.PushData1 do
 
   alias BitcoinLib.Script.Opcodes.Constants.PushData1
 
+  @type t :: PushData1
+
   @value 0x4C
 
   @doc """
@@ -52,7 +54,7 @@ defmodule BitcoinLib.Script.Opcodes.Constants.PushData1 do
       ...> )
       {:ok, [<<4, 2, 1>> | [3]]}
   """
-  @spec execute(%PushData1{}, list()) :: {:ok, list()} | {:error, binary()}
+  @spec execute(PushData1.t(), list()) :: {:ok, list()} | {:error, binary()}
   def execute(%PushData1{value: <<count::8, data::bitstring>>}, remaining) do
     case byte_size(data) do
       ^count ->

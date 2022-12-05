@@ -16,6 +16,8 @@ defmodule BitcoinLib.Script.Opcodes.Arithmetic.Not do
 
   alias BitcoinLib.Script.Opcodes.Arithmetic.Not
 
+  @type t :: Not
+
   @value 0x91
 
   @doc """
@@ -52,7 +54,7 @@ defmodule BitcoinLib.Script.Opcodes.Arithmetic.Not do
       ...> )
       {:ok, [0, 3, 1]}
   """
-  @spec execute(%Not{}, list()) :: {:ok, list()}
+  @spec execute(Not.t(), list()) :: {:ok, list()}
   def execute(%Not{}, [0] ++ remaining) do
     {:ok, [1 | remaining]}
   end

@@ -16,6 +16,8 @@ defmodule BitcoinLib.Script.Opcodes.Arithmetic.Within do
 
   alias BitcoinLib.Script.Opcodes.Arithmetic.Within
 
+  @type t :: Within
+
   @value 0xA5
 
   @doc """
@@ -52,7 +54,7 @@ defmodule BitcoinLib.Script.Opcodes.Arithmetic.Within do
       ...> )
       {:ok, [1, 7]}
   """
-  @spec execute(%Within{}, list()) :: {:ok, list()}
+  @spec execute(Within.t(), list()) :: {:ok, list()}
   def execute(%Within{}, [first, second, third] ++ remaining) do
     case first >= second && first < third do
       true -> {:ok, [1 | remaining]}

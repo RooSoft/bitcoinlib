@@ -16,6 +16,8 @@ defmodule BitcoinLib.Script.Opcodes.Arithmetic.Sub do
 
   alias BitcoinLib.Script.Opcodes.Arithmetic.Sub
 
+  @type t :: Sub
+
   @value 0x94
 
   @doc """
@@ -52,7 +54,7 @@ defmodule BitcoinLib.Script.Opcodes.Arithmetic.Sub do
       ...> )
       {:ok, [4, 1]}
   """
-  @spec execute(%Sub{}, list()) :: {:ok, list()}
+  @spec execute(Sub.t(), list()) :: {:ok, list()}
   def execute(%Sub{}, [first, second] ++ remaining) do
     {:ok, [first - second | remaining]}
   end

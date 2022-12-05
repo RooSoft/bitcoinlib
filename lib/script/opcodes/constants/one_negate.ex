@@ -16,7 +16,9 @@ defmodule BitcoinLib.Script.Opcodes.Constants.OneNegate do
 
   alias BitcoinLib.Script.Opcodes.Constants.OneNegate
 
-  @value 0x4f
+  @type t :: OneNegate
+
+  @value 0x4F
 
   @doc """
   Returns 0x4f
@@ -25,7 +27,7 @@ defmodule BitcoinLib.Script.Opcodes.Constants.OneNegate do
       iex> BitcoinLib.Script.Opcodes.Constants.OneNegate.v()
       0x4f
   """
-  @spec v() :: 0x4f
+  @spec v() :: 0x4F
   def v do
     @value
   end
@@ -52,7 +54,7 @@ defmodule BitcoinLib.Script.Opcodes.Constants.OneNegate do
       ...> )
       {:ok, [-1,3]}
   """
-  @spec execute(%OneNegate{}, list()) :: {:ok, list()}
+  @spec execute(OneNegate.t(), list()) :: {:ok, list()}
   def execute(%OneNegate{}, [remaining]) do
     {:ok, [-1, remaining]}
   end

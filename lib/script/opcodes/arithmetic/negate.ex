@@ -16,6 +16,8 @@ defmodule BitcoinLib.Script.Opcodes.Arithmetic.Negate do
 
   alias BitcoinLib.Script.Opcodes.Arithmetic.Negate
 
+  @type t :: Negate
+
   @value 0x8F
 
   @doc """
@@ -52,7 +54,7 @@ defmodule BitcoinLib.Script.Opcodes.Arithmetic.Negate do
       ...> )
       {:ok, [-2, 3, 1]}
   """
-  @spec execute(%Negate{}, list()) :: {:ok, list()}
+  @spec execute(Negate.t(), list()) :: {:ok, list()}
   def execute(%Negate{}, [first] ++ remaining) do
     {:ok, [-first | remaining]}
   end

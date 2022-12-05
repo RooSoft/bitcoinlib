@@ -16,6 +16,8 @@ defmodule BitcoinLib.Script.Opcodes.Constants.Two do
 
   alias BitcoinLib.Script.Opcodes.Constants.Two
 
+  @type t :: Two
+
   @value 0x52
 
   @doc """
@@ -51,7 +53,7 @@ defmodule BitcoinLib.Script.Opcodes.Constants.Two do
       ...> )
       {:ok, [2,3]}
   """
-  @spec execute(%Two{}, list()) :: {:ok, list()}
+  @spec execute(Two.t(), list()) :: {:ok, list()}
   def execute(%Two{}, [remaining]) do
     {:ok, [2, remaining]}
   end

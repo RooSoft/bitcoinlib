@@ -16,6 +16,8 @@ defmodule BitcoinLib.Script.Opcodes.Arithmetic.OneSub do
 
   alias BitcoinLib.Script.Opcodes.Arithmetic.OneSub
 
+  @type t :: OneSub
+
   @value 0x8C
 
   @doc """
@@ -52,7 +54,7 @@ defmodule BitcoinLib.Script.Opcodes.Arithmetic.OneSub do
       ...> )
       {:ok, [6, 3, 1]}
   """
-  @spec execute(%OneSub{}, list()) :: {:ok, list()}
+  @spec execute(OneSub.t(), list()) :: {:ok, list()}
   def execute(%OneSub{}, [first] ++ remaining) do
     {:ok, [first - 1 | remaining]}
   end
