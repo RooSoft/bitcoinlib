@@ -32,7 +32,7 @@ defmodule BitcoinLib.Address.Bech32 do
       ...> } |> BitcoinLib.Address.Bech32.from_public_key()
       "bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4"
   """
-  @spec from_public_key(%PublicKey{}, :mainnet | :testnet) :: binary()
+  @spec from_public_key(PublicKey.t(), :mainnet | :testnet) :: binary()
   def from_public_key(%PublicKey{key: key}, network \\ :mainnet) do
     key
     |> Crypto.hash160()

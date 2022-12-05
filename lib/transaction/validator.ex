@@ -42,7 +42,7 @@ defmodule BitcoinLib.Transaction.Validator do
       ...>  |> BitcoinLib.Transaction.Validator.verify(prevouts, public_key)
       true
   """
-  @spec verify(binary(), (binary() -> %Transaction{})) :: boolean()
+  @spec verify(binary(), (binary() -> Transaction.t())) :: boolean()
   def verify(txid, get_transaction_by_id) do
     with {:ok, %Transaction{inputs: inputs} = transaction} <- get_transaction_by_id.(txid) do
       [{:ok, validator_input}] =

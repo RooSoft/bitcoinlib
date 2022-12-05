@@ -36,7 +36,7 @@ defmodule BitcoinLib.Crypto.Secp256k1 do
       ...> private_key = %BitcoinLib.Key.PrivateKey{key: <<0xd6ead233e06c068585976b5c8373861d77e7f030ec452e65ee81c85fa6906970::256>>}
       ...> BitcoinLib.Crypto.Secp256k1.sign(message, private_key)
   """
-  @spec sign(binary(), %PrivateKey{}) :: bitstring()
+  @spec sign(binary(), PrivateKey.t) :: bitstring()
   def sign(message, %PrivateKey{key: key}) do
     key = Key.from_privkey(key)
 
@@ -53,7 +53,7 @@ defmodule BitcoinLib.Crypto.Secp256k1 do
       ...> BitcoinLib.Crypto.Secp256k1.validate(signature, message, public_key)
       true
   """
-  @spec validate(bitstring(), bitstring(), %PublicKey{} | bitstring()) :: boolean()
+  @spec validate(bitstring(), bitstring(), PublicKey.t() | bitstring()) :: boolean()
   def validate(signature, message, %PublicKey{key: key}) do
     validate(signature, message, key)
   end

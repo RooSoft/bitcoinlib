@@ -7,6 +7,9 @@ defmodule BitcoinLib.Transaction.Spec.Output do
 
   alias BitcoinLib.Transaction.Spec
   alias BitcoinLib.Transaction
+  alias BitcoinLib.Transaction.Spec.Output
+
+  @type t :: Output
 
   @doc """
   Converts a human readable output into a %Transaction.Output{}
@@ -28,7 +31,7 @@ defmodule BitcoinLib.Transaction.Spec.Output do
         value: 1000
       }
   """
-  @spec to_transaction_output(%Spec.Output{}) :: %Transaction.Output{}
+  @spec to_transaction_output(Spec.Output.t()) :: Transaction.Output.t()
   def to_transaction_output(%Spec.Output{script_pub_key: script_pub_key, value: value}) do
     %Transaction.Output{
       script_pub_key: script_pub_key,

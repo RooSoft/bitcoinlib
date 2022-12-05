@@ -10,7 +10,8 @@ defmodule BitcoinLib.Transaction.Validator.Input do
 
   defstruct [:type, :der_signature, :sighash_type]
 
-  @spec validate(%Input{}, (binary() -> %Transaction{})) :: {:ok, boolean()} | {:error, binary()}
+  @spec validate(Input.t(), (binary() -> Transaction.t())) ::
+          {:ok, boolean()} | {:error, binary()}
   def validate(%Input{} = input, get_transaction_by_id) do
     with {:ok, output} <- Prevout.from_input(input, get_transaction_by_id) do
       case Script.identify(output.script_pub_key) do

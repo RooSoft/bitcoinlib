@@ -6,6 +6,9 @@ defmodule BitcoinLib.Transaction.Spec.Input do
 
   alias BitcoinLib.Transaction.Spec
   alias BitcoinLib.Transaction
+  alias BitcoinLib.Transaction.Spec.Input
+
+  @type t :: Input
 
   @doc """
   Converts a human readable input into a %Transaction.Input{}
@@ -24,7 +27,7 @@ defmodule BitcoinLib.Transaction.Spec.Input do
         script_sig: "76a914c39658833d83f2299416e697af2fb95a998853d388ac"
       }
   """
-  @spec to_transaction_input(%Spec.Input{}) :: %Transaction.Input{}
+  @spec to_transaction_input(Spec.Input.t()) :: Transaction.Input.t()
   def to_transaction_input(%Spec.Input{
         txid: txid,
         vout: vout,

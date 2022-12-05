@@ -21,7 +21,7 @@ defmodule BitcoinLib.Address do
       ...> |> BitcoinLib.Address.from_public_key(:p2wpkh, :mainnet)
       "bc1qa5gyew808tdta3wjh6qh3jvcglukjsnfg0qx4u"
   """
-  @spec from_public_key(%PublicKey{}, :p2pkh | :p2sh | :p2wpkh, :mainnet | :testnet) ::
+  @spec from_public_key(PublicKey.t(), :p2pkh | :p2sh | :p2wpkh, :mainnet | :testnet) ::
           binary()
   def from_public_key(public_key, script_type, network \\ :mainnet)
 

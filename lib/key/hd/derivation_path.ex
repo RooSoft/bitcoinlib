@@ -17,6 +17,8 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
   alias BitcoinLib.Key.HD.DerivationPath.{Parser, PathValues}
   alias BitcoinLib.Key.HD.DerivationPath.Parser.{Type, Purpose, CoinType, Change}
 
+  @type t :: DerivationPath
+
   @hardened :math.pow(2, 31) |> trunc
 
   @doc """
@@ -36,7 +38,7 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
         }
       }
   """
-  @spec parse(binary()) :: {:ok, %BitcoinLib.Key.HD.DerivationPath{}}
+  @spec parse(binary()) :: {:ok, DerivationPath.t()}
   def parse(derivation_path) do
     derivation_path
     |> Parser.parse_valid_derivation_path()
@@ -65,7 +67,7 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
           integer() | nil,
           integer() | nil
         ) ::
-          %DerivationPath{}
+          DerivationPath.t()
   def from_values(
         type,
         purpose,
@@ -97,7 +99,7 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
         account: 5
       }
   """
-  @spec from_list(list()) :: %DerivationPath{}
+  @spec from_list(list()) :: DerivationPath.t()
   def from_list(values_list) do
     %PathValues{
       type: type,

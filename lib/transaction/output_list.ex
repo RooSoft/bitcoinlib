@@ -30,7 +30,7 @@ defmodule BitcoinLib.Transaction.OutputList do
       }
   """
   @spec extract(bitstring(), integer()) ::
-          {:ok, list(%Output{}), bitstring()} | {:error, binary()}
+          {:ok, list(Output.t()), bitstring()} | {:error, binary()}
   def extract(remaining, count) do
     decode(remaining, count, [])
   end
