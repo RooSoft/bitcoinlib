@@ -16,6 +16,8 @@ defmodule BitcoinLib.Script.Opcodes.Crypto.CheckSigVerify do
 
   alias BitcoinLib.Script.Opcodes.Crypto.CheckSigVerify
 
+  @type t :: CheckSigVerify
+
   @value 0xAD
 
   @doc """
@@ -45,7 +47,7 @@ defmodule BitcoinLib.Script.Opcodes.Crypto.CheckSigVerify do
   @doc """
   NOT IMPLEMENTED YET
   """
-  @spec execute(%CheckSigVerify{}, list()) :: {:ok, [list()]} | {:error, binary()}
+  @spec execute(CheckSigVerify.t(), list()) :: {:ok, [list()]} | {:error, binary()}
   def execute(%CheckSigVerify{}, []) do
     throw("OP_CHECKSIGVERIFY execution has not ben implemented yet")
   end

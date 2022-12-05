@@ -6,6 +6,8 @@ defmodule BitcoinLib.Script.Opcodes.Data do
 
   alias BitcoinLib.Script.Opcodes.Data
 
+  @type t :: Data
+
   @doc """
   Adds between 1 and 75 bytes of data into the stack
 
@@ -14,7 +16,7 @@ defmodule BitcoinLib.Script.Opcodes.Data do
       ...> |> BitcoinLib.Script.Opcodes.Data.encode()
       <<5, 1, 2, 3, 4, 5>>
   """
-  @spec encode(%Data{}) :: bitstring()
+  @spec encode(Data.t()) :: bitstring()
   def encode(%Data{value: value}) do
     size_of_value = byte_size(value)
 

@@ -17,6 +17,8 @@ defmodule BitcoinLib.Script.Opcodes.Crypto.Sha256 do
   alias BitcoinLib.Crypto
   alias BitcoinLib.Script.Opcodes.Crypto.Sha256
 
+  @type t :: Sha256
+
   @value 0xA8
 
   @doc """
@@ -52,7 +54,7 @@ defmodule BitcoinLib.Script.Opcodes.Crypto.Sha256 do
       ...> |> BitcoinLib.Script.Opcodes.Crypto.Sha256.execute([pub_key, 3])
       {:ok, [<<0x01e9a3394b9fdf95aa04dcb91bf540aae4196bf8c550d9be4c2d0ff94fd505bd::256>>, 3]}
   """
-  @spec execute(%Sha256{}, [<<_::264>> | list()]) :: {:ok, [<<_::256>> | list()]}
+  @spec execute(Sha256.t(), [<<_::264>> | list()]) :: {:ok, [<<_::256>> | list()]}
   def execute(_opcode, []), do: {:error, "trying to execute OP_SHA256 on an empty stack"}
 
   def execute(_opcode, [first_element | remaining]) do

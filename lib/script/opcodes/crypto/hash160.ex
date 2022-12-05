@@ -17,6 +17,8 @@ defmodule BitcoinLib.Script.Opcodes.Crypto.Hash160 do
   alias BitcoinLib.Crypto
   alias BitcoinLib.Script.Opcodes.Crypto.Hash160
 
+  @type t :: Hash160
+
   @value 0xA9
 
   @doc """
@@ -52,7 +54,7 @@ defmodule BitcoinLib.Script.Opcodes.Crypto.Hash160 do
       ...> |> BitcoinLib.Script.Opcodes.Crypto.Hash160.execute([pub_key, 3])
       {:ok, [<<0x17cdc02e31846f9e7c25952700f53e9752a0a3c2::160>>, 3]}
   """
-  @spec execute(%Hash160{}, [<<_::264>> | list()]) :: {:ok, [<<_::160>> | list()]}
+  @spec execute(Hash160.t(), [<<_::264>> | list()]) :: {:ok, [<<_::160>> | list()]}
   def execute(_opcode, []), do: {:error, "trying to execute OP_HASH160 on an empty stack"}
 
   def execute(_opcode, [first_element | remaining]) do

@@ -17,6 +17,8 @@ defmodule BitcoinLib.Script.Opcodes.Crypto.Ripemd160 do
   alias BitcoinLib.Crypto
   alias BitcoinLib.Script.Opcodes.Crypto.Ripemd160
 
+  @type t :: Ripemd160
+
   @value 0xA6
 
   @doc """
@@ -52,7 +54,7 @@ defmodule BitcoinLib.Script.Opcodes.Crypto.Ripemd160 do
       ...> |> BitcoinLib.Script.Opcodes.Crypto.Ripemd160.execute([pub_key, 3])
       {:ok, [<<0xafca2e6d573c88813ac8f8af67b26a8b6e49441e::160>>, 3]}
   """
-  @spec execute(%Ripemd160{}, [<<_::264>> | list()]) :: {:ok, [<<_::160>> | list()]}
+  @spec execute(Ripemd160.t(), [<<_::264>> | list()]) :: {:ok, [<<_::160>> | list()]}
   def execute(_opcode, []), do: {:error, "trying to execute OP_RIPEMD160 on an empty stack"}
 
   def execute(_opcode, [first_element | remaining]) do

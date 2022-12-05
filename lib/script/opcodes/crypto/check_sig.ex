@@ -21,6 +21,8 @@ defmodule BitcoinLib.Script.Opcodes.Crypto.CheckSig do
   alias BitcoinLib.Script.Opcodes.Crypto.CheckSig
   alias BitcoinLib.Key.PublicKey
 
+  @type t :: CheckSig
+
   @value 0xAC
 
   @doc """
@@ -61,7 +63,7 @@ defmodule BitcoinLib.Script.Opcodes.Crypto.CheckSig do
       ...> |> BitcoinLib.Script.Opcodes.Crypto.CheckSig.execute([sig_pub_key, signature, 3])
       {:ok, [1, 3]}
   """
-  @spec execute(%CheckSig{}, list()) :: {:ok, list()}
+  @spec execute(CheckSig.t(), list()) :: {:ok, list()}
   def execute(%CheckSig{script: script}, [sig_pub_key | [sig | remaining]]) do
     script_hex = script |> Binary.to_hex()
 

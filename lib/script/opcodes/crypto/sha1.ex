@@ -17,6 +17,8 @@ defmodule BitcoinLib.Script.Opcodes.Crypto.Sha1 do
   alias BitcoinLib.Crypto
   alias BitcoinLib.Script.Opcodes.Crypto.Sha1
 
+  @type t :: Sha1
+
   @value 0xA7
 
   @doc """
@@ -52,7 +54,7 @@ defmodule BitcoinLib.Script.Opcodes.Crypto.Sha1 do
       ...> |> BitcoinLib.Script.Opcodes.Crypto.Sha1.execute([pub_key, 3])
       {:ok, [<<0x148bdd3eb072846d9828b2042e8391e4f6614ad2::160>>, 3]}
   """
-  @spec execute(%Sha1{}, [<<_::264>> | list()]) :: {:ok, [<<_::160>> | list()]}
+  @spec execute(Sha1.t(), [<<_::264>> | list()]) :: {:ok, [<<_::160>> | list()]}
   def execute(_opcode, []), do: {:error, "trying to execute OP_SHA1 on an empty stack"}
 
   def execute(_opcode, [first_element | remaining]) do
