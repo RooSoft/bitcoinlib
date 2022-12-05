@@ -1,4 +1,8 @@
 defmodule BitcoinLib.Signing.Psbt.GenericProperties.Proprietary do
+  @moduledoc """
+  A list of proprietary properties in a partially signed bitcoin transaction
+  """
+
   defstruct [:key_identifier, :key_data, :data]
 
   alias BitcoinLib.Signing.Psbt.{CompactInteger, Keypair}

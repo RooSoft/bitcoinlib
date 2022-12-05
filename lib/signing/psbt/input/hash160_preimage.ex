@@ -1,4 +1,8 @@
 defmodule BitcoinLib.Signing.Psbt.Input.Hash160Preimage do
+  @moduledoc """
+  The Hash160 of a partially signed bitcoin transaction's input preimage
+  """
+
   defstruct [:hash, :value]
 
   alias BitcoinLib.Signing.Psbt.Input.Hash160Preimage

@@ -1,4 +1,8 @@
 defmodule BitcoinLib.Signing.Psbt.Input.FinalScriptWitness do
+  @moduledoc """
+  The final script witness of a partially signed bitcoin transaction's input
+  """
+
   defstruct [:script_witness]
 
   alias BitcoinLib.Signing.Psbt.Input.FinalScriptWitness

@@ -1,4 +1,8 @@
 defmodule BitcoinLib.Signing.Psbt.Input.OutputIndex do
+  @moduledoc """
+  An output index in a partially signed bitcoin transaction's input
+  """
+
   defstruct [:value]
 
   alias BitcoinLib.Signing.Psbt.Input.OutputIndex

@@ -1,4 +1,8 @@
 defmodule BitcoinLib.Signing.Psbt.Input.PartialSig do
+  @moduledoc """
+  A partial signature in a partially signed bitcoin transaction's input
+  """
+
   defstruct [:pub_key, :signature]
 
   @compressed_size 33

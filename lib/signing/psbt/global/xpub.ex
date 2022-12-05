@@ -1,4 +1,8 @@
 defmodule BitcoinLib.Signing.Psbt.Global.Xpub do
+  @moduledoc """
+  An xpub in a partially signed bitcoin transaction
+  """
+
   defstruct [:fingerprint, :path_elements]
 
   alias BitcoinLib.Signing.Psbt.Global.Xpub

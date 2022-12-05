@@ -1,4 +1,8 @@
 defmodule BitcoinLib.Crypto.Bitstring do
+  @moduledoc """
+  Bitstring manipulation functions
+  """
+
   @doc """
   Takes any bistring and returns bytes in the reverse order, such as going from
   little endian to big endian or the opposite

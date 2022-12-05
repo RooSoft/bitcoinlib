@@ -1,4 +1,8 @@
 defmodule BitcoinLib.Signing.Psbt.Global.Version do
+  @moduledoc """
+  A partially signed bitcoin transaction's version number
+  """
+
   defstruct [:value]
 
   alias BitcoinLib.Signing.Psbt.Global.Version

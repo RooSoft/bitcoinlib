@@ -1,4 +1,8 @@
 defmodule BitcoinLib.Signing.Psbt.Input.Hash256Preimage do
+  @moduledoc """
+  The double SHA256 of a partially signed bitcoin transaction's input preimage
+  """
+
   defstruct [:hash, :value]
 
   alias BitcoinLib.Signing.Psbt.Input.Hash256Preimage

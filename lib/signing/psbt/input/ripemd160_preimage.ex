@@ -1,4 +1,8 @@
 defmodule BitcoinLib.Signing.Psbt.Input.Ripemd160Preimage do
+  @moduledoc """
+  A RIPEMD169 preimage of a partially signed bitcoin transaction's input
+  """
+
   defstruct [:hash, :value]
 
   alias BitcoinLib.Signing.Psbt.Input.Ripemd160Preimage

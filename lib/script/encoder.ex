@@ -1,4 +1,8 @@
 defmodule BitcoinLib.Script.Encoder do
+  @moduledoc """
+  Used to encode scripts in the bitstring format
+  """
+
   alias BitcoinLib.Script.{OpcodeManager}
 
   @doc """
