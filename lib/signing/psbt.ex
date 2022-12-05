@@ -1,4 +1,8 @@
 defmodule BitcoinLib.Signing.Psbt do
+  @moduledoc """
+  A partially signed bitcoin transaction
+  """
+
   defstruct [:global, :inputs, :outputs]
 
   alias BitcoinLib.Signing.Psbt

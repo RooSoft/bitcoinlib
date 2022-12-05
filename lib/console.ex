@@ -1,4 +1,8 @@
 defmodule BitcoinLib.Console do
+  @moduledoc """
+  Printing stuff in the console in a more human way
+  """
+
   alias BitcoinLib.Key.{PrivateKey, PublicKey}
 
   def print_hex(bitstring, message) do

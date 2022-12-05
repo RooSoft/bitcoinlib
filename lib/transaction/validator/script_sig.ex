@@ -1,5 +1,10 @@
 defmodule BitcoinLib.Transaction.Validator.ScriptSig do
-  #alias BitcoinLib.Transaction
+  @moduledoc """
+  Analyzes the script sig section of a transaction input in the process of validating
+  that transaction
+  """
+
+  # alias BitcoinLib.Transaction
   alias BitcoinLib.Transaction.Input
   alias BitcoinLib.Script
 

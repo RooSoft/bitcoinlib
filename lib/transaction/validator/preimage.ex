@@ -1,4 +1,8 @@
 defmodule BitcoinLib.Transaction.Validator.Preimage do
+  @moduledoc """
+  Hashes a transaction right before the signing
+  """
+
   alias BitcoinLib.Transaction
   alias BitcoinLib.Crypto
 

@@ -1,4 +1,8 @@
 defmodule BitcoinLib.Signing.ScriptSig do
+  @moduledoc """
+  Script sig decoder
+  """
+
   @byte 8
 
   @doc """

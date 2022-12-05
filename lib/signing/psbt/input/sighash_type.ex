@@ -1,4 +1,8 @@
 defmodule BitcoinLib.Signing.Psbt.Input.SighashType do
+  @moduledoc """
+  Sighash type part of a partially signed bitcoin transaction's input
+  """
+
   defstruct [:value]
 
   alias BitcoinLib.Signing.Psbt.Input.SighashType

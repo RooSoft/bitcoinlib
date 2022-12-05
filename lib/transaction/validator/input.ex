@@ -1,4 +1,8 @@
 defmodule BitcoinLib.Transaction.Validator.Input do
+  @moduledoc """
+  Validates a transaction input
+  """
+
   alias BitcoinLib.Crypto
   alias BitcoinLib.Script
   alias BitcoinLib.Transaction
