@@ -40,7 +40,7 @@ defmodule BitcoinLib.Key.PrivateKey.ChildFromDerivationPath do
     {child_private_key, _} =
       {private_key, derivation_path}
       |> maybe_derive_purpose
-      |> maybe_derive_coin_type
+      |> maybe_derive_network
       |> maybe_derive_account
       |> maybe_derive_change
       |> maybe_derive_address_index
@@ -66,17 +66,17 @@ defmodule BitcoinLib.Key.PrivateKey.ChildFromDerivationPath do
     {child_private_key, derivation_path}
   end
 
-  defp maybe_derive_coin_type({%PrivateKey{}, %DerivationPath{coin_type: nil}} = hash) do
+  defp maybe_derive_network({%PrivateKey{}, %DerivationPath{network: nil}} = hash) do
     hash
   end
 
-  defp maybe_derive_coin_type(
-         {%PrivateKey{} = private_key, %DerivationPath{coin_type: coin_type} = derivation_path}
+  defp maybe_derive_network(
+         {%PrivateKey{} = private_key, %DerivationPath{network: network} = derivation_path}
        ) do
     {:ok, child_private_key} =
-      case coin_type do
-        :bitcoin -> ChildFromIndex.get(private_key, 0, true)
-        :bitcoin_testnet -> ChildFromIndex.get(private_key, 1, true)
+      case network do
+        :mainnet -> ChildFromIndex.get(private_key, 0, true)
+        :testnet -> ChildFromIndex.get(private_key, 1, true)
         _ -> {:ok, private_key}
       end
 

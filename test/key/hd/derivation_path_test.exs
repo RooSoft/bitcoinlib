@@ -17,7 +17,7 @@ defmodule BitcoinLib.Key.HD.DerivationPathTest do
     assert %DerivationPath{
              type: :private,
              purpose: :bip44,
-             coin_type: :bitcoin,
+             network: :mainnet,
              account: 0,
              change: :receiving_chain,
              address_index: 0
@@ -34,7 +34,7 @@ defmodule BitcoinLib.Key.HD.DerivationPathTest do
     assert %DerivationPath{
              type: :private,
              purpose: :bip44,
-             coin_type: :bitcoin,
+             network: :mainnet,
              account: 0,
              change: :receiving_chain,
              address_index: 0
@@ -85,7 +85,7 @@ defmodule BitcoinLib.Key.HD.DerivationPathTest do
     assert %DerivationPath{
              type: :public,
              purpose: :bip44,
-             coin_type: :bitcoin,
+             network: :mainnet,
              account: 0,
              change: :receiving_chain,
              address_index: 0
@@ -142,24 +142,24 @@ defmodule BitcoinLib.Key.HD.DerivationPathTest do
     assert "Invalid derivation path" = result
   end
 
-  test "derivation path with testnet coin type" do
+  test "derivation path with testnet network" do
     path = "m/44'/1'/0'/0/0"
 
     {:ok, result} =
       path
       |> DerivationPath.parse()
 
-    assert %{coin_type: :bitcoin_testnet} = result
+    assert %{network: :testnet} = result
   end
 
-  test "derivation path with invalid coin type" do
+  test "derivation path with invalid network" do
     path = "m/44'/2'/0'/0/0"
 
     {:error, result} =
       path
       |> DerivationPath.parse()
 
-    assert result =~ "invalid coin type"
+    assert result =~ "invalid network"
   end
 
   test "minimal derivation path returning no level information" do
@@ -171,7 +171,7 @@ defmodule BitcoinLib.Key.HD.DerivationPathTest do
 
     assert :private == result.type
     assert nil == result.purpose
-    assert nil == result.coin_type
+    assert nil == result.network
     assert nil == result.account
     assert nil == result.change
     assert nil == result.address_index
@@ -180,18 +180,18 @@ defmodule BitcoinLib.Key.HD.DerivationPathTest do
   test "derivation path from values" do
     type = "M"
     purpose = @hardened + 84
-    coin_type = @hardened
+    network = @hardened
     account = @hardened
     change = 0
     address_index = 0
 
     derivation_path =
-      DerivationPath.from_values(type, purpose, coin_type, account, change, address_index)
+      DerivationPath.from_values(type, purpose, network, account, change, address_index)
 
     assert %DerivationPath{
              type: :public,
              purpose: :bip84,
-             coin_type: :bitcoin,
+             network: :mainnet,
              account: 0,
              change: :receiving_chain,
              address_index: 0
@@ -201,15 +201,15 @@ defmodule BitcoinLib.Key.HD.DerivationPathTest do
   test "derivation path from values, some missing" do
     type = "M"
     purpose = @hardened + 84
-    coin_type = @hardened
+    network = @hardened
     account = @hardened
 
-    derivation_path = DerivationPath.from_values(type, purpose, coin_type, account)
+    derivation_path = DerivationPath.from_values(type, purpose, network, account)
 
     assert %DerivationPath{
              type: :public,
              purpose: :bip84,
-             coin_type: :bitcoin,
+             network: :mainnet,
              account: 0,
              change: nil,
              address_index: nil
@@ -225,7 +225,7 @@ defmodule BitcoinLib.Key.HD.DerivationPathTest do
     assert %DerivationPath{
              type: :public,
              purpose: :bip84,
-             coin_type: nil,
+             network: nil,
              account: nil,
              change: nil,
              address_index: nil

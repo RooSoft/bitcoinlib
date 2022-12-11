@@ -2,7 +2,7 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
   @moduledoc """
   Can parse derivation paths string format into a native format
 
-  m / purpose' / coin_type' / account' / change / address_index
+  m / purpose' / network' / account' / change / address_index
 
   Inspired by
 
@@ -11,11 +11,11 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
   """
 
   @enforce_keys [:type]
-  defstruct [:type, :purpose, :coin_type, :account, :change, :address_index]
+  defstruct [:type, :purpose, :network, :account, :change, :address_index]
 
   alias BitcoinLib.Key.HD.DerivationPath
   alias BitcoinLib.Key.HD.DerivationPath.{Parser, PathValues}
-  alias BitcoinLib.Key.HD.DerivationPath.Parser.{Type, Purpose, CoinType, Change}
+  alias BitcoinLib.Key.HD.DerivationPath.Parser.{Type, Purpose, Network, Change}
 
   @type t :: DerivationPath
 
@@ -31,7 +31,7 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
         %BitcoinLib.Key.HD.DerivationPath{
           type: :private,
           purpose: :bip44,
-          coin_type: :bitcoin_testnet,
+          network: :testnet,
           account: 2,
           change: :change_chain,
           address_index: 4
@@ -46,14 +46,14 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
 
   @doc """
   Retruns a %DerivationPath from a set of parameters, with these values potentially missing:
-  coin_type, account, change, address_index
+  network, account, change, address_index
 
   ## Examples
       iex> BitcoinLib.Key.HD.DerivationPath.from_values("M", 0x80000054, 0x80000000, 0x80000000, 0, 0)
       %BitcoinLib.Key.HD.DerivationPath{
         type: :public,
         purpose: :bip84,
-        coin_type: :bitcoin,
+        network: :mainnet,
         account: 0,
         change: :receiving_chain,
         address_index: 0
@@ -71,7 +71,7 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
   def from_values(
         type,
         purpose,
-        coin_type \\ nil,
+        network \\ nil,
         account \\ nil,
         change \\ nil,
         address_index \\ nil
@@ -79,7 +79,7 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
     %DerivationPath{
       type: parse_type(type),
       purpose: parse_purpose(purpose),
-      coin_type: parse_coin_type(coin_type),
+      network: parse_network(network),
       account: convert_hardened_account(account),
       change: parse_change(change),
       address_index: address_index
@@ -95,7 +95,7 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
       %BitcoinLib.Key.HD.DerivationPath{
         type: :private,
         purpose: :bip84,
-        coin_type: :bitcoin,
+        network: :mainnet,
         account: 5
       }
   """
@@ -104,13 +104,13 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
     %PathValues{
       type: type,
       purpose: purpose,
-      coin_type: coin_type,
+      network: network,
       account: account,
       change: change,
       address_index: address_index
     } = PathValues.from_list(values_list)
 
-    from_values(type, purpose, coin_type, account, change, address_index)
+    from_values(type, purpose, network, account, change, address_index)
   end
 
   defp parse_type(type) do
@@ -121,10 +121,10 @@ defmodule BitcoinLib.Key.HD.DerivationPath do
     Purpose.get_atom(purpose - @hardened)
   end
 
-  defp parse_coin_type(nil), do: nil
+  defp parse_network(nil), do: nil
 
-  defp parse_coin_type(coin_type) do
-    CoinType.get_atom(coin_type - @hardened)
+  defp parse_network(network) do
+    Network.get_atom(network - @hardened)
   end
 
   defp convert_hardened_account(nil), do: nil

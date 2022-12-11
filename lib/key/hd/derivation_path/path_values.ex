@@ -5,7 +5,7 @@ defmodule BitcoinLib.Key.HD.DerivationPath.PathValues do
   """
   @enforce_keys [:type]
 
-  defstruct [:type, :purpose, :coin_type, :account, :change, :address_index]
+  defstruct [:type, :purpose, :network, :account, :change, :address_index]
 
   alias BitcoinLib.Key.HD.DerivationPath.PathValues
 
@@ -20,14 +20,14 @@ defmodule BitcoinLib.Key.HD.DerivationPath.PathValues do
       %BitcoinLib.Key.HD.DerivationPath.PathValues{
         type: "m",
         purpose: 0x80000000,
-        coin_type: 0x80000000,
+        network: 0x80000000,
         account: 0x80000005
       }
   """
   @spec from_list(list()) :: PathValues.t()
   def from_list([type | remaining_values]) do
     {purpose, remaining_values} = extract_first_value(remaining_values)
-    {coin_type, remaining_values} = extract_first_value(remaining_values)
+    {network, remaining_values} = extract_first_value(remaining_values)
     {account, remaining_values} = extract_first_value(remaining_values)
     {change, remaining_values} = extract_first_value(remaining_values)
     {address_index, _remaining_values} = extract_first_value(remaining_values)
@@ -35,7 +35,7 @@ defmodule BitcoinLib.Key.HD.DerivationPath.PathValues do
     %PathValues{
       type: type,
       purpose: purpose,
-      coin_type: coin_type,
+      network: network,
       account: account,
       change: change,
       address_index: address_index

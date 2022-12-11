@@ -5,7 +5,7 @@ defmodule BitcoinLib.Key.HD.DerivationPath.Parser do
   """
 
   alias BitcoinLib.Key.HD.DerivationPath
-  alias BitcoinLib.Key.HD.DerivationPath.Parser.{Type, Purpose, CoinType, Account, Change, Index}
+  alias BitcoinLib.Key.HD.DerivationPath.Parser.{Type, Purpose, Network, Account, Change, Index}
 
   @doc """
   Single purpose function that's being called by DerivationPath.parse/1, returning a DerivationPath
@@ -19,7 +19,7 @@ defmodule BitcoinLib.Key.HD.DerivationPath.Parser do
         %BitcoinLib.Key.HD.DerivationPath{
           type: :private,
           purpose: :bip44,
-          coin_type: :bitcoin,
+          network: :mainnet,
           account: 0,
           change: :change_chain,
           address_index: 0
@@ -33,7 +33,7 @@ defmodule BitcoinLib.Key.HD.DerivationPath.Parser do
          tokens <- split_path(derivation_path),
          {:ok, type, tokens} <- Type.extract(tokens),
          {:ok, purpose, tokens} <- Purpose.extract(tokens),
-         {:ok, coin_type, tokens} <- CoinType.extract(tokens),
+         {:ok, network, tokens} <- Network.extract(tokens),
          {:ok, account, tokens} <- Account.extract(tokens),
          {:ok, change, tokens} <- Change.extract(tokens),
          {:ok, index} <- Index.extract(tokens) do
@@ -42,7 +42,7 @@ defmodule BitcoinLib.Key.HD.DerivationPath.Parser do
         %DerivationPath{
           type: type,
           purpose: purpose,
-          coin_type: coin_type,
+          network: network,
           account: account,
           change: change,
           address_index: index
