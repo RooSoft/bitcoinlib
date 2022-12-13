@@ -30,3 +30,5 @@ bitcoinlib-*.tar
 .DS_Store
 
 /livebooks/local
+
+.elixir_ls
