@@ -382,7 +382,7 @@ defmodule BitcoinLib.Transaction do
             txid: "e4c226432a9319d603b2ed1fa609bffe4cd91f89b3176a9e73b19f7891a92bb6",
             vout: 0,
             sequence: 0xFFFFFFFF,
-            script_sig: []
+            script_sig: <<>>
           }
         ],
         outputs: [%BitcoinLib.Transaction.Output{
@@ -391,7 +391,6 @@ defmodule BitcoinLib.Transaction do
         ],
         locktime: 0
       }
-      |> BitcoinLib.Transaction.strip_signatures()
   """
   @spec strip_signatures(Transaction.t()) :: Transaction.t()
   def strip_signatures(%Transaction{inputs: inputs} = transaction) do
