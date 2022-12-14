@@ -54,16 +54,11 @@ defmodule BitcoinLib.Transaction.BetterSigner do
   """
   @spec sign(Transaction.t(), list(PrivateKey.t())) :: Transaction.t()
   def sign(%Transaction{} = transaction, private_keys) do
-    IO.puts("USING THE BETTER SIGNER")
-
     with :ok <- Validator.validate(transaction, private_keys),
-         signatures <- Inputs.sign(transaction, private_keys) do
-      transaction
-      |> apply_signatures(signatures)
+         signed_transaction <- Inputs.sign(transaction, private_keys) do
+      {:ok, signed_transaction}
     else
       {:error, message} -> {:error, message}
     end
   end
-
-  defp apply_signatures(transaction, _signatures), do: transaction
 end
