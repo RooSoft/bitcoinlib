@@ -245,4 +245,15 @@ defmodule BitcoinLib.AddressTest do
 
     assert !valid?
   end
+
+  test "destructure an invalid address" do
+    # missing an S at the end
+    address = "myKgsxuFQQvYkVjqUfXJSzoqYcywsCA4V"
+
+    {:error, message} =
+      address
+      |> Address.destructure()
+
+    assert "unknown address format" == message
+  end
 end

@@ -124,11 +124,15 @@ defmodule BitcoinLib.Address do
       address
       |> Base58.decode()
 
-    {address_type, network} = get_address_type_from_prefix(prefix)
+    case get_address_type_from_prefix(prefix) do
+      {address_type, network} ->
+        case test_checksum(prefix, public_key_hash, checksum) do
+          {:ok} -> {:ok, public_key_hash, address_type, network}
+          {:error, message} -> {:error, message}
+        end
 
-    case test_checksum(prefix, public_key_hash, checksum) do
-      {:ok} -> {:ok, public_key_hash, address_type, network}
-      {:error, message} -> {:error, message}
+      :unknown ->
+        {:error, "unknown address format"}
     end
   end
 
