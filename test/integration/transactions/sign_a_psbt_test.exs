@@ -58,7 +58,7 @@ defmodule BitcoinLib.Test.Integration.Transactions.SignAPsbtTest do
 
     #  encoded_signed_transaction =
     unsigned_transaction
-    |> Transaction.sign_and_encode(private_key)
+    |> Transaction.sign_and_encode([private_key])
 
     assert 5 == private_key.depth
   end

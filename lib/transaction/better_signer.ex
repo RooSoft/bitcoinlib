@@ -32,22 +32,13 @@ defmodule BitcoinLib.Transaction.BetterSigner do
   ...>    locktime: 0
   ...>  }
   ...>  |> BitcoinLib.Transaction.BetterSigner.sign([private_key])
+  ...>  |> elem(1)
   ...>  |> Map.get(:inputs)
   [
     %BitcoinLib.Transaction.Input{
       txid: "e4c226432a9319d603b2ed1fa609bffe4cd91f89b3176a9e73b19f7891a92bb6",
       vout: 0,
-      script_sig: [
-        %BitcoinLib.Script.Opcodes.Stack.Dup{},
-        %BitcoinLib.Script.Opcodes.Crypto.Hash160{},
-        %BitcoinLib.Script.Opcodes.Data{
-          value: <<0xAFC3E518577316386188AF748A816CD14CE333F2::160>>
-        },
-        %BitcoinLib.Script.Opcodes.BitwiseLogic.EqualVerify{},
-        %BitcoinLib.Script.Opcodes.Crypto.CheckSig{
-          script: <<0x76A914AFC3E518577316386188AF748A816CD14CE333F288AC::200>>
-        }
-      ],
+      script_sig: <<0x47304402207d2ff650acf4bd2f413dc04ded50fbbfc315bcb0aa97636b3c4caf55333d1c6a02207590f62363b2263b3d9b65dad3cd56e840e0d61dc0feab8f7e7956831c7e5103012102702ded1cca9816fa1a94787ffc6f3ace62cd3b63164f76d227d0935a33ee48c3::848>>,
       sequence: 4_294_967_295
     }
   ]

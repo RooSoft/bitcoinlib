@@ -7,7 +7,7 @@ defmodule BitcoinLib.Transaction do
   alias BitcoinLib.Crypto
   alias BitcoinLib.Key.PrivateKey
   alias BitcoinLib.Transaction
-  alias BitcoinLib.Transaction.{Input, Encoder, Decoder, Signer, BetterSigner}
+  alias BitcoinLib.Transaction.{Input, Encoder, Decoder, BetterSigner}
 
   @type t :: Transaction
 
@@ -346,14 +346,22 @@ defmodule BitcoinLib.Transaction do
       ...>    ],
       ...>    locktime: 0
       ...>  }
-      ...>  |> BitcoinLib.Transaction.sign_and_encode(private_key)
-      "0100000001b62ba991789fb1739e6a17b3891fd94cfebf09a61fedb203d619932a4326c2e4000000006a47304402207d2ff650acf4bd2f413dc04ded50fbbfc315bcb0aa97636b3c4caf55333d1c6a02207590f62363b2263b3d9b65dad3cd56e840e0d61dc0feab8f7e7956831c7e5103012102702ded1cca9816fa1a94787ffc6f3ace62cd3b63164f76d227d0935a33ee48c3ffffffff0110270000000000002d76a9283265393261373463333431393661303236653839653061643561633431386366393430613361663288ac00000000"
+      ...>  |> BitcoinLib.Transaction.sign_and_encode([private_key])
+      {
+        :ok,
+        "0100000001b62ba991789fb1739e6a17b3891fd94cfebf09a61fedb203d619932a4326c2e4000000006a47304402207d2ff650acf4bd2f413dc04ded50fbbfc315bcb0aa97636b3c4caf55333d1c6a02207590f62363b2263b3d9b65dad3cd56e840e0d61dc0feab8f7e7956831c7e5103012102702ded1cca9816fa1a94787ffc6f3ace62cd3b63164f76d227d0935a33ee48c3ffffffff0110270000000000002d76a9283265393261373463333431393661303236653839653061643561633431386366393430613361663288ac00000000"
+      }
   """
   @spec sign_and_encode(Transaction.t(), list(PrivateKey.t())) :: binary()
   def sign_and_encode(%Transaction{} = transaction, private_keys) do
-    Signer.sign(transaction, private_keys)
-    |> Transaction.encode()
-    |> Binary.to_hex()
+    with {:ok, signed_transaction} <- BetterSigner.sign(transaction, private_keys) do
+      {
+        :ok,
+        signed_transaction |> Transaction.encode() |> Binary.to_hex()
+      }
+    else
+      {:error, message} -> {:error, message}
+    end
   end
 
   @doc """

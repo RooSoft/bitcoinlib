@@ -211,13 +211,16 @@ defmodule BitcoinLib.Transaction.Spec do
       ...>    }
       ...>  ]
       ...>}
-      ...>  |> BitcoinLib.Transaction.Spec.sign_and_encode(private_key)
-      "020000000126da6f8a25932979c0b1191c256e01ec3525ec9f87de78aeaf8acfef2b062569010000006b483045022100fdb5f58ab2dd24aeea72c0f832abde538e176f4474b3fe62a9c6e7e8a1a79e92022049565926bb564b996a19c6c3abd1dfbf35f9432ea7aadb10976dacee97d2e10c012102702ded1cca9816fa1a94787ffc6f3ace62cd3b63164f76d227d0935a33ee48c3fdffffff01e8030000000000001976a914ad6a62e2d23d1c060897cd0cc79c42dad715e4c788ac2caf2400"
+      ...>  |> BitcoinLib.Transaction.Spec.sign_and_encode([private_key])
+      {
+        :ok,
+        "020000000126da6f8a25932979c0b1191c256e01ec3525ec9f87de78aeaf8acfef2b062569010000006b483045022100fdb5f58ab2dd24aeea72c0f832abde538e176f4474b3fe62a9c6e7e8a1a79e92022049565926bb564b996a19c6c3abd1dfbf35f9432ea7aadb10976dacee97d2e10c012102702ded1cca9816fa1a94787ffc6f3ace62cd3b63164f76d227d0935a33ee48c3fdffffff01e8030000000000001976a914ad6a62e2d23d1c060897cd0cc79c42dad715e4c788ac2caf2400"
+      }
   """
-  @spec sign_and_encode(Spec.t(), PrivateKey.t()) :: binary()
-  def sign_and_encode(spec, %PrivateKey{} = private_key) do
+  @spec sign_and_encode(Spec.t(), list(PrivateKey.t())) :: binary()
+  def sign_and_encode(spec, private_keys) do
     spec
     |> to_transaction
-    |> Transaction.sign_and_encode(private_key)
+    |> Transaction.sign_and_encode(private_keys)
   end
 end

@@ -126,7 +126,7 @@ defmodule BitcoinLib.Test.Integration.LockingScripts.ManualExampleTest do
       %Opcodes.Crypto.CheckSig{}
     ]
 
-    signed_transaction =
+    {:ok, signed_transaction} =
       %Transaction{
         version: 1,
         inputs: [
@@ -140,7 +140,7 @@ defmodule BitcoinLib.Test.Integration.LockingScripts.ManualExampleTest do
         outputs: [%Output{script_pub_key: locking_script, value: 10_000}],
         locktime: 0
       }
-      |> Transaction.sign_and_encode(private_key)
+      |> Transaction.sign_and_encode([private_key])
 
     assert "0100000001b62ba991789fb1739e6a17b3891fd94cfebf09a61fedb203d619932a4326c2e4000000006a4730440220032a1544f599bf29981851e826e8a6f7c036958ba3543cf9778a0756dfc425f6022067eec131c0d73825633c0fddce1abfb14bb26bc9e0d6e9d644a77361f74cb55c012103f0e5a53db9f85e5b2eecf677925ffe21dd1409bcfe9a0730404053599b0901e5ffffffff0110270000000000001976a914afc3e518577316386188af748a816cd14ce333f288ac00000000" ==
              signed_transaction
@@ -168,7 +168,7 @@ defmodule BitcoinLib.Test.Integration.LockingScripts.ManualExampleTest do
     # https://medium.com/@bitaps.com/exploring-bitcoin-signing-the-p2pkh-input-b8b4d5c4809c#50a6
     locking_script = BitcoinLib.Script.Types.P2pkh.create(target_public_key_hash)
 
-    signed_transaction =
+    {:ok, signed_transaction} =
       %Transaction{
         version: 1,
         inputs: [
@@ -182,7 +182,7 @@ defmodule BitcoinLib.Test.Integration.LockingScripts.ManualExampleTest do
         outputs: [%Output{script_pub_key: locking_script, value: 1_000}],
         locktime: 0
       }
-      |> Transaction.sign_and_encode(private_key)
+      |> Transaction.sign_and_encode([private_key])
 
     assert "010000000197ca410de9ab568ab647984cd2b3f38284a8283ff261e26f96162abfb6358983000000006a473044022016bcad84e20bc6ec1a837c99ab552d8157c60c4ef5e9db3f2fe0c03b2ff8a78002205b404d67f4feb4fda8f86c16a0c8dac6530a54962ed961095ee7205b591dd4cc012103f0e5a53db9f85e5b2eecf677925ffe21dd1409bcfe9a0730404053599b0901e5ffffffff01e8030000000000001976a914fc8ca28ea75e45f538242c257e1f07fe19baa0f388ac00000000" ==
              signed_transaction
@@ -206,7 +206,7 @@ defmodule BitcoinLib.Test.Integration.LockingScripts.ManualExampleTest do
     {:ok, target_public_key_hash, :p2pkh, :testnet} =
       Address.destructure("mwKte669tM8ascBhvpw31phG2Ecauy8DUp")
 
-    signed_transaction =
+    {:ok, signed_transaction} =
       %Transaction.Spec{}
       |> Transaction.Spec.add_input!(
         txid: "f48648ab6adffe3b569383450a3279372a537c3be995c9e4e25f297d764e18d7",
@@ -221,7 +221,7 @@ defmodule BitcoinLib.Test.Integration.LockingScripts.ManualExampleTest do
         Script.Types.P2pkh.create(change_public_key_hash),
         2_740_000
       )
-      |> Transaction.Spec.sign_and_encode(spending_private_key)
+      |> Transaction.Spec.sign_and_encode([spending_private_key])
 
     assert "0200000001d7184e767d295fe2e4c995e93b7c532a3779320a458393563bfedf6aab4886f4000000006b483045022100fa5c7657d6d87d463bd90b703ffa1f94fec48f1920f2bfc42f3c85894a9079d80220338707c71e528fa9b23f2e191151c0c44f3d4b9220c65c27492292845bbdbe8f012103f30d64f65d8c08aaf81a5f5ced3873d250a53371d83c0e4328bf74cb513778d8fdffffff0220cf2900000000001976a9140272853736f3dd09248055049ff15dff09d7f00f88ace8030000000000001976a914ad6a62e2d23d1c060897cd0cc79c42dad715e4c788ac2caf2400" ==
              signed_transaction

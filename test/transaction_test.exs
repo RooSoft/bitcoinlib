@@ -90,7 +90,7 @@ defmodule BitcoinLib.TransactionTest do
 
     transaction = create_transaction(txid, vout, locking_script, redeem_script, value)
 
-    Transaction.sign_and_encode(transaction, private_key)
+    Transaction.sign_and_encode(transaction, [private_key])
   end
 
   test "decode a P2SH-P2WPKH transaction" do
