@@ -138,7 +138,7 @@ defmodule BitcoinLib.Address do
           {:error, "unknown address format"}
       end
     rescue
-      FunctionClauseError ->
+      _ ->
         {:error, "address is not base58 compatible"}
     end
   end

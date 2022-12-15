@@ -258,7 +258,6 @@ defmodule BitcoinLib.AddressTest do
   end
 
   test "destructure a one char address" do
-    # missing an S at the end
     address = "1"
 
     {:error, message} =
@@ -266,5 +265,15 @@ defmodule BitcoinLib.AddressTest do
       |> Address.destructure()
 
     assert "unknown address format" == message
+  end
+
+  test "destructure an address containing 'autocompl'" do
+    address = "autocompl"
+
+    {:error, message} =
+      address
+      |> Address.destructure()
+
+    assert "address is not base58 compatible" == message
   end
 end
