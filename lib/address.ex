@@ -121,18 +121,20 @@ defmodule BitcoinLib.Address do
 
   def destructure(address) do
     try do
-      <<prefix::8, public_key_hash::bitstring-160, checksum::bitstring-32>> =
-        address
-        |> Base58.decode()
+      case Base58.decode(address) do
+        <<prefix::8, public_key_hash::bitstring-160, checksum::bitstring-32>> ->
+          case get_address_type_from_prefix(prefix) do
+            {address_type, network} ->
+              case test_checksum(prefix, public_key_hash, checksum) do
+                {:ok} -> {:ok, public_key_hash, address_type, network}
+                {:error, message} -> {:error, message}
+              end
 
-      case get_address_type_from_prefix(prefix) do
-        {address_type, network} ->
-          case test_checksum(prefix, public_key_hash, checksum) do
-            {:ok} -> {:ok, public_key_hash, address_type, network}
-            {:error, message} -> {:error, message}
+            :unknown ->
+              {:error, "unknown address format"}
           end
 
-        :unknown ->
+        _ ->
           {:error, "unknown address format"}
       end
     rescue

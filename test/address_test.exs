@@ -256,4 +256,15 @@ defmodule BitcoinLib.AddressTest do
 
     assert "unknown address format" == message
   end
+
+  test "destructure a one char address" do
+    # missing an S at the end
+    address = "1"
+
+    {:error, message} =
+      address
+      |> Address.destructure()
+
+    assert "unknown address format" == message
+  end
 end
