@@ -120,19 +120,24 @@ defmodule BitcoinLib.Address do
   def destructure("tb1" <> _ = bech32_address), do: Bech32.destructure(bech32_address)
 
   def destructure(address) do
-    <<prefix::8, public_key_hash::bitstring-160, checksum::bitstring-32>> =
-      address
-      |> Base58.decode()
+    try do
+      <<prefix::8, public_key_hash::bitstring-160, checksum::bitstring-32>> =
+        address
+        |> Base58.decode()
 
-    case get_address_type_from_prefix(prefix) do
-      {address_type, network} ->
-        case test_checksum(prefix, public_key_hash, checksum) do
-          {:ok} -> {:ok, public_key_hash, address_type, network}
-          {:error, message} -> {:error, message}
-        end
+      case get_address_type_from_prefix(prefix) do
+        {address_type, network} ->
+          case test_checksum(prefix, public_key_hash, checksum) do
+            {:ok} -> {:ok, public_key_hash, address_type, network}
+            {:error, message} -> {:error, message}
+          end
 
-      :unknown ->
-        {:error, "unknown address format"}
+        :unknown ->
+          {:error, "unknown address format"}
+      end
+    rescue
+      FunctionClauseError ->
+        {:error, "address is not base58 compatible"}
     end
   end
 
