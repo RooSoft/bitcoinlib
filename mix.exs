@@ -72,12 +72,12 @@ defmodule BitcoinLib.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
-      {:ex_doc, "~> 0.27", only: :dev, runtime: false},
-      {:dialyxir, "~> 1.2", only: [:dev], runtime: false},
+      {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
+      {:ex_doc, "~> 0.30.6", only: :dev, runtime: false},
+      {:dialyxir, "~> 1.4", only: [:dev], runtime: false},
       {:binary, "~> 0.0.5"},
       {:b58, "~> 1.0"},
-      {:pbkdf2_elixir, "~> 2.0"},
+      {:pbkdf2_elixir, "~> 2.2"},
       {:curvy, "~> 0.3.1"},
       {:bip0173, "~> 0.1.2"}
     ]
